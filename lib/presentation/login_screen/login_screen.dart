@@ -139,7 +139,7 @@ class LoginScreen extends GetWidget<LoginController> {
                 children: [
                   /// username or Gmail
                   CustomTextFormField(
-                    labelText: 'Username or Email',
+                    labelText: 'Number',
                     controller: controller.emailController,
                     textInputAction: TextInputAction.done,
                     isRequired: true,
@@ -151,38 +151,6 @@ class LoginScreen extends GetWidget<LoginController> {
                     prefixConstraints:
                         BoxConstraints(maxHeight: getVerticalSize(56)),
                   ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-
-                  /// password
-                  Obx(() => CustomTextFormField(
-                      labelText: "Password",
-                      controller: controller.passwordController,
-                      textInputAction: TextInputAction.done,
-                      textInputType: TextInputType.visiblePassword,
-                      isRequired: true,
-                      validator: (value) {
-                        return controller.passwordValidator(value ?? "");
-                      },
-                      padding: TextFormFieldPadding.PaddingT14,
-                      prefixConstraints:
-                          BoxConstraints(maxHeight: getVerticalSize(56)),
-                      suffix: InkWell(
-                          onTap: () {
-                            controller.isShowPassword.value =
-                                !controller.isShowPassword.value;
-                          },
-                          child: Container(
-                              margin: getMargin(
-                                  left: 12, top: 16, right: 8, bottom: 16),
-                              child: CustomImageView(
-                                  svgPath: controller.isShowPassword.value
-                                      ? ImageConstant.imgCheckmark24x24
-                                      : ImageConstant.imgCheckmark24x24))),
-                      suffixConstraints:
-                          BoxConstraints(maxHeight: getVerticalSize(56)),
-                      isObscureText: controller.isShowPassword.value)),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
@@ -418,7 +386,7 @@ onTapTxtForgotPassword() {
 Future<void> onTapSignin(LoginController controller) async {
   Map<String, dynamic> requestData = {
     'userName': controller.emailController.text,
-    'password': controller.passwordController.text
+    'password': "qwerty"
   };
   try {
     await controller.callCreateLogin(requestData);

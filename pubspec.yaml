@@ -119,6 +119,37 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets: 
+    - assets/
+    - assets/images/
+    - assets/lottie/
+  fonts: 
+    - family: Inter
+      fonts: 
+        - asset: assets/fonts/InterBold.ttf
+          weight: 700
+        - asset: assets/fonts/InterSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/InterMedium.ttf
+          weight: 500
+        - asset: assets/fonts/InterBlackItalic.ttf
+          weight: 900
+        - asset: assets/fonts/InterRegular.ttf
+          weight: 400
+    - family: Raleway
+      fonts: 
+        - asset: assets/fonts/RalewayRomanSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/RalewayRomanRegular.ttf
+          weight: 400
+        - asset: assets/fonts/RalewayRomanBold.ttf
+          weight: 700
+        - asset: assets/fonts/RalewayRomanMedium.ttf
+          weight: 500
+    - family: SF Pro Display
+      fonts: 
+        - asset: assets/fonts/SFProDisplayRegular.ttf
+          weight: 400
 
   # To add assets to your application, add an assets section, like this:
   # assets:

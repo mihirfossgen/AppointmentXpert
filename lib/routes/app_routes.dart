@@ -1,10 +1,25 @@
-import 'package:appointmentxpert/presentation/onboarding_one_screen/onboarding_one_screen.dart';
 import 'package:get/get.dart';
+
+import '../presentation/create_new_password_screen/binding/create_new_password_binding.dart';
+import '../presentation/create_new_password_screen/create_new_password_screen.dart';
+import '../presentation/dashboard_screen/binding/dashboard_binding.dart';
+import '../presentation/dashboard_screen/views/screens/dashboard_screen.dart';
 import '../presentation/login_screen/binding/login_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
+import '../presentation/onboarding_four_screen/binding/onboarding_four_binding.dart';
+import '../presentation/onboarding_four_screen/onboarding_four_screen.dart';
 import '../presentation/onboarding_one_screen/binding/onboarding_one_binding.dart';
+import '../presentation/onboarding_one_screen/onboarding_one_screen.dart';
+import '../presentation/onboarding_three_screen/binding/onboarding_three_binding.dart';
+import '../presentation/onboarding_three_screen/onboarding_three_screen.dart';
 import '../presentation/onboarding_two_screen/binding/onboarding_two_binding.dart';
 import '../presentation/onboarding_two_screen/onboarding_two_screen.dart';
+import '../presentation/reset_password_email_tab_container_screen/binding/reset_password_email_tab_container_binding.dart';
+import '../presentation/reset_password_email_tab_container_screen/reset_password_email_tab_container_screen.dart';
+import '../presentation/reset_password_verify_code_screen/binding/reset_password_verify_code_binding.dart';
+import '../presentation/reset_password_verify_code_screen/reset_password_verify_code_screen.dart';
+import '../presentation/sign_up_screen/binding/sign_up_binding.dart';
+import '../presentation/sign_up_screen/sign_up_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 
@@ -115,12 +130,70 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: onboardingThreeScreen,
+      page: () => OnboardingThreeScreen(),
+      bindings: [
+        OnboardingThreeBinding(),
+      ],
+    ),
+    GetPage(
+      name: onboardingFourScreen,
+      page: () => OnboardingFourScreen(),
+      bindings: [
+        OnboardingFourBinding(),
+      ],
+    ),
+    GetPage(
       name: loginScreen,
       page: () => LoginScreen(),
       bindings: [
         LoginBinding(),
       ],
     ),
+    GetPage(
+      name: signUpScreen,
+      page: () => SignUpScreen(),
+      bindings: [
+        SignUpBinding(),
+      ],
+    ),
+    GetPage(
+      name: resetPasswordEmailTabContainerScreen,
+      page: () => ResetPasswordEmailTabContainerScreen(),
+      bindings: [
+        ResetPasswordEmailTabContainerBinding(),
+      ],
+    ),
+    GetPage(
+      name: resetPasswordVerifyCodeScreen,
+      page: () => ResetPasswordVerifyCodeScreen(),
+      bindings: [
+        ResetPasswordVerifyCodeBinding(),
+      ],
+    ),
+    GetPage(
+      name: createNewPasswordScreen,
+      page: () => CreateNewPasswordScreen(),
+      bindings: [
+        CreateNewPasswordBinding(),
+      ],
+    ),
+    GetPage(
+      name: dashboardScreen,
+      page: () => DashboardScreen(),
+      bindings: [
+        DasboardMainBinding(),
+      ],
+    ),
+
+    GetPage(
+      name: initialRoute,
+      page: () => SplashScreen(),
+      bindings: [
+        SplashBinding(),
+      ],
+    ),
+
     // GetPage(
     //   name: createInvoiceScreen,
     //   page: () => CreateInvoiceScreen(),
