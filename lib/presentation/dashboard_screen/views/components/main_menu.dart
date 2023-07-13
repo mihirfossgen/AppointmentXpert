@@ -12,9 +12,41 @@ class _MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     if (SharedPrefUtils.readPrefStr("role") == 'PATIENT') {
       return menuForPatient();
+    } else if (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST') {
+      return menuForReceptionist();
     } else {
       return menuForStaff();
     }
+  }
+
+  SelectionButton menuForReceptionist() {
+    return SelectionButton(
+      data: [
+        SelectionButtonData(
+          activeIcon: EvaIcons.home,
+          icon: EvaIcons.homeOutline,
+          label: "Home",
+        ),
+        SelectionButtonData(
+          activeIcon: EvaIcons.bell,
+          icon: EvaIcons.bellOutline,
+          label: "Add Appointments",
+          //totalNotif: 100,
+        ),
+        SelectionButtonData(
+          activeIcon: EvaIcons.personAdd,
+          icon: EvaIcons.personAdd,
+          label: "Add Patient",
+          //totalNotif: 20,
+        ),
+        SelectionButtonData(
+          activeIcon: EvaIcons.settings,
+          icon: EvaIcons.settingsOutline,
+          label: "Settings",
+        ),
+      ],
+      onSelected: onSelected,
+    );
   }
 
   SelectionButton menuForPatient() {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bs_flutter/bs_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
@@ -338,7 +337,7 @@ class AppointmentApi {
         return path;
       } else {
         ProgressDialogUtils.hideProgressDialog();
-        showPdfPopup('Prescription PDF', data, fileName);
+        //showPdfPopup('Prescription PDF', data, fileName);
         //DocumentFileSavePlus.saveFile(data, fileName, "appliation/pdf");
         return '';
       }
@@ -394,7 +393,7 @@ class AppointmentApi {
         return path;
       } else {
         ProgressDialogUtils.hideProgressDialog();
-        showPdfPopup('Invoice PDF', data, fileName);
+        //showPdfPopup('Invoice PDF', data, fileName);
         return '';
       }
     } on DioError catch (e) {
@@ -408,82 +407,82 @@ class AppointmentApi {
     }
   }
 
-  showPdfPopup(String title, dynamic pdfData, String fileName) {
-    final pdfController = PdfController(
-        document: PdfDocument.openData(pdfData), viewportFraction: 2.0);
-    showDialog(
-      context: Get.Get.context!,
-      builder: (builder) => BsModal(
-        context: Get.Get.context!,
-        dialog: BsModalDialog(
-          size: BsModalSize.xl,
-          child: BsModalContent(
-            children: [
-              BsModalContainer(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  title: Text(title),
-                  closeButton: true),
-              BsModalContainer(
-                child: Column(children: [
-                  SizedBox(
-                      height: 500,
-                      //height: MediaQuery.of(Get.Get.context!).size.height,
-                      //width: MediaQuery.of(Get.Get.context!).size.width,
-                      child: PdfView(
-                        controller: pdfController,
-                        pageSnapping: false,
-                        backgroundDecoration: BoxDecoration(color: Colors.grey),
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: BsButton(
-                      style: BsButtonStyle.info,
-                      label: Text('Download'),
-                      prefixIcon: Icons.download,
-                      onPressed: () async {
-                        //controller.onClose();
-                        await FileSaver.instance.saveFile(
-                            name: fileName,
-                            bytes: pdfData,
-                            customMimeType: 'appliation/pdf',
-                            ext: 'pdf',
-                            mimeType: MimeType.pdf);
-                        Get.Get.back();
-                      },
-                    ),
-                  )
-                ]),
-              ),
-              BsModalContainer(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                closeButton: false,
-                onClose: () {
-                  //controller.onClose();
-                  Get.Get.back();
-                },
-                actions: [
-                  BsButton(
-                    style: BsButtonStyle.danger,
-                    label: Text('Close'),
-                    prefixIcon: Icons.close,
-                    onPressed: () {
-                      //controller.onClose();
-                      Get.Get.back();
-                    },
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // showPdfPopup(String title, dynamic pdfData, String fileName) {
+  //   final pdfController = PdfController(
+  //       document: PdfDocument.openData(pdfData), viewportFraction: 2.0);
+  //   showDialog(
+  //     context: Get.Get.context!,
+  //     builder: (builder) => BsModal(
+  //       context: Get.Get.context!,
+  //       dialog: BsModalDialog(
+  //         size: BsModalSize.xl,
+  //         child: BsModalContent(
+  //           children: [
+  //             BsModalContainer(
+  //                 crossAxisAlignment: CrossAxisAlignment.end,
+  //                 mainAxisAlignment: MainAxisAlignment.end,
+  //                 title: Text(title),
+  //                 closeButton: true),
+  //             BsModalContainer(
+  //               child: Column(children: [
+  //                 SizedBox(
+  //                     height: 500,
+  //                     //height: MediaQuery.of(Get.Get.context!).size.height,
+  //                     //width: MediaQuery.of(Get.Get.context!).size.width,
+  //                     child: PdfView(
+  //                       controller: pdfController,
+  //                       pageSnapping: false,
+  //                       backgroundDecoration: BoxDecoration(color: Colors.grey),
+  //                     )),
+  //                 SizedBox(
+  //                   height: 10,
+  //                 ),
+  //                 Align(
+  //                   alignment: Alignment.bottomCenter,
+  //                   child: BsButton(
+  //                     style: BsButtonStyle.info,
+  //                     label: Text('Download'),
+  //                     prefixIcon: Icons.download,
+  //                     onPressed: () async {
+  //                       //controller.onClose();
+  //                       await FileSaver.instance.saveFile(
+  //                           name: fileName,
+  //                           bytes: pdfData,
+  //                           customMimeType: 'appliation/pdf',
+  //                           ext: 'pdf',
+  //                           mimeType: MimeType.pdf);
+  //                       Get.Get.back();
+  //                     },
+  //                   ),
+  //                 )
+  //               ]),
+  //             ),
+  //             BsModalContainer(
+  //               crossAxisAlignment: CrossAxisAlignment.end,
+  //               mainAxisAlignment: MainAxisAlignment.end,
+  //               closeButton: false,
+  //               onClose: () {
+  //                 //controller.onClose();
+  //                 Get.Get.back();
+  //               },
+  //               actions: [
+  //                 BsButton(
+  //                   style: BsButtonStyle.danger,
+  //                   label: Text('Close'),
+  //                   prefixIcon: Icons.close,
+  //                   onPressed: () {
+  //                     //controller.onClose();
+  //                     Get.Get.back();
+  //                   },
+  //                 )
+  //               ],
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 final appointmentProvider = Provider<AppointmentApi>((ref) => AppointmentApi());

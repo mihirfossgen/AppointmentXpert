@@ -26,11 +26,62 @@ class _AppointmentInProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Responsive.isMobile(context) ? loadList() : loadDataTable();
+    return ResponsiveBuilder.isMobile(context)
+        ? loadDataTableMobile()
+        : loadDataTable();
     // ClipRRect(
     //   borderRadius: BorderRadius.circular(kBorderRadius * 2),
     //   child: loadDataTable(),
     // );
+  }
+
+  Widget loadDataTableMobile() {
+    return SizedBox(
+        //width: 400,
+        height: 250,
+        child: Card(
+          child: DataTable2(
+              columnSpacing: 12,
+              horizontalMargin: 12,
+              minWidth: MediaQuery.of(Get.context!).size.width,
+              showBottomBorder: true,
+              columns: [
+                DataColumn(
+                  label: Text(
+                    'Name',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Time',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Status',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
+                ),
+              ],
+              rows: List<DataRow>.generate(
+                  data.length,
+                  (index) => DataRow(cells: [
+                        DataCell(
+                            Text(
+                              '${data[index].patient?.firstName} '
+                              '${data[index].patient?.lastName}',
+                              overflow: TextOverflow.clip,
+                            ),
+                            onTap: () {}),
+                        DataCell(
+                            Text(
+                                '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}'),
+                            onTap: () {}),
+                        DataCell(Text('${data[index].visit}')),
+                      ]))),
+        ));
   }
 
   Widget loadDataTable() {
@@ -45,21 +96,6 @@ class _AppointmentInProgress extends StatelessWidget {
             horizontalMargin: 12,
             minWidth: 600,
             showBottomBorder: true,
-            //dataRowHeight: 70,
-            empty: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'No today\'s appointments found.',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             columns: [
               // DataColumn2(
               //   label: Text(
@@ -159,27 +195,28 @@ class _AppointmentInProgress extends StatelessWidget {
                                                   '/images/default_profile.png'
                                               : '/images/default_profile.png',
                                     ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
-                              Text('${data[index].patient?.firstName} ' +
-                                  '${data[index].patient?.lastName}')
+                              Text(
+                                '${data[index].patient?.firstName} '
+                                '${data[index].patient?.lastName}',
+                                overflow: TextOverflow.clip,
+                              )
                             ],
                           ),
                           onTap: () {}),
-                      DataCell(Text('${data[index].patient?.mobile}'),
+                      DataCell(Text("${data[index].patient?.mobile}"),
                           onTap: () {}),
-                      DataCell(Text('${data[index].purpose}'), onTap: () {}),
-                      //DataCell(Text('${data[index].visit}')),
+                      DataCell(Text('${data[index].visit}')),
                       DataCell(
                           Text(formatter
-                              .format(DateTime.parse('${data[index].date}'))),
+                              .format(DateTime.parse(data[index].date ?? ""))),
                           onTap: () {}),
                       DataCell(
                           Text(
-                              '${data[index].startTime?.replaceAll(" AM", "").replaceAll(" PM", "")} - ${data[index].endTime}'),
+                              '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}'),
                           onTap: () {}),
-
                       DataCell(Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.end,

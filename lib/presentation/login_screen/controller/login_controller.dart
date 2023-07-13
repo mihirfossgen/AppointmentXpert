@@ -21,6 +21,7 @@ class LoginController extends GetxController {
   Rx<bool> isRememberMe = false.obs;
 
   final formKey = GlobalKey<FormState>();
+  String userNumber = '';
 
   //LoginModel postLoginResp = LoginModel();
 
@@ -61,6 +62,19 @@ class LoginController extends GetxController {
       return "Please enter username";
     } else if (value.length < 4) {
       return 'Username must be at least 4 characters long.';
+    }
+    return null;
+  }
+
+  String? numberValidator(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter mobile number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    } else {
+      userNumber = value;
     }
     return null;
   }

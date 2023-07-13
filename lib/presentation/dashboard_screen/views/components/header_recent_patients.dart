@@ -11,7 +11,7 @@ class _HeaderRecentPatients extends StatelessWidget {
         const Spacer(),
         //_buildArchive(),
         const SizedBox(width: 10),
-        _buildAddNewButton(),
+        //_buildAddNewButton(),
       ],
     );
   }

@@ -144,9 +144,9 @@ class LoginScreen extends GetWidget<LoginController> {
                     textInputAction: TextInputAction.done,
                     isRequired: true,
                     textInputType: TextInputType.emailAddress,
-                    validator: (value) {
-                      return controller.userNameValidator(value ?? "");
-                    },
+                    // validator: (value) {
+                    //   return controller.numberValidator(value ?? "");
+                    // },
                     padding: TextFormFieldPadding.PaddingT14,
                     prefixConstraints:
                         BoxConstraints(maxHeight: getVerticalSize(56)),

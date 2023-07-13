@@ -51,7 +51,7 @@ class CustomTextFormField extends StatefulWidget {
   FocusNode? focusNode;
 
   bool? isObscureText;
-  bool? isRequired;
+  bool? isRequired = false;
 
   TextInputAction? textInputAction;
 
@@ -129,19 +129,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         child: Row(
           children: [
             Text(widget.labelText!),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(3.0),
             ),
-            widget.isRequired != null
+            widget.isRequired == true
                 ? const Text('*', style: TextStyle(color: Colors.red))
-                : SizedBox(
+                : const SizedBox(
                     width: 0,
                   ),
           ],
         ),
       ),
       // floatingLabelAlignment: FloatingLabelAlignment.start,
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
           color: Colors.black, fontWeight: FontWeight.w400, fontSize: 20),
       floatingLabelBehavior: FloatingLabelBehavior.always,
       prefixIconConstraints: widget.prefixConstraints,

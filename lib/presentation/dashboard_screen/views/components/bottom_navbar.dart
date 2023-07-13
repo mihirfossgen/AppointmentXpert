@@ -15,9 +15,51 @@ class _BottomNavbarState extends State<_BottomNavbar> {
   Widget build(BuildContext context) {
     if (SharedPrefUtils.readPrefStr("role") == 'PATIENT') {
       return menuForPatient();
+    } else if (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST') {
+      return menuForReceptionist();
     } else {
       return menuForStaff();
     }
+  }
+
+  BottomNavigationBar menuForReceptionist() {
+    return BottomNavigationBar(
+      currentIndex: index,
+      elevation: 10,
+      backgroundColor: ColorConstant.blue700,
+      items: const [
+        BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.home),
+          icon: Icon(EvaIcons.homeOutline),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.list),
+          icon: Icon(EvaIcons.list),
+          label: "Add Appointments",
+        ),
+        BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.personAdd),
+          icon: Icon(EvaIcons.personAdd),
+          label: "Add Patients",
+        ),
+        BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.settings),
+          icon: Icon(EvaIcons.settingsOutline),
+          label: "Settings",
+        ),
+      ],
+      selectedItemColor: ColorConstant.whiteA700,
+      unselectedItemColor: ColorConstant.gray400,
+      type: BottomNavigationBarType.fixed,
+      showUnselectedLabels: false,
+      onTap: (value) {
+        setState(() {
+          index = value;
+          widget.onSelected(value);
+        });
+      },
+    );
   }
 
   BottomNavigationBar menuForPatient() {
