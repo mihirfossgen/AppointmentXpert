@@ -73,11 +73,11 @@ class _BottomNavbarState extends State<_BottomNavbar> {
           icon: Icon(EvaIcons.homeOutline),
           label: "Home",
         ),
-        /*BottomNavigationBarItem(
+        BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.bell),
           icon: Icon(EvaIcons.bellOutline),
           label: "Appointments",
-        ),*/
+        ),
         // BottomNavigationBarItem(
         //   activeIcon: Icon(EvaIcons.phoneCall),
         //   icon: Icon(EvaIcons.phoneCall),
