@@ -61,11 +61,11 @@ class DashboardScreen extends GetView<DashboardController> {
       switch (index) {
         case 0:
           return _buildHomePageContent(context: context);
-        case 1:
-          return _buildAppointmentPageContent();
+        /*case 1:
+          return _buildAppointmentPageContent();*/
         // case 2:
         //   return _buildChatPageContent();
-        case 2:
+        case 1:
           return _buildProfilePageContent();
         default:
           return Container();
@@ -340,6 +340,164 @@ class DashboardScreen extends GetView<DashboardController> {
                   ? Column(
                       children: [
                         Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        color: Colors.red.shade50,
+                        shadowColor: Colors.grey.shade400,
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            //child: ResponsiveBuilder.isMobile(Get.context!)
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                  children:[
+
+                                    Image.asset('assets/images/call.png',height: 50,width: 50),
+
+                                    Text(
+                                      "Emergency Appointment",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorConstant.black900),
+                                    )
+                                  ]),
+
+                              Text(
+                                "We keep emergency appointments available everyday.",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: ColorConstant.gray600),
+                              ),
+
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          alignment:Alignment.center,
+                                          backgroundColor: Colors.red.shade900,
+                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                          textStyle: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold)),
+
+                                      onPressed: () {
+                                        String? pat = "Existing Patient";
+                                        Get.defaultDialog(
+                                            title: '',
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Row(
+                                                    children: [
+                                                      ListTile(
+                                                        title: const Text('Existing Patient'),
+                                                        leading: Radio<String>(
+                                                          value: "Existing Patient",
+                                                          groupValue: pat,
+                                                          onChanged: (value) {
+                                                            pat = value;
+                                                          },
+                                                        ),
+                                                      ),
+
+                                                      ListTile(
+                                                        title: const Text('New Patient'),
+                                                        leading: Radio<String>(
+                                                          value: "New Patient",
+                                                          groupValue: pat,
+                                                          onChanged: (value) {
+                                                            pat = value;
+                                                          },
+                                                        ),
+                                                      ),
+
+                                                      /* Radio(
+                                            value: "New Patient",
+                                            groupValue: pat,
+                                            onChanged: (value){
+                                                print(value);
+                                              },
+                                            activeColor: Colors.blue,)*/
+                                                      SizedBox(
+                                                        height: 30.0,
+                                                      )
+                                                    ]
+                                                ),
+
+                                                const TextField(
+                                                  //controller: settingsScreenController.categoryNameController,
+                                                  keyboardType: TextInputType.text,
+                                                  maxLines: 1,
+                                                  decoration: InputDecoration(
+                                                      labelText: 'Patient name',
+                                                      hintMaxLines: 1,
+                                                      border: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: Colors.green, width: 4.0))),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                const TextField(
+                                                  //controller: settingsScreenController.categoryNameController,
+                                                  keyboardType: TextInputType.text,
+                                                  maxLines: 1,
+                                                  decoration: InputDecoration(
+                                                      labelText: 'Patient mobile no.',
+                                                      hintMaxLines: 1,
+                                                      border: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: Colors.green, width: 4.0))),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                const TextField(
+                                                  //controller: settingsScreenController.categoryNameController,
+                                                  keyboardType: TextInputType.text,
+                                                  maxLines: 1,
+                                                  decoration: InputDecoration(
+                                                      labelText: 'Patient Address',
+                                                      hintMaxLines: 1,
+                                                      border: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: Colors.green, width: 4.0))),
+                                                ),
+                                                const SizedBox(
+                                                  height: 30.0,
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    /*if (settingsScreenController
+                                            .categoryNameController.text.isNotEmpty) {
+                                          var expenseCategory = ExpenseCategory(
+                                              settingsScreenController.categoryNameController.text,
+                                              id: _addExpenseController.expenseCategories.length);
+                                          settingsScreenController.addExpenseCategory(expenseCategory);
+                                          _addExpenseController.expenseCategories.add(expenseCategory);
+                                          Get.back();
+                                        } else {
+                                          Utils.showSnackBar("Enter category name");
+                                        }*/
+                                                  },
+                                                  style: ElevatedButton.styleFrom(backgroundColor:Colors.red.shade900),
+                                                  child: const Text(
+                                                    'Add Patient',
+                                                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            radius: 10.0);
+
+                                      },
+                                      child: Text('Book Now'))
+                              )
+                            ]
+                        ),
+                       )),
+                        const SizedBox(height: 10),
+                        Card(
                           elevation: 4,
                           color: Colors.white,
                           shadowColor: ColorConstant.gray400,
@@ -492,7 +650,7 @@ class DashboardScreen extends GetView<DashboardController> {
                               borderRadius: BorderRadius.circular(20)),
                           child: Container(
                             padding: EdgeInsets.all(
-                                ResponsiveBuilder.isMobile(context) ? 95 : 40),
+                                ResponsiveBuilder.isMobile(context) ? 75 : 40),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: const Color(0xff013f88)),
@@ -526,7 +684,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                   height: 10,
                                 ),
                                 Text(
-                                  "Mr. Mihir Rawal",
+                                  "Current Serving Patient",
                                   style: TextStyle(
                                       color: Colors.yellow.shade800,
                                       fontSize: 20,
@@ -535,34 +693,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Text(
-                                  "Symtoms - Fever/cough",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                const Text(
-                                  "Blood group - O+",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                const Text(
-                                  "Address - Pune",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                const Text(
-                                  "Contact - +918550978814",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                )
                               ],
                             ),
                           ),
@@ -1005,7 +1135,10 @@ class DashboardScreen extends GetView<DashboardController> {
                           height: 5,
                         ),
                         Text(
-                          "Have a nice day at work",
+                          (SharedPrefUtils.readPrefStr('role') ==
+                              "PATIENT")
+                              ? 'Have a nice day'
+                              : "Have a nice day at work",
                           style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.normal,
@@ -1013,6 +1146,16 @@ class DashboardScreen extends GetView<DashboardController> {
                         ),
                         const SizedBox(
                           height: 10,
+                        ),
+                        Text(
+                          (SharedPrefUtils.readPrefStr('role') ==
+                              "PATIENT")
+                              ? 'Your Number - 1'
+                              : "",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red.shade900),
                         ),
                       ],
                     ),
