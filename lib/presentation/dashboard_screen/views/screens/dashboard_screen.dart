@@ -52,7 +52,7 @@ part '../components/member.dart';
 part '../components/recent_patients.dart';
 part '../components/task_menu.dart';
 part '../components/todays_appointment_group.dart';
-
+enum pats{Existing,New}
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -384,49 +384,57 @@ class DashboardScreen extends GetView<DashboardController> {
                                               fontWeight: FontWeight.bold)),
 
                                       onPressed: () {
-                                        String? pat = "Existing Patient";
+                                        pats? pat = pats.Existing;
                                         Get.defaultDialog(
                                             title: '',
                                             content: Column(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                Row(
-                                                    children: [
-                                                      ListTile(
-                                                        title: const Text('Existing Patient'),
-                                                        leading: Radio<String>(
-                                                          value: "Existing Patient",
-                                                          groupValue: pat,
-                                                          onChanged: (value) {
-                                                            pat = value;
-                                                          },
-                                                        ),
-                                                      ),
 
-                                                      ListTile(
-                                                        title: const Text('New Patient'),
-                                                        leading: Radio<String>(
-                                                          value: "New Patient",
-                                                          groupValue: pat,
-                                                          onChanged: (value) {
-                                                            pat = value;
-                                                          },
-                                                        ),
-                                                      ),
-
-                                                      /* Radio(
-                                            value: "New Patient",
-                                            groupValue: pat,
-                                            onChanged: (value){
-                                                print(value);
-                                              },
-                                            activeColor: Colors.blue,)*/
-                                                      SizedBox(
-                                                        height: 30.0,
-                                                      )
-                                                    ]
+                                                Text(
+                                                  "Thanks for your enquiry.",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: ColorConstant.gray900),
                                                 ),
 
+                                                Text(
+                                                  "We will co-ordinate with you shortly.",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.normal,
+                                                      color: ColorConstant.gray600),
+                                                ),
+
+                                                /*ListTile(
+                                                        title: Text('Existing Patient'),
+                                                        leading: Radio<pats>(
+                                                          value: pats.Existing,
+                                                          groupValue: pat,
+                                                          onChanged: (pats? value) {
+                                                            setState((){
+
+                                                              pat = value;
+
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+
+                                                ListTile(
+                                                    title: Text('New Patient'),
+                                                    leading: Radio<pats>(
+                                                      value: pats.New,
+                                                      groupValue: pat,
+                                                      onChanged: (pats? value) {
+                                                        setState((){
+                                                              pat = value;
+                                                            });
+                                                          },
+                                                        ),
+                                                      )
+                                                ,
                                                 const TextField(
                                                   //controller: settingsScreenController.categoryNameController,
                                                   keyboardType: TextInputType.text,
@@ -437,9 +445,11 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       border: OutlineInputBorder(
                                                           borderSide: BorderSide(color: Colors.green, width: 4.0))),
                                                 ),
+
                                                 const SizedBox(
                                                   height: 10.0,
                                                 ),
+
                                                 const TextField(
                                                   //controller: settingsScreenController.categoryNameController,
                                                   keyboardType: TextInputType.text,
@@ -450,9 +460,11 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       border: OutlineInputBorder(
                                                           borderSide: BorderSide(color: Colors.green, width: 4.0))),
                                                 ),
+
                                                 const SizedBox(
                                                   height: 10.0,
                                                 ),
+
                                                 const TextField(
                                                   //controller: settingsScreenController.categoryNameController,
                                                   keyboardType: TextInputType.text,
@@ -463,12 +475,14 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       border: OutlineInputBorder(
                                                           borderSide: BorderSide(color: Colors.green, width: 4.0))),
                                                 ),
+
                                                 const SizedBox(
                                                   height: 30.0,
                                                 ),
+
                                                 ElevatedButton(
                                                   onPressed: () {
-                                                    /*if (settingsScreenController
+                                                    *//*if (settingsScreenController
                                             .categoryNameController.text.isNotEmpty) {
                                           var expenseCategory = ExpenseCategory(
                                               settingsScreenController.categoryNameController.text,
@@ -478,14 +492,16 @@ class DashboardScreen extends GetView<DashboardController> {
                                           Get.back();
                                         } else {
                                           Utils.showSnackBar("Enter category name");
-                                        }*/
+                                        }*//*
                                                   },
                                                   style: ElevatedButton.styleFrom(backgroundColor:Colors.red.shade900),
                                                   child: const Text(
                                                     'Add Patient',
                                                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                                                   ),
-                                                )
+                                                )*/
+
+
                                               ],
                                             ),
                                             radius: 10.0);
@@ -1264,6 +1280,8 @@ class DashboardScreen extends GetView<DashboardController> {
       ),
     );
   }
+
+  void setState(Null Function() param0) {}
 }
 
 Widget _dailyNumbers(List<AppointmentContent> list) {
