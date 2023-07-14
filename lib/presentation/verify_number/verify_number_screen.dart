@@ -75,7 +75,7 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
                   await controller.verifyOtp(
                       controller.enteredOtpp.value, phoneNumber ?? "");
 
-                  Get.back(result: true);
+                  // Get.back(result: true);
                 } on Map {
                   //  _onOnTapSignInError();
                 } on NoInternetException catch (e) {

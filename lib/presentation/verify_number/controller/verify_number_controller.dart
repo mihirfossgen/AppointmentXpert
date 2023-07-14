@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/verify_otp.dart';
+import '../../../routes/app_routes.dart';
+import '../../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../create_profile/controller/create_profile_controller.dart';
 
 class VerifyNumberController extends GetxController {
   bool isKeyboardVisible = false;
@@ -46,6 +49,8 @@ class VerifyNumberController extends GetxController {
   ) async {
     try {
       getOtp = await Get.find<VerifyOtpApi>().verifyOtp(number, otp);
+
+      _handleCreateLoginSuccess(getOtp!);
     } on Map catch (e) {
       print(e);
       rethrow;
@@ -62,6 +67,56 @@ class VerifyNumberController extends GetxController {
       print(e);
       return false;
     }
+  }
+
+  void _handleCreateLoginSuccess(OtpModel otpModel) {
+    print(otpModel.response?.body?.roles?[0].name);
+    storingAuthKey(
+        otpModel.response?.body?.jwt ?? "",
+        otpModel.response?.body?.userId ?? 0,
+        otpModel.response?.body?.roles?[0].name ?? "");
+    getPatientOrEmplyeeId(otpModel.response?.body?.roles?[0].name ?? "",
+        otpModel.response?.body?.userId ?? 0, otpModel);
+  }
+
+  getPatientOrEmplyeeId(String role, int id, OtpModel _model) async {
+    if (role.toLowerCase() == "examiner" ||
+        role.toLowerCase() == "receptionist" ||
+        role.toLowerCase() == "admin" ||
+        role.toLowerCase() == "doctor") {
+      if (_model.response?.body?.staff != null) {
+        SharedPrefUtils.saveInt(
+            'employee_Id', _model.response?.body?.staff?.id ?? 0);
+        // AppointmentDetails.staffId = _model.staff!.id ?? 0;
+        Get.offAllNamed(AppRoutes.dashboardScreen);
+      } else {
+        Get.toNamed(AppRoutes.create_profile_screen,
+            arguments: ScreenArguments(
+                _model.response?.body?.roles?[0].name ?? "",
+                _model.response?.body?.userId ?? 0,
+                _model.response?.body?.userName ?? ""));
+      }
+    } else {
+      if (_model.response?.body?.patient != null) {
+        SharedPrefUtils.saveInt(
+            'patient_Id', _model.response?.body?.patient!.id ?? 0);
+        //Get.offNamed(AppRoutes.homeContainerScreen);
+        Get.offAllNamed(AppRoutes.dashboardScreen);
+      } else {
+        Get.back();
+        Get.toNamed(AppRoutes.create_profile_screen,
+            arguments: ScreenArguments(
+                _model.response?.body?.roles?[0].name ?? "",
+                _model.response?.body?.userId ?? 0,
+                _model.response?.body?.userName ?? ""));
+      }
+    }
+  }
+
+  void storingAuthKey(String key, int id, String role) {
+    SharedPrefUtils.saveStr('auth_token', key);
+    SharedPrefUtils.saveInt("user_Id", id);
+    SharedPrefUtils.saveStr("role", role);
   }
 
   @override

@@ -1,9 +1,9 @@
-import 'package:appointmentxpert/presentation/patient_dashboard_screen/binding/patient_dashboard_binding.dart';
-import 'package:appointmentxpert/presentation/patient_dashboard_screen/views/screens/patient_dashboard_screen.dart';
 import 'package:get/get.dart';
 
 import '../presentation/create_new_password_screen/binding/create_new_password_binding.dart';
 import '../presentation/create_new_password_screen/create_new_password_screen.dart';
+import '../presentation/create_profile/binding/create_profile_binding.dart';
+import '../presentation/create_profile/create_profile_screen.dart';
 import '../presentation/dashboard_screen/binding/dashboard_binding.dart';
 import '../presentation/dashboard_screen/views/screens/dashboard_screen.dart';
 import '../presentation/login_screen/binding/login_binding.dart';
@@ -55,8 +55,6 @@ class AppRoutes {
   static const String homePage = '/home_page';
 
   static const String dashboardScreen = '/dashboard_screen';
-
-  static const String patientdashboardScreen = '/dashboard_screen';
 
   static const String topDoctorScreen = '/top_doctor_screen';
 
@@ -189,29 +187,21 @@ class AppRoutes {
         DasboardMainBinding(),
       ],
     ),
-    GetPage(
-          name: patientdashboardScreen,
-          page: () => PatientDashboardScreen(),
-          bindings: [
-            PatientDashboardMainBinding(),
-          ],
-        ),
 
     GetPage(
-      name: initialRoute,
-      page: () => PatientDashboardScreen(),
-      bindings: [
-        PatientDashboardMainBinding(),
-      ],
-    ),
-
-    /*GetPage(
       name: initialRoute,
       page: () => SplashScreen(),
       bindings: [
         SplashBinding(),
       ],
-    ),*/
+    ),
+    GetPage(
+      name: create_profile_screen,
+      page: () => CreateProfileScreen(),
+      bindings: [
+        CreateProfileBinding(),
+      ],
+    ),
 
     // GetPage(
     //   name: createInvoiceScreen,

@@ -24,6 +24,7 @@ import '../../../../theme/app_style.dart';
 import '../../../../widgets/app_bar/appbar_image.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
+import '../../../add_patient_screens/add_patient_screen.dart';
 import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../../create_profile/create_profile_screen.dart';
 import '../../../profile_page/profile_page.dart';
@@ -857,38 +858,20 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget _buildPatientsListPageContent({Function()? onPressedMenu}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: Column(
-        children: [
-          // const SizedBox(height: kSpacing),
-          // Row(
-          //   children: [
-          //     if (onPressedMenu != null)
-          //       Padding(
-          //         padding: const EdgeInsets.only(right: kSpacing / 2),
-          //         child: IconButton(
-          //           onPressed: onPressedMenu,
-          //           icon: const Icon(Icons.menu),
-          //         ),
-          //       ),
-          //     // Expanded(
-          //     //   child: SearchField(
-          //     //     onSearch: controller.searchTask,
-          //     //     hintText: "Search.. ",
-          //     //   ),
-          //     // ),
-          //   ],
-          // ),
-          //const SizedBox(height: kSpacing),
-          Container(
-              width: MediaQuery.of(Get.context!).size.width,
-              height: MediaQuery.of(Get.context!).size.height,
-              //color: Colors.red,
-              child: PatientsList(
-                data: controller.getAllPatientsList,
-                onPressed: (index, data) {},
-              ))
-        ],
-      ),
+      child: SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
+          ? AddPatientScreen()
+          : Column(
+              children: [
+                SizedBox(
+                    width: MediaQuery.of(Get.context!).size.width,
+                    height: MediaQuery.of(Get.context!).size.height,
+                    //color: Colors.red,
+                    child: PatientsList(
+                      data: controller.getAllPatientsList,
+                      onPressed: (index, data) {},
+                    ))
+              ],
+            ),
     );
   }
 

@@ -20,6 +20,8 @@ import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
 import '../login_success_dialog/controller/login_success_controller.dart';
 import '../login_success_dialog/login_success_dialog.dart';
+import '../verify_number/controller/verify_number_controller.dart';
+import '../verify_number/verify_number_screen.dart';
 import 'controller/login_controller.dart';
 
 class LoginScreen extends GetWidget<LoginController> {
@@ -139,14 +141,14 @@ class LoginScreen extends GetWidget<LoginController> {
                 children: [
                   /// username or Gmail
                   CustomTextFormField(
-                    labelText: 'Number',
+                    labelText: 'Mobile Number',
                     controller: controller.emailController,
                     textInputAction: TextInputAction.done,
                     isRequired: true,
                     textInputType: TextInputType.emailAddress,
-                    // validator: (value) {
-                    //   return controller.numberValidator(value ?? "");
-                    // },
+                    validator: (value) {
+                      return controller.numberValidator(value ?? "");
+                    },
                     padding: TextFormFieldPadding.PaddingT14,
                     prefixConstraints:
                         BoxConstraints(maxHeight: getVerticalSize(56)),
@@ -319,60 +321,60 @@ class LoginScreen extends GetWidget<LoginController> {
         text: "lbl_login".tr,
         margin: getMargin(top: 12, bottom: 10),
         onTap: () async {
-          // if (controller.trySubmit()) {
-          // bool resp = await controller.callOtp(
-          //     controller.emailController.text, "login");
-          // if (resp) {
-          //   VerifyNumberController verifyNumberController =
-          //       Get.put(VerifyNumberController());
+          if (controller.trySubmit()) {
+            bool resp = await controller.callOtp(
+                controller.emailController.text, "login");
+            if (resp) {
+              VerifyNumberController verifyNumberController =
+                  Get.put(VerifyNumberController());
 
-          //   Responsive.isMobile(Get.context!)
-          //       ? await showModalBottomSheet<dynamic>(
-          //           context: Get.context!,
-          //           isDismissible: true,
-          //           isScrollControlled: false,
-          //           enableDrag: false,
-          //           elevation: 2.0,
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(20.0),
-          //           ),
-          //           builder: (context) {
-          //             return ClipRRect(
-          //               borderRadius: BorderRadius.circular(20),
-          //               child: VerifyPhoneNumberScreen(
-          //                   phoneNumber: controller.emailController.text),
-          //             );
-          //           },
-          //         ).then((value) {
-          //           print(value);
-          //           if (value) onTapSignin(controller);
-          //         })
-          //       : WidgetsBinding.instance.addPostFrameCallback((_) {
-          //           showDialog(
-          //               context: Get.context!,
-          //               builder: (context) => AlertDialog(
-          //                     actions: [
-          //                       ElevatedButton(
-          //                           onPressed: () {
-          //                             Get.back();
-          //                           },
-          //                           child: Text('Close'))
-          //                     ],
-          //                     title: Text('Verify Phone Number'),
-          //                     content: SizedBox(
-          //                         height: 300,
-          //                         width:
-          //                             MediaQuery.of(context).size.width / 3,
-          //                         child: VerifyPhoneNumberScreen(
-          //                             phoneNumber:
-          //                                 controller.emailController.text)),
-          //                   )).then((value) {
-          bool value = controller.trySubmit();
-          if (value) onTapSignin(controller);
-          //   });
-          // });
-          //}
-          // }
+              Responsive.isMobile(Get.context!)
+                  ? await showModalBottomSheet<dynamic>(
+                      context: Get.context!,
+                      isDismissible: true,
+                      isScrollControlled: false,
+                      enableDrag: false,
+                      elevation: 2.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      builder: (context) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: VerifyPhoneNumberScreen(
+                              phoneNumber: controller.emailController.text),
+                        );
+                      },
+                    ).then((value) {
+                      print(value);
+                      if (value) onTapSignin(controller);
+                    })
+                  : WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showDialog(
+                          context: Get.context!,
+                          builder: (context) => AlertDialog(
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      child: const Text('Close'))
+                                ],
+                                title: const Text('Verify Phone Number'),
+                                content: SizedBox(
+                                    height: 300,
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    child: VerifyPhoneNumberScreen(
+                                        phoneNumber:
+                                            controller.emailController.text)),
+                              )).then((value) {
+                        bool value = controller.trySubmit();
+                        if (value) onTapSignin(controller);
+                      });
+                    });
+            }
+          }
         });
   }
 }
