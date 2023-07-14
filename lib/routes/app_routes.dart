@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../presentation/create_new_password_screen/binding/create_new_password_binding.dart';
 import '../presentation/create_new_password_screen/create_new_password_screen.dart';
+import '../presentation/create_profile/binding/create_profile_binding.dart';
+import '../presentation/create_profile/create_profile_screen.dart';
 import '../presentation/dashboard_screen/binding/dashboard_binding.dart';
 import '../presentation/dashboard_screen/views/screens/dashboard_screen.dart';
 import '../presentation/login_screen/binding/login_binding.dart';
@@ -191,6 +193,13 @@ class AppRoutes {
       page: () => SplashScreen(),
       bindings: [
         SplashBinding(),
+      ],
+    ),
+    GetPage(
+      name: create_profile_screen,
+      page: () => CreateProfileScreen(),
+      bindings: [
+        CreateProfileBinding(),
       ],
     ),
 

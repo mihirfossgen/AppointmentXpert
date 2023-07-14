@@ -195,7 +195,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
         const SizedBox(height: 16),
         CustomTextFormField(
             controller: controller.mobile,
-            hintText: "Number",
+            hintText: "Phone Number",
             padding: TextFormFieldPadding.PaddingT14,
             textInputType: TextInputType.emailAddress,
             prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
@@ -1003,16 +1003,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
     ScreenArguments? args =
         ModalRoute.of(context)?.settings.arguments as ScreenArguments?;
     if (args != null) {
-      String username = args.username;
-      if (username.contains(" ")) {
-        List<String> words = username.split(" ");
-        controller.firstname.text = words[0];
-        controller.lastname.text = words[1];
-        controller.userName.text = username;
-      } else {
-        controller.firstname.text = username;
-        controller.userName.text = username;
-      }
+      controller.mobile.text = args.username;
     }
     return SafeArea(
         top: false,

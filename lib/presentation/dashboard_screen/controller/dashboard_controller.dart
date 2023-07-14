@@ -86,8 +86,9 @@ class DashboardController extends GetxController {
     print(role);
     isloading.value = true;
     if (role == "PATIENT") {
-      var credentials = {"pageNumber": 0, "profession": "DOCTOR"};
-      callDoctorsList(credentials);
+      // var credentials = {"pageNumber": 0, "profession": "DOCTOR"};
+      //callDoctorsList(credentials);
+      getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
     }
     // else if (role == "EXAMINER") {
     //   callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));

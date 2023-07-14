@@ -129,7 +129,7 @@ class OnboardingThreeScreen extends GetWidget<OnboardingThreeController> {
                           ),
                           fontStyle: ButtonFontStyle.InterSemiBold16WhiteA700,
                           onTap: () {
-                            Get.toNamed(AppRoutes.dashboardScreen);
+                            Get.toNamed(AppRoutes.onboardingFourScreen);
                           },
                         ),
                       ],

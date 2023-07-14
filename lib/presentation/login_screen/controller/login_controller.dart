@@ -50,7 +50,6 @@ class LoginController extends GetxController {
         },
         data: req,
       ));
-      _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;
       rethrow;
@@ -98,56 +97,17 @@ class LoginController extends GetxController {
     return false;
   }
 
-  void _handleCreateLoginSuccess(LoginModel loginModelObj) {
-    storingAuthKey(loginModelObj.jwt ?? "", loginModelObj.userId ?? 0,
-        loginModelObj.roles?[0].name ?? "");
-    getPatientOrEmplyeeId(loginModelObj.roles?[0].name ?? "",
-        loginModelObj.userId ?? 0, loginModelObj);
-  }
-
-  getPatientOrEmplyeeId(String role, int id, LoginModel _model) async {
-    if (role.toLowerCase() == "examiner" ||
-        role.toLowerCase() == "receptionist" ||
-        role.toLowerCase() == "admin" ||
-        role.toLowerCase() == "doctor") {
-      if (_model.staff != null) {
-        SharedPrefUtils.saveInt('employee_Id', _model.staff!.id ?? 0);
-        // AppointmentDetails.staffId = _model.staff!.id ?? 0;
-        Get.offAllNamed(AppRoutes.dashboardScreen);
-      } else {
-        Get.toNamed(AppRoutes.create_profile_screen,
-            arguments: ScreenArguments(_model.roles?[0].name ?? "",
-                _model.userId ?? 0, _model.userName ?? ""));
-      }
-    } else {
-      if (_model.patient != null) {
-        SharedPrefUtils.saveInt('patient_Id', _model.patient!.id ?? 0);
-        //Get.offNamed(AppRoutes.homeContainerScreen);
-        Get.offAllNamed(AppRoutes.dashboardScreen);
-      } else {
-        Get.toNamed(AppRoutes.create_profile_screen,
-            arguments: ScreenArguments(_model.roles?[0].name ?? "",
-                _model.userId ?? 0, _model.userName ?? ""));
-      }
-    }
-  }
-
   OtpModel? getOtp;
   Future<bool> callOtp(String number, String type) async {
     try {
       getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
         'Content-type': 'application/x-www-form-urlencoded',
       }, number: number, type: type);
+
       return true;
     } on Map catch (e) {
       print(e);
       return false;
     }
-  }
-
-  void storingAuthKey(String key, int id, String role) {
-    SharedPrefUtils.saveStr('auth_token', key);
-    SharedPrefUtils.saveInt("user_Id", id);
-    SharedPrefUtils.saveStr("role", role);
   }
 }

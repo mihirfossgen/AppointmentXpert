@@ -88,6 +88,45 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
+  String? lastNameValidator(String value) {
+    if (value.isEmpty || value.length < 4) {
+      return 'Last name must be at least 4 characters long.';
+    }
+    return null;
+  }
+
+  String? userNameValidator(String value) {
+    if (value.isEmpty || value.length < 4) {
+      return 'Username must be at least 4 characters long.';
+    }
+    return null;
+  }
+
+  String? dobValidator(String value) {
+    if (value.isEmpty) {
+      return 'Please select date of birth';
+    }
+    return null;
+  }
+
+  String? numberValidator(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter mobile number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    }
+    return null;
+  }
+
+  String? addressValidator(String value) {
+    if (value.isEmpty || value.length < 4) {
+      return 'Please enter address';
+    }
+    return null;
+  }
+
   String? fromValidator(String value) {
     if (value.isEmpty) {
       return 'Please select time';
@@ -123,13 +162,6 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
-  String? lastNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'Last name must be at least 4 characters long.';
-    }
-    return null;
-  }
-
   String? genderValidator(String value) {
     if (value.isEmpty) {
       return 'Please select gender';
@@ -140,31 +172,6 @@ class DoctorDetailController extends GetxController {
   String? consultingdoctorValidator(String value) {
     if (value.isEmpty) {
       return 'Please select doctor';
-    }
-    return null;
-  }
-
-  String? dobValidator(String value) {
-    if (value.isEmpty) {
-      return 'Please select date of birth';
-    }
-    return null;
-  }
-
-  String? numberValidator(String value) {
-    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return 'Please enter mobile number';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
-    }
-    return null;
-  }
-
-  String? addressValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'Please enter address';
     }
     return null;
   }
