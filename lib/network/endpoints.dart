@@ -40,6 +40,7 @@ class Endpoints {
   static const String patientTreatmentAdd = "patientTreatment/create";
   static const String createTreatment = "treatment/create";
   static const String getStaffById = "staff/";
+  static const String staffList = "staff/list?pageNumber=";
   static const String getPatientById = "patient/";
   static const String getReceptionistTodayAppoitments = "appointment/today";
   static const String getAllAppointments = "appointment/list";
