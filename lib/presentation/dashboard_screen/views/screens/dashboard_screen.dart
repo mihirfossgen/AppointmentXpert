@@ -341,80 +341,76 @@ class DashboardScreen extends GetView<DashboardController> {
               child: ResponsiveBuilder.isMobile(context)
                   ? Column(
                       children: [
+                        SharedPrefUtils.readPrefStr("role") == 'PATIENT'?
                         Card(
-                            elevation: 8,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            color: Colors.red.shade50,
-                            shadowColor: Colors.grey.shade400,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              //child: ResponsiveBuilder.isMobile(Get.context!)
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(children: [
-                                      Image.asset('assets/images/call.png',
-                                          height: 50, width: 50),
-                                      Text(
-                                        "Emergency Appointment",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: ColorConstant.black900),
-                                      )
-                                    ]),
-                                    Text(
-                                      "We keep emergency appointments available everyday.",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.normal,
-                                          color: ColorConstant.gray600),
-                                    ),
-                                    Align(
-                                        alignment: Alignment.centerRight,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                alignment: Alignment.center,
-                                                backgroundColor:
-                                                    Colors.red.shade900,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 12),
-                                                textStyle: const TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            onPressed: () {
-                                              pats? pat = pats.Existing;
-                                              Get.defaultDialog(
-                                                  title: '',
-                                                  content: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Text(
-                                                        "Thanks for your enquiry.",
-                                                        style: TextStyle(
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: ColorConstant
-                                                                .gray900),
-                                                      ),
-                                                      Text(
-                                                        "We will co-ordinate with you shortly.",
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            color: ColorConstant
-                                                                .gray600),
-                                                      ),
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        color: Colors.red.shade50,
+                        shadowColor: Colors.grey.shade400,
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            //child: ResponsiveBuilder.isMobile(Get.context!)
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                  children:[
 
-                                                      /*ListTile(
+                                    Image.asset('assets/images/call.png',height: 50,width: 50),
+
+                                    Text(
+                                      "Emergency Appointment",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorConstant.black900),
+                                    )
+                                  ]),
+
+                              Text(
+                                "We keep emergency appointments available everyday.",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: ColorConstant.gray600),
+                              ),
+
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          alignment:Alignment.center,
+                                          backgroundColor: Colors.red.shade900,
+                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                          textStyle: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold)),
+
+                                      onPressed: () {
+                                        pats? pat = pats.Existing;
+                                        Get.defaultDialog(
+                                            title: '',
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+
+                                                Text(
+                                                  "Thanks for your enquiry.",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: ColorConstant.gray900),
+                                                ),
+
+                                                Text(
+                                                  "We will co-ordinate with you shortly.",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.normal,
+                                                      color: ColorConstant.gray600),
+                                                ),
+
+                                                /*ListTile(
                                                         title: Text('Existing Patient'),
                                                         leading: Radio<pats>(
                                                           value: pats.Existing,
@@ -507,13 +503,18 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                                                   ),
                                                 )*/
-                                                    ],
-                                                  ),
-                                                  radius: 10.0);
-                                            },
-                                            child: Text('Book Now')))
-                                  ]),
-                            )),
+
+
+                                              ],
+                                            ),
+                                            radius: 10.0);
+
+                                      },
+                                      child: Text('Book Now'))
+                              )
+                            ]
+                        ),
+                       )),
                         const SizedBox(height: 10),
                         Card(
                           elevation: 4,
@@ -661,6 +662,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         const SizedBox(
                           height: 10,
                         ),
+                        SharedPrefUtils.readPrefStr("role") == 'PATIENT'?
                         Card(
                           elevation: 4,
                           shadowColor: ColorConstant.gray400,
@@ -714,6 +716,9 @@ class DashboardScreen extends GetView<DashboardController> {
                               ],
                             ),
                           ),
+                        ):
+                        const SizedBox(
+                          height: 10,
                         )
                       ],
                     )
@@ -1322,7 +1327,9 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  void setState(Null Function() param0) {}
+  void setState(Null Function() param0) {
+    return;
+  }
 }
 
 Widget _dailyNumbers(List<AppointmentContent> list) {
