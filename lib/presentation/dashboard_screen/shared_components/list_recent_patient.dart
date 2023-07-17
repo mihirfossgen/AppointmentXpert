@@ -1,5 +1,5 @@
+import 'package:appointmentxpert/models/patient_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,11 @@ import '../../../network/endpoints.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/responsive.dart';
+import '../../appointment_booking_screen/appointment_booking.dart';
+import '../views/screens/dashboard_screen.dart';
 
 class ListRecentPatientData {
+  final int patientId;
   final Icon icon;
   final String name;
   final String age;
@@ -23,6 +26,7 @@ class ListRecentPatientData {
   final String? diognosys;
 
   const ListRecentPatientData({
+    required this.patientId,
     required this.icon,
     required this.name,
     required this.age,
@@ -48,9 +52,9 @@ class ListRecentPatients extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0.0),
       child: GFListTile(
-        icon: Icon(Icons.arrow_right),
+        icon: const Icon(Icons.arrow_right),
         avatar: data.profilePicture != null
             ? CachedNetworkImage(
                 width: 80,
@@ -88,32 +92,48 @@ class ListRecentPatients extends StatelessWidget {
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Email: ${data.email.toString()}',
-              style: TextStyle(fontSize: 14, color: Colors.black),
+              style: const TextStyle(fontSize: 14, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Address: ${data.address}',
-              style: TextStyle(fontSize: 13, color: Colors.black),
+              style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Age: ${data.age}',
-              style: TextStyle(fontSize: 13, color: Colors.black),
+              style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
           ],
         ),
         enabled: true,
-        //firstButtonTextStyle: ,
+        firstButtonTextStyle: const TextStyle(color: Colors.blue),
         firstButtonTitle: 'View Details',
+        secondButtonTitle: 'Book Appointment',
+        secondButtonTextStyle: const TextStyle(color: Colors.red),
+        onSecondButtonTap: () {
+          Get.to(AppointmentBookingScreen(
+              patientDetailsArguments: PatientDetailsArguments(
+                  [],
+                  Patients(
+                      id: data.id,
+                      email: data.email,
+                      firstName: data.firstName,
+                      lastName: data.lastName,
+                      address: data.address,
+                      mobile: data.mobile,
+                      sex: data.sex))));
+        },
+        onFirstButtonTap: () {},
         //focusColor: ,
         focusNode: FocusNode(),
         //hoverColor: Colors.blue,
@@ -188,7 +208,7 @@ class ListRecentPatients extends StatelessWidget {
       //_buildIcon(),
       title: Text(
         '${data.firstName} ' + '${data.lastName}',
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -198,26 +218,26 @@ class ListRecentPatients extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             'Email: ${data.email.toString()}',
-            style: TextStyle(fontSize: 14, color: Colors.black),
+            style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             'Address: ${data.address}',
-            style: TextStyle(fontSize: 13, color: Colors.black),
+            style: const TextStyle(fontSize: 13, color: Colors.black),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             'Age: ${data.age}',
-            style: TextStyle(fontSize: 13, color: Colors.black),
+            style: const TextStyle(fontSize: 13, color: Colors.black),
           ),
         ],
       ),
@@ -230,7 +250,7 @@ class ListRecentPatients extends StatelessWidget {
             size: 30,
             color: Colors.blue.shade600,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(

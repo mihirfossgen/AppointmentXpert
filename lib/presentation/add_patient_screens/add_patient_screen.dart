@@ -1,10 +1,12 @@
 import 'package:appointmentxpert/core/app_export.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+
+import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
+import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_image_view.dart';
@@ -46,16 +48,38 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
   }
 
   Widget getBody() {
-    return SingleChildScrollView(
-      child: Container(
-          width: double.maxFinite,
-          padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
-          child: ResponsiveBuilder.isMobile(Get.context!)
-              ? Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: mobileUi(),
-                )
-              : webOrTabUi()),
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Scaffold(
+        appBar: ResponsiveBuilder.isDesktop(Get.context!)
+            ? null
+            : AppbarImage(
+                backgroundColor: ColorConstant.whiteA70001,
+                height: 70,
+                width: width,
+                leading: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    )),
+                imagePath: 'assets/images/login-logo.png',
+              ),
+        body: SingleChildScrollView(
+          child: Container(
+              width: double.maxFinite,
+              padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
+              child: ResponsiveBuilder.isMobile(Get.context!)
+                  ? Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: mobileUi(),
+                    )
+                  : webOrTabUi()),
+        ),
+      ),
     );
   }
 

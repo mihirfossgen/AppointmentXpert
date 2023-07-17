@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:intl/intl.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/size_utils.dart';
-import '../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../models/getallEmplyesList.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../widgets/app_bar/appbar_image.dart';
@@ -30,6 +28,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
   DoctorDetailsArguments? doctorDetailsArguments;
   PatientDetailsArguments? patientDetailsArguments;
   DoctorDetailController controller = Get.put(DoctorDetailController());
+
   @override
   Widget build(BuildContext context) {
     // final args =
@@ -757,13 +756,35 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
 
     Widget getBody(
         Size size, BuildContext context, PatientDetailsArguments args) {
-      return SingleChildScrollView(
-        child: Container(
-            width: double.maxFinite,
-            padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
-            child: ResponsiveBuilder.isMobile(Get.context!)
-                ? mobileUi(context)
-                : webUi(context, args)),
+      return SafeArea(
+        top: false,
+        bottom: false,
+        child: Scaffold(
+          appBar: ResponsiveBuilder.isDesktop(context)
+              ? null
+              : AppbarImage(
+                  backgroundColor: ColorConstant.whiteA70001,
+                  height: 70,
+                  width: width,
+                  leading: IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      )),
+                  imagePath: 'assets/images/login-logo.png',
+                ),
+          body: SingleChildScrollView(
+            child: Container(
+                width: double.maxFinite,
+                padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
+                child: ResponsiveBuilder.isMobile(Get.context!)
+                    ? mobileUi(context)
+                    : webUi(context, args)),
+          ),
+        ),
       );
     }
 

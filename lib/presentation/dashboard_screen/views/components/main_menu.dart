@@ -30,13 +30,13 @@ class _MainMenu extends StatelessWidget {
         SelectionButtonData(
           activeIcon: EvaIcons.bell,
           icon: EvaIcons.bellOutline,
-          label: "Add Appointments",
+          label: "Appointments",
           //totalNotif: 100,
         ),
         SelectionButtonData(
           activeIcon: EvaIcons.personAdd,
           icon: EvaIcons.personAdd,
-          label: "Add Patient",
+          label: "Patients",
           //totalNotif: 20,
         ),
         SelectionButtonData(
