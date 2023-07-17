@@ -339,6 +339,7 @@ class DashboardScreen extends GetView<DashboardController> {
               child: ResponsiveBuilder.isMobile(context)
                   ? Column(
                       children: [
+                        SharedPrefUtils.readPrefStr("role") == 'PATIENT'?
                         Card(
                         elevation: 8,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -385,6 +386,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
                                       onPressed: () {
                                         pats? pat = pats.Existing;
+                                        String? gender;
                                         Get.defaultDialog(
                                             title: '',
                                             content: Column(
@@ -406,6 +408,28 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       fontWeight: FontWeight.normal,
                                                       color: ColorConstant.gray600),
                                                 ),
+
+                                               /* RadioListTile(
+                                                  title: Text("Male"),
+                                                  value: "male",
+                                                  groupValue: gender,
+                                                  onChanged: (value){
+                                                    setState(() {
+                                                      gender = value.toString();
+                                                    });
+                                                  },
+                                                ),
+
+                                                RadioListTile(
+                                                  title: Text("Female"),
+                                                  value: "female",
+                                                  groupValue: gender,
+                                                  onChanged: (value){
+                                                    setState(() {
+                                                      gender = value.toString();
+                                                    });
+                                                  },
+                                                ),*/
 
                                                 /*ListTile(
                                                         title: Text('Existing Patient'),
@@ -511,7 +535,7 @@ class DashboardScreen extends GetView<DashboardController> {
                               )
                             ]
                         ),
-                       )),
+                       )):
                         const SizedBox(height: 10),
                         Card(
                           elevation: 4,
@@ -659,6 +683,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         const SizedBox(
                           height: 10,
                         ),
+                        SharedPrefUtils.readPrefStr("role") == 'PATIENT'?
                         Card(
                           elevation: 4,
                           shadowColor: ColorConstant.gray400,
@@ -712,6 +737,9 @@ class DashboardScreen extends GetView<DashboardController> {
                               ],
                             ),
                           ),
+                        ):
+                        const SizedBox(
+                          height: 10,
                         )
                       ],
                     )
@@ -1281,7 +1309,9 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  void setState(Null Function() param0) {}
+  void setState(Null Function() param0) {
+    return;
+  }
 }
 
 Widget _dailyNumbers(List<AppointmentContent> list) {
