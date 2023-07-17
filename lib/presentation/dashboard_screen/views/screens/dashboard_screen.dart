@@ -49,8 +49,6 @@ part '../components/recent_patients.dart';
 part '../components/task_menu.dart';
 part '../components/todays_appointment_group.dart';
 
-enum pats { Existing, New }
-
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -393,125 +391,131 @@ class DashboardScreen extends GetView<DashboardController> {
                                                   Get.defaultDialog(
                                                       title: '',
                                                       content: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
+                                                        // mainAxisSize:
+                                                        //     MainAxisSize.max,
                                                         children: [
-                                                          Text(
-                                                            "Thanks for your enquiry.",
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color:
-                                                                    ColorConstant
-                                                                        .gray900),
+                                                          ListTile(
+                                                            title: const Text(
+                                                                'Existing Patient'),
+                                                            leading: Obx(
+                                                              () => Radio<pats>(
+                                                                value: pats
+                                                                    .Existing,
+                                                                groupValue: controller
+                                                                            .radioButtonIndex
+                                                                            .value ==
+                                                                        0
+                                                                    ? pats
+                                                                        .Existing
+                                                                    : pats.New,
+                                                                onChanged:
+                                                                    (pats?
+                                                                        value) {
+                                                                  controller
+                                                                      .nameController
+                                                                      .text = controller
+                                                                          .patientData
+                                                                          .value
+                                                                          .patient
+                                                                          ?.firstName
+                                                                          .toString() ??
+                                                                      '';
+                                                                  controller
+                                                                      .mobileController
+                                                                      .text = controller
+                                                                          .patientData
+                                                                          .value
+                                                                          .patient
+                                                                          ?.mobile
+                                                                          .toString() ??
+                                                                      '';
+                                                                  controller
+                                                                      .addressController
+                                                                      .text = controller
+                                                                          .patientData
+                                                                          .value
+                                                                          .patient
+                                                                          ?.address
+                                                                          .toString() ??
+                                                                      '';
+                                                                  controller
+                                                                          .radioButtonVal
+                                                                          .value =
+                                                                      'Existing Patient';
+                                                                  controller
+                                                                      .radioButtonIndex
+                                                                      .value = 0;
+                                                                },
+                                                              ),
+                                                            ),
                                                           ),
-                                                          Text(
-                                                            "We will co-ordinate with you shortly.",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                color:
-                                                                    ColorConstant
-                                                                        .gray600),
+                                                          ListTile(
+                                                            title: const Text(
+                                                                'New Patient'),
+                                                            leading: Obx(
+                                                              () => Radio<pats>(
+                                                                value: pats.New,
+                                                                groupValue: controller
+                                                                            .radioButtonIndex
+                                                                            .value ==
+                                                                        0
+                                                                    ? pats
+                                                                        .Existing
+                                                                    : pats.New,
+                                                                onChanged:
+                                                                    (pats?
+                                                                        value) {
+                                                                  controller
+                                                                      .nameController
+                                                                      .text = '';
+                                                                  controller
+                                                                      .mobileController
+                                                                      .text = '';
+                                                                  controller
+                                                                      .addressController
+                                                                      .text = '';
+                                                                  controller
+                                                                          .radioButtonVal
+                                                                          .value =
+                                                                      'New Patient';
+                                                                  controller
+                                                                      .radioButtonIndex
+                                                                      .value = 1;
+                                                                },
+                                                              ),
+                                                            ),
                                                           ),
-
-                                                          /*ListTile(
-                                                        title: Text('Existing Patient'),
-                                                        leading: Radio<pats>(
-                                                          value: pats.Existing,
-                                                          groupValue: pat,
-                                                          onChanged: (pats? value) {
-                                                            setState((){
-
-                                                              pat = value;
-
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
-
-                                                ListTile(
-                                                    title: Text('New Patient'),
-                                                    leading: Radio<pats>(
-                                                      value: pats.New,
-                                                      groupValue: pat,
-                                                      onChanged: (pats? value) {
-                                                        setState((){
-                                                              pat = value;
-                                                            });
-                                                          },
-                                                        ),
-                                                      )
-                                                ,
-                                                const TextField(
-                                                  //controller: settingsScreenController.categoryNameController,
-                                                  keyboardType: TextInputType.text,
-                                                  maxLines: 1,
-                                                  decoration: InputDecoration(
-                                                      labelText: 'Patient name',
-                                                      hintMaxLines: 1,
-                                                      border: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: Colors.green, width: 4.0))),
-                                                ),
-
-                                                const SizedBox(
-                                                  height: 10.0,
-                                                ),
-
-                                                const TextField(
-                                                  //controller: settingsScreenController.categoryNameController,
-                                                  keyboardType: TextInputType.text,
-                                                  maxLines: 1,
-                                                  decoration: InputDecoration(
-                                                      labelText: 'Patient mobile no.',
-                                                      hintMaxLines: 1,
-                                                      border: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: Colors.green, width: 4.0))),
-                                                ),
-
-                                                const SizedBox(
-                                                  height: 10.0,
-                                                ),
-
-                                                const TextField(
-                                                  //controller: settingsScreenController.categoryNameController,
-                                                  keyboardType: TextInputType.text,
-                                                  maxLines: 1,
-                                                  decoration: InputDecoration(
-                                                      labelText: 'Patient Address',
-                                                      hintMaxLines: 1,
-                                                      border: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: Colors.green, width: 4.0))),
-                                                ),
-
-                                                const SizedBox(
-                                                  height: 30.0,
-                                                ),
-
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    */ /*if (settingsScreenController
-                                            .categoryNameController.text.isNotEmpty) {
-                                          var expenseCategory = ExpenseCategory(
-                                              settingsScreenController.categoryNameController.text,
-                                              id: _addExpenseController.expenseCategories.length);
-                                          settingsScreenController.addExpenseCategory(expenseCategory);
-                                          _addExpenseController.expenseCategories.add(expenseCategory);
-                                          Get.back();
-                                        } else {
-                                          Utils.showSnackBar("Enter category name");
-                                        }*/ /*
-                                                  },
-                                                  style: ElevatedButton.styleFrom(backgroundColor:Colors.red.shade900),
-                                                  child: const Text(
-                                                    'Add Patient',
-                                                    style: TextStyle(color: Colors.white, fontSize: 16.0),
-                                                  ),
-                                                )*/
+                                                          Obx(() => controller
+                                                                          .radioButtonIndex
+                                                                          .value ==
+                                                                      0
+                                                                  ? loadEmergencyDetails(
+                                                                      true)
+                                                                  : loadEmergencyDetails(
+                                                                      false)
+                                                              // Column(
+                                                              //     children: [
+                                                              //       Text(
+                                                              //         "Thanks for your enquiry.",
+                                                              //         style: TextStyle(
+                                                              //             fontSize:
+                                                              //                 20,
+                                                              //             fontWeight:
+                                                              //                 FontWeight.bold,
+                                                              //             color: ColorConstant.gray900),
+                                                              //       ),
+                                                              //       Text(
+                                                              //         "We will co-ordinate with you shortly.",
+                                                              //         style: TextStyle(
+                                                              //             fontSize:
+                                                              //                 15,
+                                                              //             fontWeight:
+                                                              //                 FontWeight.normal,
+                                                              //             color: ColorConstant.gray600),
+                                                              //       ),
+                                                              //     ],
+                                                              //   ),
+                                                              )
                                                         ],
                                                       ),
                                                       radius: 10.0);
@@ -697,13 +701,23 @@ class DashboardScreen extends GetView<DashboardController> {
                                             style: BorderStyle.solid,
                                           ),
                                         ),
-                                        child: const Center(
-                                          child: Text(
-                                            '1',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 40.0,
-                                              fontWeight: FontWeight.bold,
+                                        child: Center(
+                                          child: Obx(
+                                            () => Text(
+                                              SharedPrefUtils.readPrefStr(
+                                                          "role") ==
+                                                      'PATIENT'
+                                                  ? controller.patientTodaysData
+                                                      .value.length
+                                                      .toString()
+                                                  : controller.staffTodaysData
+                                                      .value.length
+                                                      .toString(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 40.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -985,6 +999,100 @@ class DashboardScreen extends GetView<DashboardController> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget loadEmergencyDetails(bool isForExistingPatient) {
+    return Column(
+      children: [
+        TextField(
+          controller: controller.nameController,
+          keyboardType: TextInputType.text,
+          maxLines: 1,
+          decoration: const InputDecoration(
+              // label: isForExistingPatient == true
+              //     ? Obx(
+              //         () => Text(
+              //             '${controller.patientData.value.patient?.firstName.toString()} + ${controller.patientData.value.patient?.lastName.toString()}'),
+              //       )
+              //     : null,
+              labelText: 'Patient name',
+              hintMaxLines: 1,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 4.0))),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        TextField(
+          controller: controller.mobileController,
+          keyboardType: TextInputType.text,
+          maxLines: 1,
+          decoration: const InputDecoration(
+              labelText: 'Patient mobile no.',
+              // label: isForExistingPatient == true
+              //     ? Obx(() => Text(
+              //         controller.patientData.value.patient?.mobile.toString() ??
+              //             ''))
+              //     : null,
+              hintMaxLines: 1,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 4.0))),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        TextField(
+          controller: controller.addressController,
+          keyboardType: TextInputType.text,
+          maxLines: 1,
+          decoration: const InputDecoration(
+              labelText: 'Patient Address',
+              // label: isForExistingPatient == true
+              //     ? Obx(() => Text(controller.patientData.value.patient?.address
+              //             .toString() ??
+              //         ''))
+              //     : null,
+              hintMaxLines: 1,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 4.0))),
+        ),
+        const SizedBox(
+          height: 30.0,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            // if (settingsScreenController
+            //     .categoryNameController
+            //     .text
+            //     .isNotEmpty) {
+            //   var expenseCategory = ExpenseCategory(
+            //       settingsScreenController
+            //           .categoryNameController
+            //           .text,
+            //       id: _addExpenseController
+            //           .expenseCategories
+            //           .length);
+            //   settingsScreenController
+            //       .addExpenseCategory(
+            //           expenseCategory);
+            //   _addExpenseController
+            //       .expenseCategories
+            //       .add(
+            //           expenseCategory);
+            //   Get.back();
+            // } else {
+            //   Utils.showSnackBar(
+            //       "Enter category name");
+            // }
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.red.shade900),
+          child: Text(
+            isForExistingPatient == true ? 'Submit' : 'Add Patient',
+            style: const TextStyle(color: Colors.white, fontSize: 16.0),
+          ),
+        )
+      ],
     );
   }
 

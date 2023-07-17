@@ -18,6 +18,8 @@ import '../shared_components/selection_button.dart';
 import '../shared_components/task_progress.dart';
 import '../shared_components/user_profile.dart';
 
+enum pats { Existing, New }
+
 class DashboardController extends GetxController {
   final scafoldKey = GlobalKey<ScaffoldState>();
 
@@ -28,6 +30,13 @@ class DashboardController extends GetxController {
   );
 
   RxInt selectedPageIndex = 0.obs;
+  RxInt radioButtonIndex = 0.obs;
+  RxString radioButtonVal = "".obs;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
   //final member = ["Avril Kimberly", "Michael Greg"];
 
   final dataTask = const TodaysAppointmentsProgressData(

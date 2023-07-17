@@ -342,7 +342,7 @@ class CreateProfileController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    callClinicsList();
+    //callClinicsList();
     // _controller = TextEditingController(
     //   patternMatchMap: {RegExp('*'): TextStyle(color: Colors.red)},
     //   onMatch: (match) {},

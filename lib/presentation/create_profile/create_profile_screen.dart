@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +13,6 @@ import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../models/create_staff_model.dart';
 import '../../models/createpatient_model.dart';
-import '../../models/get_all_clinic_model.dart';
 import '../../widgets/app_bar/appbar_subtitle_2.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/custom_button.dart';
@@ -33,7 +31,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
 
   List<String>? deptname;
   late ImageSource sourcee;
-  late GetAllClinic _getAllClinic;
+  //late GetAllClinic _getAllClinic;
   String? finalDob;
   String fileName = "";
 
@@ -1011,7 +1009,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
         child: Scaffold(
             appBar: !Responsive.isDesktop(context)
                 ? CustomAppBar(
-                    backgroundColor: ColorConstant.blue50,
+                    backgroundColor: ColorConstant.blue700,
                     height: getVerticalSize(60),
                     leadingWidth: 64,
                     elevation: 0,
@@ -1020,7 +1018,10 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             onPressed: () {
                               onTapArrowleft();
                             },
-                            icon: Icon(Icons.arrow_back))
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                            ))
                         // AppbarImage(
                         //     height: getSize(40),
                         //     width: getSize(40),
