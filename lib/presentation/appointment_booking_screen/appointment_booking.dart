@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../booking_doctor_success_dialog/booking_doctor_success_dialog.dart';
+import '../booking_doctor_success_dialog/controller/booking_doctor_success_controller.dart';
 import '../dashboard_screen/shared_components/responsive_builder.dart';
 import '../dashboard_screen/views/screens/dashboard_screen.dart';
 import 'controller/doctor_detail_controller.dart';
@@ -43,6 +46,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         .map((tod) => tod.format(context))
         .toList();
 
+    if (SharedPrefUtils.readPrefStr('doctor_name') != '') {
+      controller.consultingDoctor.text =
+          SharedPrefUtils.readPrefStr('doctor_name');
+    }
     if (patientDetailsArguments?.details != null &&
         controller.firstname.text == "") {
       controller.firstname.text =
@@ -54,11 +61,6 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       controller.mobile.text = patientDetailsArguments?.details?.mobile ?? "";
       controller.address.text = patientDetailsArguments?.details?.address ?? "";
       controller.list = patientDetailsArguments?.list;
-
-      controller.counsultingDoctor.value = patientDetailsArguments!.list
-          .map((e) => SelectionPopupModel(
-              title: "${e.firstName} ${e.lastName}", id: e.id))
-          .toList();
 
       controller.genderList.value.any((element) {
         if (element.title.toLowerCase() ==
@@ -86,6 +88,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       controller.address.text =
           doctorDetailsArguments?.appointmentData.patient?.address ?? "";
       controller.list = patientDetailsArguments?.list;
+
       controller.genderList.value.any((element) {
         if (element.title.toLowerCase() ==
             doctorDetailsArguments?.appointmentData.patient?.sex
@@ -357,25 +360,19 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
-                              Obx(() => CustomDropDown(
-                                  labelText: "Consulting Doctor ",
-                                  variant: DropDownVariant.OutlineBluegray400,
-                                  fontStyle: DropDownFontStyle
-                                      .ManropeMedium14Bluegray500,
+                              CustomTextFormField(
+                                  controller: controller.consultingDoctor,
+                                  labelText: "Consulting Doctor",
+                                  readonly: true,
+                                  isRequired: true,
                                   validator: (value) {
-                                    return controller.consultingdoctorValidator(
-                                        value?.title ?? "");
+                                    return controller
+                                        .consultingdoctorValidator(value ?? "");
                                   },
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Icon(Icons.arrow_drop_down),
-                                  ),
-                                  items: controller.counsultingDoctor.value,
-                                  onChanged: (value) {
-                                    controller.consultingDoctor.text =
-                                        value.title;
-                                    controller.onConsultingDoctorSelect(value);
-                                  })),
+                                  padding: TextFormFieldPadding.PaddingT14,
+                                  textInputType: TextInputType.emailAddress,
+                                  prefixConstraints: BoxConstraints(
+                                      maxHeight: getVerticalSize(56))),
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
@@ -423,11 +420,12 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                 onTap: () async {
                                                   bool a = await controller
                                                       .trySubmit();
-                                                  if (a)
+                                                  if (a) {
                                                     onTapBookapointmentOne(
                                                       controller.examinerId ??
                                                           0,
                                                     );
+                                                  }
                                                 }))
                                       ]))
                             ],
@@ -679,25 +677,22 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                   padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
                   child: Row(
                     children: [
-                      Obx(() => Flexible(
-                          fit: FlexFit.tight,
-                          child: CustomDropDown(
-                              labelText: "Consulting Doctor ",
-                              isRequired: true,
-                              validator: (value) {
-                                return controller.consultingdoctorValidator(
-                                    value?.title ?? "");
-                              },
-                              icon: const Padding(
-                                padding: EdgeInsets.only(right: 10),
-                                child: Icon(Icons.arrow_drop_down),
-                              ),
-                              items: controller.counsultingDoctor.value,
-                              onChanged: (value) {
-                                controller.consultingDoctor.text = value.title;
-                                controller.onConsultingDoctorSelect(value);
-                                print(controller.examinerId);
-                              }))),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: CustomTextFormField(
+                            controller: controller.consultingDoctor,
+                            labelText: "Consulting Doctor",
+                            isRequired: true,
+                            readonly: true,
+                            validator: (value) {
+                              return controller
+                                  .consultingdoctorValidator(value ?? "");
+                            },
+                            padding: TextFormFieldPadding.PaddingT14,
+                            textInputType: TextInputType.emailAddress,
+                            prefixConstraints:
+                                BoxConstraints(maxHeight: getVerticalSize(56))),
+                      ),
                       SizedBox(
                         width: size.width * 0.02,
                       ),
@@ -816,22 +811,23 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       "date": DateTime.parse(
               "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
           .toIso8601String(),
-      "departmentId": controller.getdeptId(id),
+      // "departmentId": controller.getdeptId(id),
       "startTime": controller.from.value.text,
       "endTime": controller.to.value.text,
-      "examinerId": id,
+      "examinerId": SharedPrefUtils.readPrefINt('staff_id'),
       "note": controller.treatment.text,
-      "patientId": SharedPrefUtils.readPrefINt('patient_Id'),
+
       "purpose": "OTHER",
       //"referenceId": 0,
-      "status": "Pending"
+      "status": "Pending",
+      "updateTimeInMin": 0
     };
 
     print(jsonEncode(requestData));
 
     try {
       await controller.callCreateLogin(requestData);
-      //onTapBooknow();
+      onTapBooknow();
     } on Map {
       //  _onOnTapSignInError();
     } on NoInternetException catch (e) {
@@ -846,18 +842,18 @@ onTapArrowleft4() {
   Get.back();
 }
 
-// onTapBooknow() {
-//   Get.dialog(AlertDialog(
-//     backgroundColor: Colors.transparent,
-//     contentPadding: EdgeInsets.zero,
-//     insetPadding: EdgeInsets.only(left: 0),
-//     content: BookingDoctorSuccessDialog(
-//       Get.put(
-//         BookingDoctorSuccessController(),
-//       ),
-//     ),
-//   ));
-// }
+onTapBooknow() {
+  Get.dialog(AlertDialog(
+    backgroundColor: Colors.transparent,
+    contentPadding: EdgeInsets.zero,
+    insetPadding: const EdgeInsets.only(left: 0),
+    content: BookingDoctorSuccessDialog(
+      Get.put(
+        BookingDoctorSuccessController(),
+      ),
+    ),
+  ));
+}
 
 class AppointmentDetails {
   String time;

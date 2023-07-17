@@ -1,3 +1,5 @@
+import 'package:appointmentxpert/models/staff_list_model.dart';
+import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -98,6 +100,7 @@ class DashboardController extends GetxController {
     else {
       //callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
       callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
+      callStaffList(0);
     }
   }
 
@@ -125,6 +128,26 @@ class DashboardController extends GetxController {
       staffData.value = response;
       //callAppointmentsByStaffId(
       //    SharedPrefUtils.readPrefINt('employee_Id'), true);
+      callReceiptionTodayAppointments();
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    }
+  }
+
+  Future<void> callStaffList(int pageNumber) async {
+    try {
+      StaffList response = (await Get.find<StaffApi>().staffList(pageNumber));
+      print(response);
+      for (var i = 0; i < (response.content?.length ?? 0); i++) {
+        if (response.content?[i].profession == "DOCTOR") {
+          TempHold().DoctorName =
+              "${response.content![i].firstName} ${response.content![i].lastName}";
+          SharedPrefUtils.saveStr('doctor_name',
+              "${response.content![i].firstName} ${response.content![i].lastName}");
+          SharedPrefUtils.saveInt('staff_id', response.content![i].id ?? 0);
+        }
+      }
       callReceiptionTodayAppointments();
     } on Map {
       //postLoginResp = e;

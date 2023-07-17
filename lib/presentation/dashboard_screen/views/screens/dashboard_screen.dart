@@ -75,7 +75,9 @@ class DashboardScreen extends GetView<DashboardController> {
         case 0:
           return _buildHomePageContent(context: context);
         case 1:
-          return _buildAppointmentPageContent();
+          return SharedPrefUtils.readPrefStr('role') == "DOCTOR"
+              ? Container()
+              : _buildAppointmentPageContent();
         case 2:
           return _buildPatientsListPageContent();
         // case 3:

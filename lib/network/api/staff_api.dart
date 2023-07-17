@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/logger.dart';
 import '../../models/getallEmplyesList.dart';
+import '../../models/staff_list_model.dart';
 import '../../models/staff_model.dart';
 import '../dio_client.dart';
 import '../endpoints.dart';
@@ -38,6 +39,20 @@ class StaffApi {
       final Response response =
           await _apiService.get(Endpoints.getStaffById + "$value");
       return StaffData.fromJson(response.data);
+    } on DioError catch (e) {
+      print("e -- $e");
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
+
+  Future<StaffList> staffList(int value) async {
+    try {
+      final Response response =
+          await _apiService.get("${Endpoints.staffList}$value");
+      return StaffList.fromJson(response.data);
     } on DioError catch (e) {
       print("e -- $e");
       throw Exception(e.response?.data['error_description']);
