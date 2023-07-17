@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 import '../../core/app_export.dart';
 import '../../models/patient_model.dart';
 import '../../models/staff_model.dart';
@@ -30,11 +31,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget doctorProfile() {
-    return Container(
+    return SizedBox(
       child: ListView.builder(
           itemCount: 1,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return doctorCard(
               firstName: staffData?.firstName,
@@ -71,11 +72,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget patientProfile() {
-    return Container(
+    return SizedBox(
       child: ListView.builder(
           itemCount: 1,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return patientCard(
                 firstName: patientData?.patient?.firstName,
@@ -112,14 +113,14 @@ class _ProfilePageState extends State<ProfilePage> {
             margin: const EdgeInsets.only(
               top: 45.0,
             ),
-            decoration: new BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
               ),
               color: Colors.white,
               boxShadow: [
-                new BoxShadow(
+                BoxShadow(
                   color: Colors.black12,
                   blurRadius: 20.0,
                   offset: Offset(0, 0),
@@ -129,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   //transform: Matrix4.translationValues(0.0, -16.0, 0.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -137,12 +138,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       Column(
                         children: [
                           Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(100),
                               ),
                               boxShadow: [
-                                new BoxShadow(
+                                BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 15.0,
                                   offset: Offset(0, 0),
@@ -169,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                 errorWidget: (context, url, error) =>
                                     Image.asset(
                                         !Responsive.isDesktop(Get.context!)
@@ -202,8 +203,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          '${prefix ?? ''} ${firstName} ${lastName}',
-                          style: TextStyle(
+                          '${prefix ?? ''} $firstName $lastName',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Color(0xFF6f6f6f),
@@ -247,8 +248,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       unratedColor: Colors.amber.withAlpha(50),
                       itemCount: 5,
                       itemSize: 30.0,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => Icon(
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
@@ -274,7 +275,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             address,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFF9f9f9f),
                             ),
                           ),
@@ -299,14 +300,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               (medicalEducation != null)
-                                  ? Container(
+                                  ? SizedBox(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'MEDICAL EDUCATION',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -316,7 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           Text(
                                             medicalEducation,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Color(0xFF9f9f9f),
                                             ),
                                           )
@@ -326,7 +327,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   : Container(),
                               (internship != null)
                                   ? Container(
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                         top: 20.0,
                                       ),
                                       child: Column(
@@ -335,7 +336,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'INTERNSHIP',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -345,7 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           Text(
                                             internship,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Color(0xFF9f9f9f),
                                             ),
                                           )
@@ -362,14 +363,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               (residency != null)
-                                  ? Container(
+                                  ? SizedBox(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'RESIDENCY',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -379,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           Text(
                                             residency,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Color(0xFF9f9f9f),
                                             ),
                                           )
@@ -389,7 +390,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   : Container(),
                               (fellowship != null)
                                   ? Container(
-                                      margin: EdgeInsets.only(
+                                      margin: const EdgeInsets.only(
                                         top: 20.0,
                                       ),
                                       child: Column(
@@ -398,7 +399,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'FELLOWSHIP',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -408,7 +409,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           Text(
                                             fellowship,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Color(0xFF9f9f9f),
                                             ),
                                           )
@@ -424,7 +425,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 sectionTitle(context, "Office Gallery"),
-                Container(
+                SizedBox(
                   height: 150,
                   child: ListView(
                     padding: EdgeInsets.zero,
@@ -475,14 +476,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 //     ],
                 //   ),
                 // ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 ElevatedButton.icon(
                     onPressed: () {
                       onTapLogout();
                     },
-                    icon: Icon(Icons.logout),
-                    label: Text('Log Out')),
-                SizedBox(
+                    icon: const Icon(Icons.logout),
+                    label: const Text('Log Out')),
+                const SizedBox(
                   height: 20,
                 )
               ],
@@ -512,14 +513,14 @@ class _ProfilePageState extends State<ProfilePage> {
             margin: const EdgeInsets.only(
               top: 45.0,
             ),
-            decoration: new BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
               ),
               color: Colors.white,
               boxShadow: [
-                new BoxShadow(
+                BoxShadow(
                   color: Colors.black12,
                   blurRadius: 20.0,
                   offset: Offset(0, 0),
@@ -529,7 +530,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   //transform: Matrix4.translationValues(0.0, -16.0, 0.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -539,12 +540,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(100),
                               ),
                               boxShadow: [
-                                new BoxShadow(
+                                BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 15.0,
                                   offset: Offset(0, 0),
@@ -579,7 +580,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
+                                      const CircularProgressIndicator(),
                                   errorWidget: (context, url, error) =>
                                       Image.asset(
                                           !Responsive.isDesktop(Get.context!)
@@ -613,8 +614,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          '${prefix} ${firstName} ${lastName}',
-                          style: TextStyle(
+                          '$prefix $firstName $lastName',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Color(0xFF6f6f6f),
@@ -664,12 +665,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
+                              SizedBox(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'AGE',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -680,7 +681,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Text(
                                       patientData?.patient?.age.toString() ??
                                           '',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
                                     )
@@ -688,14 +689,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   top: 20.0,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Gender',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -706,7 +707,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Text(
                                       patientData?.patient?.sex.toString() ??
                                           '',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
                                     )
@@ -721,12 +722,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
+                              SizedBox(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Email',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -736,7 +737,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     Text(
                                       patientData?.patient?.email ?? '',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
                                     )
@@ -744,14 +745,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                   top: 20.0,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Mobile',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -761,7 +762,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     Text(
                                       patientData?.patient?.mobile ?? '',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
                                     )
@@ -775,14 +776,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 ElevatedButton.icon(
                     onPressed: () {
                       onTapLogout();
                     },
-                    icon: Icon(Icons.logout),
-                    label: Text('Log Out')),
-                SizedBox(
+                    icon: const Icon(Icons.logout),
+                    label: const Text('Log Out')),
+                const SizedBox(
                   height: 20,
                 )
               ],
@@ -817,7 +818,7 @@ onTapLogout() {
   Get.dialog(AlertDialog(
     backgroundColor: Colors.transparent,
     contentPadding: EdgeInsets.zero,
-    insetPadding: EdgeInsets.only(left: 0),
+    insetPadding: const EdgeInsets.only(left: 0),
     content: LogOutPopUpDialog(
       Get.put(
         LogOutPopUpController(),
@@ -843,11 +844,11 @@ Material appointmentDays(
           children: [
             Text(
               appointmentDay,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Text(
               appointmentDate,
-              style: TextStyle(fontWeight: FontWeight.normal),
+              style: const TextStyle(fontWeight: FontWeight.normal),
             ),
           ],
         ),
@@ -870,7 +871,7 @@ Material appointmentTimes(String appointmentDay, context) {
         alignment: Alignment.center,
         child: Text(
           appointmentDay,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     ),
@@ -882,7 +883,7 @@ Widget officePhotos(context, String officePhotoUrl) {
     margin: const EdgeInsets.only(
       left: 20.0,
     ),
-    decoration: BoxDecoration(
+    decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(8.0)),
     ),
     child: Material(
@@ -964,7 +965,7 @@ Widget sectionTitle(context, String title) {
             ),
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(
             top: 20,
           ),

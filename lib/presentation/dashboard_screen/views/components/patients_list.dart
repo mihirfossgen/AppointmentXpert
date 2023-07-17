@@ -1,3 +1,4 @@
+import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -24,90 +25,104 @@ class PatientsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Container(
-          padding: EdgeInsets.all(defaultPadding),
-          decoration: BoxDecoration(
-            color: secondaryColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (Responsive.isMobile(context))
-                Column(
-                  children: [
-                    textView(),
-                    SizedBox(
-                      height: 10.0,
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Get.to(AddPatientScreen());
+          },
+          child: const Icon(Icons.add),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: SingleChildScrollView(
+          child: Container(
+              padding: const EdgeInsets.all(defaultPadding),
+              decoration: const BoxDecoration(
+                color: secondaryColor,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (Responsive.isMobile(context))
+                    Column(
+                      children: [
+                        textView(),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        //SearchField(),
+                      ],
                     ),
-                    //SearchField(),
-                  ],
-                ),
-              if (!Responsive.isMobile(context))
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(flex: 3, child: textView()),
-                    //Expanded(flex: 5, child: SearchField())
-                  ],
-                ),
-              SizedBox(
-                height: 10.0,
-              ),
-              SizedBox(
-                height: 700,
-                child:
-                    Responsive.isMobile(context) ? loadList() : loadDataTable(),
-              ),
+                  if (!Responsive.isMobile(context))
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(flex: 3, child: textView()),
+                        //Expanded(flex: 5, child: SearchField())
+                      ],
+                    ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  SizedBox(
+                    height: 700,
+                    child: Responsive.isMobile(context)
+                        ? loadList()
+                        : loadDataTable(),
+                  ),
 
-              // Container(
-              //   width: double.infinity,
-              //   height: 680,
-              //   child: DataTable2(
-              //     columnSpacing: defaultPadding,
-              //     headingRowHeight: defaultPadding * 5,
-              //     minWidth: 00,
-              //     //decoration: BoxDecoration(color: Color(0xFF2CABB8)),
-              //     columns: [
-              //       DataColumn(
-              //         label: Text(
-              //           "Patient Name",
-              //           style: AppStyle.txtInterSemiBold14,
-              //         ),
-              //       ),
-              //       DataColumn(
-              //         label: Text(
-              //           "Age",
-              //           style: AppStyle.txtInterSemiBold14,
-              //         ),
-              //       ),
-              //       DataColumn(
-              //         label: Text(
-              //           "Date of Birth",
-              //           style: AppStyle.txtInterSemiBold14,
-              //         ),
-              //       ),
-              //       DataColumn(
-              //         label: Text(
-              //           "Blood Type",
-              //           style: AppStyle.txtInterSemiBold14,
-              //         ),
-              //       ),
-              //       DataColumn(
-              //         label: Text(
-              //           "Gender",
-              //           style: AppStyle.txtInterSemiBold14,
-              //         ),
-              //       ),
-              //     ],
-              //     rows: List.generate(data.length,
-              //         (index) => patientDataRow(data[index], context, size),
-              //         growable: true),
-              //   ),
-              // ),
-            ],
-          )),
+                  // Container(
+                  //   width: double.infinity,
+                  //   height: 680,
+                  //   child: DataTable2(
+                  //     columnSpacing: defaultPadding,
+                  //     headingRowHeight: defaultPadding * 5,
+                  //     minWidth: 00,
+                  //     //decoration: BoxDecoration(color: Color(0xFF2CABB8)),
+                  //     columns: [
+                  //       DataColumn(
+                  //         label: Text(
+                  //           "Patient Name",
+                  //           style: AppStyle.txtInterSemiBold14,
+                  //         ),
+                  //       ),
+                  //       DataColumn(
+                  //         label: Text(
+                  //           "Age",
+                  //           style: AppStyle.txtInterSemiBold14,
+                  //         ),
+                  //       ),
+                  //       DataColumn(
+                  //         label: Text(
+                  //           "Date of Birth",
+                  //           style: AppStyle.txtInterSemiBold14,
+                  //         ),
+                  //       ),
+                  //       DataColumn(
+                  //         label: Text(
+                  //           "Blood Type",
+                  //           style: AppStyle.txtInterSemiBold14,
+                  //         ),
+                  //       ),
+                  //       DataColumn(
+                  //         label: Text(
+                  //           "Gender",
+                  //           style: AppStyle.txtInterSemiBold14,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //     rows: List.generate(data.length,
+                  //         (index) => patientDataRow(data[index], context, size),
+                  //         growable: true),
+                  //   ),
+                  // ),
+                ],
+              )),
+        ),
+      ),
     );
   }
 

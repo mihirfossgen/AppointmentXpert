@@ -36,12 +36,12 @@ class _BottomNavbarState extends State<_BottomNavbar> {
         BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.list),
           icon: Icon(EvaIcons.list),
-          label: "Add Appointments",
+          label: "Appointments",
         ),
         BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.personAdd),
           icon: Icon(EvaIcons.personAdd),
-          label: "Add Patients",
+          label: "Patients",
         ),
         BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.settings),

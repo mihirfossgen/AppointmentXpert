@@ -1,5 +1,6 @@
 library dashboard;
 
+import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedule_tab_container_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:countup/countup.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -22,8 +23,6 @@ import '../../../../theme/app_style.dart';
 import '../../../../widgets/app_bar/appbar_image.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
-import '../../../add_patient_screens/add_patient_screen.dart';
-import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../../profile_page/profile_page.dart';
 import '../../controller/dashboard_controller.dart';
 import '../../shared_components/card_appointment.dart';
@@ -71,9 +70,10 @@ class DashboardScreen extends GetView<DashboardController> {
         case 0:
           return _buildHomePageContent(context: context);
         case 1:
-          return SharedPrefUtils.readPrefStr('role') == "DOCTOR"
-              ? Container()
-              : _buildAppointmentPageContent();
+          return _buildAppointmentPageContent();
+        // SharedPrefUtils.readPrefStr('role') == "DOCTOR"
+        //     ? Container()
+        //     : _buildAppointmentPageContent();
         case 2:
           return _buildPatientsListPageContent();
         // case 3:
@@ -1098,11 +1098,42 @@ class DashboardScreen extends GetView<DashboardController> {
 
   Widget _buildAppointmentPageContent({Function()? onPressedMenu}) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-        child: AppointmentBookingScreen(
-            patientDetailsArguments: PatientDetailsArguments(
-                controller.getAllEmployesList.value.doctorList ?? [],
-                controller.patientData.value.patient)));
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+      child: Column(
+        children: [
+          const SizedBox(height: kSpacing),
+          Row(
+            children: [
+              if (onPressedMenu != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: kSpacing / 2),
+                  child: IconButton(
+                    onPressed: onPressedMenu,
+                    icon: const Icon(Icons.menu),
+                  ),
+                ),
+              // Expanded(
+              //   child: SearchField(
+              //     onSearch: controller.searchTask,
+              //     hintText: "Search.. ",
+              //   ),
+              // ),
+            ],
+          ),
+          const SizedBox(height: kSpacing),
+          SizedBox(
+            width: MediaQuery.of(Get.context!).size.width,
+            height: MediaQuery.of(Get.context!).size.height,
+            //color: Colors.red,
+            child: ScheduleTabContainerPage(),
+          )
+        ],
+      ),
+    );
+    // AppointmentBookingScreen(
+    //     patientDetailsArguments: PatientDetailsArguments(
+    //         controller.getAllEmployesList.value.doctorList ?? [],
+    //         controller.patientData.value.patient)));
   }
 
   Widget _buildChatPageContent({Function()? onPressedMenu}) {
@@ -1127,20 +1158,32 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget _buildPatientsListPageContent({Function()? onPressedMenu}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
-          ? AddPatientScreen()
-          : Column(
-              children: [
-                SizedBox(
-                    width: MediaQuery.of(Get.context!).size.width,
-                    height: MediaQuery.of(Get.context!).size.height,
-                    //color: Colors.red,
-                    child: PatientsList(
-                      data: controller.getAllPatientsList,
-                      onPressed: (index, data) {},
-                    ))
-              ],
-            ),
+      child: Column(
+        children: [
+          SizedBox(
+              width: MediaQuery.of(Get.context!).size.width,
+              height: MediaQuery.of(Get.context!).size.height,
+              //color: Colors.red,
+              child: PatientsList(
+                data: controller.getAllPatientsList,
+                onPressed: (index, data) {},
+              ))
+        ],
+      ),
+      // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
+      //     ? AddPatientScreen()
+      //     : Column(
+      //         children: [
+      //           SizedBox(
+      //               width: MediaQuery.of(Get.context!).size.width,
+      //               height: MediaQuery.of(Get.context!).size.height,
+      //               //color: Colors.red,
+      //               child: PatientsList(
+      //                 data: controller.getAllPatientsList,
+      //                 onPressed: (index, data) {},
+      //               ))
+      //         ],
+      //       ),
     );
   }
 
