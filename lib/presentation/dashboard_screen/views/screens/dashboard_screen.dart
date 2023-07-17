@@ -2,13 +2,11 @@ library dashboard;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:countup/countup.dart';
-
 import 'package:data_table_2/data_table_2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_constants.dart';
@@ -26,7 +24,6 @@ import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../../add_patient_screens/add_patient_screen.dart';
 import '../../../appointment_booking_screen/appointment_booking.dart';
-import '../../../create_profile/create_profile_screen.dart';
 import '../../../profile_page/profile_page.dart';
 import '../../controller/dashboard_controller.dart';
 import '../../shared_components/card_appointment.dart';
@@ -37,7 +34,6 @@ import '../../shared_components/responsive_builder.dart';
 import '../../shared_components/selection_button.dart';
 import '../../shared_components/simple_selection_button.dart';
 import '../../shared_components/simple_user_profile.dart';
-import '../../shared_components/task_progress.dart';
 import '../components/dashboard_header.dart';
 import '../components/patients_list.dart';
 
@@ -52,7 +48,9 @@ part '../components/member.dart';
 part '../components/recent_patients.dart';
 part '../components/task_menu.dart';
 part '../components/todays_appointment_group.dart';
-enum pats{Existing,New}
+
+enum pats { Existing, New }
+
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -331,7 +329,9 @@ class DashboardScreen extends GetView<DashboardController> {
                 controller.role,
                 Get.context!,
                 controller.staffData.value.id ?? 0,
-                controller.patientData.value.patient?.id ?? 0)),
+                controller.patientData.value.patient?.id ?? 0,
+                controller.staffData.value.profilePicture,
+                controller.patientData.value.patient?.profilePicture)),
             const SizedBox(height: kSpacing),
             SharedPrefUtils.readPrefStr("role") == 'PATIENT'
                 ? const SizedBox()
@@ -342,74 +342,79 @@ class DashboardScreen extends GetView<DashboardController> {
                   ? Column(
                       children: [
                         Card(
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        color: Colors.red.shade50,
-                        shadowColor: Colors.grey.shade400,
-                        child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            //child: ResponsiveBuilder.isMobile(Get.context!)
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                  children:[
-
-                                    Image.asset('assets/images/call.png',height: 50,width: 50),
-
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                            color: Colors.red.shade50,
+                            shadowColor: Colors.grey.shade400,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              //child: ResponsiveBuilder.isMobile(Get.context!)
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(children: [
+                                      Image.asset('assets/images/call.png',
+                                          height: 50, width: 50),
+                                      Text(
+                                        "Emergency Appointment",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstant.black900),
+                                      )
+                                    ]),
                                     Text(
-                                      "Emergency Appointment",
+                                      "We keep emergency appointments available everyday.",
                                       style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorConstant.black900),
-                                    )
-                                  ]),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                          color: ColorConstant.gray600),
+                                    ),
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                alignment: Alignment.center,
+                                                backgroundColor:
+                                                    Colors.red.shade900,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 12),
+                                                textStyle: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            onPressed: () {
+                                              pats? pat = pats.Existing;
+                                              Get.defaultDialog(
+                                                  title: '',
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Text(
+                                                        "Thanks for your enquiry.",
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: ColorConstant
+                                                                .gray900),
+                                                      ),
+                                                      Text(
+                                                        "We will co-ordinate with you shortly.",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color: ColorConstant
+                                                                .gray600),
+                                                      ),
 
-                              Text(
-                                "We keep emergency appointments available everyday.",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    color: ColorConstant.gray600),
-                              ),
-
-                              Align(
-                                  alignment: Alignment.centerRight,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          alignment:Alignment.center,
-                                          backgroundColor: Colors.red.shade900,
-                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                          textStyle: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold)),
-
-                                      onPressed: () {
-                                        pats? pat = pats.Existing;
-                                        Get.defaultDialog(
-                                            title: '',
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-
-                                                Text(
-                                                  "Thanks for your enquiry.",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ColorConstant.gray900),
-                                                ),
-
-                                                Text(
-                                                  "We will co-ordinate with you shortly.",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.normal,
-                                                      color: ColorConstant.gray600),
-                                                ),
-
-                                                /*ListTile(
+                                                      /*ListTile(
                                                         title: Text('Existing Patient'),
                                                         leading: Radio<pats>(
                                                           value: pats.Existing,
@@ -484,7 +489,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
                                                 ElevatedButton(
                                                   onPressed: () {
-                                                    *//*if (settingsScreenController
+                                                    */ /*if (settingsScreenController
                                             .categoryNameController.text.isNotEmpty) {
                                           var expenseCategory = ExpenseCategory(
                                               settingsScreenController.categoryNameController.text,
@@ -494,7 +499,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                           Get.back();
                                         } else {
                                           Utils.showSnackBar("Enter category name");
-                                        }*//*
+                                        }*/ /*
                                                   },
                                                   style: ElevatedButton.styleFrom(backgroundColor:Colors.red.shade900),
                                                   child: const Text(
@@ -502,18 +507,13 @@ class DashboardScreen extends GetView<DashboardController> {
                                                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                                                   ),
                                                 )*/
-
-
-                                              ],
-                                            ),
-                                            radius: 10.0);
-
-                                      },
-                                      child: Text('Book Now'))
-                              )
-                            ]
-                        ),
-                       )),
+                                                    ],
+                                                  ),
+                                                  radius: 10.0);
+                                            },
+                                            child: Text('Book Now')))
+                                  ]),
+                            )),
                         const SizedBox(height: 10),
                         Card(
                           elevation: 4,
@@ -1065,8 +1065,15 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  Widget _welcomeWidget(String firstName, String lastName, String role,
-      BuildContext context, int staffId, int patientId) {
+  Widget _welcomeWidget(
+      String firstName,
+      String lastName,
+      String role,
+      BuildContext context,
+      int staffId,
+      int patientId,
+      String? staffProfile,
+      String? patientProfile) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -1084,25 +1091,59 @@ class DashboardScreen extends GetView<DashboardController> {
                     SizedBox(
                       height: 100,
                       width: 100,
-                      child: CachedNetworkImage(
-                        imageUrl: Uri.encodeFull(
-                          '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}${staffId == 0 ? patientId : staffId}',
-                        ),
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Image.asset(
-                            !Responsive.isDesktop(Get.context!)
-                                ? 'assets' + '/images/default_profile.png'
-                                : '/images/default_profile.png'),
-                      ),
+                      child: staffId == 0
+                          ? staffProfile != null
+                              ? CachedNetworkImage(
+                                  imageUrl: Uri.encodeFull(
+                                    '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffId',
+                                  ),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                          !Responsive.isDesktop(Get.context!)
+                                              ? 'assets' +
+                                                  '/images/default_profile.png'
+                                              : '/images/default_profile.png'),
+                                )
+                              : Image.asset(!Responsive.isDesktop(Get.context!)
+                                  ? 'assets' + '/images/default_profile.png'
+                                  : '/images/default_profile.png')
+                          : patientProfile != null
+                              ? CachedNetworkImage(
+                                  imageUrl: Uri.encodeFull(
+                                    '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$patientId',
+                                  ),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                          !Responsive.isDesktop(Get.context!)
+                                              ? 'assets' +
+                                                  '/images/default_profile.png'
+                                              : '/images/default_profile.png'),
+                                )
+                              : Image.asset(!Responsive.isDesktop(Get.context!)
+                                  ? 'assets' + '/images/default_profile.png'
+                                  : '/images/default_profile.png'),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1153,8 +1194,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           height: 5,
                         ),
                         Text(
-                          (SharedPrefUtils.readPrefStr('role') ==
-                              "PATIENT")
+                          (SharedPrefUtils.readPrefStr('role') == "PATIENT")
                               ? 'Have a nice day'
                               : "Have a nice day at work",
                           style: TextStyle(
@@ -1166,8 +1206,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           height: 10,
                         ),
                         Text(
-                          (SharedPrefUtils.readPrefStr('role') ==
-                              "PATIENT")
+                          (SharedPrefUtils.readPrefStr('role') == "PATIENT")
                               ? 'Your Number - 1'
                               : "",
                           style: TextStyle(
