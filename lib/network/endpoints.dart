@@ -51,6 +51,6 @@ class Endpoints {
   static const String generateInvoice = "report/patientInvoice/?";
   static const String getServices = baseURL + 'service/list';
   static const String visitUpdate = baseURL + 'patientVisit/update';
-  static const String examinationUpdate =
-      baseURL + 'examination/updateDiagnosis';
+  static const String examinationUpdate = baseURL + 'examination/updateDiagnosis';
+  static const String addEmergencyAppointment = baseURL + 'emergencyAppointment/create';
 }

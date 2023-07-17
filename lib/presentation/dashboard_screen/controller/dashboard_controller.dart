@@ -37,6 +37,8 @@ class DashboardController extends GetxController {
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
+  Map postAppointmentResp = Map();
+  
   //final member = ["Avril Kimberly", "Michael Greg"];
 
   final dataTask = const TodaysAppointmentsProgressData(
@@ -336,6 +338,22 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<void> addEmergencyAppointment(Map<String, dynamic> req) async {
+    try {
+      postAppointmentResp = (await Get.find<AppointmentApi>().addEmergencyAppointment(
+        headers: {
+          'Content-type': 'application/json',
+        },
+        data: req,
+      ));
+      _handleCreateRegisterSuccess();
+    } on Map catch (e) {
+      postAppointmentResp = e;
+      rethrow;
+    }
+  }
+  
+
   String greeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) {
@@ -351,4 +369,6 @@ class DashboardController extends GetxController {
   void onClose() {
     super.onClose();
   }
+
+  void _handleCreateRegisterSuccess() {}
 }

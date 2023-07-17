@@ -1,5 +1,7 @@
 library dashboard;
 
+import 'dart:convert';
+
 import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedule_tab_container_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:countup/countup.dart';
@@ -7,10 +9,12 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/errors/exceptions.dart';
 import '../../../../core/utils/color_constant.dart';
 import '../../../../core/utils/size_utils.dart';
 import '../../../../models/getAllApointments.dart';
@@ -1047,7 +1051,7 @@ class DashboardScreen extends GetView<DashboardController> {
           keyboardType: TextInputType.text,
           maxLines: 1,
           decoration: const InputDecoration(
-              labelText: 'Patient Address',
+              labelText: 'Patient EmailID',
               // label: isForExistingPatient == true
               //     ? Obx(() => Text(controller.patientData.value.patient?.address
               //             .toString() ??
@@ -1062,6 +1066,9 @@ class DashboardScreen extends GetView<DashboardController> {
         ),
         ElevatedButton(
           onPressed: () {
+
+            isForExistingPatient == true ? onTapBookEmergencyAppointment("existing") : onTapBookEmergencyAppointment("new");
+
             // if (settingsScreenController
             //     .categoryNameController
             //     .text
@@ -1095,6 +1102,33 @@ class DashboardScreen extends GetView<DashboardController> {
       ],
     );
   }
+
+  Future<void> onTapBookEmergencyAppointment(String type) async {
+    Map<String, dynamic> requestData = {
+      "date": DateTime.now().toIso8601String(),
+      "patientName": controller.nameController.text,
+      "mobileNumber": controller.mobileController.text,
+      "patientType": type,
+      "emailId": controller.addressController.text
+      //"address": controller.addressController.text
+    };
+    print(jsonEncode(requestData));
+    try {
+      await controller.addEmergencyAppointment(requestData);
+      Fluttertoast.showToast(
+        msg: "Emergency appointment raised we will connect you shortly...",
+      );
+      Get.back();
+    } on Map {
+      _onTapBookEmergencyAppointmentError();
+
+    } on NoInternetException catch (e) {
+      Get.rawSnackbar(message: e.toString());
+    } catch (e) {
+      Get.rawSnackbar(message: e.toString());
+    }
+  }
+
 
   Widget _buildAppointmentPageContent({Function()? onPressedMenu}) {
     return Padding(
@@ -1488,6 +1522,12 @@ class DashboardScreen extends GetView<DashboardController> {
 
   void setState(Null Function() param0) {
     return;
+  }
+
+  void _onTapBookEmergencyAppointmentError() {
+    Fluttertoast.showToast(
+      msg: "Facing technical difficulties",
+    );
   }
 }
 
