@@ -22,7 +22,8 @@ class ScheduleItemWidget extends StatelessWidget {
   //Datum? model2;
 
   ScheduleItemWidget(
-      this.appointment, this.patientId, this.examninerId, this.tab);
+      this.appointment, this.patientId, this.examninerId, this.tab,
+      {super.key});
 
   ScheduleController controller = ScheduleController();
 
@@ -33,7 +34,7 @@ class ScheduleItemWidget extends StatelessWidget {
         Get.toNamed(AppRoutes.appointmentDetailsPage,
             arguments: AppointmentDetailsArguments(appointment));
       },
-      child: Container(
+      child: SizedBox(
         child: Card(
           elevation: 4,
           color: ColorConstant.whiteA700,
@@ -60,7 +61,7 @@ class ScheduleItemWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             height: 80,
             width: 80,
             //decoration: BoxDecoration(
@@ -82,7 +83,6 @@ class ScheduleItemWidget extends StatelessWidget {
                             CircularProgressIndicator(
                                 value: downloadProgress.progress),
                     errorWidget: (context, url, error) {
-                      print(error);
                       return Container(
                         height: 80,
                         width: 80,
@@ -97,11 +97,11 @@ class ScheduleItemWidget extends StatelessWidget {
                     height: 80,
                     fit: BoxFit.contain,
                     imagePath: !Responsive.isDesktop(Get.context!)
-                        ? 'assets' + '/images/default_profile.png'
+                        ? 'assets' '/images/default_profile.png'
                         : '/images/default_profile.png',
                   ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Row(
@@ -110,15 +110,15 @@ class ScheduleItemWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 5,
+                  const SizedBox(
+                    width: 10,
                   ),
                   Text(
-                    '${appointment.examiner?.firstName.toString()} ${appointment.examiner?.lastName.toString()}',
+                    '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
                     style: AppStyle.txtInterSemiBold14,
                   ),
-                  SizedBox(
-                    width: 5,
+                  const SizedBox(
+                    width: 10,
                   ),
                   Text(
                     controller.getformattedDate(appointment.date.toString()) +
@@ -127,14 +127,14 @@ class ScheduleItemWidget extends StatelessWidget {
                             appointment.date ?? "", Get.context!),
                     style: AppStyle.txtInterRegular14Gray700,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
                     "Appointment id - ${appointment.id}",
                     style: AppStyle.txtManrope12,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
@@ -148,14 +148,14 @@ class ScheduleItemWidget extends StatelessWidget {
                   //   appointment.purpose ?? 'N/A',
                   //   style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    'Note: ' + appointment.note.toString(),
+                    'Note: ${appointment.note}',
                     style: AppStyle.txtInterRegular14,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   loadActionButtons(),
@@ -174,32 +174,43 @@ class ScheduleItemWidget extends StatelessWidget {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              InkWell(
-                onTap: () {
-                  // Call accept appointment
-                },
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  decoration: AppDecoration.txtFillGray10002.copyWith(
-                    borderRadius: BorderRadiusStyle.txtRoundedBorder8,
-                  ),
-                  child: Text(
-                    'Accecpt',
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: AppStyle.txtRalewayRomanSemiBold14Gray700,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
+              // InkWell(
+              //   onTap: () {
+              //     // Call accept appointment
+              //   },
+              //   child: Container(
+              //     padding: EdgeInsets.all(15),
+              //     decoration: AppDecoration.txtFillGray10002.copyWith(
+              //       borderRadius: BorderRadiusStyle.txtRoundedBorder8,
+              //     ),
+              //     child: Text(
+              //       'Accecpt',
+              //       overflow: TextOverflow.ellipsis,
+              //       textAlign: TextAlign.center,
+              //       style: AppStyle.txtRalewayRomanSemiBold14Gray700,
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: 10,
+              // ),
               InkWell(
                 onTap: () {
                   // Call cancel appointment
+                  var data = {
+                    "active": false,
+                    "id": appointment.id,
+                    "date": appointment.date,
+                    "examinerId": examninerId,
+                    "note": appointment.note,
+                    "patientId": patientId,
+                    "purpose": appointment.purpose,
+                    "status": "Cancel"
+                  };
+                  controller.updateAppointment(data);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   decoration: AppDecoration.txtStyle.copyWith(
                     borderRadius: BorderRadiusStyle.txtRoundedBorder8,
                   ),
@@ -220,20 +231,20 @@ class ScheduleItemWidget extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       // call cancel appointment
-                      // var data = {
-                      //   "active": false,
-                      //   "id": appointment.id,
-                      //   "date": appointment.date,
-                      //   "examinerId": examninerId,
-                      //   "note": appointment.note,
-                      //   "patientId": patientId,
-                      //   "purpose": appointment.purpose,
-                      //   "status": "Cancel"
-                      // };
-                      // controller.updateAppointment(data);
+                      var data = {
+                        "active": false,
+                        "id": appointment.id,
+                        "date": appointment.date,
+                        "examinerId": examninerId,
+                        "note": appointment.note,
+                        "patientId": patientId,
+                        "purpose": appointment.purpose,
+                        "status": "Cancel"
+                      };
+                      controller.updateAppointment(data);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       decoration: AppDecoration.txtFillGray10002.copyWith(
                         borderRadius: BorderRadiusStyle.txtRoundedBorder8,
                       ),
@@ -245,7 +256,7 @@ class ScheduleItemWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   InkWell(
@@ -253,7 +264,7 @@ class ScheduleItemWidget extends StatelessWidget {
                       // Call reschedule appointment
                     },
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       decoration: AppDecoration.txtStyle.copyWith(
                         borderRadius: BorderRadiusStyle.txtRoundedBorder8,
                       ),
@@ -267,53 +278,53 @@ class ScheduleItemWidget extends StatelessWidget {
                   ),
                 ],
               )
-            : Row(
+            : const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      // Call generate precription
-                      controller.callGeneratePrecription(patientId,
-                          appointment.id!, appointment.examination?.id ?? 1);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: AppDecoration.txtFillGray10002.copyWith(
-                        borderRadius: BorderRadiusStyle.txtRoundedBorder8,
-                      ),
-                      child: Text(
-                        'Precription PDF',
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: AppStyle.txtRalewayRomanSemiBold14Gray700,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Get.to(CreateInvoiceScreen(
-                      //   appointment: appointment,
-                      // ));
-                      // Generate invoice
-                      //controller.callGenerateInvoice(
-                      //    patientId, appointment.id!, 7, examninerId);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: AppDecoration.txtStyle.copyWith(
-                        borderRadius: BorderRadiusStyle.txtRoundedBorder8,
-                      ),
-                      child: Text(
-                        'Invoice',
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: AppStyle.txtRalewayRomanSemiBold14,
-                      ),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     // Call generate precription
+                  //     controller.callGeneratePrecription(patientId,
+                  //         appointment.id!, appointment.examination?.id ?? 1);
+                  //   },
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(15),
+                  //     decoration: AppDecoration.txtFillGray10002.copyWith(
+                  //       borderRadius: BorderRadiusStyle.txtRoundedBorder8,
+                  //     ),
+                  //     child: Text(
+                  //       'Precription PDF',
+                  //       overflow: TextOverflow.ellipsis,
+                  //       textAlign: TextAlign.center,
+                  //       style: AppStyle.txtRalewayRomanSemiBold14Gray700,
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     // Get.to(CreateInvoiceScreen(
+                  //     //   appointment: appointment,
+                  //     // ));
+                  //     // Generate invoice
+                  //     //controller.callGenerateInvoice(
+                  //     //    patientId, appointment.id!, 7, examninerId);
+                  //   },
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(15),
+                  //     decoration: AppDecoration.txtStyle.copyWith(
+                  //       borderRadius: BorderRadiusStyle.txtRoundedBorder8,
+                  //     ),
+                  //     child: Text(
+                  //       'Invoice',
+                  //       overflow: TextOverflow.ellipsis,
+                  //       textAlign: TextAlign.center,
+                  //       style: AppStyle.txtRalewayRomanSemiBold14,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               );
   }

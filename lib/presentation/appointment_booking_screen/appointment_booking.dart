@@ -837,7 +837,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       "endTime": controller.to.value.text,
       "examinerId": SharedPrefUtils.readPrefINt('staff_id'),
       "note": controller.treatment.text,
-
+      "patientId": patientDetailsArguments?.details?.id,
       "purpose": "OTHER",
       //"referenceId": 0,
       "status": "Pending",

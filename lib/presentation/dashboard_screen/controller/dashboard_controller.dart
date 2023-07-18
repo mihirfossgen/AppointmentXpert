@@ -189,16 +189,13 @@ class DashboardController extends GetxController {
       var response = (await Get.find<AppointmentApi>().getTodaysAppointments(
           SharedPrefUtils.readPrefINt('patient_Id'), true));
       List<AppointmentContent> list = response;
-      List<AppointmentContent> match = [];
-      list.any((element) {
-        if (element.status?.toLowerCase() != 'completed') {
-          print('Matched obj: ${element}');
-          match.add(element);
-          return true;
-        }
-        return false;
-      });
-      patientTodaysData.value = match;
+      var now = DateTime.now();
+      List<AppointmentContent> appointments = list
+          .where((i) =>
+              i.status?.toLowerCase() != 'completed' &&
+              now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
+          .toList();
+      patientTodaysData.value = appointments;
       getUpcomingAppointments(0, true);
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
@@ -212,16 +209,23 @@ class DashboardController extends GetxController {
       var response = (await Get.find<AppointmentApi>()
           .getAllReceiptionstTodayAppointment());
       List<AppointmentContent> list = response;
-      List<AppointmentContent> match = [];
-      list.any((element) {
-        if (element.status?.toLowerCase() != 'completed') {
-          print('Matched obj: ${element}');
-          match.add(element);
-          return true;
-        }
-        return false;
-      });
-      staffTodaysData.value = match;
+      //List<AppointmentContent> match = [];
+      var now = DateTime.now();
+      List<AppointmentContent> appointments = list
+          .where((i) =>
+              i.status?.toLowerCase() != 'completed' ||
+              now.isAfter(DateTime.parse(i.date!)))
+          .toList();
+
+      // list.any((element) {
+      //   if (element.status?.toLowerCase() != 'completed') {
+      //     print('Matched obj: ${element}');
+      //     match.add(element);
+      //     return true;
+      //   }
+      //   return false;
+      // });
+      staffTodaysData.value = appointments;
       callReceiptionUpcomingAppointments();
     } on Map {
       //postLoginResp = e;
@@ -238,16 +242,18 @@ class DashboardController extends GetxController {
       //var now_1m = new DateTime(now.year, now.month - 1, now.day);
       //var now_1y = new DateTime(now.year - 1, now.month, now.day);
       List<AppointmentContent> list = response;
-      List<AppointmentContent> match = [];
-      list.any((element) {
-        if (now_3d.isAfter(DateTime.parse(element.date!))) {
-          print('Matched obj: ${element}');
-          match.add(element);
-          return true;
-        }
-        return false;
-      });
-      upComingAppointments.value = match;
+      //List<AppointmentContent> match = [];
+      List<AppointmentContent> appointments =
+          list.where((i) => now_3d.isAfter(DateTime.parse(i.date!))).toList();
+      // list.any((element) {
+      //   if (now_3d.isAfter(DateTime.parse(element.date!))) {
+      //     print('Matched obj: ${element}');
+      //     match.add(element);
+      //     return true;
+      //   }
+      //   return false;
+      // });
+      upComingAppointments.value = appointments;
       callRecentPatientList();
     } on Map {
       //postLoginResp = e;
@@ -267,16 +273,18 @@ class DashboardController extends GetxController {
         //var now_1m = new DateTime(now.year, now.month - 1, now.day);
         //var now_1y = new DateTime(now.year - 1, now.month, now.day);
         List<AppointmentContent> list = response;
-        List<AppointmentContent> match = [];
-        list.any((element) {
-          if (now.isAfter(DateTime.parse(element.date!))) {
-            print('Matched obj: ${element}');
-            match.add(element);
-            return true;
-          }
-          return false;
-        });
-        upComingAppointments.value = match;
+        List<AppointmentContent> appointments =
+            list.where((i) => now.isAfter(DateTime.parse(i.date!))).toList();
+        // List<AppointmentContent> match = [];
+        // list.any((element) {
+        //   if (now.isAfter(DateTime.parse(element.date!))) {
+        //     print('Matched obj: ${element}');
+        //     match.add(element);
+        //     return true;
+        //   }
+        //   return false;
+        // });
+        upComingAppointments.value = appointments;
       } else {
         var response =
             (await Get.find<AppointmentApi>().getAllAppointments(pageIndex));
@@ -285,16 +293,18 @@ class DashboardController extends GetxController {
         //var now_1m = new DateTime(now.year, now.month - 1, now.day);
         //var now_1y = new DateTime(now.year - 1, now.month, now.day);
         List<AppointmentContent> list = response.content ?? [];
-        List<AppointmentContent> match = [];
-        list.any((element) {
-          if (now_3d.isAfter(DateTime.parse(element.date!))) {
-            print('Matched obj: ${element}');
-            match.add(element);
-            return true;
-          }
-          return false;
-        });
-        upComingAppointments.value = match;
+        List<AppointmentContent> appointments =
+            list.where((i) => now_3d.isAfter(DateTime.parse(i.date!))).toList();
+        // List<AppointmentContent> match = [];
+        // list.any((element) {
+        //   if (now_3d.isAfter(DateTime.parse(element.date!))) {
+        //     print('Matched obj: ${element}');
+        //     match.add(element);
+        //     return true;
+        //   }
+        //   return false;
+        // });
+        upComingAppointments.value = appointments;
       }
 
       isloading(false);

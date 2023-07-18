@@ -1,7 +1,10 @@
+import 'package:appointmentxpert/routes/app_routes.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart' as Get;
 
 import '../network/endpoints.dart';
+import '../shared_prefrences_page/shared_prefrence_page.dart';
 import 'dio_exception.dart';
 import 'interceptors/authorization_interceptor.dart';
 
@@ -35,8 +38,15 @@ class DioClient {
       );
       return response;
     } on DioError catch (err) {
-      final errorMessage = DioException.fromDioError(err).toString();
-      throw errorMessage;
+      if (err.response?.statusCode == 500) {
+        SharedPrefUtils.clearPreferences();
+        Get.Get.offAllNamed(AppRoutes.loginScreen);
+        final errorMessage = DioException.fromDioError(err).toString();
+        throw errorMessage;
+      } else {
+        final errorMessage = DioException.fromDioError(err).toString();
+        throw errorMessage;
+      }
     } catch (e) {
       if (kDebugMode) print(e);
       throw e.toString();
@@ -65,8 +75,15 @@ class DioClient {
       );
       return response;
     } on DioError catch (err) {
-      final errorMessage = DioException.fromDioError(err).toString();
-      throw errorMessage;
+      if (err.response?.statusCode == 500) {
+        SharedPrefUtils.clearPreferences();
+        Get.Get.offAllNamed(AppRoutes.loginScreen);
+        final errorMessage = DioException.fromDioError(err).toString();
+        throw errorMessage;
+      } else {
+        final errorMessage = DioException.fromDioError(err).toString();
+        throw errorMessage;
+      }
     } catch (e) {
       if (kDebugMode) print(e);
       throw e.toString();

@@ -186,7 +186,7 @@ class Patients {
         dateCreated: json["dateCreated"],
         visits: json["visits"],
         age: json["age"],
-        profilePicture: json["profilePicture"],
+        profilePicture: json["uploadedProfilePath"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -214,6 +214,6 @@ class Patients {
         "dateCreated": dateCreated,
         "visits": visits,
         "age": age,
-        "profilePicture": profilePicture,
+        "uploadedProfilePath": profilePicture,
       };
 }

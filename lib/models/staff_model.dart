@@ -132,7 +132,7 @@ class StaffData {
         status: json["status"],
         joinedDate: json["joinedDate"],
         terminatedDate: json["terminatedDate"],
-        profilePicture: json["profilePicture"],
+        profilePicture: json["uploadedProfilePath"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -158,6 +158,6 @@ class StaffData {
         "status": status,
         "joinedDate": joinedDate,
         "terminatedDate": terminatedDate,
-        "profilePicture": profilePicture,
+        "uploadedProfilePath": profilePicture,
       };
 }
