@@ -10,8 +10,8 @@ import '../endpoints.dart';
 class PatientApi {
   final DioClient _apiService = DioClient();
 
-  Future<PatientList> getAllPatientsList() async {
-    var url = Endpoints.getPatientsList + '/0';
+  Future<dynamic> getAllPatientsList(int pageIndex) async {
+    var url = '${Endpoints.getPatientsList}/$pageIndex';
     try {
       final Response response = await _apiService.get(url);
       return PatientList.fromJson(response.data);

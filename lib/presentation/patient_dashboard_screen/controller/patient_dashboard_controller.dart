@@ -102,7 +102,7 @@ class DashboardController extends GetxController {
 
   Future<void> callRecentPatientList() async {
     try {
-      var response = (await Get.find<PatientApi>().getAllPatientsList());
+      var response = (await Get.find<PatientApi>().getAllPatientsList(0));
       print(response.content);
       getAllPatientsList.value = response.content ?? [];
       //getUpcomingAppointments(0, true);
@@ -226,12 +226,12 @@ class DashboardController extends GetxController {
       if (isForPatient == true) {
         var patientId = SharedPrefUtils.readPrefINt('patient_Id');
         var response = (await Get.find<AppointmentApi>()
-            .getAllAppointmentBYPatientId(patientId, pageIndex));
+            .getAllAppointmentBYPatientId(patientId, 0));
         var now = new DateTime.now();
         var now_3d = now.add(Duration(days: 7));
         //var now_1m = new DateTime(now.year, now.month - 1, now.day);
         //var now_1y = new DateTime(now.year - 1, now.month, now.day);
-        List<AppointmentContent> list = response;
+        List<AppointmentContent> list = response.content ?? [];
         List<AppointmentContent> match = [];
         list.any((element) {
           if (now.isAfter(DateTime.parse(element.date!))) {

@@ -16,6 +16,8 @@ class OnboardingOneScreen extends GetWidget<OnboardingOneController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+        top: false,
+        bottom: false,
         child: Scaffold(
             extendBody: true,
             extendBodyBehindAppBar: false,
@@ -105,7 +107,7 @@ class OnboardingOneScreen extends GetWidget<OnboardingOneController> {
                                                               .txtInterRegular14))),
                                               CustomButton(
                                                   height: getVerticalSize(60),
-                                                  width: getHorizontalSize(65),
+                                                  width: getHorizontalSize(85),
                                                   text: "lbl_next".tr,
                                                   fontStyle: ButtonFontStyle
                                                       .InterSemiBold16WhiteA700,

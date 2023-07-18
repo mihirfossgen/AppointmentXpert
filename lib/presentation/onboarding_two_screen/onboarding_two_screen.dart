@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
@@ -15,6 +16,8 @@ class OnboardingTwoScreen extends GetWidget<OnboardingTwoController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+        top: false,
+        bottom: false,
         child: Scaffold(
             extendBody: true,
             extendBodyBehindAppBar: true,
@@ -113,9 +116,9 @@ class OnboardingTwoScreen extends GetWidget<OnboardingTwoController> {
                                                             style: AppStyle
                                                                 .txtInterRegular14))),
                                                 CustomButton(
-                                                    height: getVerticalSize(56),
+                                                    height: getVerticalSize(60),
                                                     width:
-                                                        getHorizontalSize(65),
+                                                        getHorizontalSize(85),
                                                     text: "lbl_next".tr,
                                                     fontStyle: ButtonFontStyle
                                                         .InterSemiBold16WhiteA700,

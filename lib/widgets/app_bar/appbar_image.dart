@@ -29,6 +29,8 @@ class AppbarImage extends StatelessWidget implements PreferredSizeWidget {
 
   Widget? leading;
 
+  List<Widget>? actions;
+
   Color? backgroundColor;
 
   @override
@@ -65,6 +67,7 @@ class AppbarImage extends StatelessWidget implements PreferredSizeWidget {
           backgroundColor: backgroundColor,
           leading: leading,
           elevation: 2,
+          actions: actions,
           title: imagePath != null
               ? Image.asset(
                   imagePath!,

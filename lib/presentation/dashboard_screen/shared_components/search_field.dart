@@ -29,6 +29,9 @@ class SearchField extends StatelessWidget {
         FocusScope.of(context).unfocus();
         if (onSearch != null) onSearch!(controller.text);
       },
+      onChanged: (value) {
+        onSearch!(value);
+      },
       textInputAction: TextInputAction.search,
       style: TextStyle(color: kFontColorPallets[1]),
     );

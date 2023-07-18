@@ -2,6 +2,7 @@ import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/getAllApointments.dart';
@@ -38,7 +39,7 @@ class DashboardController extends GetxController {
   TextEditingController addressController = TextEditingController();
 
   Map postAppointmentResp = Map();
-  
+
   //final member = ["Avril Kimberly", "Michael Greg"];
 
   final dataTask = const TodaysAppointmentsProgressData(
@@ -81,6 +82,10 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
 
+  static const _pageSize = 20;
+  final PagingController<int, Content> patientPagingController =
+      PagingController(firstPageKey: 0);
+
   var isloading = false.obs;
 
   getformattedDate(String date) {
@@ -99,27 +104,30 @@ class DashboardController extends GetxController {
     print(role);
     isloading.value = true;
     if (role == "PATIENT") {
-      // var credentials = {"pageNumber": 0, "profession": "DOCTOR"};
-      //callDoctorsList(credentials);
       getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
-    }
-    // else if (role == "EXAMINER") {
-    //   callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
-    //   callAppointmentsByStaffId(
-    //       SharedPrefUtils.readPrefINt('employee_Id'), true);
-    // }
-    else {
-      //callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
+    } else {
       callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
       callStaffList(0);
     }
   }
 
-  Future<void> callRecentPatientList() async {
+  Future<void> callRecentPatientList(int pageNo) async {
     try {
-      var response = (await Get.find<PatientApi>().getAllPatientsList());
+      var response = (await Get.find<PatientApi>().getAllPatientsList(pageNo));
       print(response.content);
-      getAllPatientsList.value = response.content ?? [];
+      //getAllPatientsList.value = response.content ?? [];
+      PatientList patientListData = response;
+      patientPagingController.itemList = [];
+      final isLastPage = patientListData.totalElements! < _pageSize;
+      if (isLastPage) {
+        List<Content> list = patientListData.content ?? [];
+        patientPagingController.appendLastPage(list);
+      } else {
+        List<Content> list = patientListData.content ?? [];
+        final nextPageKey = pageNo + list.length;
+        patientPagingController.appendPage(list, nextPageKey);
+      }
+      update();
       //getUpcomingAppointments(0, true);
       isloading(false);
       //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
@@ -173,7 +181,7 @@ class DashboardController extends GetxController {
           .getTodaysAppointmentsByExaminerId(staffId, active));
       print(response);
       staffTodaysData.value = response;
-      callRecentPatientList();
+      callRecentPatientList(0);
       //isloading(false);
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
@@ -254,7 +262,7 @@ class DashboardController extends GetxController {
       //   return false;
       // });
       upComingAppointments.value = appointments;
-      callRecentPatientList();
+      callRecentPatientList(0);
     } on Map {
       //postLoginResp = e;
       rethrow;
@@ -272,7 +280,7 @@ class DashboardController extends GetxController {
         var now_3d = now.add(Duration(days: 7));
         //var now_1m = new DateTime(now.year, now.month - 1, now.day);
         //var now_1y = new DateTime(now.year - 1, now.month, now.day);
-        List<AppointmentContent> list = response;
+        List<AppointmentContent> list = response.content ?? [];
         List<AppointmentContent> appointments =
             list.where((i) => now.isAfter(DateTime.parse(i.date!))).toList();
         // List<AppointmentContent> match = [];
@@ -350,7 +358,8 @@ class DashboardController extends GetxController {
 
   Future<void> addEmergencyAppointment(Map<String, dynamic> req) async {
     try {
-      postAppointmentResp = (await Get.find<AppointmentApi>().addEmergencyAppointment(
+      postAppointmentResp =
+          (await Get.find<AppointmentApi>().addEmergencyAppointment(
         headers: {
           'Content-type': 'application/json',
         },
@@ -362,7 +371,6 @@ class DashboardController extends GetxController {
       rethrow;
     }
   }
-  
 
   String greeting() {
     var hour = DateTime.now().hour;

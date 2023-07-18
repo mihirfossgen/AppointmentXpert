@@ -34,17 +34,18 @@ class AppointmentApi {
     }
   }
 
-  Future<List<AppointmentContent>> getAllAppointmentBYPatientId(
+  Future<GetAllAppointments> getAllAppointmentBYPatientId(
       int value, int pageIndex) async {
     try {
       debugPrint('ssssss');
       var response = await _apiService
           .get(Endpoints.getAllAppoinmentByPatirntId + '${value}/true/');
       //var newResponse = {"data": response.data};
-      List<dynamic> data = response.data;
-      List<AppointmentContent> list =
-          data.map((e) => AppointmentContent.fromJson(e)).toList();
-      return list;
+      return GetAllAppointments.fromJson(response.data);
+      // List<dynamic> data = response.data;
+      // List<AppointmentContent> list =
+      //     data.map((e) => AppointmentContent.fromJson(e)).toList();
+      // return list;
     } on DioError catch (e) {
       print("e -- $e");
       throw Exception(e.response?.data['error_description']);
@@ -294,12 +295,12 @@ class AppointmentApi {
 
   Future<Map> addEmergencyAppointment(
       {Map<String, String> headers = const {},
-        Map<String, dynamic>? data}) async {
+      Map<String, dynamic>? data}) async {
     ProgressDialogUtils.showProgressDialog();
     try {
       //await isNetworkConnected();
       final Response response =
-      await _apiService.post(Endpoints.addEmergencyAppointment, data: data);
+          await _apiService.post(Endpoints.addEmergencyAppointment, data: data);
       ProgressDialogUtils.hideProgressDialog();
       return response.data;
     } catch (error, stackTrace) {
@@ -311,7 +312,6 @@ class AppointmentApi {
       rethrow;
     }
   }
-
 
   Future<String> callGeneratePrecription(
       int patientId, int appointmentId, int examinationId) async {

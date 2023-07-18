@@ -82,6 +82,9 @@ class ScheduleTabContainerPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    onTap: (value) {
+                      print(value);
+                    },
                     tabs: [
                       const Tab(
                         child: Text(
