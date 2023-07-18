@@ -9,6 +9,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_selector/flutter_custom_selector.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -393,7 +394,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 onPressed: () {
                                                   pats? pat = pats.Existing;
                                                   Get.defaultDialog(
-                                                      title: '',
+                                                      titlePadding: const EdgeInsets.all(10),
+                                                      title: 'Select an Option',
+                                                      titleStyle: TextStyle(color: Colors.red.shade900,fontSize: 20,fontWeight: FontWeight.bold),
                                                       content: Column(
                                                         // mainAxisSize:
                                                         //     MainAxisSize.max,
@@ -533,6 +536,8 @@ class DashboardScreen extends GetView<DashboardController> {
                           elevation: 4,
                           color: Colors.white,
                           shadowColor: ColorConstant.gray400,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Column(
