@@ -1,19 +1,24 @@
+import 'package:appointmentxpert/models/emergency_patient_list.dart';
 import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/emergency_patient_list.dart';
+import '../../../models/emergency_patient_list.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../models/getallEmplyesList.dart';
 import '../../../models/patient_list_model.dart';
 import '../../../models/patient_model.dart';
+import '../../../models/emergency_patient_list.dart';
 import '../../../models/staff_model.dart';
 import '../../../network/api/appointment_api.dart';
 import '../../../network/api/patient_api.dart';
 import '../../../network/api/staff_api.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../shared_components/list_recent_patient.dart';
+import '../shared_components/emergency_patient_list.dart';
 import '../shared_components/selection_button.dart';
 import '../shared_components/task_progress.dart';
 import '../shared_components/user_profile.dart';
@@ -72,6 +77,7 @@ class DashboardController extends GetxController {
 
   String role = SharedPrefUtils.readPrefStr("role");
   RxList<Content> getAllPatientsList = <Content>[].obs;
+  RxList<EmergencyContent> getEmergencyPatientsList = <EmergencyContent>[].obs;
 
   Rx<GetAllEmployesList> getAllEmployesList = GetAllEmployesList().obs;
 
@@ -112,6 +118,7 @@ class DashboardController extends GetxController {
       //callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
       callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
       callStaffList(0);
+      callEmergencyPatientList();
     }
   }
 
@@ -131,6 +138,23 @@ class DashboardController extends GetxController {
       isloading(false);
     }
   }
+
+  Future<void> callEmergencyPatientList() async {
+      try {
+        var response = (await Get.find<AppointmentApi>().getEmergencyPatientsList());
+        //print(response.content);
+        getEmergencyPatientsList.value = response;
+        //getUpcomingAppointments(0, true);
+        isloading(false);
+        //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
+        // _handleCreateLoginSuccess(loginModelObj);
+      } on Map {
+        //postLoginResp = e;
+        rethrow;
+      } finally {
+        isloading(false);
+      }
+    }
 
   Future<void> callDoctorsData(int staffId) async {
     try {
@@ -347,6 +371,18 @@ class DashboardController extends GetxController {
       rethrow;
     }
   }
+
+  Future<void> getEmergencyPatientDetails() async {
+      try {
+        getEmergencyPatientsList.value =
+            (await Get.find<AppointmentApi>().getEmergencyPatientsList()) as List<EmergencyContent>;
+        callEmergencyPatientList();
+        // _handleCreateLoginSuccess(loginModelObj);
+      } on Map {
+        //postLoginResp = e;
+        rethrow;
+      }
+    }
 
   Future<void> addEmergencyAppointment(Map<String, dynamic> req) async {
     try {

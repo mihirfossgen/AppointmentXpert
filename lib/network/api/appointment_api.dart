@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/emergency_patient_list.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../core/utils/logger.dart';
 import '../../core/utils/progress_dialog_utils.dart';
+import '../../models/emergency_patient_list.dart';
 import '../../models/getAllApointments.dart';
 import '../../models/patient_model.dart';
 import '../../models/patient_visit_model.dart';
@@ -312,6 +314,19 @@ class AppointmentApi {
     }
   }
 
+  Future<List<EmergencyContent>> getEmergencyPatientsList() async {
+    var url = Endpoints.emergencyPatientList;
+    try {
+      final Response response = await _apiService.get(url);
+      List<dynamic> data = response.data;
+      List<EmergencyContent> list =
+      data.map((e) => EmergencyContent.fromJson(e)).toList();
+      return list;
+
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<String> callGeneratePrecription(
       int patientId, int appointmentId, int examinationId) async {

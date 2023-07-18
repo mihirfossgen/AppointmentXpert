@@ -44,6 +44,10 @@ class _BottomNavbarState extends State<_BottomNavbar> {
           label: "Patients",
         ),
         BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.alertCircle),
+          icon: Icon(EvaIcons.alertCircleOutline),
+          label: "Emergency",
+        ),BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.settings),
           icon: Icon(EvaIcons.settingsOutline),
           label: "Settings",
@@ -127,6 +131,11 @@ class _BottomNavbarState extends State<_BottomNavbar> {
         //   icon: Icon(EvaIcons.phoneCall),
         //   label: "Chat",
         // ),
+        BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.alertCircle),
+          icon: Icon(EvaIcons.alertCircleOutline),
+          label: "Emergency",
+        ),
         BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.settings),
           icon: Icon(EvaIcons.settingsOutline),

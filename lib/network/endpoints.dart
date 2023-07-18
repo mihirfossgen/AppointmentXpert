@@ -53,4 +53,5 @@ class Endpoints {
   static const String visitUpdate = baseURL + 'patientVisit/update';
   static const String examinationUpdate = baseURL + 'examination/updateDiagnosis';
   static const String addEmergencyAppointment = baseURL + 'emergencyAppointment/create';
+  static const String emergencyPatientList = baseURL + 'emergencyAppointment/today';
 }

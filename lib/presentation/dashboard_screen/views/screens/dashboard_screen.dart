@@ -2,6 +2,7 @@ library dashboard;
 
 import 'dart:convert';
 
+import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/emergency_patient_list.dart';
 import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedule_tab_container_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:countup/countup.dart';
@@ -22,6 +23,7 @@ import '../../../../models/getAllApointments.dart';
 import '../../../../models/getallEmplyesList.dart';
 import '../../../../models/patient_list_model.dart';
 import '../../../../models/patient_model.dart';
+import '../../../../models/emergency_patient_list.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
@@ -40,6 +42,7 @@ import '../../shared_components/simple_selection_button.dart';
 import '../../shared_components/simple_user_profile.dart';
 import '../components/dashboard_header.dart';
 import '../components/patients_list.dart';
+import '../components/emergency_list.dart';
 
 part '../components/appointment_in_progress.dart';
 // model
@@ -81,9 +84,9 @@ class DashboardScreen extends GetView<DashboardController> {
         //     : _buildAppointmentPageContent();
         case 2:
           return _buildPatientsListPageContent();
-        // case 3:
-        //   return _buildChatPageContent();
         case 3:
+          return _buildEmergencyPatientsListPage();
+        case 4:
           return _buildProfilePageContent();
         default:
           return Container();
@@ -1151,7 +1154,6 @@ class DashboardScreen extends GetView<DashboardController> {
     }
   }
 
-
   Widget _buildAppointmentPageContent({Function()? onPressedMenu}) {
     return Padding(
       padding:
@@ -1215,6 +1217,34 @@ class DashboardScreen extends GetView<DashboardController> {
       //       ),
     );
   }
+
+  Widget _buildEmergencyPatientsListPage({Function()? onPressedMenu}) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+        child: SizedBox(
+            width: MediaQuery.of(Get.context!).size.width,
+            height: MediaQuery.of(Get.context!).size.height,
+            //color: Colors.red,
+            child: EmergencyList(
+              data: controller.getEmergencyPatientsList,
+              onPressed: (index, data) {},
+            )),
+        // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
+        //     ? AddPatientScreen()
+        //     : Column(
+        //         children: [
+        //           SizedBox(
+        //               width: MediaQuery.of(Get.context!).size.width,
+        //               height: MediaQuery.of(Get.context!).size.height,
+        //               //color: Colors.red,
+        //               child: PatientsList(
+        //                 data: controller.getAllPatientsList,
+        //                 onPressed: (index, data) {},
+        //               ))
+        //         ],
+        //       ),
+      );
+    }
 
   Widget _buildCalendarContent() {
     var outputFormat = DateFormat('d MMMM');
@@ -1566,9 +1596,6 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  void setState(Null Function() param0) {
-    return;
-  }
 
   void _onTapBookEmergencyAppointmentError() {
     Fluttertoast.showToast(
@@ -1887,4 +1914,10 @@ class PatientDetailsArguments {
   List<DoctorList> list;
   Patients? details;
   PatientDetailsArguments(this.list, this.details);
+}
+
+class EmergencyPatientDetailsArguments {
+  List<DoctorList> list;
+  Patients? details;
+  EmergencyPatientDetailsArguments(this.list, this.details);
 }
