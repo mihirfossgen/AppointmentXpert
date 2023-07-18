@@ -112,23 +112,10 @@ class DashboardScreen extends GetView<DashboardController> {
       body: SafeArea(
         child: ResponsiveBuilder(
           mobileBuilder: (context, constraints) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(() =>
-                      loadBody(controller.selectedPageIndex.value, context)),
-                  // _buildTaskContent(
-                  //   onPressedMenu: () => controller.openDrawer(),
-                  // ),
-                  //_buildCalendarContent(),
-                  // Obx(
-                  //   () => controller.selectedPageIndex.value == 0
-                  //       ? _buildCalendarContent()
-                  //       : Container(),
-                  // )
-                ],
-              ),
+            return SizedBox(
+              //height: MediaQuery.of(context).size.height,
+              child: Obx(
+                  () => loadBody(controller.selectedPageIndex.value, context)),
             );
           },
           tabletBuilder: (context, constraints) {
@@ -388,6 +375,32 @@ class DashboardScreen extends GetView<DashboardController> {
                                                             FontWeight.bold)),
                                                 onPressed: () {
                                                   pats? pat = pats.Existing;
+                                                  controller.radioButtonIndex
+                                                      .value = 0;
+                                                  controller.nameController
+                                                      .text = controller
+                                                          .patientData
+                                                          .value
+                                                          .patient
+                                                          ?.firstName
+                                                          .toString() ??
+                                                      '';
+                                                  controller.mobileController
+                                                      .text = controller
+                                                          .patientData
+                                                          .value
+                                                          .patient
+                                                          ?.mobile
+                                                          .toString() ??
+                                                      '';
+                                                  controller.addressController
+                                                      .text = controller
+                                                          .patientData
+                                                          .value
+                                                          .patient
+                                                          ?.address
+                                                          .toString() ??
+                                                      '';
                                                   Get.defaultDialog(
                                                       title: '',
                                                       content: Column(
@@ -936,10 +949,11 @@ class DashboardScreen extends GetView<DashboardController> {
                                       style: BorderStyle.solid,
                                     ),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
-                                      '1',
-                                      style: TextStyle(
+                                      controller.patientTodaysData.length
+                                          .toString(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 40.0,
                                         fontWeight: FontWeight.bold,
@@ -951,7 +965,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                   height: 10,
                                 ),
                                 Text(
-                                  "Mr. Mihir Rawal",
+                                  '${controller.patientData.value.patient?.firstName} ' +
+                                      '${controller.patientData.value.patient?.lastName}',
                                   style: TextStyle(
                                       color: Colors.yellow.shade800,
                                       fontSize: 20,
@@ -960,30 +975,32 @@ class DashboardScreen extends GetView<DashboardController> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const Text(
-                                  "Symtoms - Fever/cough",
-                                  style: TextStyle(
+                                Text(
+                                  controller.patientData.value.patient?.sex
+                                          .toString() ??
+                                      '',
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400),
                                 ),
-                                const Text(
-                                  "Blood group - O+",
-                                  style: TextStyle(
+                                Text(
+                                  "Blood group - ${controller.patientData.value.patient?.bloodType?.toString()}",
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400),
                                 ),
-                                const Text(
-                                  "Address - Pune",
-                                  style: TextStyle(
+                                Text(
+                                  "Address - ${controller.patientData.value.patient?.address?.toString()}",
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400),
                                 ),
-                                const Text(
-                                  "Contact - +918550978814",
-                                  style: TextStyle(
+                                Text(
+                                  "Contact - ${controller.patientData.value.patient?.mobile?.toString()}",
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400),
@@ -1098,36 +1115,13 @@ class DashboardScreen extends GetView<DashboardController> {
 
   Widget _buildAppointmentPageContent({Function()? onPressedMenu}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-      child: Column(
-        children: [
-          const SizedBox(height: kSpacing),
-          Row(
-            children: [
-              if (onPressedMenu != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: kSpacing / 2),
-                  child: IconButton(
-                    onPressed: onPressedMenu,
-                    icon: const Icon(Icons.menu),
-                  ),
-                ),
-              // Expanded(
-              //   child: SearchField(
-              //     onSearch: controller.searchTask,
-              //     hintText: "Search.. ",
-              //   ),
-              // ),
-            ],
-          ),
-          const SizedBox(height: kSpacing),
-          SizedBox(
-            width: MediaQuery.of(Get.context!).size.width,
-            height: MediaQuery.of(Get.context!).size.height,
-            //color: Colors.red,
-            child: ScheduleTabContainerPage(),
-          )
-        ],
+      padding:
+          const EdgeInsets.symmetric(horizontal: kSpacing, vertical: kSpacing),
+      child: SizedBox(
+        width: MediaQuery.of(Get.context!).size.width,
+        height: MediaQuery.of(Get.context!).size.height,
+        //color: Colors.red,
+        child: ScheduleTabContainerPage(),
       ),
     );
     // AppointmentBookingScreen(
@@ -1158,18 +1152,14 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget _buildPatientsListPageContent({Function()? onPressedMenu}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: Column(
-        children: [
-          SizedBox(
-              width: MediaQuery.of(Get.context!).size.width,
-              height: MediaQuery.of(Get.context!).size.height,
-              //color: Colors.red,
-              child: PatientsList(
-                data: controller.getAllPatientsList,
-                onPressed: (index, data) {},
-              ))
-        ],
-      ),
+      child: SizedBox(
+          width: MediaQuery.of(Get.context!).size.width,
+          height: MediaQuery.of(Get.context!).size.height,
+          //color: Colors.red,
+          child: PatientsList(
+            data: controller.getAllPatientsList,
+            onPressed: (index, data) {},
+          )),
       // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
       //     ? AddPatientScreen()
       //     : Column(
@@ -1206,7 +1196,7 @@ class DashboardScreen extends GetView<DashboardController> {
           ),
           const SizedBox(height: 10),
           Obx(() => controller.isloading.value
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Column(
@@ -1279,35 +1269,44 @@ class DashboardScreen extends GetView<DashboardController> {
                                                   '/images/default_profile.png'
                                               : '/images/default_profile.png'),
                                 )
-                              : Image.asset(!Responsive.isDesktop(Get.context!)
-                                  ? 'assets' + '/images/default_profile.png'
-                                  : '/images/default_profile.png')
-                          : patientProfile != null
-                              ? CachedNetworkImage(
-                                  imageUrl: Uri.encodeFull(
-                                    '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$patientId',
-                                  ),
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
+                              : patientProfile != null
+                                  ? CachedNetworkImage(
+                                      imageUrl: Uri.encodeFull(
+                                        '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientId',
                                       ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(!Responsive.isDesktop(
+                                                  Get.context!)
+                                              ? 'assets' +
+                                                  '/images/default_profile.png'
+                                              : '/images/default_profile.png'),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image.asset(
                                           !Responsive.isDesktop(Get.context!)
                                               ? 'assets' +
                                                   '/images/default_profile.png'
                                               : '/images/default_profile.png'),
-                                )
-                              : Image.asset(!Responsive.isDesktop(Get.context!)
-                                  ? 'assets' + '/images/default_profile.png'
-                                  : '/images/default_profile.png'),
+                                    )
+                          : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                  !Responsive.isDesktop(Get.context!)
+                                      ? 'assets' + '/images/default_profile.png'
+                                      : '/images/default_profile.png'),
+                            ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1388,25 +1387,67 @@ class DashboardScreen extends GetView<DashboardController> {
                 children: [
                   SizedBox(
                     height: 100,
-                    child: CachedNetworkImage(
-                      imageUrl: Uri.encodeFull(
-                        '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}0',
-                      ),
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Image.asset(
-                          !Responsive.isDesktop(Get.context!)
-                              ? 'assets' + '/images/default_profile.png'
-                              : '/images/default_profile.png'),
-                    ),
+                    child: staffId == 0
+                        ? staffProfile != null
+                            ? CachedNetworkImage(
+                                imageUrl: Uri.encodeFull(
+                                  '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffId',
+                                ),
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                        !Responsive.isDesktop(Get.context!)
+                                            ? 'assets' +
+                                                '/images/default_profile.png'
+                                            : '/images/default_profile.png'),
+                              )
+                            : patientProfile != null
+                                ? CachedNetworkImage(
+                                    imageUrl: Uri.encodeFull(
+                                      '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientId',
+                                    ),
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(!Responsive.isDesktop(
+                                                Get.context!)
+                                            ? 'assets' +
+                                                '/images/default_profile.png'
+                                            : '/images/default_profile.png'),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                        !Responsive.isDesktop(Get.context!)
+                                            ? 'assets' +
+                                                '/images/default_profile.png'
+                                            : '/images/default_profile.png'),
+                                  )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                                !Responsive.isDesktop(Get.context!)
+                                    ? 'assets' + '/images/default_profile.png'
+                                    : '/images/default_profile.png')),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(30),
@@ -1512,7 +1553,7 @@ Widget _dailyNumbers(List<AppointmentContent> list) {
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.blue.shade900),
                               child: const Icon(Icons.calendar_month_sharp,
-                                  size: 60, color: Colors.white),
+                                  size: 40, color: Colors.white),
                             ),
                             const SizedBox(
                               width: 10,
@@ -1558,7 +1599,7 @@ Widget _dailyNumbers(List<AppointmentContent> list) {
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.blue.shade900),
                               child: const Icon(Icons.person_outline_outlined,
-                                  size: 60, color: Colors.white),
+                                  size: 40, color: Colors.white),
                             ),
                             const SizedBox(
                               width: 10,
@@ -1604,7 +1645,7 @@ Widget _dailyNumbers(List<AppointmentContent> list) {
                                   borderRadius: BorderRadius.circular(20),
                                   color: const Color(0xff013f88)),
                               child: const Icon(Icons.cut_outlined,
-                                  size: 60, color: Colors.white),
+                                  size: 40, color: Colors.white),
                             ),
                             const SizedBox(
                               width: 10,

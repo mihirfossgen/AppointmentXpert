@@ -38,18 +38,18 @@ class _ProfilePageState extends State<ProfilePage> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return doctorCard(
-              firstName: staffData?.firstName,
-              lastName: staffData?.lastName,
-              prefix: staffData?.prefix,
-              specialty: staffData?.profession,
-              imagePath: staffData?.profilePicture,
-              rank: 5,
-              medicalEducation: staffData?.qualification,
-              residency: staffData?.departmentName,
-              internship: staffData?.clinicName,
-              fellowship: staffData?.employment,
-              address: staffData?.address,
-            );
+                firstName: staffData?.firstName,
+                lastName: staffData?.lastName,
+                prefix: staffData?.prefix,
+                specialty: staffData?.profession,
+                imagePath: staffData?.profilePicture,
+                rank: 5,
+                medicalEducation: staffData?.qualification,
+                residency: staffData?.departmentName,
+                internship: staffData?.clinicName,
+                fellowship: staffData?.employment,
+                address: staffData?.address,
+                profile: staffData?.profilePicture);
           }),
     );
     // : Container(
@@ -86,7 +86,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 address: patientData?.patient?.address,
                 age: patientData?.patient?.age.toString(),
                 email: patientData?.patient?.email,
-                mobile: patientData?.patient?.mobile);
+                mobile: patientData?.patient?.mobile,
+                profile: patientData?.patient?.profilePicture);
           }),
     );
   }
@@ -103,6 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String? internship,
     String? fellowship,
     String? address,
+    String? profile,
   }) {
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
@@ -158,26 +160,35 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child:
                                       // imagePath != null
                                       //     ?
-                                      CachedNetworkImage(
-                                imageUrl: imagePath ?? '',
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                        !Responsive.isDesktop(Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
-                                            : '/images/default_profile.png'),
-                              )
+                                      profile != null
+                                          ? CachedNetworkImage(
+                                              imageUrl: imagePath ?? '',
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(),
+                                              errorWidget: (context, url,
+                                                      error) =>
+                                                  Image.asset(!Responsive
+                                                          .isDesktop(
+                                                              Get.context!)
+                                                      ? 'assets' +
+                                                          '/images/default_profile.png'
+                                                      : '/images/default_profile.png'),
+                                            )
+                                          : Image.asset(!Responsive.isDesktop(
+                                                  Get.context!)
+                                              ? 'assets' +
+                                                  '/images/default_profile.png'
+                                              : '/images/default_profile.png')
                                   // : CustomImageView(
                                   //     imagePath: !Responsive.isDesktop(
                                   //             Get.context!)
@@ -503,6 +514,7 @@ class _ProfilePageState extends State<ProfilePage> {
     String? age,
     String? email,
     String? mobile,
+    String? profile,
   }) {
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
@@ -562,32 +574,43 @@ class _ProfilePageState extends State<ProfilePage> {
                                     child:
                                         // imagePath != null
                                         //     ?
-                                        CachedNetworkImage(
-                                  imageUrl: Uri.encodeFull(
-                                    Endpoints.baseURL +
-                                        Endpoints.downLoadPatientPhoto +
-                                        SharedPrefUtils.readPrefINt(
-                                                'patient_Id')
-                                            .toString(),
-                                  ),
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
-                                          !Responsive.isDesktop(Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png'),
-                                )
+                                        profile != null
+                                            ? CachedNetworkImage(
+                                                imageUrl: Uri.encodeFull(
+                                                  Endpoints.baseURL +
+                                                      Endpoints
+                                                          .downLoadPatientPhoto +
+                                                      SharedPrefUtils
+                                                              .readPrefINt(
+                                                                  'patient_Id')
+                                                          .toString(),
+                                                ),
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    const CircularProgressIndicator(),
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    Image.asset(!Responsive
+                                                            .isDesktop(
+                                                                Get.context!)
+                                                        ? 'assets' +
+                                                            '/images/default_profile.png'
+                                                        : '/images/default_profile.png'),
+                                              )
+                                            : Image.asset(!Responsive.isDesktop(
+                                                    Get.context!)
+                                                ? 'assets' +
+                                                    '/images/default_profile.png'
+                                                : '/images/default_profile.png')
                                     // : CustomImageView(
                                     //     imagePath: !Responsive.isDesktop(
                                     //             Get.context!)

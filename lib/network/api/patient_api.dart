@@ -37,6 +37,7 @@ class PatientApi {
         error,
         stackTrace: stackTrace,
       );
+
       rethrow;
     }
   }

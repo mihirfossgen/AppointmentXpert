@@ -74,7 +74,7 @@ class ScheduleController extends GetxController {
       //SharedPrefUtils.readPrefINt('employee_Id')
       callGetAllAppointments(0, 1);
     } else {
-      callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+      //callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
     }
   }
 

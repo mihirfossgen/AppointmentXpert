@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
@@ -94,7 +95,7 @@ class OnboardingOneScreen extends GetWidget<OnboardingOneController> {
                                                   },
                                                   child: Padding(
                                                       padding: getPadding(
-                                                          top: 20, bottom: 18),
+                                                          top: 10, bottom: 18),
                                                       child: Text("lbl_skip".tr,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -103,7 +104,7 @@ class OnboardingOneScreen extends GetWidget<OnboardingOneController> {
                                                           style: AppStyle
                                                               .txtInterRegular14))),
                                               CustomButton(
-                                                  height: getVerticalSize(56),
+                                                  height: getVerticalSize(60),
                                                   width: getHorizontalSize(65),
                                                   text: "lbl_next".tr,
                                                   fontStyle: ButtonFontStyle

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
@@ -26,10 +27,11 @@ class SchedulePage extends GetWidget<ScheduleController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.maxFinite,
+      height: double.maxFinite,
       child: controller.isloading.value
-          ? Container(child: Center(child: CircularProgressIndicator()))
+          ? const SizedBox(child: Center(child: CircularProgressIndicator()))
           : Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -37,7 +39,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                     ? Obx(() => Padding(
                           padding: getPadding(left: 0, top: 12, right: 0),
                           child: SizedBox(
-                            height: 600,
+                            //height: 600,
                             child: Responsive.isMobile(context)
                                 ? loadStaffAppointmentList()
                                 : loadStaffAppointmentsDataTable(),
@@ -179,20 +181,36 @@ class SchedulePage extends GetWidget<ScheduleController> {
                   horizontalInside:
                       const BorderSide(color: Colors.grey, width: 1)),
               //dataRowHeight: 70,
-              empty: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'No ${tab} appointments found.',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
+              empty: EmptyWidget(
+                image: null,
+                hideBackgroundAnimation: true,
+                packageImage: PackageImage.Image_1,
+                title: 'No data',
+                subTitle: 'No $tab appointments found.',
+                titleTextStyle: const TextStyle(
+                  fontSize: 22,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w600,
+                ),
+                subtitleTextStyle: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
                 ),
               ),
+              // Center(
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text(
+              //         'No $tab appointments found.',
+              //         style: const TextStyle(
+              //           fontSize: 18,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               columns: [
                 // DataColumn2(
                 //   label: Text(
@@ -300,7 +318,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                 '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Flexible(
@@ -342,7 +360,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                 //                   tab, index),
                                 //             )));
                               },
-                              child: Icon(
+                              child: const Icon(
                                 Icons.remove_red_eye,
                                 color: Colors.green,
                               ),
@@ -378,20 +396,36 @@ class SchedulePage extends GetWidget<ScheduleController> {
               right: BorderSide(color: Colors.grey[300]!),
               verticalInside: BorderSide(color: Colors.grey[300]!),
               horizontalInside: const BorderSide(color: Colors.grey, width: 1)),
-          empty: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'No ${tab} appointments found.',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ],
+          empty: EmptyWidget(
+            image: null,
+            hideBackgroundAnimation: true,
+            packageImage: PackageImage.Image_1,
+            title: 'No data',
+            subTitle: 'No $tab appointments found.',
+            titleTextStyle: const TextStyle(
+              fontSize: 22,
+              color: Colors.grey,
+              fontWeight: FontWeight.w600,
+            ),
+            subtitleTextStyle: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
             ),
           ),
+          // Center(
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       Text(
+          //         'No $tab appointments found.',
+          //         style: const TextStyle(
+          //           fontSize: 18,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           columns: [
             // DataColumn2(
             //   label: Text(
@@ -505,7 +539,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                 '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                   ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Flexible(
@@ -549,7 +583,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                   //                   tab, index),
                                   //             )));
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   Icons.remove_red_eye,
                                   color: Colors.green,
                                 ),
@@ -569,7 +603,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                       //                   .getData(tab, index),
                                       //             )));
                                     },
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.remove_red_eye,
                                       color: Colors.green,
                                     ),
@@ -594,12 +628,12 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                           //                       tab, index),
                                           //             )));
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.remove_red_eye,
                                           color: Colors.green,
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       InkWell(
@@ -611,17 +645,17 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                   tab, index),
                                               1);
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.list_alt,
                                           color: Colors.green,
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       InkWell(
                                         onTap: () {},
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.payment,
                                           color: Colors.green,
                                         ),
@@ -635,38 +669,56 @@ class SchedulePage extends GetWidget<ScheduleController> {
   }
 
   Widget loadStaffAppointmentList() {
-    return ResponsiveGridList(
-      horizontalGridMargin: 0,
-      maxItemsPerRow: 3,
-      minItemsPerRow: 1,
-      verticalGridMargin: 0,
-      minItemWidth: 320,
-      children: List.generate(
-        controller.getList(tab).length,
-        (index) => ScheduleItemWidget(
-            controller.getList(tab)[index],
-            controller.getPatientId(tab, index),
-            controller.getExaminerId(tab, index),
-            tab),
-        //loadAppointmentCard(index, Get.context!),
-        // InkWell(
-        //     onTap: () {
-        //       // Navigator.push(
-        //       //     Get.context!,
-        //       //     MaterialPageRoute(
-        //       //         builder: (context) => AppointmentDetailsPage(
-        //       //               appointmentid:
-        //       //                   controller.getAppointmentID(tab, index),
-        //       //               model2: null,
-        //       //               model1: controller.getData(tab, index),
-        //       //             )));
-        //     },
-        //     child: AbsorbPointer(
-        //         child: loadAppointmentCard(index, Get.context!)))
-      ),
-      listViewBuilderOptions: ListViewBuilderOptions(
-          shrinkWrap: true, physics: NeverScrollableScrollPhysics()),
-    );
+    return controller.getList(tab).isNotEmpty
+        ? ResponsiveGridList(
+            horizontalGridMargin: 0,
+            maxItemsPerRow: 3,
+            minItemsPerRow: 1,
+            verticalGridMargin: 0,
+            minItemWidth: 320,
+            listViewBuilderOptions: ListViewBuilderOptions(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics()),
+            children: List.generate(
+              controller.getList(tab).length,
+              (index) => ScheduleItemWidget(
+                  controller.getList(tab)[index],
+                  controller.getPatientId(tab, index),
+                  controller.getExaminerId(tab, index),
+                  tab),
+              //loadAppointmentCard(index, Get.context!),
+              // InkWell(
+              //     onTap: () {
+              //       // Navigator.push(
+              //       //     Get.context!,
+              //       //     MaterialPageRoute(
+              //       //         builder: (context) => AppointmentDetailsPage(
+              //       //               appointmentid:
+              //       //                   controller.getAppointmentID(tab, index),
+              //       //               model2: null,
+              //       //               model1: controller.getData(tab, index),
+              //       //             )));
+              //     },
+              //     child: AbsorbPointer(
+              //         child: loadAppointmentCard(index, Get.context!)))
+            ),
+          )
+        : EmptyWidget(
+            image: null,
+            hideBackgroundAnimation: true,
+            packageImage: PackageImage.Image_1,
+            title: 'No data',
+            subTitle: 'No $tab appointments found.',
+            titleTextStyle: const TextStyle(
+              fontSize: 22,
+              color: Colors.grey,
+              fontWeight: FontWeight.w600,
+            ),
+            subtitleTextStyle: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          );
   }
 
   Widget loadPatientAppointmentsList() {
@@ -676,6 +728,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
       minItemsPerRow: 1,
       verticalGridMargin: 0,
       minItemWidth: 320,
+      listViewBuilderOptions: ListViewBuilderOptions(
+          shrinkWrap: true, physics: const NeverScrollableScrollPhysics()),
       children: List.generate(
           controller.getList(tab).length,
           (index) => InkWell(
@@ -696,14 +750,12 @@ class SchedulePage extends GetWidget<ScheduleController> {
                   tab)
               // loadAppointmentCard(index, Get.context!),
               )),
-      listViewBuilderOptions: ListViewBuilderOptions(
-          shrinkWrap: true, physics: NeverScrollableScrollPhysics()),
     );
   }
 
   Widget loadAppointmentCard(int index, BuildContext context) {
     return GFCard(
-      padding: EdgeInsets.all(2),
+      padding: const EdgeInsets.all(2),
       buttonBar: GFButtonBar(children: [
         ElevatedButton(
             onPressed: () {
@@ -712,7 +764,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                   controller.getAppointmentID(tab, index),
                   1);
             },
-            child: Text('Generate Precription')),
+            child: const Text('Generate Precription')),
         ElevatedButton(
             onPressed: () {
               controller.callGenerateInvoice(
@@ -721,7 +773,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                   7,
                   controller.getExaminerId(tab, index));
             },
-            child: Text('Generate Invoice'))
+            child: const Text('Generate Invoice'))
       ]),
       title: GFListTile(
         // firstButtonTitle: 'Generate Precription',
@@ -740,14 +792,14 @@ class SchedulePage extends GetWidget<ScheduleController> {
               Icons.calendar_month,
               color: ColorConstant.blue60001,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               '${controller.getformattedDate(controller.getDate(tab, index) ?? "")}',
               style: AppStyle.txtManropeBold12,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
@@ -807,14 +859,14 @@ class SchedulePage extends GetWidget<ScheduleController> {
               '${controller.getPurpose(tab, index)}',
               style: AppStyle.txtInterRegular12Gray700,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Department: ${controller.getDeptName(tab, index) ?? ""}',
               style: AppStyle.txtInterRegular12Gray700,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(

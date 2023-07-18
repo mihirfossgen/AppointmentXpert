@@ -181,19 +181,22 @@ class _RecentPatients extends StatelessWidget {
   }
 
   Widget loadList() {
-    return Column(
-      children: data
-          .asMap()
-          .entries
-          .map(
-            (e) => ListRecentPatients(
-              data: e.value,
-              onPressed: () => onPressed(e.key, e.value),
-              // onPressedAssign: () => onPressedAssign(e.key, e.value),
-              // onPressedMember: () => onPressedMember(e.key, e.value),
-            ),
-          )
-          .toList(),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Column(
+        children: data
+            .asMap()
+            .entries
+            .map(
+              (e) => ListRecentPatients(
+                data: e.value,
+                onPressed: () => onPressed(e.key, e.value),
+                // onPressedAssign: () => onPressedAssign(e.key, e.value),
+                // onPressedMember: () => onPressedMember(e.key, e.value),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

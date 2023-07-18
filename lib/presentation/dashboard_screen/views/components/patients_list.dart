@@ -14,6 +14,7 @@ import '../../../../theme/app_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../shared_components/list_recent_patient.dart';
+import '../../shared_components/search_field.dart';
 
 class PatientsList extends StatelessWidget {
   const PatientsList({Key? key, required this.data, required this.onPressed})
@@ -48,12 +49,14 @@ class PatientsList extends StatelessWidget {
                 children: [
                   if (Responsive.isMobile(context))
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         textView(),
                         const SizedBox(
                           height: 10.0,
                         ),
-                        //SearchField(),
+                        SearchField(),
                       ],
                     ),
                   if (!Responsive.isMobile(context))
