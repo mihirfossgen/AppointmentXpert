@@ -52,47 +52,72 @@ class ListEmergencyPatients extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: GFListTile(
-        icon: const Icon(Icons.arrow_right),
-        avatar: CustomImageView(
-          width: 80,
-          height: 80,
-          imagePath: !Responsive.isDesktop(Get.context!)
-              ? 'assets' + '/images/default_profile.png'
-              : '/images/default_profile.png',
-        ),
-        //autofocus: true,
         color: Colors.white,
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 5,
+              height: 10,
             ),
-            Text(
-              'Email: ${data.emailId.toString()}',
-              style: const TextStyle(fontSize: 14, color: Colors.black),
-            ),
+
+            Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  const Text(
+                    'Email: ',
+                    style: TextStyle(fontSize: 14, color: Colors.black,fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '${data.emailId.toString()}',
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+            ]),
             const SizedBox(
               height: 5,
             ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:[
+            const Text(
+              'Mobile no.: ',
+              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
+            ),
             Text(
-              'Mobile no.: ${data.mobileNumber}',
+              '${data.mobileNumber}',
               style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
+          ]),
             const SizedBox(
               height: 5,
             ),
+
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:[
+            const Text(
+              'Date: ',
+              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
+            ),
             Text(
-              'Date: ${data.date}',
+              '${dateFormatter(data.date.toString())}',
               style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
+          ]),
             const SizedBox(
               height: 5,
             ),
-            Text(
-              'Patient Type: ${data.patientType}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:[
+            const Text(
+              'Patient Type: ',
+              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
             ),
+            Text(
+              '${data.patientType}',
+              style: const TextStyle(fontSize: 13, color: Colors.blueAccent,fontWeight: FontWeight.bold),
+            ),
+          ]),
           ],
         ),
         enabled: true,
@@ -107,7 +132,7 @@ class ListEmergencyPatients extends StatelessWidget {
         //onSecondButtonTap: ,
         onTap: () {},
         //padding: ,
-        radius: 2,
+        radius: 8,
         //secondButtonTextStyle: ,
         //secondButtonTitle: 'Delete',
         selected: false,
@@ -248,7 +273,7 @@ class ListEmergencyPatients extends StatelessWidget {
   Widget _buildTitle() {
     return Text(
       '${data.patientName}',
-      style: const TextStyle(fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
