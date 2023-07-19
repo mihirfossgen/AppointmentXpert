@@ -54,6 +54,7 @@ class ListEmergencyPatients extends StatelessWidget {
       padding: const EdgeInsets.all(0.0),
       child: GFListTile(
         color: Colors.white,
+        padding: const EdgeInsets.all(10.0),
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,11 +67,11 @@ class ListEmergencyPatients extends StatelessWidget {
                 children:[
                   const Text(
                     'Email: ',
-                    style: TextStyle(fontSize: 14, color: Colors.black,fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '${data.emailId.toString()}',
-                    style: const TextStyle(fontSize: 14, color: Colors.black),
+                    style: const TextStyle(fontSize: 13, color: Colors.black),
                   ),
             ]),
             const SizedBox(

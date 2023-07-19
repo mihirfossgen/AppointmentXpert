@@ -640,7 +640,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 color: Colors.white,
                                 shadowColor: ColorConstant.gray400,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
                                       (SharedPrefUtils.readPrefStr("role") ==
@@ -675,8 +675,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                   : Container(
                                                       color: Colors.white,
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              10),
+                                                          const EdgeInsets.all(10),
                                                       child: const Center(
                                                         child: Column(
                                                           crossAxisAlignment:

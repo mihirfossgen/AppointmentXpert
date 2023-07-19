@@ -24,7 +24,7 @@ class _RecentPatients extends StatelessWidget {
 
     return SizedBox(
         //width: 400,
-        height: 250,
+        height: 350,
         child: Card(
           child: DataTable2(
               columnSpacing: 10,
@@ -32,7 +32,7 @@ class _RecentPatients extends StatelessWidget {
               minWidth: 600,
               showBottomBorder: true,
               //dataRowHeight: 70,
-              empty: Center(
+              empty: const Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +182,7 @@ class _RecentPatients extends StatelessWidget {
 
   Widget loadList() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 2.0),
       child: Column(
         children: data
             .asMap()

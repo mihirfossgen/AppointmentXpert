@@ -97,7 +97,6 @@ class ListRecentPatients extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            Row(children:[
             const Text(
               'Email: ',
               style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
@@ -110,7 +109,6 @@ class ListRecentPatients extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
                   maxLines: 2,
             )),
-            ]),
             const SizedBox(
               height: 5,
             ),

@@ -154,7 +154,7 @@ class PatientsList extends GetView<DashboardController> {
                                           Text(
                                             'Email: ${item.email.toString()}',
                                             style: const TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 13,
                                                 color: Colors.black),
                                           ),
                                           const SizedBox(
@@ -179,11 +179,11 @@ class PatientsList extends GetView<DashboardController> {
                                       ),
                                       enabled: true,
                                       firstButtonTextStyle:
-                                          const TextStyle(color: Colors.blue),
+                                          const TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),
                                       firstButtonTitle: 'View Details',
                                       secondButtonTitle: 'Book Appointment',
                                       secondButtonTextStyle:
-                                          const TextStyle(color: Colors.red),
+                                          const TextStyle(color: Colors.red,fontWeight: FontWeight.bold),
                                       onSecondButtonTap: () {
                                         Get.to(AppointmentBookingScreen(
                                             patientDetailsArguments:
@@ -202,7 +202,7 @@ class PatientsList extends GetView<DashboardController> {
                                       //onSecondButtonTap: ,
                                       onTap: () {},
                                       //padding: ,
-                                      radius: 2,
+                                      radius: 8,
                                       //secondButtonTextStyle: ,
                                       //secondButtonTitle: 'Delete',
                                       selected: false,
@@ -211,7 +211,7 @@ class PatientsList extends GetView<DashboardController> {
                                       title: Text(
                                         '${item.firstName} ' +
                                             '${item.lastName}',
-                                        style: const TextStyle(
+                                        style: const TextStyle(fontSize: 16,
                                             fontWeight: FontWeight.bold),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
