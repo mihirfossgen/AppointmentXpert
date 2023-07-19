@@ -57,8 +57,8 @@ class ListRecentPatients extends StatelessWidget {
         icon: const Icon(Icons.arrow_right),
         avatar: data.profilePicture != null
             ? CachedNetworkImage(
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
                 fit: BoxFit.cover,
                 imageUrl: Uri.encodeFull(
                   Endpoints.baseURL +
@@ -81,8 +81,8 @@ class ListRecentPatients extends StatelessWidget {
                 },
               )
             : CustomImageView(
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
                 imagePath: !Responsive.isDesktop(Get.context!)
                     ? 'assets' + '/images/default_profile.png'
                     : '/images/default_profile.png',
@@ -90,48 +90,65 @@ class ListRecentPatients extends StatelessWidget {
         //autofocus: true,
         color: Colors.white,
         description: Column(
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
               height: 5,
             ),
-            Text(
-              'Email: ${data.email.toString()}',
-              style: const TextStyle(fontSize: 14, color: Colors.black),
+            Row(children:[
+            const Text(
+              'Email: ',
+              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
             ),
+            SizedBox(
+              width: 180,
+                child: Text('${data.email}',
+              style: const TextStyle(fontSize: 13, color: Colors.black),
+              softWrap:true,
+              overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+            )),
+            ]),
             const SizedBox(
               height: 5,
             ),
-            Text(
-              'Address: ${data.address}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
+            Row(children:[
+            const Text(
+              'Address: ',
+              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
             ),
+              Text(
+              '${data.address}',
+              style: const TextStyle(fontSize: 13, color: Colors.black),
+              softWrap:true,
+              overflow: TextOverflow.ellipsis,
+            ),
+            ]),
             const SizedBox(
               height: 5,
             ),
+        Row(children:[
+            const Text(
+              'Age: ',
+              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
+            ),
             Text(
-              'Age: ${data.age}',
+              '${data.age}',
               style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
+          ]),
           ],
         ),
         enabled: true,
-        firstButtonTextStyle: const TextStyle(color: Colors.blue),
+        firstButtonTextStyle: const TextStyle(color: Colors.blue,fontSize: 14,fontWeight: FontWeight.bold),
         firstButtonTitle: 'View Details',
         secondButtonTitle: 'Book Appointment',
-        secondButtonTextStyle: const TextStyle(color: Colors.red),
+        secondButtonTextStyle: const TextStyle(color: Colors.red,fontSize: 14,fontWeight: FontWeight.bold),
         onSecondButtonTap: () {
           Get.to(AppointmentBookingScreen(
-              patientDetailsArguments: PatientDetailsArguments(
-                  [],
-                  Patients(
-                      id: data.id,
-                      email: data.email,
-                      firstName: data.firstName,
-                      lastName: data.lastName,
-                      address: data.address,
-                      mobile: data.mobile,
-                      sex: data.sex))));
+              patientDetailsArguments: PatientDetailsArguments([], data)));
         },
         onFirstButtonTap: () {},
         //focusColor: ,
@@ -145,7 +162,7 @@ class ListRecentPatients extends StatelessWidget {
         //onSecondButtonTap: ,
         onTap: () {},
         //padding: ,
-        radius: 2,
+        radius: 8,
         //secondButtonTextStyle: ,
         //secondButtonTitle: 'Delete',
         selected: false,
@@ -307,7 +324,7 @@ class ListRecentPatients extends StatelessWidget {
   Widget _buildTitle() {
     return Text(
       '${data.firstName} ' + '${data.lastName}',
-      style: const TextStyle(fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

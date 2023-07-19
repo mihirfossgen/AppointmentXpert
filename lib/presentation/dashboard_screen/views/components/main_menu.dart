@@ -58,9 +58,9 @@ class _MainMenu extends StatelessWidget {
           label: "Home",
         ),
         SelectionButtonData(
-          activeIcon: EvaIcons.bell,
+          activeIcon: EvaIcons.person,
           icon: EvaIcons.bellOutline,
-          label: "Appointments",
+          label: "Profile",
           //totalNotif: 100,
         ),
         // SelectionButtonData(

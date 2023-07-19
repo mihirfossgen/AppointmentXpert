@@ -95,7 +95,6 @@ dependencies:
   ripple_button: ^2.2.1
   countup: ^0.1.4
   empty_widget: ^0.0.3
- 
   stepper_page_view: ^0.0.2
   pdfx: ^2.4.0
 

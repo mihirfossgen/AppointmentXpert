@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/emergency_patient_list.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -314,19 +313,29 @@ class AppointmentApi {
     }
   }
 
-  Future<List<EmergencyContent>> getEmergencyPatientsList() async {
-    var url = Endpoints.emergencyPatientList;
+  Future<List<EmergencyContent>> getEmergencyPatientsList(
+      {Map<String, String> headers = const {},
+        Map<String, dynamic>? data}) async {
+    ProgressDialogUtils.showProgressDialog();
     try {
-      final Response response = await _apiService.get(url);
+      //await isNetworkConnected();
+      final Response response =
+      await _apiService.get(Endpoints.emergencyPatientList);
+      ProgressDialogUtils.hideProgressDialog();
       List<dynamic> data = response.data;
       List<EmergencyContent> list =
       data.map((e) => EmergencyContent.fromJson(e)).toList();
       return list;
-
-    } catch (e) {
+    } catch (error, stackTrace) {
+      ProgressDialogUtils.hideProgressDialog();
+      Logger.log(
+        error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
+
 
   Future<String> callGeneratePrecription(
       int patientId, int appointmentId, int examinationId) async {

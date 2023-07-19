@@ -79,7 +79,7 @@ class _AppointmentInProgress extends StatelessWidget {
                             Text(
                                 '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}'),
                             onTap: () {}),
-                        DataCell(Text('${data[index].visit}')),
+                        DataCell(Text('${data[index].status}')),
                       ]))),
         ));
   }
@@ -208,7 +208,7 @@ class _AppointmentInProgress extends StatelessWidget {
                           onTap: () {}),
                       DataCell(Text("${data[index].patient?.mobile}"),
                           onTap: () {}),
-                      DataCell(Text('${data[index].visit}')),
+                      DataCell(Text('${data[index].status}')),
                       DataCell(
                           Text(formatter
                               .format(DateTime.parse(data[index].date ?? ""))),

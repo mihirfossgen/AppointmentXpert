@@ -1,6 +1,7 @@
 import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';

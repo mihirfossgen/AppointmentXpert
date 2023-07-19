@@ -17,6 +17,8 @@ class OnboardingThreeScreen extends GetWidget<OnboardingThreeController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
+      bottom: false,
       child: Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,

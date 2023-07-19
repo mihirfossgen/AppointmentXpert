@@ -236,7 +236,7 @@ class EmergencyList extends StatelessWidget {
 
   Widget loadList() {
     return ResponsiveGridList(
-        horizontalGridMargin: 10,
+        horizontalGridMargin: 0,
         maxItemsPerRow: 2,
         minItemsPerRow: 1,
         shrinkWrap: true,

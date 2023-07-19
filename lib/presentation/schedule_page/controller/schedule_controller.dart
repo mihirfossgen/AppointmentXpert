@@ -1,5 +1,5 @@
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/app_export.dart';
@@ -13,7 +13,7 @@ class ScheduleController extends GetxController {
   bool response = false;
 
   GetAllAppointments model = GetAllAppointments();
-  List<AppointmentContent> listModel = <AppointmentContent>[];
+  RxList<AppointmentContent> listModel = <AppointmentContent>[].obs;
   String precriptionFileName = "";
   String invoiceFileName = "";
   RxBool isloading = false.obs;
@@ -30,11 +30,18 @@ class ScheduleController extends GetxController {
   RxBool sortAscending = true.obs;
   RxInt sortColumnIndex = 0.obs;
   //DessertDataSourceAsync? _dessertsDataSource;
-  final PaginatorController pageController = PaginatorController();
   //DessertDataSourceAsync? dessertsDataSource;
 
   RxBool dataSourceLoading = false.obs;
   RxInt initialRow = 0.obs;
+
+  static const _pageSize = 20;
+  final PagingController<int, AppointmentContent> todayPagingController =
+      PagingController(firstPageKey: 0);
+  final PagingController<int, AppointmentContent> upcomingPagingController =
+      PagingController(firstPageKey: 0);
+  final PagingController<int, AppointmentContent> completedPagingController =
+      PagingController(firstPageKey: 0);
 
   getformattedDate(String date) {
     final DateFormat formatter = DateFormat.yMMMEd();
@@ -67,25 +74,81 @@ class ScheduleController extends GetxController {
   final GlobalKey _rangeSelectorKey = GlobalKey();
 
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
     isloading.value = true;
+    //pagingController.addPageRequestListener((pageKey) {
     if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       //SharedPrefUtils.readPrefINt('employee_Id')
-      callGetAllAppointments(0, 1);
+      callGetAllAppointments(0, _pageSize);
     } else {
-      //callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+      callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
     }
+    //});
+    super.onInit;
+  }
+
+  @override
+  void onReady() {
+    // isloading.value = true;
+    // pagingController.addPageRequestListener((pageKey) {
+    //   if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+    //     //SharedPrefUtils.readPrefINt('employee_Id')
+    //     callGetAllAppointments(pageKey, _pageSize);
+    //   } else {
+    //     //callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+    //   }
+    // });
+    super.onReady();
   }
 
   Future<void> callGetAllAppointments(int pageNo, int count) async {
     print("count ----- $count");
     try {
       model = (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
-      _handleGetAllAppointment(model);
+      final isLastPage = model.totalElements! < _pageSize;
+      if (isLastPage) {
+        todayPagingController.itemList = [];
+        upcomingPagingController.itemList = [];
+        completedPagingController.itemList = [];
+        List<AppointmentContent> list = model.content ?? [];
+        List<AppointmentContent> appointmentsCompleted =
+            list.where((i) => i.status?.toLowerCase() == "completed").toList();
+        List<AppointmentContent> appointmentsUpcoming =
+            list.where((i) => i.active == true).toList();
+        List<AppointmentContent> appointmentsToday = list
+            .where((i) =>
+                dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+                i.active == true)
+            .toList();
+        todayPagingController.appendLastPage(appointmentsToday);
+        upcomingPagingController.appendLastPage(appointmentsUpcoming);
+        completedPagingController.appendLastPage(appointmentsCompleted);
+      } else {
+        List<AppointmentContent> list = model.content ?? [];
+        List<AppointmentContent> appointmentsCompleted = list
+            .where((i) =>
+                i.status == "Completed" &&
+                i.treatment != null &&
+                i.active == true)
+            .toList();
+        List<AppointmentContent> appointmentsUpcoming =
+            list.where((i) => i.active == true).toList();
+        List<AppointmentContent> appointmentsToday = list
+            .where((i) =>
+                dateFormat(i.date ?? "") ==
+                    dateFormat(DateTime.now().toString()) &&
+                i.active == true)
+            .toList();
+        final nextPageKey = pageNo + appointmentsToday.length;
+        todayPagingController.appendPage(appointmentsToday, nextPageKey);
+        upcomingPagingController.appendPage(appointmentsUpcoming, nextPageKey);
+        completedPagingController.appendPage(
+            appointmentsCompleted, nextPageKey);
+      }
       update();
     } on Map {
       //postLoginResp = e;
+      todayPagingController.error = 'No data found.';
       rethrow;
     } finally {
       isloading.value = false;
@@ -94,8 +157,8 @@ class ScheduleController extends GetxController {
 
   Future<void> callAppointmentsByPatientId(int patientId) async {
     try {
-      listModel = (await Get.find<AppointmentApi>()
-          .getAllAppointmentBYPatientId(patientId, 0));
+      // listModel = (await Get.find<AppointmentApi>()
+      //     .getAllAppointmentBYPatientId(patientId, 0));
 
       isloading.value = false;
       _handleAllAppointmentPatientId(listModel);
@@ -158,8 +221,7 @@ class ScheduleController extends GetxController {
     return formatter.format(DateTime.parse(a));
   }
 
-  _handleGetAllAppointment(GetAllAppointments model) {
-    List<AppointmentContent> userList = model.content!.map((e) => e).toList();
+  _handleGetAllAppointment(List<AppointmentContent> userList) {
     for (var i = 0; i < userList.length; i++) {
       if (userList[i].status == "Completed" &&
           userList[i].treatment != null &&
@@ -296,6 +358,9 @@ class ScheduleController extends GetxController {
 
   @override
   void onClose() {
+    todayPagingController.dispose();
+    upcomingPagingController.dispose();
+    completedPagingController.dispose();
     super.onClose();
   }
 

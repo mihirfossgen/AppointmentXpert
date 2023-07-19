@@ -7,10 +7,10 @@ import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedu
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:countup/countup.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_selector/flutter_custom_selector.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +23,6 @@ import '../../../../models/getAllApointments.dart';
 import '../../../../models/getallEmplyesList.dart';
 import '../../../../models/patient_list_model.dart';
 import '../../../../models/patient_model.dart';
-import '../../../../models/emergency_patient_list.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
@@ -136,15 +135,13 @@ class DashboardScreen extends GetView<DashboardController> {
                     controller: ScrollController(),
                     child: Obx(() =>
                         loadBody(controller.selectedPageIndex.value, context)),
-                    // _buildTaskContent(
-                    //   onPressedMenu: () => controller.openDrawer(),
-                    // ),
                   ),
                 ),
                 // SizedBox(
                 //   height: MediaQuery.of(context).size.height,
                 //   child: const VerticalDivider(),
                 // ),
+
                 // Obx(
                 //   () => controller.selectedPageIndex.value == 0
                 //       ? Flexible(
@@ -410,9 +407,16 @@ class DashboardScreen extends GetView<DashboardController> {
                                                           .toString() ??
                                                       '';
                                                   Get.defaultDialog(
-                                                      titlePadding: const EdgeInsets.all(10),
+                                                      titlePadding:
+                                                          const EdgeInsets.all(
+                                                              10),
                                                       title: 'Select an Option',
-                                                      titleStyle: TextStyle(color: Colors.red.shade900,fontSize: 20,fontWeight: FontWeight.bold),
+                                                      titleStyle: TextStyle(
+                                                          color: Colors
+                                                              .red.shade900,
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                       content: Column(
                                                         // mainAxisSize:
                                                         //     MainAxisSize.max,
@@ -645,7 +649,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                           ? const _HeaderRecentPatients()
                                           : Container(),
                                       //: Container(),
-                                      //const SizedBox(height: kSpacing),
+                                      const SizedBox(height: kSpacing),
                                       (SharedPrefUtils.readPrefStr("role") ==
                                               'RECEPTIONIST')
                                           //? (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST')
@@ -654,11 +658,15 @@ class DashboardScreen extends GetView<DashboardController> {
                                                   child:
                                                       CircularProgressIndicator(),
                                                 )
-                                              : controller.getAllPatientsList
+                                              : controller
+                                                      .patientPagingController
+                                                      .itemList!
                                                       .isNotEmpty
                                                   ? _RecentPatients(
                                                       data: controller
-                                                          .getAllPatientsList,
+                                                              .patientPagingController
+                                                              .itemList ??
+                                                          [],
                                                       onPressed: controller
                                                           .onPressedPatient,
                                                       // onPressedAssign: controller.onPressedAssignTask,
@@ -1091,8 +1099,9 @@ class DashboardScreen extends GetView<DashboardController> {
         ),
         ElevatedButton(
           onPressed: () {
-
-            isForExistingPatient == true ? onTapBookEmergencyAppointment("existing") : onTapBookEmergencyAppointment("new");
+            isForExistingPatient == true
+                ? onTapBookEmergencyAppointment("existing")
+                : onTapBookEmergencyAppointment("new");
 
             // if (settingsScreenController
             //     .categoryNameController
@@ -1146,7 +1155,6 @@ class DashboardScreen extends GetView<DashboardController> {
       Get.back();
     } on Map {
       _onTapBookEmergencyAppointmentError();
-
     } on NoInternetException catch (e) {
       Get.rawSnackbar(message: e.toString());
     } catch (e) {
@@ -1198,7 +1206,7 @@ class DashboardScreen extends GetView<DashboardController> {
           height: MediaQuery.of(Get.context!).size.height,
           //color: Colors.red,
           child: PatientsList(
-            data: controller.getAllPatientsList,
+            //data: controller.getAllPatientsList,
             onPressed: (index, data) {},
           )),
       // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
@@ -1218,6 +1226,25 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
+  Widget loadEmptyWidget() {
+    return EmptyWidget(
+      image: null,
+      hideBackgroundAnimation: true,
+      packageImage: PackageImage.Image_1,
+      title: 'No data',
+      subTitle: 'No emergency requests today.',
+      titleTextStyle: const TextStyle(
+        fontSize: 22,
+        color: Colors.grey,
+        fontWeight: FontWeight.w600,
+      ),
+      subtitleTextStyle: const TextStyle(
+        fontSize: 14,
+        color: Colors.black,
+      ),
+    );
+  }
+
   Widget _buildEmergencyPatientsListPage({Function()? onPressedMenu}) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0.0),
@@ -1225,10 +1252,12 @@ class DashboardScreen extends GetView<DashboardController> {
             width: MediaQuery.of(Get.context!).size.width,
             height: MediaQuery.of(Get.context!).size.height,
             //color: Colors.red,
-            child: EmergencyList(
-              data: controller.getEmergencyPatientsList,
+            child: Obx(() => controller.isloading.value ? const Center(child:CircularProgressIndicator()) :
+            controller.getEmergencyPatientsList.value.isEmpty ? loadEmptyWidget() :
+            EmergencyList(
+              data: controller.getEmergencyPatientsList.value,
               onPressed: (index, data) {},
-            )),
+            ))),
         // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
         //     ? AddPatientScreen()
         //     : Column(
@@ -1912,7 +1941,7 @@ class DoctorDetailsArguments {
 
 class PatientDetailsArguments {
   List<DoctorList> list;
-  Patients? details;
+  Content? details;
   PatientDetailsArguments(this.list, this.details);
 }
 
