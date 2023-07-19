@@ -1,4 +1,3 @@
-import 'package:appointmentxpert/models/patient_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
