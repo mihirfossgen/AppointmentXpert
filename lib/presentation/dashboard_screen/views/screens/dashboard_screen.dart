@@ -22,6 +22,7 @@ import '../../../../core/utils/size_utils.dart';
 import '../../../../models/getAllApointments.dart';
 import '../../../../models/getallEmplyesList.dart';
 import '../../../../models/patient_list_model.dart';
+import '../../../../models/patient_model.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
