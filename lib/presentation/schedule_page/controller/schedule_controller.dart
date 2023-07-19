@@ -111,33 +111,50 @@ class ScheduleController extends GetxController {
         upcomingPagingController.itemList = [];
         completedPagingController.itemList = [];
         List<AppointmentContent> list = model.content ?? [];
+        var now = DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
         List<AppointmentContent> appointmentsCompleted =
             list.where((i) => i.status?.toLowerCase() == "completed").toList();
-        List<AppointmentContent> appointmentsUpcoming =
-            list.where((i) => i.active == true).toList();
+        List<AppointmentContent> appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed",
+            )
+            .toList();
         List<AppointmentContent> appointmentsToday = list
             .where((i) =>
                 dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
-                i.active == true)
+                i.active == true &&
+                i.status?.toLowerCase() != "completed")
             .toList();
         todayPagingController.appendLastPage(appointmentsToday);
         upcomingPagingController.appendLastPage(appointmentsUpcoming);
         completedPagingController.appendLastPage(appointmentsCompleted);
       } else {
         List<AppointmentContent> list = model.content ?? [];
-        List<AppointmentContent> appointmentsCompleted = list
-            .where((i) =>
-                i.status == "Completed" &&
-                i.treatment != null &&
-                i.active == true)
+        var now = DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+        List<AppointmentContent> appointmentsCompleted =
+            list.where((i) => i.status?.toLowerCase() == "completed").toList();
+        List<AppointmentContent> appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed",
+            )
             .toList();
-        List<AppointmentContent> appointmentsUpcoming =
-            list.where((i) => i.active == true).toList();
         List<AppointmentContent> appointmentsToday = list
             .where((i) =>
-                dateFormat(i.date ?? "") ==
-                    dateFormat(DateTime.now().toString()) &&
-                i.active == true)
+                dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+                i.active == true &&
+                i.status?.toLowerCase() != "completed")
             .toList();
         final nextPageKey = pageNo + appointmentsToday.length;
         todayPagingController.appendPage(appointmentsToday, nextPageKey);
@@ -218,6 +235,11 @@ class ScheduleController extends GetxController {
 
   dateFormat(String a) {
     final DateFormat formatter = DateFormat('dd-MMM-yyyy');
+    return formatter.format(DateTime.parse(a));
+  }
+
+  dateFormatUTC(String a) {
+    final DateFormat formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
     return formatter.format(DateTime.parse(a));
   }
 

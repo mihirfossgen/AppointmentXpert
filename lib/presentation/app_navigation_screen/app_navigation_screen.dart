@@ -116,7 +116,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
                                                     ]))),
                                         GestureDetector(
                                             onTap: () {
-                                              onTapOnboardingOne();
+                                              onTapOnboarding();
                                             },
                                             child: Container(
                                                 decoration: AppDecoration.white,
@@ -137,141 +137,6 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
                                                                           10),
                                                               child: Text(
                                                                   "lbl_onboarding_one"
-                                                                      .tr,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: AppStyle
-                                                                      .txtRobotoRegular20))),
-                                                      Padding(
-                                                          padding: getPadding(
-                                                              top: 5),
-                                                          child: Divider(
-                                                              height:
-                                                                  getVerticalSize(
-                                                                      1),
-                                                              thickness:
-                                                                  getVerticalSize(
-                                                                      1),
-                                                              color: ColorConstant
-                                                                  .blueGray40002))
-                                                    ]))),
-                                        GestureDetector(
-                                            onTap: () {
-                                              onTapOnboardingTwo();
-                                            },
-                                            child: Container(
-                                                decoration: AppDecoration.white,
-                                                child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Align(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Padding(
-                                                              padding:
-                                                                  getPadding(
-                                                                      left: 20,
-                                                                      top: 10,
-                                                                      right: 20,
-                                                                      bottom:
-                                                                          10),
-                                                              child: Text(
-                                                                  "lbl_onboarding_two"
-                                                                      .tr,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: AppStyle
-                                                                      .txtRobotoRegular20))),
-                                                      Padding(
-                                                          padding: getPadding(
-                                                              top: 5),
-                                                          child: Divider(
-                                                              height:
-                                                                  getVerticalSize(
-                                                                      1),
-                                                              thickness:
-                                                                  getVerticalSize(
-                                                                      1),
-                                                              color: ColorConstant
-                                                                  .blueGray40002))
-                                                    ]))),
-                                        GestureDetector(
-                                            onTap: () {
-                                              onTapOnboardingThree();
-                                            },
-                                            child: Container(
-                                                decoration: AppDecoration.white,
-                                                child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Align(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Padding(
-                                                              padding:
-                                                                  getPadding(
-                                                                      left: 20,
-                                                                      top: 10,
-                                                                      right: 20,
-                                                                      bottom:
-                                                                          10),
-                                                              child: Text(
-                                                                  "msg_onboarding_three"
-                                                                      .tr,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: AppStyle
-                                                                      .txtRobotoRegular20))),
-                                                      Padding(
-                                                          padding: getPadding(
-                                                              top: 5),
-                                                          child: Divider(
-                                                              height:
-                                                                  getVerticalSize(
-                                                                      1),
-                                                              thickness:
-                                                                  getVerticalSize(
-                                                                      1),
-                                                              color: ColorConstant
-                                                                  .blueGray40002))
-                                                    ]))),
-                                        GestureDetector(
-                                            onTap: () {
-                                              onTapOnboardingFour();
-                                            },
-                                            child: Container(
-                                                decoration: AppDecoration.white,
-                                                child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Align(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Padding(
-                                                              padding:
-                                                                  getPadding(
-                                                                      left: 20,
-                                                                      top: 10,
-                                                                      right: 20,
-                                                                      bottom:
-                                                                          10),
-                                                              child: Text(
-                                                                  "lbl_onboarding_four"
                                                                       .tr,
                                                                   overflow:
                                                                       TextOverflow
@@ -1380,27 +1245,9 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
     );
   }
 
-  onTapOnboardingOne() {
+  onTapOnboarding() {
     Get.toNamed(
-      AppRoutes.onboardingOneScreen,
-    );
-  }
-
-  onTapOnboardingTwo() {
-    Get.toNamed(
-      AppRoutes.onboardingTwoScreen,
-    );
-  }
-
-  onTapOnboardingThree() {
-    Get.toNamed(
-      AppRoutes.onboardingThreeScreen,
-    );
-  }
-
-  onTapOnboardingFour() {
-    Get.toNamed(
-      AppRoutes.onboardingFourScreen,
+      AppRoutes.onboardingScreen,
     );
   }
 

@@ -102,12 +102,13 @@ class PatientsList extends GetView<DashboardController> {
                                           ? CachedNetworkImage(
                                               width: 80,
                                               height: 80,
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.contain,
                                               imageUrl: Uri.encodeFull(
                                                 Endpoints.baseURL +
                                                     Endpoints
                                                         .downLoadPatientPhoto +
-                                                    item.id.toString(),
+                                                    item.profilePicture
+                                                        .toString(),
                                               ),
                                               httpHeaders: {
                                                 "Authorization":

@@ -124,6 +124,7 @@ class DoctorList {
   String? status;
   String? joinedDate;
   String? terminatedDate;
+  String? profilePicture;
 
   DoctorList({
     this.id,
@@ -148,6 +149,7 @@ class DoctorList {
     this.status,
     this.joinedDate,
     this.terminatedDate,
+    this.profilePicture,
   });
 
   DoctorList copyWith({
@@ -173,6 +175,7 @@ class DoctorList {
     String? status,
     String? joinedDate,
     String? terminatedDate,
+    String? profilePicture,
   }) =>
       DoctorList(
         id: id ?? this.id,
@@ -197,6 +200,7 @@ class DoctorList {
         status: status ?? this.status,
         joinedDate: joinedDate ?? this.joinedDate,
         terminatedDate: terminatedDate ?? this.terminatedDate,
+        profilePicture: profilePicture ?? this.profilePicture,
       );
 
   factory DoctorList.fromJson(Map<String, dynamic> json) => DoctorList(
@@ -222,6 +226,7 @@ class DoctorList {
         status: json["status"],
         joinedDate: json["joinedDate"],
         terminatedDate: json["terminatedDate"],
+        profilePicture: json["uploadedProfilePath"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -247,6 +252,7 @@ class DoctorList {
         "status": status,
         "joinedDate": joinedDate,
         "terminatedDate": terminatedDate,
+        "uploadedProfilePath": profilePicture,
       };
 }
 

@@ -154,16 +154,13 @@ class DashboardController extends GetxController {
       var response = (await Get.find<AppointmentApi>().getTodaysAppointments(
           SharedPrefUtils.readPrefINt('patient_Id'), true));
       List<AppointmentContent> list = response;
-      List<AppointmentContent> match = [];
-      list.any((element) {
-        if (element.status?.toLowerCase() != 'completed') {
-          print('Matched obj: ${element}');
-          match.add(element);
-          return true;
-        }
-        return false;
-      });
-      patientTodaysData.value = match;
+      List<AppointmentContent> appointmentsToday = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+              i.active == true &&
+              i.status?.toLowerCase() != "completed")
+          .toList();
+      patientTodaysData.value = appointmentsToday;
       getUpcomingAppointments(0, true);
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
@@ -177,16 +174,13 @@ class DashboardController extends GetxController {
       var response = (await Get.find<AppointmentApi>()
           .getAllReceiptionstTodayAppointment());
       List<AppointmentContent> list = response;
-      List<AppointmentContent> match = [];
-      list.any((element) {
-        if (element.status?.toLowerCase() != 'completed') {
-          print('Matched obj: ${element}');
-          match.add(element);
-          return true;
-        }
-        return false;
-      });
-      staffTodaysData.value = match;
+      List<AppointmentContent> appointmentsToday = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+              i.active == true &&
+              i.status?.toLowerCase() != "completed")
+          .toList();
+      staffTodaysData.value = appointmentsToday;
       callReceiptionUpcomingAppointments();
     } on Map {
       //postLoginResp = e;
@@ -194,25 +188,30 @@ class DashboardController extends GetxController {
     }
   }
 
+  dateFormat(String a) {
+    final DateFormat formatter = DateFormat('dd-MMM-yyyy');
+    return formatter.format(DateTime.parse(a));
+  }
+
   Future<void> callReceiptionUpcomingAppointments() async {
     try {
       var response =
           (await Get.find<AppointmentApi>().getAllReceiptionstAppointment(0));
-      var now = new DateTime.now();
-      var now_3d = now.add(Duration(days: 3));
-      //var now_1m = new DateTime(now.year, now.month - 1, now.day);
-      //var now_1y = new DateTime(now.year - 1, now.month, now.day);
+
       List<AppointmentContent> list = response;
-      List<AppointmentContent> match = [];
-      list.any((element) {
-        if (now_3d.isAfter(DateTime.parse(element.date!))) {
-          print('Matched obj: ${element}');
-          match.add(element);
-          return true;
-        }
-        return false;
-      });
-      upComingAppointments.value = match;
+      var now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      List<AppointmentContent> appointmentsUpcoming = list
+          .where(
+            (i) =>
+                i.active == true &&
+                !formatter
+                    .parse(i.date!)
+                    .isBefore(formatter.parse(now.toString())) &&
+                i.status?.toLowerCase() != "completed",
+          )
+          .toList();
+      upComingAppointments.value = appointmentsUpcoming;
       callRecentPatientList();
     } on Map {
       //postLoginResp = e;
@@ -227,39 +226,38 @@ class DashboardController extends GetxController {
         var patientId = SharedPrefUtils.readPrefINt('patient_Id');
         var response = (await Get.find<AppointmentApi>()
             .getAllAppointmentBYPatientId(patientId, 0));
-        var now = new DateTime.now();
-        var now_3d = now.add(Duration(days: 7));
-        //var now_1m = new DateTime(now.year, now.month - 1, now.day);
-        //var now_1y = new DateTime(now.year - 1, now.month, now.day);
-        List<AppointmentContent> list = response?? [];
-        List<AppointmentContent> match = [];
-        list.any((element) {
-          if (now.isAfter(DateTime.parse(element.date!))) {
-            print('Matched obj: ${element}');
-            match.add(element);
-            return true;
-          }
-          return false;
-        });
-        upComingAppointments.value = match;
+
+        List<AppointmentContent> list = response;
+        var now = DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+        List<AppointmentContent> appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed",
+            )
+            .toList();
+        upComingAppointments.value = appointmentsUpcoming;
       } else {
         var response =
             (await Get.find<AppointmentApi>().getAllAppointments(pageIndex));
-        var now = new DateTime.now();
-        var now_3d = now.add(Duration(days: 3));
-        //var now_1m = new DateTime(now.year, now.month - 1, now.day);
-        //var now_1y = new DateTime(now.year - 1, now.month, now.day);
         List<AppointmentContent> list = response.content ?? [];
-        List<AppointmentContent> match = [];
-        list.any((element) {
-          if (now_3d.isAfter(DateTime.parse(element.date!))) {
-            print('Matched obj: ${element}');
-            match.add(element);
-            return true;
-          }
-          return false;
-        });
-        upComingAppointments.value = match;
+        var now = DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+        List<AppointmentContent> appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed",
+            )
+            .toList();
+        upComingAppointments.value = appointmentsUpcoming;
       }
 
       isloading(false);

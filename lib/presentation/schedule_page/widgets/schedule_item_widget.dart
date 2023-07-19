@@ -68,11 +68,11 @@ class ScheduleItemWidget extends StatelessWidget {
             //    color: Colors.black, borderRadius: BorderRadius.circular(12)),
             child: appointment.patient?.profilePicture != null
                 ? CachedNetworkImage(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     imageUrl: Uri.encodeFull(
                       Endpoints.baseURL +
                           Endpoints.downLoadPatientPhoto +
-                          patientId.toString(),
+                          appointment.patient!.profilePicture.toString(),
                     ),
                     httpHeaders: {
                       "Authorization":

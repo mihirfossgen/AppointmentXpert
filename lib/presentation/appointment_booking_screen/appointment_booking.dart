@@ -49,8 +49,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       controller.consultingDoctor.text =
           SharedPrefUtils.readPrefStr('doctor_name');
     }
-    if (patientDetailsArguments?.details != null &&
-        controller.firstname.text == "") {
+    if (patientDetailsArguments?.details != null) {
       controller.firstname.text =
           patientDetailsArguments?.details?.firstName ?? "";
       controller.lastname.text =
@@ -73,8 +72,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       });
     }
 
-    if (doctorDetailsArguments?.appointmentData != null &&
-        controller.firstname.text == "") {
+    if (doctorDetailsArguments?.appointmentData != null) {
       controller.firstname.text =
           doctorDetailsArguments?.appointmentData.patient?.firstName ?? "";
       controller.lastname.text =

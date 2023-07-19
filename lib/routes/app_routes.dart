@@ -1,3 +1,4 @@
+import 'package:appointmentxpert/presentation/splash_screen/onboarding_screen.dart';
 import 'package:get/get.dart';
 
 import '../presentation/create_new_password_screen/binding/create_new_password_binding.dart';
@@ -8,14 +9,6 @@ import '../presentation/dashboard_screen/binding/dashboard_binding.dart';
 import '../presentation/dashboard_screen/views/screens/dashboard_screen.dart';
 import '../presentation/login_screen/binding/login_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
-import '../presentation/onboarding_four_screen/binding/onboarding_four_binding.dart';
-import '../presentation/onboarding_four_screen/onboarding_four_screen.dart';
-import '../presentation/onboarding_one_screen/binding/onboarding_one_binding.dart';
-import '../presentation/onboarding_one_screen/onboarding_one_screen.dart';
-import '../presentation/onboarding_three_screen/binding/onboarding_three_binding.dart';
-import '../presentation/onboarding_three_screen/onboarding_three_screen.dart';
-import '../presentation/onboarding_two_screen/binding/onboarding_two_binding.dart';
-import '../presentation/onboarding_two_screen/onboarding_two_screen.dart';
 import '../presentation/reset_password_email_tab_container_screen/binding/reset_password_email_tab_container_binding.dart';
 import '../presentation/reset_password_email_tab_container_screen/reset_password_email_tab_container_screen.dart';
 import '../presentation/reset_password_verify_code_screen/binding/reset_password_verify_code_binding.dart';
@@ -28,13 +21,7 @@ import '../presentation/splash_screen/splash_screen.dart';
 class AppRoutes {
   static const String splashScreen = '/splash_screen';
 
-  static const String onboardingOneScreen = '/onboarding_one_screen';
-
-  static const String onboardingTwoScreen = '/onboarding_two_screen';
-
-  static const String onboardingThreeScreen = '/onboarding_three_screen';
-
-  static const String onboardingFourScreen = '/onboarding_four_screen';
+  static const String onboardingScreen = '/onboarding_screen';
 
   static const String loginScreen = '/login_screen';
 
@@ -118,34 +105,6 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: onboardingOneScreen,
-      page: () => OnboardingOneScreen(),
-      bindings: [
-        OnboardingOneBinding(),
-      ],
-    ),
-    GetPage(
-      name: onboardingTwoScreen,
-      page: () => OnboardingTwoScreen(),
-      bindings: [
-        OnboardingTwoBinding(),
-      ],
-    ),
-    GetPage(
-      name: onboardingThreeScreen,
-      page: () => OnboardingThreeScreen(),
-      bindings: [
-        OnboardingThreeBinding(),
-      ],
-    ),
-    GetPage(
-      name: onboardingFourScreen,
-      page: () => OnboardingFourScreen(),
-      bindings: [
-        OnboardingFourBinding(),
-      ],
-    ),
-    GetPage(
       name: loginScreen,
       page: () => LoginScreen(),
       bindings: [
@@ -188,6 +147,10 @@ class AppRoutes {
       ],
     ),
 
+    GetPage(
+      name: onboardingScreen,
+      page: () => const OnBoardingPage(),
+    ),
     GetPage(
       name: initialRoute,
       page: () => SplashScreen(),

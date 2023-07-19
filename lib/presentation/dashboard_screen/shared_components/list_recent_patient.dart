@@ -56,13 +56,13 @@ class ListRecentPatients extends StatelessWidget {
         icon: const Icon(Icons.arrow_right),
         avatar: data.profilePicture != null
             ? CachedNetworkImage(
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
                 imageUrl: Uri.encodeFull(
                   Endpoints.baseURL +
                       Endpoints.downLoadPatientPhoto +
-                      data.id.toString(),
+                      data.profilePicture.toString(),
                 ),
                 httpHeaders: {
                   "Authorization":
@@ -98,51 +98,63 @@ class ListRecentPatients extends StatelessWidget {
             ),
             const Text(
               'Email: ',
-              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(
-              width: 180,
-                child: Text('${data.email}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
-              softWrap:true,
-              overflow: TextOverflow.ellipsis,
+                width: 180,
+                child: Text(
+                  '${data.email}',
+                  style: const TextStyle(fontSize: 13, color: Colors.black),
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-            )),
+                )),
             const SizedBox(
               height: 5,
             ),
-            Row(children:[
-            const Text(
-              'Address: ',
-              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
-            ),
+            Row(children: [
+              const Text(
+                'Address: ',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
               Text(
-              '${data.address}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
-              softWrap:true,
-              overflow: TextOverflow.ellipsis,
-            ),
+                '${data.address}',
+                style: const TextStyle(fontSize: 13, color: Colors.black),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
             ]),
             const SizedBox(
               height: 5,
             ),
-        Row(children:[
-            const Text(
-              'Age: ',
-              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${data.age}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
-            ),
-          ]),
+            Row(children: [
+              const Text(
+                'Age: ',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${data.age}',
+                style: const TextStyle(fontSize: 13, color: Colors.black),
+              ),
+            ]),
           ],
         ),
         enabled: true,
-        firstButtonTextStyle: const TextStyle(color: Colors.blue,fontSize: 14,fontWeight: FontWeight.bold),
+        firstButtonTextStyle: const TextStyle(
+            color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),
         firstButtonTitle: 'View Details',
         secondButtonTitle: 'Book Appointment',
-        secondButtonTextStyle: const TextStyle(color: Colors.red,fontSize: 14,fontWeight: FontWeight.bold),
+        secondButtonTextStyle: const TextStyle(
+            color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
         onSecondButtonTap: () {
           Get.to(AppointmentBookingScreen(
               patientDetailsArguments: PatientDetailsArguments([], data)));
@@ -193,11 +205,11 @@ class ListRecentPatients extends StatelessWidget {
       ),
       leading: data.profilePicture != null
           ? CachedNetworkImage(
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               imageUrl: Uri.encodeFull(
                 Endpoints.baseURL +
                     Endpoints.downLoadPatientPhoto +
-                    data.id.toString(),
+                    data.profilePicture.toString(),
               ),
               httpHeaders: {
                 "Authorization":
@@ -321,7 +333,7 @@ class ListRecentPatients extends StatelessWidget {
   Widget _buildTitle() {
     return Text(
       '${data.firstName} ' + '${data.lastName}',
-      style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

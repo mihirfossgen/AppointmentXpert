@@ -15,6 +15,7 @@ import path_provider_foundation
 import pdfx
 import share_plus
 import shared_preferences_foundation
+import sign_in_with_apple
 import smart_auth
 import sqflite
 
@@ -29,6 +30,7 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   PdfxPlugin.register(with: registry.registrar(forPlugin: "PdfxPlugin"))
   SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
+  SignInWithApplePlugin.register(with: registry.registrar(forPlugin: "SignInWithApplePlugin"))
   SmartAuthPlugin.register(with: registry.registrar(forPlugin: "SmartAuthPlugin"))
   SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
 }

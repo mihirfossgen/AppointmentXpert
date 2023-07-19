@@ -28,8 +28,8 @@ class Endpoints {
   static const String createEmployee = 'staff/add';
   static const String uploadEmployeePhoto = 'staff/uploadPhoto/';
   static const String uploadPatientPhoto = 'patient/uploadPhoto/';
-  static const String downLoadEmployePhoto = "staff/downloadProfilePhoto/";
-  static const String downLoadPatientPhoto = "patient/downloadProfilePhoto/";
+  static const String downLoadEmployePhoto = "staff/profilePhoto/";
+  static const String downLoadPatientPhoto = "patient/profilePhoto/";
   static const String createPatientCase = baseURL + 'patientCases/create';
   static const String createAppointment = baseURL + 'appointment/create';
   static const String updateAppointment = baseURL + "appointment/update";
@@ -55,5 +55,6 @@ class Endpoints {
       baseURL + 'examination/updateDiagnosis';
   static const String addEmergencyAppointment =
       baseURL + 'emergencyAppointment/create';
-  static const String emergencyPatientList = baseURL + 'emergencyAppointment/today';
+  static const String emergencyPatientList =
+      baseURL + 'emergencyAppointment/today';
 }

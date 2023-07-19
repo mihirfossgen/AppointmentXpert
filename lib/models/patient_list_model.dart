@@ -147,7 +147,7 @@ class Content {
     dateCreated = json['dateCreated'];
     visits = json['visits'];
     age = json['age'];
-    profilePicture = json['profilePicture'];
+    profilePicture = json['uploadedProfilePath'];
   }
 
   Map<String, dynamic> toJson() {
@@ -176,7 +176,7 @@ class Content {
     data['dateCreated'] = this.dateCreated;
     data['visits'] = this.visits;
     data['age'] = this.age;
-    data['profilePicture'] = this.profilePicture;
+    data['uploadedProfilePath'] = this.profilePicture;
     return data;
   }
 }

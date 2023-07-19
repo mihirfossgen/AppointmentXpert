@@ -97,6 +97,8 @@ dependencies:
   empty_widget: ^0.0.3
   stepper_page_view: ^0.0.2
   pdfx: ^2.4.0
+  introduction_screen: ^3.1.11
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:

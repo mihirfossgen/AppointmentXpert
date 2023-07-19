@@ -905,19 +905,19 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                       child: patientProfile != null
                           ? CachedNetworkImage(
                               imageUrl: Uri.encodeFull(
-                                '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientId',
+                                '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientProfile',
                               ),
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: imageProvider,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               ),
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
                               errorWidget: (context, url, error) => Image.asset(
                                   !Responsive.isDesktop(Get.context!)
                                       ? 'assets' + '/images/default_profile.png'
@@ -998,18 +998,18 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                     child: staffProfile != null
                         ? CachedNetworkImage(
                             imageUrl: Uri.encodeFull(
-                              '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffId',
+                              '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffProfile',
                             ),
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: imageProvider,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             ),
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) => Image.asset(
                                 !Responsive.isDesktop(Get.context!)
                                     ? 'assets' + '/images/default_profile.png'

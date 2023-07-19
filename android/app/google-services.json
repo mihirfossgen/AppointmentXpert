@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "231282522270",
+    "project_id": "healthcare-cpas",
+    "storage_bucket": "healthcare-cpas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231282522270:android:a6896aa6d7a46034b1638f",
+        "android_client_info": {
+          "package_name": "com.fossgen.opdxpert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231282522270-f8rg7775kqj0dvfhvqud87bkqo82hkoe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX7puGlnu_F7DeMBA86rNj4tiotpFAtAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231282522270-f8rg7775kqj0dvfhvqud87bkqo82hkoe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

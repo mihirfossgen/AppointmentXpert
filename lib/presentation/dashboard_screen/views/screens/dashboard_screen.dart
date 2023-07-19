@@ -2,7 +2,6 @@ library dashboard;
 
 import 'dart:convert';
 
-import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/emergency_patient_list.dart';
 import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedule_tab_container_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:countup/countup.dart';
@@ -40,8 +39,8 @@ import '../../shared_components/selection_button.dart';
 import '../../shared_components/simple_selection_button.dart';
 import '../../shared_components/simple_user_profile.dart';
 import '../components/dashboard_header.dart';
-import '../components/patients_list.dart';
 import '../components/emergency_list.dart';
+import '../components/patients_list.dart';
 
 part '../components/appointment_in_progress.dart';
 // model
@@ -235,804 +234,842 @@ class DashboardScreen extends GetView<DashboardController> {
       {Function()? onPressedMenu, required BuildContext context}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: kSpacing),
-            Row(
-              children: [
-                if (onPressedMenu != null)
-                  Padding(
-                    padding: const EdgeInsets.only(right: kSpacing / 2),
-                    child: IconButton(
-                      onPressed: onPressedMenu,
-                      icon: const Icon(Icons.menu),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          controller.isloading.value = true;
+          if (controller.role == "PATIENT") {
+            controller
+                .getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
+          } else {
+            controller
+                .callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
+            controller.callStaffList(0);
+          }
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: kSpacing),
+              Row(
+                children: [
+                  if (onPressedMenu != null)
+                    Padding(
+                      padding: const EdgeInsets.only(right: kSpacing / 2),
+                      child: IconButton(
+                        onPressed: onPressedMenu,
+                        icon: const Icon(Icons.menu),
+                      ),
                     ),
+                  HeaderDashboard(
+                    role: SharedPrefUtils.readPrefStr("role"),
                   ),
-                HeaderDashboard(
-                  role: SharedPrefUtils.readPrefStr("role"),
-                ),
-                // Expanded(
-                //   child: SearchField(
-                //     onSearch: controller.searchTask,
-                //     hintText: "Search.. ",
-                //   ),
-                // ),
-              ],
-            ),
-            ResponsiveBuilder.isDesktop(context)
-                ? (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
-                    ? InkWell(
-                        onTap: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      actions: [
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            child: Text('Close'))
-                                      ],
-                                      title: Text('Book new appointment'),
-                                      content: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                      ),
-                                    ));
-                          });
-
-                          // Get.toNamed(AppRoutes.doctorDetailScreen,
-                          //     arguments: DoctorDetailsArguments(
-                          //         controller.getAllEmployesList.value.doctorList ??
-                          //             [],
-                          //         controller.patientData.value.patient));
-                        },
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Card(
-                            elevation: 4,
-                            color: Colors.blue.shade900,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            shadowColor: ColorConstant.gray400,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text('New Appointment',
-                                  style: TextStyle(
-                                      color: ColorConstant.whiteA700)),
-                            ),
-                          ),
-                        ),
-                      )
-                    : SizedBox()
-                : SizedBox(),
-            const SizedBox(height: kSpacing),
-            Obx(() => _welcomeWidget(
-                (controller.staffData.value.firstName ??
-                        controller.patientData.value.patient?.firstName) ??
-                    "",
-                (controller.staffData.value.lastName ??
-                        controller.patientData.value.patient?.lastName) ??
-                    "",
-                controller.role,
-                Get.context!,
-                controller.staffData.value.id ?? 0,
-                controller.patientData.value.patient?.id ?? 0,
-                controller.staffData.value.profilePicture,
-                controller.patientData.value.patient?.profilePicture)),
-            const SizedBox(height: kSpacing),
-            SharedPrefUtils.readPrefStr("role") == 'PATIENT'
-                ? const SizedBox()
-                : _dailyNumbers(controller.staffTodaysData),
-            const SizedBox(height: kSpacing),
-            SizedBox(
-              child: ResponsiveBuilder.isMobile(context)
-                  ? Column(
-                      children: [
-                        SharedPrefUtils.readPrefStr("role") == 'PATIENT'
-                            ? Card(
-                                elevation: 8,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                                color: Colors.red.shade50,
-                                shadowColor: Colors.grey.shade400,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  //child: ResponsiveBuilder.isMobile(Get.context!)
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(children: [
-                                          Image.asset('assets/images/call.png',
-                                              height: 50, width: 50),
-                                          Text(
-                                            "Emergency Appointment",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: ColorConstant.black900),
-                                          )
-                                        ]),
-                                        Text(
-                                          "We keep emergency appointments available everyday.",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal,
-                                              color: ColorConstant.gray600),
+                  // Expanded(
+                  //   child: SearchField(
+                  //     onSearch: controller.searchTask,
+                  //     hintText: "Search.. ",
+                  //   ),
+                  // ),
+                ],
+              ),
+              ResponsiveBuilder.isDesktop(context)
+                  ? (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
+                      ? InkWell(
+                          onTap: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        actions: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: Text('Close'))
+                                        ],
+                                        title: Text('Book new appointment'),
+                                        content: SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                         ),
-                                        Align(
-                                            alignment: Alignment.centerRight,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    alignment: Alignment.center,
-                                                    backgroundColor:
-                                                        Colors.red.shade900,
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 12),
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                onPressed: () {
-                                                  pats? pat = pats.Existing;
-                                                  controller.radioButtonIndex
-                                                      .value = 0;
-                                                  controller.nameController
-                                                      .text = controller
-                                                          .patientData
-                                                          .value
-                                                          .patient
-                                                          ?.firstName
-                                                          .toString() ??
-                                                      '';
-                                                  controller.mobileController
-                                                      .text = controller
-                                                          .patientData
-                                                          .value
-                                                          .patient
-                                                          ?.mobile
-                                                          .toString() ??
-                                                      '';
-                                                  controller.addressController
-                                                      .text = controller
-                                                          .patientData
-                                                          .value
-                                                          .patient
-                                                          ?.address
-                                                          .toString() ??
-                                                      '';
-                                                  Get.defaultDialog(
-                                                      titlePadding:
-                                                          const EdgeInsets.all(
-                                                              10),
-                                                      title: 'Select an Option',
-                                                      titleStyle: TextStyle(
-                                                          color: Colors
-                                                              .red.shade900,
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      content: Column(
-                                                        // mainAxisSize:
-                                                        //     MainAxisSize.max,
-                                                        children: [
-                                                          ListTile(
-                                                            title: const Text(
-                                                                'Existing Patient'),
-                                                            leading: Obx(
-                                                              () => Radio<pats>(
-                                                                value: pats
-                                                                    .Existing,
-                                                                groupValue: controller
-                                                                            .radioButtonIndex
-                                                                            .value ==
-                                                                        0
-                                                                    ? pats
-                                                                        .Existing
-                                                                    : pats.New,
-                                                                onChanged:
-                                                                    (pats?
-                                                                        value) {
-                                                                  controller
-                                                                      .nameController
-                                                                      .text = controller
-                                                                          .patientData
-                                                                          .value
-                                                                          .patient
-                                                                          ?.firstName
-                                                                          .toString() ??
-                                                                      '';
-                                                                  controller
-                                                                      .mobileController
-                                                                      .text = controller
-                                                                          .patientData
-                                                                          .value
-                                                                          .patient
-                                                                          ?.mobile
-                                                                          .toString() ??
-                                                                      '';
-                                                                  controller
-                                                                      .addressController
-                                                                      .text = controller
-                                                                          .patientData
-                                                                          .value
-                                                                          .patient
-                                                                          ?.address
-                                                                          .toString() ??
-                                                                      '';
-                                                                  controller
-                                                                          .radioButtonVal
-                                                                          .value =
-                                                                      'Existing Patient';
-                                                                  controller
-                                                                      .radioButtonIndex
-                                                                      .value = 0;
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          ListTile(
-                                                            title: const Text(
-                                                                'New Patient'),
-                                                            leading: Obx(
-                                                              () => Radio<pats>(
-                                                                value: pats.New,
-                                                                groupValue: controller
-                                                                            .radioButtonIndex
-                                                                            .value ==
-                                                                        0
-                                                                    ? pats
-                                                                        .Existing
-                                                                    : pats.New,
-                                                                onChanged:
-                                                                    (pats?
-                                                                        value) {
-                                                                  controller
-                                                                      .nameController
-                                                                      .text = '';
-                                                                  controller
-                                                                      .mobileController
-                                                                      .text = '';
-                                                                  controller
-                                                                      .addressController
-                                                                      .text = '';
-                                                                  controller
-                                                                          .radioButtonVal
-                                                                          .value =
-                                                                      'New Patient';
-                                                                  controller
-                                                                      .radioButtonIndex
-                                                                      .value = 1;
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Obx(() => controller
-                                                                          .radioButtonIndex
-                                                                          .value ==
-                                                                      0
-                                                                  ? loadEmergencyDetails(
-                                                                      true)
-                                                                  : loadEmergencyDetails(
-                                                                      false)
-                                                              // Column(
-                                                              //     children: [
-                                                              //       Text(
-                                                              //         "Thanks for your enquiry.",
-                                                              //         style: TextStyle(
-                                                              //             fontSize:
-                                                              //                 20,
-                                                              //             fontWeight:
-                                                              //                 FontWeight.bold,
-                                                              //             color: ColorConstant.gray900),
-                                                              //       ),
-                                                              //       Text(
-                                                              //         "We will co-ordinate with you shortly.",
-                                                              //         style: TextStyle(
-                                                              //             fontSize:
-                                                              //                 15,
-                                                              //             fontWeight:
-                                                              //                 FontWeight.normal,
-                                                              //             color: ColorConstant.gray600),
-                                                              //       ),
-                                                              //     ],
-                                                              //   ),
-                                                              )
-                                                        ],
-                                                      ),
-                                                      radius: 10.0);
-                                                },
-                                                child: Text('Book Now')))
-                                      ]),
-                                ))
-                            : const SizedBox(),
-                        const SizedBox(height: 10),
-                        Card(
-                          elevation: 4,
-                          color: Colors.white,
-                          shadowColor: ColorConstant.gray400,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: HeaderText(
-                                      //DateTime.now().formatdMMMMY(),
-                                      "Today's Appointments"),
-                                ),
-                                const SizedBox(height: kSpacing),
-                                Obx(() => controller.isloading.value
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : (SharedPrefUtils.readPrefStr("role") ==
-                                            'PATIENT')
-                                        ? controller
-                                                .patientTodaysData.isNotEmpty
-                                            ? _AppointmentInProgress(
-                                                data: controller
-                                                    .patientTodaysData)
-                                            : Container(
-                                                color: Colors.white,
-                                                padding: EdgeInsets.all(10),
-                                                child: const Center(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        'No today\'s appointments found.',
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                        : controller.staffTodaysData.isNotEmpty
-                                            ? _AppointmentInProgress(
-                                                data:
-                                                    controller.staffTodaysData)
-                                            : Container(
-                                                color: Colors.white,
-                                                padding:
-                                                    const EdgeInsets.all(20),
-                                                child: const Center(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        'No today\'s appointments found.',
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )),
-                              ],
+                                      ));
+                            });
+
+                            // Get.toNamed(AppRoutes.doctorDetailScreen,
+                            //     arguments: DoctorDetailsArguments(
+                            //         controller.getAllEmployesList.value.doctorList ??
+                            //             [],
+                            //         controller.patientData.value.patient));
+                          },
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Card(
+                              elevation: 4,
+                              color: Colors.blue.shade900,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              shadowColor: ColorConstant.gray400,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text('New Appointment',
+                                    style: TextStyle(
+                                        color: ColorConstant.whiteA700)),
+                              ),
                             ),
                           ),
-                        ),
-                        (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST')
-                            //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
-                            ? Card(
-                                elevation: 4,
-                                color: Colors.white,
-                                shadowColor: ColorConstant.gray400,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      (SharedPrefUtils.readPrefStr("role") ==
-                                              'RECEPTIONIST')
-                                          //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
-                                          ? const _HeaderRecentPatients()
-                                          : Container(),
-                                      //: Container(),
-                                      const SizedBox(height: kSpacing),
-                                      (SharedPrefUtils.readPrefStr("role") ==
-                                              'RECEPTIONIST')
-                                          //? (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST')
-                                          ? Obx(() => controller.isloading.value
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                )
-                                              : controller
-                                                      .patientPagingController
-                                                      .itemList!
-                                                      .isNotEmpty
-                                                  ? _RecentPatients(
-                                                      data: controller
-                                                              .patientPagingController
-                                                              .itemList ??
-                                                          [],
-                                                      onPressed: controller
-                                                          .onPressedPatient,
-                                                      // onPressedAssign: controller.onPressedAssignTask,
-                                                      // onPressedMember: controller.onPressedMemberTask,
-                                                    )
-                                                  : Container(
-                                                      color: Colors.white,
-                                                      padding:
-                                                          const EdgeInsets.all(10),
-                                                      child: const Center(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
+                        )
+                      : SizedBox()
+                  : SizedBox(),
+              const SizedBox(height: kSpacing),
+              Obx(() => _welcomeWidget(
+                  (controller.staffData.value.firstName ??
+                          controller.patientData.value.patient?.firstName) ??
+                      "",
+                  (controller.staffData.value.lastName ??
+                          controller.patientData.value.patient?.lastName) ??
+                      "",
+                  controller.role,
+                  Get.context!,
+                  controller.staffData.value.id ?? 0,
+                  controller.patientData.value.patient?.id ?? 0,
+                  controller.staffData.value.profilePicture,
+                  controller.patientData.value.patient?.profilePicture)),
+              const SizedBox(height: kSpacing),
+              SharedPrefUtils.readPrefStr("role") == 'PATIENT'
+                  ? const SizedBox()
+                  : _dailyNumbers(controller.staffTodaysData),
+              const SizedBox(height: kSpacing),
+              SizedBox(
+                child: ResponsiveBuilder.isMobile(context) ||
+                        ResponsiveBuilder.isTablet(context)
+                    ? Column(
+                        children: [
+                          SharedPrefUtils.readPrefStr("role") == 'PATIENT'
+                              ? Card(
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  color: Colors.red.shade50,
+                                  shadowColor: Colors.grey.shade400,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    //child: ResponsiveBuilder.isMobile(Get.context!)
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(children: [
+                                            Image.asset(
+                                                'assets/images/call.png',
+                                                height: 50,
+                                                width: 50),
+                                            Text(
+                                              "Emergency Appointment",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      ColorConstant.black900),
+                                            )
+                                          ]),
+                                          Text(
+                                            "We keep emergency appointments available everyday.",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal,
+                                                color: ColorConstant.gray600),
+                                          ),
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      backgroundColor:
+                                                          Colors.red.shade900,
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 20,
+                                                          vertical: 12),
+                                                      textStyle:
+                                                          const TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                  onPressed: () {
+                                                    pats? pat = pats.Existing;
+                                                    controller.radioButtonIndex
+                                                        .value = 0;
+                                                    controller.nameController
+                                                        .text = controller
+                                                            .patientData
+                                                            .value
+                                                            .patient
+                                                            ?.firstName
+                                                            .toString() ??
+                                                        '';
+                                                    controller.mobileController
+                                                        .text = controller
+                                                            .patientData
+                                                            .value
+                                                            .patient
+                                                            ?.mobile
+                                                            .toString() ??
+                                                        '';
+                                                    controller.addressController
+                                                        .text = controller
+                                                            .patientData
+                                                            .value
+                                                            .patient
+                                                            ?.address
+                                                            .toString() ??
+                                                        '';
+                                                    Get.defaultDialog(
+                                                        titlePadding:
+                                                            const EdgeInsets
+                                                                .all(10),
+                                                        title:
+                                                            'Select an Option',
+                                                        titleStyle: TextStyle(
+                                                            color: Colors
+                                                                .red.shade900,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        content: Column(
+                                                          // mainAxisSize:
+                                                          //     MainAxisSize.max,
                                                           children: [
-                                                            Text(
-                                                              'No patients found.',
-                                                              style: TextStyle(
-                                                                fontSize: 18,
+                                                            ListTile(
+                                                              title: const Text(
+                                                                  'Existing Patient'),
+                                                              leading: Obx(
+                                                                () =>
+                                                                    Radio<pats>(
+                                                                  value: pats
+                                                                      .Existing,
+                                                                  groupValue: controller
+                                                                              .radioButtonIndex
+                                                                              .value ==
+                                                                          0
+                                                                      ? pats
+                                                                          .Existing
+                                                                      : pats
+                                                                          .New,
+                                                                  onChanged:
+                                                                      (pats?
+                                                                          value) {
+                                                                    controller
+                                                                        .nameController
+                                                                        .text = controller
+                                                                            .patientData
+                                                                            .value
+                                                                            .patient
+                                                                            ?.firstName
+                                                                            .toString() ??
+                                                                        '';
+                                                                    controller
+                                                                        .mobileController
+                                                                        .text = controller
+                                                                            .patientData
+                                                                            .value
+                                                                            .patient
+                                                                            ?.mobile
+                                                                            .toString() ??
+                                                                        '';
+                                                                    controller
+                                                                        .addressController
+                                                                        .text = controller
+                                                                            .patientData
+                                                                            .value
+                                                                            .patient
+                                                                            ?.address
+                                                                            .toString() ??
+                                                                        '';
+                                                                    controller
+                                                                            .radioButtonVal
+                                                                            .value =
+                                                                        'Existing Patient';
+                                                                    controller
+                                                                        .radioButtonIndex
+                                                                        .value = 0;
+                                                                  },
+                                                                ),
                                                               ),
                                                             ),
+                                                            ListTile(
+                                                              title: const Text(
+                                                                  'New Patient'),
+                                                              leading: Obx(
+                                                                () =>
+                                                                    Radio<pats>(
+                                                                  value:
+                                                                      pats.New,
+                                                                  groupValue: controller
+                                                                              .radioButtonIndex
+                                                                              .value ==
+                                                                          0
+                                                                      ? pats
+                                                                          .Existing
+                                                                      : pats
+                                                                          .New,
+                                                                  onChanged:
+                                                                      (pats?
+                                                                          value) {
+                                                                    controller
+                                                                        .nameController
+                                                                        .text = '';
+                                                                    controller
+                                                                        .mobileController
+                                                                        .text = '';
+                                                                    controller
+                                                                        .addressController
+                                                                        .text = '';
+                                                                    controller
+                                                                            .radioButtonVal
+                                                                            .value =
+                                                                        'New Patient';
+                                                                    controller
+                                                                        .radioButtonIndex
+                                                                        .value = 1;
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Obx(() => controller
+                                                                            .radioButtonIndex
+                                                                            .value ==
+                                                                        0
+                                                                    ? loadEmergencyDetails(
+                                                                        true)
+                                                                    : loadEmergencyDetails(
+                                                                        false)
+                                                                // Column(
+                                                                //     children: [
+                                                                //       Text(
+                                                                //         "Thanks for your enquiry.",
+                                                                //         style: TextStyle(
+                                                                //             fontSize:
+                                                                //                 20,
+                                                                //             fontWeight:
+                                                                //                 FontWeight.bold,
+                                                                //             color: ColorConstant.gray900),
+                                                                //       ),
+                                                                //       Text(
+                                                                //         "We will co-ordinate with you shortly.",
+                                                                //         style: TextStyle(
+                                                                //             fontSize:
+                                                                //                 15,
+                                                                //             fontWeight:
+                                                                //                 FontWeight.normal,
+                                                                //             color: ColorConstant.gray600),
+                                                                //       ),
+                                                                //     ],
+                                                                //   ),
+                                                                )
                                                           ],
                                                         ),
-                                                      ),
-                                                    ))
-                                          : Container()
-                                    ],
+                                                        radius: 10.0);
+                                                  },
+                                                  child: Text('Book Now')))
+                                        ]),
+                                  ))
+                              : const SizedBox(),
+                          const SizedBox(height: 10),
+                          Card(
+                            elevation: 4,
+                            color: Colors.white,
+                            shadowColor: ColorConstant.gray400,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: HeaderText(
+                                        //DateTime.now().formatdMMMMY(),
+                                        "Today's Appointments"),
                                   ),
-                                ))
-                            : const SizedBox(),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SharedPrefUtils.readPrefStr("role") == 'PATIENT'
-                            ? Card(
-                                elevation: 4,
-                                shadowColor: ColorConstant.gray400,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  padding: EdgeInsets.all(
-                                      ResponsiveBuilder.isMobile(context)
-                                          ? 75
-                                          : 40),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: const Color(0xff013f88)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 100.0,
-                                        height: 100.0,
-                                        decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 6.0,
-                                            style: BorderStyle.solid,
+                                  const SizedBox(height: kSpacing),
+                                  Obx(() => controller.isloading.value
+                                      ? const Center(
+                                          child: CircularProgressIndicator())
+                                      : (SharedPrefUtils.readPrefStr("role") ==
+                                              'PATIENT')
+                                          ? controller
+                                                  .patientTodaysData.isNotEmpty
+                                              ? _AppointmentInProgress(
+                                                  data: controller
+                                                      .patientTodaysData)
+                                              : Container(
+                                                  color: Colors.white,
+                                                  padding: EdgeInsets.all(10),
+                                                  child: const Center(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          'No today\'s appointments found.',
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                          : controller
+                                                  .staffTodaysData.isNotEmpty
+                                              ? _AppointmentInProgress(
+                                                  data: controller
+                                                      .staffTodaysData)
+                                              : Container(
+                                                  color: Colors.white,
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  child: const Center(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          'No today\'s appointments found.',
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )),
+                                ],
+                              ),
+                            ),
+                          ),
+                          (SharedPrefUtils.readPrefStr("role") ==
+                                  'RECEPTIONIST')
+                              //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
+                              ? Card(
+                                  elevation: 4,
+                                  color: Colors.white,
+                                  shadowColor: ColorConstant.gray400,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        (SharedPrefUtils.readPrefStr("role") ==
+                                                'RECEPTIONIST')
+                                            //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
+                                            ? const _HeaderRecentPatients()
+                                            : Container(),
+                                        //: Container(),
+                                        const SizedBox(height: kSpacing),
+                                        (SharedPrefUtils.readPrefStr("role") ==
+                                                'RECEPTIONIST')
+                                            //? (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST')
+                                            ? Obx(() => controller
+                                                    .isloading.value
+                                                ? const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  )
+                                                : controller
+                                                        .patientPagingController
+                                                        .itemList!
+                                                        .isNotEmpty
+                                                    ? _RecentPatients(
+                                                        data: controller
+                                                                .patientPagingController
+                                                                .itemList ??
+                                                            [],
+                                                        onPressed: controller
+                                                            .onPressedPatient,
+                                                        // onPressedAssign: controller.onPressedAssignTask,
+                                                        // onPressedMember: controller.onPressedMemberTask,
+                                                      )
+                                                    : Container(
+                                                        color: Colors.white,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10),
+                                                        child: const Center(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                'No patients found.',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 18,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ))
+                                            : Container()
+                                      ],
+                                    ),
+                                  ))
+                              : const SizedBox(),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SharedPrefUtils.readPrefStr("role") == 'PATIENT'
+                              ? Card(
+                                  elevation: 4,
+                                  shadowColor: ColorConstant.gray400,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    padding: EdgeInsets.all(
+                                        ResponsiveBuilder.isMobile(context)
+                                            ? 75
+                                            : 40),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: const Color(0xff013f88)),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 100.0,
+                                          height: 100.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: 6.0,
+                                              style: BorderStyle.solid,
+                                            ),
                                           ),
-                                        ),
-                                        child: Center(
-                                          child: Obx(
-                                            () => Text(
-                                              SharedPrefUtils.readPrefStr(
-                                                          "role") ==
-                                                      'PATIENT'
-                                                  ? controller.patientTodaysData
-                                                      .value.length
-                                                      .toString()
-                                                  : controller.staffTodaysData
-                                                      .value.length
-                                                      .toString(),
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 40.0,
-                                                fontWeight: FontWeight.bold,
+                                          child: Center(
+                                            child: Obx(
+                                              () => Text(
+                                                SharedPrefUtils.readPrefStr(
+                                                            "role") ==
+                                                        'PATIENT'
+                                                    ? controller
+                                                        .patientTodaysData
+                                                        .value
+                                                        .length
+                                                        .toString()
+                                                    : controller.staffTodaysData
+                                                        .value.length
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 40.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "Current Serving Patient",
-                                        style: TextStyle(
-                                            color: Colors.yellow.shade800,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(
-                                height: 10,
-                              )
-                      ],
-                    )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Column(
-                            children: [
-                              Card(
-                                elevation: 4,
-                                color: Colors.white,
-                                shadowColor: ColorConstant.gray400,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: HeaderText(
-                                            //DateTime.now().formatdMMMMY(),
-                                            "Today's Appointments"),
-                                      ),
-                                      const SizedBox(height: kSpacing),
-                                      Obx(() => controller.isloading.value
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : (SharedPrefUtils.readPrefStr(
-                                                      "role") ==
-                                                  'PATIENT')
-                                              ? controller.patientTodaysData
-                                                      .isNotEmpty
-                                                  ? _AppointmentInProgress(
-                                                      data: controller
-                                                          .patientTodaysData)
-                                                  : Container(
-                                                      color: Colors.white,
-                                                      padding:
-                                                          EdgeInsets.all(10),
-                                                      child: const Center(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              'No today\'s appointments found.',
-                                                              style: TextStyle(
-                                                                fontSize: 18,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )
-                                              : controller.staffTodaysData
-                                                      .isNotEmpty
-                                                  ? _AppointmentInProgress(
-                                                      data: controller
-                                                          .staffTodaysData)
-                                                  : Container(
-                                                      color: Colors.white,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              20),
-                                                      child: const Center(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              'No today\'s appointments found.',
-                                                              style: TextStyle(
-                                                                fontSize: 18,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              (SharedPrefUtils.readPrefStr("role") ==
-                                      'RECEPTIONIST')
-                                  //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
-                                  ? Card(
-                                      elevation: 4,
-                                      color: Colors.white,
-                                      shadowColor: ColorConstant.gray400,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Column(
-                                          children: [
-                                            (SharedPrefUtils.readPrefStr(
-                                                        "role") ==
-                                                    'RECEPTIONIST')
-                                                //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
-                                                ? const _HeaderRecentPatients()
-                                                : Container(),
-                                            //: Container(),
-                                            //const SizedBox(height: kSpacing),
-                                            (SharedPrefUtils.readPrefStr(
-                                                        "role") ==
-                                                    'RECEPTIONIST')
-                                                //? (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST')
-                                                ? Obx(() => controller
-                                                        .isloading.value
-                                                    ? const Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      )
-                                                    : controller
-                                                            .getAllPatientsList
-                                                            .isNotEmpty
-                                                        ? _RecentPatients(
-                                                            data: controller
-                                                                .getAllPatientsList,
-                                                            onPressed: controller
-                                                                .onPressedPatient,
-                                                            // onPressedAssign: controller.onPressedAssignTask,
-                                                            // onPressedMember: controller.onPressedMemberTask,
-                                                          )
-                                                        : Container(
-                                                            color: Colors.white,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(10),
-                                                            child: const Center(
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    'No patients found.',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ))
-                                                : Container()
-                                          ],
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      ))
-                                  : const SizedBox()
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: kSpacing),
-                        Card(
-                          elevation: 4,
-                          shadowColor: ColorConstant.gray400,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Container(
-                            padding: const EdgeInsets.all(40),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xff013f88)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 6.0,
-                                      style: BorderStyle.solid,
+                                        Text(
+                                          "Current Serving Patient",
+                                          style: TextStyle(
+                                              color: Colors.yellow.shade800,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      controller.patientTodaysData.length
-                                          .toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  '${controller.patientData.value.patient?.firstName} ' +
-                                      '${controller.patientData.value.patient?.lastName}',
-                                  style: TextStyle(
-                                      color: Colors.yellow.shade800,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  controller.patientData.value.patient?.sex
-                                          .toString() ??
-                                      '',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  "Blood group - ${controller.patientData.value.patient?.bloodType?.toString()}",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  "Address - ${controller.patientData.value.patient?.address?.toString()}",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  "Contact - ${controller.patientData.value.patient?.mobile?.toString()}",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
                                 )
+                              : const SizedBox(
+                                  height: 10,
+                                )
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              children: [
+                                Card(
+                                  elevation: 4,
+                                  color: Colors.white,
+                                  shadowColor: ColorConstant.gray400,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: HeaderText(
+                                              //DateTime.now().formatdMMMMY(),
+                                              "Today's Appointments"),
+                                        ),
+                                        const SizedBox(height: kSpacing),
+                                        Obx(() => controller.isloading.value
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : (SharedPrefUtils.readPrefStr(
+                                                        "role") ==
+                                                    'PATIENT')
+                                                ? controller.patientTodaysData
+                                                        .isNotEmpty
+                                                    ? _AppointmentInProgress(
+                                                        data: controller
+                                                            .patientTodaysData)
+                                                    : Container(
+                                                        color: Colors.white,
+                                                        padding:
+                                                            EdgeInsets.all(10),
+                                                        child: const Center(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                'No today\'s appointments found.',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 18,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                : controller.staffTodaysData
+                                                        .isNotEmpty
+                                                    ? _AppointmentInProgress(
+                                                        data: controller
+                                                            .staffTodaysData)
+                                                    : Container(
+                                                        color: Colors.white,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(20),
+                                                        child: const Center(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                'No today\'s appointments found.',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 18,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                (SharedPrefUtils.readPrefStr("role") ==
+                                        'RECEPTIONIST')
+                                    //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
+                                    ? Card(
+                                        elevation: 4,
+                                        color: Colors.white,
+                                        shadowColor: ColorConstant.gray400,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Column(
+                                            children: [
+                                              (SharedPrefUtils.readPrefStr(
+                                                          "role") ==
+                                                      'RECEPTIONIST')
+                                                  //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
+                                                  ? const _HeaderRecentPatients()
+                                                  : Container(),
+                                              //: Container(),
+                                              //const SizedBox(height: kSpacing),
+                                              (SharedPrefUtils.readPrefStr(
+                                                          "role") ==
+                                                      'RECEPTIONIST')
+                                                  //? (SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST')
+                                                  ? Obx(() => controller
+                                                          .isloading.value
+                                                      ? const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        )
+                                                      : controller
+                                                              .getAllPatientsList
+                                                              .isNotEmpty
+                                                          ? _RecentPatients(
+                                                              data: controller
+                                                                  .getAllPatientsList,
+                                                              onPressed: controller
+                                                                  .onPressedPatient,
+                                                              // onPressedAssign: controller.onPressedAssignTask,
+                                                              // onPressedMember: controller.onPressedMemberTask,
+                                                            )
+                                                          : Container(
+                                                              color:
+                                                                  Colors.white,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              child:
+                                                                  const Center(
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      'No patients found.',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ))
+                                                  : Container()
+                                            ],
+                                          ),
+                                        ))
+                                    : const SizedBox()
                               ],
                             ),
                           ),
-                        )
-                      ],
-                    ),
-            ),
-            const SizedBox(height: kSpacing),
-          ],
+                          const SizedBox(width: kSpacing),
+                          Card(
+                            elevation: 4,
+                            shadowColor: ColorConstant.gray400,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Container(
+                              padding: const EdgeInsets.all(40),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: const Color(0xff013f88)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 100.0,
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 6.0,
+                                        style: BorderStyle.solid,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        controller.patientTodaysData.length
+                                            .toString(),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '${controller.patientData.value.patient?.firstName} ' +
+                                        '${controller.patientData.value.patient?.lastName}',
+                                    style: TextStyle(
+                                        color: Colors.yellow.shade800,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    controller.patientData.value.patient?.sex
+                                            .toString() ??
+                                        '',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    "Blood group - ${controller.patientData.value.patient?.bloodType?.toString()}",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    "Address - ${controller.patientData.value.patient?.address?.toString()}",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    "Contact - ${controller.patientData.value.patient?.mobile?.toString()}",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+              ),
+              const SizedBox(height: kSpacing),
+            ],
+          ),
         ),
       ),
     );
@@ -1225,6 +1262,38 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
+  Widget _buildEmergencyPatientsListPage({Function()? onPressedMenu}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+      child: SizedBox(
+          width: MediaQuery.of(Get.context!).size.width,
+          height: MediaQuery.of(Get.context!).size.height,
+          //color: Colors.red,
+          child: Obx(() => controller.isloading.value
+              ? const Center(child: CircularProgressIndicator())
+              : controller.getEmergencyPatientsList.value.isEmpty
+                  ? loadEmptyWidget()
+                  : EmergencyList(
+                      data: controller.getEmergencyPatientsList.value,
+                      onPressed: (index, data) {},
+                    ))),
+      // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
+      //     ? AddPatientScreen()
+      //     : Column(
+      //         children: [
+      //           SizedBox(
+      //               width: MediaQuery.of(Get.context!).size.width,
+      //               height: MediaQuery.of(Get.context!).size.height,
+      //               //color: Colors.red,
+      //               child: PatientsList(
+      //                 data: controller.getAllPatientsList,
+      //                 onPressed: (index, data) {},
+      //               ))
+      //         ],
+      //       ),
+    );
+  }
+
   Widget loadEmptyWidget() {
     return EmptyWidget(
       image: null,
@@ -1243,36 +1312,6 @@ class DashboardScreen extends GetView<DashboardController> {
       ),
     );
   }
-
-  Widget _buildEmergencyPatientsListPage({Function()? onPressedMenu}) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-        child: SizedBox(
-            width: MediaQuery.of(Get.context!).size.width,
-            height: MediaQuery.of(Get.context!).size.height,
-            //color: Colors.red,
-            child: Obx(() => controller.isloading.value ? const Center(child:CircularProgressIndicator()) :
-            controller.getEmergencyPatientsList.value.isEmpty ? loadEmptyWidget() :
-            EmergencyList(
-              data: controller.getEmergencyPatientsList.value,
-              onPressed: (index, data) {},
-            ))),
-        // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
-        //     ? AddPatientScreen()
-        //     : Column(
-        //         children: [
-        //           SizedBox(
-        //               width: MediaQuery.of(Get.context!).size.width,
-        //               height: MediaQuery.of(Get.context!).size.height,
-        //               //color: Colors.red,
-        //               child: PatientsList(
-        //                 data: controller.getAllPatientsList,
-        //                 onPressed: (index, data) {},
-        //               ))
-        //         ],
-        //       ),
-      );
-    }
 
   Widget _buildCalendarContent() {
     var outputFormat = DateFormat('d MMMM');
@@ -1342,23 +1381,43 @@ class DashboardScreen extends GetView<DashboardController> {
                     SizedBox(
                       height: 100,
                       width: 100,
-                      child: staffId == 0
-                          ? staffProfile != null
+                      child: staffProfile != null
+                          ? CachedNetworkImage(
+                              imageUrl: Uri.encodeFull(
+                                '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffProfile',
+                              ),
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => Image.asset(
+                                  !Responsive.isDesktop(Get.context!)
+                                      ? 'assets' + '/images/default_profile.png'
+                                      : '/images/default_profile.png'),
+                            )
+                          : patientProfile != null
                               ? CachedNetworkImage(
                                   imageUrl: Uri.encodeFull(
-                                    '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffId',
+                                    '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientProfile',
                                   ),
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: imageProvider,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
+                                  placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator()),
                                   errorWidget: (context, url, error) =>
                                       Image.asset(
                                           !Responsive.isDesktop(Get.context!)
@@ -1366,44 +1425,14 @@ class DashboardScreen extends GetView<DashboardController> {
                                                   '/images/default_profile.png'
                                               : '/images/default_profile.png'),
                                 )
-                              : patientProfile != null
-                                  ? CachedNetworkImage(
-                                      imageUrl: Uri.encodeFull(
-                                        '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientId',
-                                      ),
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(!Responsive.isDesktop(
-                                                  Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png'),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                          !Responsive.isDesktop(Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png'),
-                                    )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                  !Responsive.isDesktop(Get.context!)
-                                      ? 'assets' + '/images/default_profile.png'
-                                      : '/images/default_profile.png'),
-                            ),
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                      !Responsive.isDesktop(Get.context!)
+                                          ? 'assets' +
+                                              '/images/default_profile.png'
+                                          : '/images/default_profile.png'),
+                                ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1484,23 +1513,42 @@ class DashboardScreen extends GetView<DashboardController> {
                 children: [
                   SizedBox(
                     height: 100,
-                    child: staffId == 0
-                        ? staffProfile != null
+                    child: staffProfile != null
+                        ? CachedNetworkImage(
+                            imageUrl: Uri.encodeFull(
+                              '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffProfile',
+                            ),
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Image.asset(
+                                !Responsive.isDesktop(Get.context!)
+                                    ? 'assets' + '/images/default_profile.png'
+                                    : '/images/default_profile.png'),
+                          )
+                        : patientProfile != null
                             ? CachedNetworkImage(
                                 imageUrl: Uri.encodeFull(
-                                  '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$staffId',
+                                  '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientProfile',
                                 ),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: imageProvider,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
+                                placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator()),
                                 errorWidget: (context, url, error) =>
                                     Image.asset(
                                         !Responsive.isDesktop(Get.context!)
@@ -1508,43 +1556,14 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 '/images/default_profile.png'
                                             : '/images/default_profile.png'),
                               )
-                            : patientProfile != null
-                                ? CachedNetworkImage(
-                                    imageUrl: Uri.encodeFull(
-                                      '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$patientId',
-                                    ),
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(!Responsive.isDesktop(
-                                                Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
-                                            : '/images/default_profile.png'),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.asset(
-                                        !Responsive.isDesktop(Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
-                                            : '/images/default_profile.png'),
-                                  )
-                        : Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                                !Responsive.isDesktop(Get.context!)
-                                    ? 'assets' + '/images/default_profile.png'
-                                    : '/images/default_profile.png')),
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                    !Responsive.isDesktop(Get.context!)
+                                        ? 'assets' +
+                                            '/images/default_profile.png'
+                                        : '/images/default_profile.png'),
+                              ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(30),
@@ -1623,7 +1642,6 @@ class DashboardScreen extends GetView<DashboardController> {
       ),
     );
   }
-
 
   void _onTapBookEmergencyAppointmentError() {
     Fluttertoast.showToast(

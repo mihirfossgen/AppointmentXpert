@@ -7,20 +7,16 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
-import '../../../models/emergency_patient_list.dart';
-import '../../../models/emergency_patient_list.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../models/getallEmplyesList.dart';
 import '../../../models/patient_list_model.dart';
 import '../../../models/patient_model.dart';
-import '../../../models/emergency_patient_list.dart';
 import '../../../models/staff_model.dart';
 import '../../../network/api/appointment_api.dart';
 import '../../../network/api/patient_api.dart';
 import '../../../network/api/staff_api.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../shared_components/list_recent_patient.dart';
-import '../shared_components/emergency_patient_list.dart';
 import '../shared_components/selection_button.dart';
 import '../shared_components/task_progress.dart';
 import '../shared_components/user_profile.dart';
@@ -149,21 +145,22 @@ class DashboardController extends GetxController {
   }
 
   Future<void> callEmergencyPatientList() async {
-      try {
-        var response = (await Get.find<AppointmentApi>().getEmergencyPatientsList());
-        //print(response.content);
-        getEmergencyPatientsList.value = response;
-        //getUpcomingAppointments(0, true);
-        isloading(false);
-        //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
-        // _handleCreateLoginSuccess(loginModelObj);
-      } on Map {
-        //postLoginResp = e;
-        rethrow;
-      } finally {
-        isloading(false);
-      }
+    try {
+      var response =
+          (await Get.find<AppointmentApi>().getEmergencyPatientsList());
+      //print(response.content);
+      getEmergencyPatientsList.value = response;
+      //getUpcomingAppointments(0, true);
+      isloading(false);
+      //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
+      // _handleCreateLoginSuccess(loginModelObj);
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isloading(false);
     }
+  }
 
   Future<void> callDoctorsData(int staffId) async {
     try {
@@ -270,23 +267,20 @@ class DashboardController extends GetxController {
     try {
       var response =
           (await Get.find<AppointmentApi>().getAllReceiptionstAppointment(0));
-      var now = new DateTime.now();
-      var now_3d = now.add(Duration(days: 3));
-      //var now_1m = new DateTime(now.year, now.month - 1, now.day);
-      //var now_1y = new DateTime(now.year - 1, now.month, now.day);
       List<AppointmentContent> list = response;
-      //List<AppointmentContent> match = [];
-      List<AppointmentContent> appointments =
-          list.where((i) => now_3d.isAfter(DateTime.parse(i.date!))).toList();
-      // list.any((element) {
-      //   if (now_3d.isAfter(DateTime.parse(element.date!))) {
-      //     print('Matched obj: ${element}');
-      //     match.add(element);
-      //     return true;
-      //   }
-      //   return false;
-      // });
-      upComingAppointments.value = appointments;
+      var now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      List<AppointmentContent> appointmentsUpcoming = list
+          .where(
+            (i) =>
+                i.active == true &&
+                !formatter
+                    .parse(i.date!)
+                    .isBefore(formatter.parse(now.toString())) &&
+                i.status?.toLowerCase() != "completed",
+          )
+          .toList();
+      upComingAppointments.value = appointmentsUpcoming;
       callRecentPatientList(0);
     } on Map {
       //postLoginResp = e;
@@ -301,43 +295,37 @@ class DashboardController extends GetxController {
         var patientId = SharedPrefUtils.readPrefINt('patient_Id');
         var response = (await Get.find<AppointmentApi>()
             .getAllAppointmentBYPatientId(patientId, pageIndex));
-        var now = new DateTime.now();
-        var now_3d = now.add(Duration(days: 7));
-        //var now_1m = new DateTime(now.year, now.month - 1, now.day);
-        //var now_1y = new DateTime(now.year - 1, now.month, now.day);
-        List<AppointmentContent> list = response ?? [];
-        List<AppointmentContent> appointments =
-            list.where((i) => now.isAfter(DateTime.parse(i.date!))).toList();
-        // List<AppointmentContent> match = [];
-        // list.any((element) {
-        //   if (now.isAfter(DateTime.parse(element.date!))) {
-        //     print('Matched obj: ${element}');
-        //     match.add(element);
-        //     return true;
-        //   }
-        //   return false;
-        // });
-        upComingAppointments.value = appointments;
+        List<AppointmentContent> list = response;
+        var now = DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+        List<AppointmentContent> appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed",
+            )
+            .toList();
+        upComingAppointments.value = appointmentsUpcoming;
       } else {
         var response =
             (await Get.find<AppointmentApi>().getAllAppointments(pageIndex));
-        var now = new DateTime.now();
-        var now_3d = now.add(Duration(days: 3));
-        //var now_1m = new DateTime(now.year, now.month - 1, now.day);
-        //var now_1y = new DateTime(now.year - 1, now.month, now.day);
         List<AppointmentContent> list = response.content ?? [];
-        List<AppointmentContent> appointments =
-            list.where((i) => now_3d.isAfter(DateTime.parse(i.date!))).toList();
-        // List<AppointmentContent> match = [];
-        // list.any((element) {
-        //   if (now_3d.isAfter(DateTime.parse(element.date!))) {
-        //     print('Matched obj: ${element}');
-        //     match.add(element);
-        //     return true;
-        //   }
-        //   return false;
-        // });
-        upComingAppointments.value = appointments;
+        var now = DateTime.now();
+        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+        List<AppointmentContent> appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed",
+            )
+            .toList();
+        upComingAppointments.value = appointmentsUpcoming;
       }
 
       isloading(false);
@@ -382,16 +370,16 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getEmergencyPatientDetails() async {
-      try {
-        getEmergencyPatientsList.value =
-            (await Get.find<AppointmentApi>().getEmergencyPatientsList()) as List<EmergencyContent>;
-        callEmergencyPatientList();
-        // _handleCreateLoginSuccess(loginModelObj);
-      } on Map {
-        //postLoginResp = e;
-        rethrow;
-      }
+    try {
+      getEmergencyPatientsList.value = (await Get.find<AppointmentApi>()
+          .getEmergencyPatientsList()) as List<EmergencyContent>;
+      callEmergencyPatientList();
+      // _handleCreateLoginSuccess(loginModelObj);
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
     }
+  }
 
   Future<void> addEmergencyAppointment(Map<String, dynamic> req) async {
     try {

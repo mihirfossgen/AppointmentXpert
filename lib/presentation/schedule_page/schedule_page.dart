@@ -104,9 +104,13 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                         // newPageProgressIndicatorBuilder: (_) =>
                                         //     NewPageProgressIndicator(),
                                         noItemsFoundIndicatorBuilder: (_) =>
-                                            loadEmptyWidget(),
+                                            const Text(
+                                                'No appointments found.'),
                                         noMoreItemsIndicatorBuilder: (_) =>
-                                            loadEmptyWidget(),
+                                            const Text(
+                                          'No more appointments.',
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                       separatorBuilder: (context, index) =>
                                           const Divider(),
@@ -419,12 +423,12 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     ? CachedNetworkImage(
                                         width: 40,
                                         height: 40,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                         imageUrl: Uri.encodeFull(
                                           Endpoints.baseURL +
                                               Endpoints.downLoadPatientPhoto +
                                               controller
-                                                  .getPatientId(tab, index)
+                                                  .getProfilePicture(tab, index)
                                                   .toString(),
                                         ),
                                         httpHeaders: {
@@ -641,12 +645,12 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                 ? CachedNetworkImage(
                                     width: 40,
                                     height: 40,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                     imageUrl: Uri.encodeFull(
                                       Endpoints.baseURL +
                                           Endpoints.downLoadPatientPhoto +
                                           controller
-                                              .getPatientId(tab, index)
+                                              .getProfilePicture(tab, index)
                                               .toString(),
                                     ),
                                     httpHeaders: {
@@ -955,11 +959,11 @@ class SchedulePage extends GetWidget<ScheduleController> {
             ? CachedNetworkImage(
                 width: 80,
                 height: 80,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 imageUrl: Uri.encodeFull(
                   Endpoints.baseURL +
                       Endpoints.downLoadPatientPhoto +
-                      controller.getPatientId(tab, index).toString(),
+                      controller.getProfilePicture(tab, index).toString(),
                 ),
                 httpHeaders: {
                   "Authorization":

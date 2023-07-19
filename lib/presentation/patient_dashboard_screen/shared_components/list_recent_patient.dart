@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +54,11 @@ class ListRecentPatients extends StatelessWidget {
             ? CachedNetworkImage(
                 width: 80,
                 height: 80,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 imageUrl: Uri.encodeFull(
                   Endpoints.baseURL +
                       Endpoints.downLoadPatientPhoto +
-                      data.id.toString(),
+                      data.profilePicture.toString(),
                 ),
                 httpHeaders: {
                   "Authorization":
@@ -159,11 +158,11 @@ class ListRecentPatients extends StatelessWidget {
       ),
       leading: data.profilePicture != null
           ? CachedNetworkImage(
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               imageUrl: Uri.encodeFull(
                 Endpoints.baseURL +
                     Endpoints.downLoadPatientPhoto +
-                    data.id.toString(),
+                    data.profilePicture.toString(),
               ),
               httpHeaders: {
                 "Authorization":

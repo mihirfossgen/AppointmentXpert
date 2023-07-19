@@ -295,12 +295,12 @@ class AppointmentApi {
 
   Future<Map> addEmergencyAppointment(
       {Map<String, String> headers = const {},
-        Map<String, dynamic>? data}) async {
+      Map<String, dynamic>? data}) async {
     ProgressDialogUtils.showProgressDialog();
     try {
       //await isNetworkConnected();
       final Response response =
-      await _apiService.post(Endpoints.addEmergencyAppointment, data: data);
+          await _apiService.post(Endpoints.addEmergencyAppointment, data: data);
       ProgressDialogUtils.hideProgressDialog();
       return response.data;
     } catch (error, stackTrace) {
@@ -315,16 +315,16 @@ class AppointmentApi {
 
   Future<List<EmergencyContent>> getEmergencyPatientsList(
       {Map<String, String> headers = const {},
-        Map<String, dynamic>? data}) async {
+      Map<String, dynamic>? data}) async {
     ProgressDialogUtils.showProgressDialog();
     try {
       //await isNetworkConnected();
       final Response response =
-      await _apiService.get(Endpoints.emergencyPatientList);
+          await _apiService.get(Endpoints.emergencyPatientList);
       ProgressDialogUtils.hideProgressDialog();
       List<dynamic> data = response.data;
       List<EmergencyContent> list =
-      data.map((e) => EmergencyContent.fromJson(e)).toList();
+          data.map((e) => EmergencyContent.fromJson(e)).toList();
       return list;
     } catch (error, stackTrace) {
       ProgressDialogUtils.hideProgressDialog();
@@ -335,7 +335,6 @@ class AppointmentApi {
       rethrow;
     }
   }
-
 
   Future<String> callGeneratePrecription(
       int patientId, int appointmentId, int examinationId) async {

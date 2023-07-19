@@ -124,7 +124,7 @@ class Datum {
         address: json["address"],
         email: json["email"],
         bloodGroup: json["bloodGroup"],
-        profilePicture: json["profilePicture"],
+        profilePicture: json["uploadedProfilePath"],
         patientCases: json["patientCases"] == null
             ? []
             : List<dynamic>.from(json["patientCases"]!.map((x) => x)),
@@ -143,7 +143,7 @@ class Datum {
         "address": address,
         "email": email,
         "bloodGroup": bloodGroup,
-        "profilePicture": profilePicture,
+        "uploadedProfilePath": profilePicture,
         "patientCases": patientCases == null
             ? []
             : List<dynamic>.from(patientCases!.map((x) => x)),

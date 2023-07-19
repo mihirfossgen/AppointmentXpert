@@ -106,11 +106,13 @@ class _RecentPatients extends StatelessWidget {
                                     ? CachedNetworkImage(
                                         width: 40,
                                         height: 40,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                         imageUrl: Uri.encodeFull(
                                           Endpoints.baseURL +
                                               Endpoints.downLoadPatientPhoto +
-                                              data[index].id.toString(),
+                                              data[index]
+                                                  .profilePicture
+                                                  .toString(),
                                         ),
                                         httpHeaders: {
                                           "Authorization":

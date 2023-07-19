@@ -160,11 +160,14 @@ class _AppointmentInProgress extends StatelessWidget {
                                   ? CachedNetworkImage(
                                       width: 40,
                                       height: 40,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.contain,
                                       imageUrl: Uri.encodeFull(
                                         Endpoints.baseURL +
                                             Endpoints.downLoadPatientPhoto +
-                                            data[index].patient!.id.toString(),
+                                            data[index]
+                                                .patient!
+                                                .profilePicture
+                                                .toString(),
                                       ),
                                       httpHeaders: {
                                         "Authorization":

@@ -7,6 +7,7 @@ import '../../models/patient_model.dart';
 import '../../models/staff_model.dart';
 import '../../network/endpoints.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../widgets/custom_image_view.dart';
 import '../../widgets/responsive.dart';
 import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
 import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
@@ -38,6 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return doctorCard(
+                id: staffData?.id,
                 firstName: staffData?.firstName,
                 lastName: staffData?.lastName,
                 prefix: staffData?.prefix,
@@ -79,6 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return patientCard(
+                id: patientData?.patient?.id,
                 firstName: patientData?.patient?.firstName,
                 lastName: patientData?.patient?.lastName,
                 prefix: patientData?.patient?.prefix ?? '',
@@ -93,6 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget doctorCard({
+    int? id,
     String? firstName,
     String? lastName,
     String? prefix,
@@ -162,27 +166,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                       //     ?
                                       profile != null
                                           ? CachedNetworkImage(
-                                              imageUrl: imagePath ?? '',
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
+                                              width: 140,
+                                              height: 140,
+                                              fit: BoxFit.contain,
+                                              imageUrl: Uri.encodeFull(
+                                                Endpoints.baseURL +
+                                                    Endpoints
+                                                        .downLoadEmployePhoto +
+                                                    profile.toString(),
                                               ),
-                                              placeholder: (context, url) =>
-                                                  const CircularProgressIndicator(),
-                                              errorWidget: (context, url,
-                                                      error) =>
-                                                  Image.asset(!Responsive
+                                              httpHeaders: {
+                                                "Authorization":
+                                                    "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                                              },
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress),
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                print(error);
+                                                return CustomImageView(
+                                                  imagePath: !Responsive
                                                           .isDesktop(
                                                               Get.context!)
                                                       ? 'assets' +
                                                           '/images/default_profile.png'
-                                                      : '/images/default_profile.png'),
+                                                      : '/images/default_profile.png',
+                                                );
+                                              },
                                             )
                                           : Image.asset(!Responsive.isDesktop(
                                                   Get.context!)
@@ -506,6 +521,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget patientCard({
+    int? id,
     String? firstName,
     String? lastName,
     String? prefix,
@@ -576,14 +592,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                         //     ?
                                         profile != null
                                             ? CachedNetworkImage(
+                                                width: 140,
+                                                height: 140,
                                                 imageUrl: Uri.encodeFull(
                                                   Endpoints.baseURL +
                                                       Endpoints
                                                           .downLoadPatientPhoto +
-                                                      SharedPrefUtils
-                                                              .readPrefINt(
-                                                                  'patient_Id')
-                                                          .toString(),
+                                                      profile.toString(),
                                                 ),
                                                 imageBuilder:
                                                     (context, imageProvider) =>
@@ -591,12 +606,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                       image: imageProvider,
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.contain,
                                                     ),
                                                   ),
                                                 ),
                                                 placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
+                                                    const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
                                                 errorWidget: (context, url,
                                                         error) =>
                                                     Image.asset(!Responsive
