@@ -1,4 +1,5 @@
 import 'package:appointmentxpert/core/utils/size_utils.dart';
+import 'package:appointmentxpert/models/patient_model.dart';
 import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,21 +8,22 @@ import 'package:getwidget/getwidget.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/color_constant.dart';
 import '../../../../models/patient_list_model.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../../../theme/app_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../controller/dashboard_controller.dart';
+import '../../shared_components/list_recent_patient.dart';
 import '../../shared_components/search_field.dart';
 import '../screens/dashboard_screen.dart';
 
 class PatientsList extends GetView<DashboardController> {
-  PatientsList({Key? key, required this.onPressed}) : super(key: key);
+  List<Content>? data;
 
-  //final List<Content> data;
-  final Function(int index, Content data) onPressed;
   DashboardController dashboardController = Get.put(DashboardController());
 
   @override
@@ -33,7 +35,7 @@ class PatientsList extends GetView<DashboardController> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.to(AddPatientScreen());
+            Get.to(() => AddPatientScreen());
           },
           child: const Icon(Icons.add),
         ),
@@ -53,7 +55,36 @@ class PatientsList extends GetView<DashboardController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        textView(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            textView(),
+                            InkWell(
+                              onTap: () async {
+                                controller.onClose();
+                                await controller.callRecentPatientList(0);
+                                data = controller.getAllPatientsList;
+                              },
+                              child: Card(
+                                color: ColorConstant.blue700,
+                                elevation: 4,
+                                shadowColor: ColorConstant.gray400,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 50,
+                                  width: 150,
+                                  child: Text(
+                                    'Refresh',
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: AppStyle
+                                        .txtRalewayRomanMedium14WhiteA700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(
                           height: 10.0,
                         ),
@@ -179,12 +210,14 @@ class PatientsList extends GetView<DashboardController> {
                                         ],
                                       ),
                                       enabled: true,
-                                      firstButtonTextStyle:
-                                          const TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),
+                                      firstButtonTextStyle: const TextStyle(
+                                          color: Colors.blue,
+                                          fontWeight: FontWeight.bold),
                                       firstButtonTitle: 'View Details',
                                       secondButtonTitle: 'Book Appointment',
-                                      secondButtonTextStyle:
-                                          const TextStyle(color: Colors.red,fontWeight: FontWeight.bold),
+                                      secondButtonTextStyle: const TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold),
                                       onSecondButtonTap: () {
                                         Get.to(AppointmentBookingScreen(
                                             patientDetailsArguments:
@@ -212,7 +245,8 @@ class PatientsList extends GetView<DashboardController> {
                                       title: Text(
                                         '${item.firstName} ' +
                                             '${item.lastName}',
-                                        style: const TextStyle(fontSize: 16,
+                                        style: const TextStyle(
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

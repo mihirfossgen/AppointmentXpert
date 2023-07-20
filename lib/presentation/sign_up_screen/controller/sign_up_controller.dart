@@ -1,9 +1,9 @@
+import 'package:appointmentxpert/models/sign_up_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
-import '../models/sign_up_model.dart';
 
 class SignUpController extends GetxController {
   TextEditingController enternameController = TextEditingController();
@@ -13,7 +13,6 @@ class SignUpController extends GetxController {
   TextEditingController selectedDropDownvalue = TextEditingController();
   SelectionPopupModel? selectedDropDownValue;
 
-  Rx<SignUpModel> signUpModelObj = SignUpModel().obs;
   OtpModel? getOtp;
 
   Map postRegisterResp = Map();
@@ -144,7 +143,7 @@ class SignUpController extends GetxController {
 
   Future<void> callRegister(Map<String, dynamic> req) async {
     try {
-      postRegisterResp = await Get.find<UserApi>().callRegister(
+      SignUpModel model = await Get.find<UserApi>().callRegister(
         headers: {
           'Content-type': 'application/json',
         },

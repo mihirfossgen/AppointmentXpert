@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:appointmentxpert/models/patient_list_model.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../models/getallEmplyesList.dart';
+import '../../models/staff_list_model.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/custom_button.dart';
@@ -28,16 +30,20 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
   DoctorDetailsArguments? doctorDetailsArguments;
   PatientDetailsArguments? patientDetailsArguments;
   DoctorDetailController controller = Get.put(DoctorDetailController());
+  Contents? content;
+  Map<String, dynamic>? a;
 
   @override
   Widget build(BuildContext context) {
     // final args =
     //     ModalRoute.of(context)!.settings.arguments as DoctorDetailsArguments;
 
+    a = jsonDecode(SharedPrefUtils.readPrefStr("doctor_details"));
+    print(jsonEncode(a));
     TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 30);
     TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 30);
     Duration step = const Duration(minutes: 30);
-    TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
+    TimeOfDay selectedTime = const TimeOfDay(hour: 12, minute: 00);
     TextEditingController _timeController = TextEditingController();
     String _hour, _minute, _time;
     controller.times = controller
@@ -45,9 +51,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         .map((tod) => tod.format(context))
         .toList();
 
-    if (SharedPrefUtils.readPrefStr('doctor_name') != '') {
-      controller.consultingDoctor.text =
-          SharedPrefUtils.readPrefStr('doctor_name');
+    if (a != null) {
+      controller.consultingDoctor.text = "${a!['firstName']} ${a!['lastName']}";
     }
     if (patientDetailsArguments?.details != null) {
       controller.firstname.text =
@@ -132,7 +137,12 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         context: context,
         initialTime: selectedTime,
       );
-      if (picked != null) selectedTime = picked;
+      if (picked != null) {
+        print(picked);
+        selectedTime = picked;
+      }
+      print(a!['timeSlotForBookingInMin'].runtimeType);
+      int intervalTime = a!['timeSlotForBookingInMin'];
       _hour = selectedTime.hour.toString();
       _minute = selectedTime.minute.toString();
       _time = '$_hour : $_minute';
@@ -141,7 +151,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
           DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
           [hh, ':', nn, " ", am]).toString();
       controller.to.text = formatDate(
-          DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute + 30),
+          DateTime(2019, 08, 1, selectedTime.hour,
+              selectedTime.minute + intervalTime),
           [hh, ':', nn, " ", am]).toString();
       _timeController.text = formatDate(
           DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
@@ -321,8 +332,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                       labelText: "From",
                                       padding: TextFormFieldPadding.PaddingT14,
                                       validator: (value) {
-                                        return controller
-                                            .fromValidator(value ?? "");
+                                        return controller.fromValidator(
+                                            value ?? "",
+                                            content?.startTime ?? "12:00 PM");
                                       },
                                       textInputType: TextInputType.emailAddress,
                                       suffix: Container(
@@ -632,8 +644,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                   controller: controller.from.value,
                                   padding: TextFormFieldPadding.PaddingT14,
                                   validator: (value) {
-                                    return controller
-                                        .fromValidator(value ?? "");
+                                    return controller.fromValidator(value ?? "",
+                                        content?.startTime ?? "12:00 PM");
                                   },
                                   textInputType: TextInputType.emailAddress,
                                   suffix: Container(
@@ -766,6 +778,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                   width: width,
                   leading: IconButton(
                       onPressed: () {
+                        controller.onClose();
                         Get.back();
                       },
                       icon: const Icon(
@@ -833,7 +846,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       // "departmentId": controller.getdeptId(id),
       "startTime": controller.from.value.text,
       "endTime": controller.to.value.text,
-      "examinerId": SharedPrefUtils.readPrefINt('staff_id'),
+      "examinerId": a!['id'],
       "note": controller.treatment.text,
       "patientId": patientDetailsArguments?.details?.id,
       "purpose": "OTHER",

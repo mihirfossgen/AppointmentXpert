@@ -1,4 +1,5 @@
-import 'package:appointmentxpert/models/emergency_patient_list.dart';
+import 'dart:convert';
+
 import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/emergency_patient_list.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../models/getallEmplyesList.dart';
 import '../../../models/patient_list_model.dart';
@@ -182,13 +184,11 @@ class DashboardController extends GetxController {
       print(response);
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
         if (response.content?[i].profession == "DOCTOR") {
-          TempHold().DoctorName =
-              "${response.content![i].firstName} ${response.content![i].lastName}";
-          SharedPrefUtils.saveStr('doctor_name',
-              "${response.content![i].firstName} ${response.content![i].lastName}");
-          SharedPrefUtils.saveInt('staff_id', response.content![i].id ?? 0);
+          SharedPrefUtils.saveStr(
+              'doctor_details', jsonEncode(response.content![i]));
         }
       }
+
       callReceiptionTodayAppointments();
     } on Map {
       //postLoginResp = e;
@@ -430,6 +430,7 @@ class DashboardController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+    getAllPatientsList.clear();
   }
 
   void _handleCreateRegisterSuccess() {}

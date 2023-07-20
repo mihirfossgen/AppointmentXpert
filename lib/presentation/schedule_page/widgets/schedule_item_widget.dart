@@ -1,15 +1,19 @@
+import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../../../core/app_export.dart';
 import '../../../core/utils/color_constant.dart';
+import '../../../core/utils/size_utils.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../network/endpoints.dart';
 import '../../../routes/app_routes.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../theme/app_decoration.dart';
 import '../../../theme/app_style.dart';
+import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_image_view.dart';
+import '../../../widgets/custom_text_form_field.dart';
 import '../../../widgets/responsive.dart';
 import '../controller/schedule_controller.dart';
 
@@ -230,18 +234,77 @@ class ScheduleItemWidget extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      // call cancel appointment
-                      var data = {
-                        "active": false,
-                        "id": appointment.id,
-                        "date": appointment.date,
-                        "examinerId": examninerId,
-                        "note": appointment.note,
-                        "patientId": patientId,
-                        "purpose": appointment.purpose,
-                        "status": "Cancel"
-                      };
-                      controller.updateAppointment(data);
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        showDialog(
+                          context: Get.context!,
+                          builder: (context) => AlertDialog(
+                            title: const Text(
+                                'Are you sure to cancel appointment?'),
+                            actions: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      // call cancel appointment
+                                      var data = {
+                                        "active": false,
+                                        "id": appointment.id,
+                                        "date": appointment.date,
+                                        "examinerId":
+                                            examninerId == 0 ? 1 : examninerId,
+                                        "note": appointment.note,
+                                        "patientId": patientId,
+                                        "purpose": appointment.purpose,
+                                        "status": "Cancel"
+                                      };
+                                      controller.updateAppointment(data);
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                          color: ColorConstant.blue700,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Yes',
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: AppStyle
+                                            .txtRalewayRomanRegular14WhiteA700,
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                          color: ColorConstant.blue700,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'No',
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: AppStyle
+                                            .txtRalewayRomanRegular14WhiteA700,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      });
                     },
                     child: Container(
                       padding: const EdgeInsets.all(15),
@@ -262,6 +325,150 @@ class ScheduleItemWidget extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       // Call reschedule appointment
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        showDialog(
+                          context: Get.context!,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Reschdule Appointment'),
+                            actions: [
+                              Column(
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 15, 15),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            child: InkWell(
+                                              onTap: () async {
+                                                DateTime a = await controller
+                                                    .getRescheduleDate();
+
+                                                final DateFormat formatter =
+                                                    DateFormat('yyyy-MM-dd');
+                                                controller.dob.text =
+                                                    formatter.format(a);
+                                              },
+                                              child: AbsorbPointer(
+                                                child: CustomTextFormField(
+                                                    controller: controller.dob,
+                                                    labelText: "Date",
+                                                    size: size,
+                                                    padding:
+                                                        TextFormFieldPadding
+                                                            .PaddingT14,
+                                                    textInputType: TextInputType
+                                                        .emailAddress,
+                                                    suffix: Container(
+                                                        margin: const EdgeInsets
+                                                            .only(right: 10),
+                                                        child: const Icon(Icons
+                                                            .calendar_month)),
+                                                    suffixConstraints:
+                                                        BoxConstraints(
+                                                            maxHeight:
+                                                                getVerticalSize(
+                                                                    56))),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              controller
+                                                  .selectTime(Get.context!);
+                                            },
+                                            child: AbsorbPointer(
+                                              child: CustomTextFormField(
+                                                  labelText: "From",
+                                                  controller: controller
+                                                      .from.value,
+                                                  padding: TextFormFieldPadding
+                                                      .PaddingT14,
+                                                  textInputType: TextInputType
+                                                      .emailAddress,
+                                                  suffix: Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    child:
+                                                        const Icon(Icons.alarm),
+                                                  ),
+                                                  suffixConstraints:
+                                                      BoxConstraints(
+                                                          maxHeight:
+                                                              getVerticalSize(
+                                                                  56))),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          AbsorbPointer(
+                                            child: CustomTextFormField(
+                                                controller: controller.to,
+                                                labelText: "To",
+                                                padding: TextFormFieldPadding
+                                                    .PaddingT14,
+                                                textInputType: TextInputType
+                                                    .datetime,
+                                                suffix: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 10),
+                                                  child:
+                                                      const Icon(Icons.alarm),
+                                                ),
+                                                suffixConstraints:
+                                                    BoxConstraints(
+                                                        maxHeight:
+                                                            getVerticalSize(
+                                                                56))),
+                                          ),
+                                        ],
+                                      )),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: CustomButton(
+                                        height: getVerticalSize(56),
+                                        width: getHorizontalSize(110),
+                                        text: "Rechsdule Appointment",
+                                        shape: ButtonShape.RoundedBorder8,
+                                        padding: ButtonPadding.PaddingAll16,
+                                        fontStyle: ButtonFontStyle
+                                            .RalewayRomanSemiBold14WhiteA700,
+                                        onTap: () async {
+                                          var requestData = {
+                                            "active": true,
+                                            "date": DateTime.parse(
+                                                    "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
+                                                .toIso8601String(),
+                                            "startTime":
+                                                controller.from.value.text,
+                                            "endTime": controller.to.value.text,
+                                            "examinerId": 1,
+                                            "note": "Reschdule",
+                                            "id": appointment.id,
+                                            "patientId":
+                                                appointment.patient?.id,
+                                            "purpose": "CHECKUP",
+                                            "status": "Pending",
+                                            "update_time_in_min": 0
+                                          };
+                                          print(jsonEncode(requestData));
+                                          controller
+                                              .updateAppointment(requestData);
+                                        }),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
                     },
                     child: Container(
                       padding: const EdgeInsets.all(15),

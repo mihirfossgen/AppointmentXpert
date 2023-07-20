@@ -22,6 +22,7 @@ import '../../../../models/getAllApointments.dart';
 import '../../../../models/getallEmplyesList.dart';
 import '../../../../models/patient_list_model.dart';
 import '../../../../models/patient_model.dart';
+import '../../../../models/staff_list_model.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
@@ -271,54 +272,247 @@ class DashboardScreen extends GetView<DashboardController> {
                   // ),
                 ],
               ),
-              ResponsiveBuilder.isDesktop(context)
-                  ? (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
-                      ? InkWell(
-                          onTap: () {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                        actions: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Get.back();
-                                              },
-                                              child: Text('Close'))
-                                        ],
-                                        title: Text('Book new appointment'),
-                                        content: SizedBox(
-                                          width:
-                                              MediaQuery.of(context).size.width,
+              ResponsiveBuilder.isDesktop(context) &&
+                      (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
+                  ? InkWell(onTap: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(actions: [
+                            Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        alignment: Alignment.center,
+                                        backgroundColor: Colors.red.shade900,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 12),
+                                        textStyle: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold)),
+                                    onPressed: () {
+                                      pats? pat = pats.Existing;
+                                      controller.radioButtonIndex.value = 0;
+                                      controller.nameController.text =
+                                          controller.patientData.value.patient
+                                                  ?.firstName
+                                                  .toString() ??
+                                              '';
+                                      controller.mobileController.text =
+                                          controller.patientData.value.patient
+                                                  ?.mobile
+                                                  .toString() ??
+                                              '';
+                                      controller.addressController.text =
+                                          controller.patientData.value.patient
+                                                  ?.address
+                                                  .toString() ??
+                                              '';
+                                      Get.defaultDialog(
+                                          titlePadding:
+                                              const EdgeInsets.all(10),
+                                          title: 'Select an Option',
+                                          titleStyle: TextStyle(
+                                              color: Colors.red.shade900,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                          content: Column(
+                                            // mainAxisSize:
+                                            //     MainAxisSize.max,
+                                            children: [
+                                              ListTile(
+                                                title: const Text(
+                                                    'Existing Patient'),
+                                                leading: Obx(
+                                                  () => Radio<pats>(
+                                                    value: pats.Existing,
+                                                    groupValue: controller
+                                                                .radioButtonIndex
+                                                                .value ==
+                                                            0
+                                                        ? pats.Existing
+                                                        : pats.New,
+                                                    onChanged: (pats? value) {
+                                                      controller.nameController
+                                                          .text = controller
+                                                              .patientData
+                                                              .value
+                                                              .patient
+                                                              ?.firstName
+                                                              .toString() ??
+                                                          '';
+                                                      controller
+                                                          .mobileController
+                                                          .text = controller
+                                                              .patientData
+                                                              .value
+                                                              .patient
+                                                              ?.mobile
+                                                              .toString() ??
+                                                          '';
+                                                      controller
+                                                          .addressController
+                                                          .text = controller
+                                                              .patientData
+                                                              .value
+                                                              .patient
+                                                              ?.address
+                                                              .toString() ??
+                                                          '';
+                                                      controller.radioButtonVal
+                                                              .value =
+                                                          'Existing Patient';
+                                                      controller
+                                                          .radioButtonIndex
+                                                          .value = 0;
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                title:
+                                                    const Text('New Patient'),
+                                                leading: Obx(
+                                                  () => Radio<pats>(
+                                                    value: pats.New,
+                                                    groupValue: controller
+                                                                .radioButtonIndex
+                                                                .value ==
+                                                            0
+                                                        ? pats.Existing
+                                                        : pats.New,
+                                                    onChanged: (pats? value) {
+                                                      controller.nameController
+                                                          .text = '';
+                                                      controller
+                                                          .mobileController
+                                                          .text = '';
+                                                      controller
+                                                          .addressController
+                                                          .text = '';
+                                                      controller.radioButtonVal
+                                                              .value =
+                                                          'New Patient';
+                                                      controller
+                                                          .radioButtonIndex
+                                                          .value = 1;
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              Obx(() => controller
+                                                              .radioButtonIndex
+                                                              .value ==
+                                                          0
+                                                      ? loadEmergencyDetails(
+                                                          true)
+                                                      : loadEmergencyDetails(
+                                                          false)
+                                                  // Column(
+                                                  //     children: [
+                                                  //       Text(
+                                                  //         "Thanks for your enquiry.",
+                                                  //         style: TextStyle(
+                                                  //             fontSize:
+                                                  //                 20,
+                                                  //             fontWeight:
+                                                  //                 FontWeight.bold,
+                                                  //             color: ColorConstant.gray900),
+                                                  //       ),
+                                                  //       Text(
+                                                  //         "We will co-ordinate with you shortly.",
+                                                  //         style: TextStyle(
+                                                  //             fontSize:
+                                                  //                 15,
+                                                  //             fontWeight:
+                                                  //                 FontWeight.normal,
+                                                  //             color: ColorConstant.gray600),
+                                                  //       ),
+                                                  //     ],
+                                                  //   ),
+                                                  )
+                                            ],
+                                          ),
+                                          radius: 10.0);
+                                    },
+                                    child: Text('Book Now')))
+                          ]),
+                        );
+                      });
+                    })
+                  : const SizedBox(),
+              const SizedBox(height: 10),
+              Card(
+                elevation: 4,
+                color: Colors.white,
+                shadowColor: ColorConstant.gray400,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: HeaderText(
+                            //DateTime.now().formatdMMMMY(),
+                            "Today's Appointments"),
+                      ),
+                      const SizedBox(height: kSpacing),
+                      Obx(() => controller.isloading.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
+                              ? controller.patientTodaysData.isNotEmpty
+                                  ? _AppointmentInProgress(
+                                      data: controller.patientTodaysData)
+                                  : Container(
+                                      color: Colors.white,
+                                      padding: EdgeInsets.all(10),
+                                      child: const Center(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'No today\'s appointments found.',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ));
-                            });
-
-                            // Get.toNamed(AppRoutes.doctorDetailScreen,
-                            //     arguments: DoctorDetailsArguments(
-                            //         controller.getAllEmployesList.value.doctorList ??
-                            //             [],
-                            //         controller.patientData.value.patient));
-                          },
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Card(
-                              elevation: 4,
-                              color: Colors.blue.shade900,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              shadowColor: ColorConstant.gray400,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text('New Appointment',
-                                    style: TextStyle(
-                                        color: ColorConstant.whiteA700)),
-                              ),
-                            ),
-                          ),
-                        )
-                      : SizedBox()
-                  : SizedBox(),
+                                      ),
+                                    )
+                              : controller.staffTodaysData.isNotEmpty
+                                  ? _AppointmentInProgress(
+                                      data: controller.staffTodaysData)
+                                  : Container(
+                                      color: Colors.white,
+                                      padding: const EdgeInsets.all(20),
+                                      child: const Center(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'No today\'s appointments found.',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: kSpacing),
               Obx(() => _welcomeWidget(
                   (controller.staffData.value.firstName ??
@@ -1242,9 +1436,9 @@ class DashboardScreen extends GetView<DashboardController> {
           height: MediaQuery.of(Get.context!).size.height,
           //color: Colors.red,
           child: PatientsList(
-            //data: controller.getAllPatientsList,
-            onPressed: (index, data) {},
-          )),
+              //data: controller.getAllPatientsList,
+
+              )),
       // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
       //     ? AddPatientScreen()
       //     : Column(
@@ -1959,6 +2153,7 @@ class DoctorDetailsArguments {
 class PatientDetailsArguments {
   List<DoctorList> list;
   Content? details;
+
   PatientDetailsArguments(this.list, this.details);
 }
 

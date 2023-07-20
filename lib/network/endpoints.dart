@@ -1,7 +1,7 @@
 class Endpoints {
   Endpoints._();
 
-  static const String baseURL = 'http://192.168.1.43:7070/';
+  static const String baseURL = 'http://192.168.0.106:7070/';
 
   static const int receiveTimeout = 5000;
 
@@ -41,6 +41,7 @@ class Endpoints {
   static const String createTreatment = "treatment/create";
   static const String getStaffById = "staff/";
   static const String staffList = "staff/list?pageNumber=";
+  static const String staffUpdate = "staff/update";
   static const String getPatientById = "patient/";
   static const String getReceptionistTodayAppoitments = "appointment/today";
   static const String getAllAppointments = "appointment/list";

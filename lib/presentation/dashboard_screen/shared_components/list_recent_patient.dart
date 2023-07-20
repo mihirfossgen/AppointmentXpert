@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/image_constant.dart';
 import '../../../models/patient_list_model.dart';
+import '../../../models/patient_model.dart';
 import '../../../network/endpoints.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../widgets/custom_image_view.dart';

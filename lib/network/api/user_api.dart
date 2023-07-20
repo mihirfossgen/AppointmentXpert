@@ -8,6 +8,7 @@ import '../../core/utils/progress_dialog_utils.dart';
 import '../../models/create_staff_model.dart';
 import '../../models/createpatient_model.dart';
 import '../../models/get_all_clinic_model.dart';
+import '../../models/sign_up_model.dart';
 import '../../presentation/login_screen/models/login_model.dart';
 import '../dio_client.dart';
 import '../endpoints.dart';
@@ -38,7 +39,7 @@ class UserApi {
     }
   }
 
-  Future<Map> callRegister(
+  Future<SignUpModel> callRegister(
       {Map<String, String> headers = const {},
       Map<String, dynamic>? data}) async {
     ProgressDialogUtils.showProgressDialog();
@@ -47,7 +48,7 @@ class UserApi {
       final Response response =
           await _apiService.post(Endpoints.register, data: data);
       ProgressDialogUtils.hideProgressDialog();
-      return response.data;
+      return SignUpModel.fromJson(response.data);
     } catch (error, stackTrace) {
       ProgressDialogUtils.hideProgressDialog();
       Logger.log(

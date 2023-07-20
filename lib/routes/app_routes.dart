@@ -1,4 +1,6 @@
 import 'package:appointmentxpert/presentation/splash_screen/onboarding_screen.dart';
+import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
+import 'package:appointmentxpert/presentation/add_patient_screens/bindings/add_patient_bindings.dart';
 import 'package:get/get.dart';
 
 import '../presentation/create_new_password_screen/binding/create_new_password_binding.dart';
@@ -95,6 +97,7 @@ class AppRoutes {
   static const String newPositionScreen = '/new_position_screen';
   static const String addNewEducationScreen = '/add_new_education_screen';
   static const String createInvoiceScreen = '/create_invoice_screen';
+  static const String addPatientScreen = '/add_patient_screen';
 
   static List<GetPage> pages = [
     GetPage(
@@ -165,7 +168,13 @@ class AppRoutes {
         CreateProfileBinding(),
       ],
     ),
-
+    GetPage(
+      name: addPatientScreen,
+      page: () => AddPatientScreen(),
+      bindings: [
+        AddPatientBindings(),
+      ],
+    ),
     // GetPage(
     //   name: createInvoiceScreen,
     //   page: () => CreateInvoiceScreen(),

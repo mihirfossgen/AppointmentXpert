@@ -119,8 +119,8 @@ class Contents {
   String? joinedDate;
   String? terminatedDate;
   int? timeSlotForBookingInMin;
-  dynamic startTime;
-  dynamic endTime;
+  String? startTime;
+  String? endTime;
   dynamic rescheduleDate;
   int? rescheduleTimeInMin;
 

@@ -127,9 +127,25 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
-  String? fromValidator(String value) {
+  DateTime timeFormat(String value) {
+    final now = DateTime.now();
+    final dt = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        int.parse(value.split(':')[0]),
+        int.parse(
+            value.split(':')[1].replaceAll(" AM", "").replaceAll(" PM", "")));
+    return dt;
+  }
+
+  String? fromValidator(String value, String startTime) {
+    print(startTime);
+    print(timeFormat(value).isBefore(timeFormat(startTime)));
     if (value.isEmpty) {
       return 'Please select time';
+    } else if (timeFormat(value).isBefore(timeFormat(startTime))) {
+      return "Please select time between 12 to 6 PM";
     }
     return null;
   }

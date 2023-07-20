@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/utils/color_constant.dart';
+import '../../../core/utils/image_constant.dart';
+import '../../../core/utils/size_utils.dart';
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
+import '../../../models/createpatient_model.dart';
+import '../../../models/sign_up_model.dart';
+import '../../../network/api/user_api.dart';
+import '../../../routes/app_routes.dart';
+import '../../../theme/app_decoration.dart';
+import '../../../theme/app_style.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_image_view.dart';
 
 class AddPatientController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -20,6 +31,7 @@ class AddPatientController extends GetxController {
   TextEditingController stateOrProvince = TextEditingController();
   TextEditingController postalCode = TextEditingController();
   RxBool isShowPassword = true.obs;
+  CreatepatientModel createpatientModel = CreatepatientModel();
   isObscureActive() {
     isShowPassword.value = !isShowPassword.value;
   }
@@ -60,7 +72,8 @@ class AddPatientController extends GetxController {
     } else {
       if (!regex.hasMatch(value)) {
         return 'Enter valid password';
-      } else if (password != confirmPassword) {
+      } else if (password.text.toLowerCase() !=
+          confirmPassword.text.toLowerCase()) {
         return 'Password must be similar';
       } else {
         return null;
@@ -176,5 +189,130 @@ class AddPatientController extends GetxController {
       return true;
     }
     return false;
+  }
+
+  Map postRegisterResp = Map();
+  Future<void> callRegister(Map<String, dynamic> req) async {
+    try {
+      SignUpModel model = await Get.find<UserApi>().callRegister(
+        headers: {
+          'Content-type': 'application/json',
+        },
+        data: req,
+      );
+      callCreatePatient(model.userDetail?.id ?? 0);
+    } on Map catch (e) {
+      postRegisterResp = e;
+      rethrow;
+    }
+  }
+
+  calculateAge(String birthDate) {
+    DateTime a = DateTime.parse(birthDate);
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - a.year;
+    int month1 = currentDate.month;
+    int month2 = a.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      int day1 = currentDate.day;
+      int day2 = a.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
+  }
+
+  Future<void> callCreatePatient(int roleID) async {
+    var data = {
+      "address": "",
+      "age": calculateAge(dob.text),
+      "bloodType": "",
+      "country": country.text,
+      "countryOfBirth": country.text,
+      "dateCreated": DateTime.now().toIso8601String(),
+      "dob": dob.text,
+      "email": email.text,
+      "fatherName": "",
+      "firstName": firstName.text,
+      "lastName": lastName.text,
+      "mobile": mobile.text,
+      "motherName": "",
+      "nationality": "",
+      // "placeOfBirth": controller.placeOfBirth.text,
+      "prefix": "",
+      // "regions": controller.regions.text,
+      "sex": gender.text,
+      "userId": roleID,
+      "visits": []
+    };
+    try {
+      createpatientModel = (await Get.find<UserApi>().callCreatePatient(
+        headers: {
+          'Content-type': 'application/json',
+        },
+        data: data,
+      ));
+      print("create api called for patient");
+      Get.dialog(Padding(
+          padding: EdgeInsets.all(20),
+          child: AlertDialog(
+            backgroundColor: Colors.transparent,
+            contentPadding: EdgeInsets.zero,
+            insetPadding: EdgeInsets.only(left: 0),
+            content: Container(
+                //width: getHorizontalSize(327),
+                padding: getPadding(left: 24, top: 36, right: 24, bottom: 36),
+                decoration: AppDecoration.white
+                    .copyWith(borderRadius: BorderRadiusStyle.roundedBorder24),
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Card(
+                          clipBehavior: Clip.antiAlias,
+                          elevation: 0,
+                          margin: getMargin(top: 26),
+                          color: ColorConstant.gray50,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusStyle.circleBorder51),
+                          child: Container(
+                              height: getSize(102),
+                              width: getSize(102),
+                              padding: getPadding(
+                                  left: 29, top: 34, right: 29, bottom: 34),
+                              decoration: AppDecoration.fillGray50.copyWith(
+                                  borderRadius:
+                                      BorderRadiusStyle.circleBorder51),
+                              child: Stack(children: [
+                                CustomImageView(
+                                    svgPath: ImageConstant.imgCheckmark31x41,
+                                    height: getVerticalSize(31),
+                                    width: getHorizontalSize(41),
+                                    radius: BorderRadius.circular(
+                                        getHorizontalSize(3)),
+                                    alignment: Alignment.center)
+                              ]))),
+                      Padding(
+                          padding: getPadding(top: 42),
+                          child: Text("Patient Added Successfully!!",
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: AppStyle.txtRalewayRomanBold20)),
+                      CustomButton(
+                          height: getVerticalSize(56),
+                          text: "lbl_go_to_home".tr,
+                          margin: getMargin(top: 22),
+                          onTap: () {
+                            Get.offAllNamed(AppRoutes.dashboardScreen);
+                          })
+                    ])),
+          )));
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    }
   }
 }

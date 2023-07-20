@@ -1,3 +1,6 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +37,62 @@ class ScheduleController extends GetxController {
 
   RxBool dataSourceLoading = false.obs;
   RxInt initialRow = 0.obs;
+  TextEditingController dob = TextEditingController();
+  Rx<TextEditingController> from = TextEditingController().obs;
+  TextEditingController to = TextEditingController();
+
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  TextEditingController _timeController = TextEditingController();
+  String? _hour, _minute, _time;
+  Future<Null> selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null) selectedTime = picked;
+    _hour = selectedTime.hour.toString();
+    _minute = selectedTime.minute.toString();
+    _time = _hour! + ' : ' + _minute!;
+    _timeController.text = _time!;
+    from.value.text = formatDate(
+        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+        [hh, ':', nn, " ", am]).toString();
+    to.text = formatDate(
+        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute + 30),
+        [hh, ':', nn, " ", am]).toString();
+    _timeController.text = formatDate(
+        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+        [hh, ':', nn, " ", am]).toString();
+  }
+
+  getRescheduleDate() {
+    DateTime? date = DateTime.now();
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    return Get.dialog(
+        AlertDialog(
+          title: const Text('Please select Date'),
+          content: SizedBox(
+            height: 250,
+            width: 100,
+            child: CalendarDatePicker2(
+              config: CalendarDatePicker2Config(),
+              initialValue: [DateTime.now()],
+              onValueChanged: (value) {
+                print(value);
+                date = value[0];
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+                child: const Text("Continue"),
+                onPressed: () {
+                  Get.back(result: date);
+                }),
+          ],
+        ),
+        barrierDismissible: false);
+  }
 
   static const _pageSize = 20;
   final PagingController<int, AppointmentContent> todayPagingController =
@@ -79,7 +138,7 @@ class ScheduleController extends GetxController {
     //pagingController.addPageRequestListener((pageKey) {
     if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       //SharedPrefUtils.readPrefINt('employee_Id')
-      callGetAllAppointments(0, _pageSize);
+      callGetAllAppointments(0, 0);
     } else {
       callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
     }
@@ -188,11 +247,14 @@ class ScheduleController extends GetxController {
   Future<void> updateAppointment(var data) async {
     try {
       value = (await Get.find<AppointmentApi>().updateAppointment(data));
-      if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
-        callGetAllAppointments(0, 0);
-      } else {
-        callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+      // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+      if (value) {
+        Get.back();
       }
+      //   callGetAllAppointments(0, 1);
+      // } else {
+      //   callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+      // }
     } on Map {
       //postLoginResp = e;
       rethrow;
@@ -248,64 +310,133 @@ class ScheduleController extends GetxController {
       if (userList[i].status == "Completed" &&
           userList[i].treatment != null &&
           userList[i].active == true) {
-        completed.add(AppointmentContent(
-            active: userList[i].active,
-            date: userList[i].date,
-            startTime: userList[i].startTime,
-            endTime: userList[i].endTime,
-            dateCreated: userList[i].dateCreated,
-            department: userList[i].department,
-            examination: userList[i].examination,
-            examiner: userList[i].examiner,
-            id: userList[i].id,
-            labOrder: userList[i].labOrder,
-            note: userList[i].note,
-            patient: userList[i].patient,
-            purpose: userList[i].purpose,
-            referenceId: userList[i].referenceId,
-            status: userList[i].status,
-            treatment: userList[i].treatment,
-            visit: userList[i].visit));
+        if (completed.isEmpty) {
+          completed.add(AppointmentContent(
+              active: userList[i].active,
+              date: userList[i].date,
+              startTime: userList[i].startTime,
+              endTime: userList[i].endTime,
+              dateCreated: userList[i].dateCreated,
+              department: userList[i].department,
+              examination: userList[i].examination,
+              examiner: userList[i].examiner,
+              id: userList[i].id,
+              labOrder: userList[i].labOrder,
+              note: userList[i].note,
+              patient: userList[i].patient,
+              purpose: userList[i].purpose,
+              referenceId: userList[i].referenceId,
+              status: userList[i].status,
+              treatment: userList[i].treatment,
+              visit: userList[i].visit));
+        } else {
+          completed.clear();
+          completed.add(AppointmentContent(
+              active: userList[i].active,
+              date: userList[i].date,
+              startTime: userList[i].startTime,
+              endTime: userList[i].endTime,
+              dateCreated: userList[i].dateCreated,
+              department: userList[i].department,
+              examination: userList[i].examination,
+              examiner: userList[i].examiner,
+              id: userList[i].id,
+              labOrder: userList[i].labOrder,
+              note: userList[i].note,
+              patient: userList[i].patient,
+              purpose: userList[i].purpose,
+              referenceId: userList[i].referenceId,
+              status: userList[i].status,
+              treatment: userList[i].treatment,
+              visit: userList[i].visit));
+        }
+        update;
       } else if (dateFormat(userList[i].date ?? "") ==
               dateFormat(DateTime.now().toString()) &&
           userList[i].active == true) {
-        today.add(AppointmentContent(
-            active: userList[i].active,
-            date: userList[i].date,
-            startTime: userList[i].startTime,
-            endTime: userList[i].endTime,
-            dateCreated: userList[i].dateCreated,
-            department: userList[i].department,
-            examination: userList[i].examination,
-            examiner: userList[i].examiner,
-            id: userList[i].id,
-            labOrder: userList[i].labOrder,
-            note: userList[i].note,
-            patient: userList[i].patient,
-            purpose: userList[i].purpose,
-            referenceId: userList[i].referenceId,
-            status: userList[i].status,
-            treatment: userList[i].treatment,
-            visit: userList[i].visit));
+        if (today.isEmpty) {
+          today.add(AppointmentContent(
+              active: userList[i].active,
+              date: userList[i].date,
+              startTime: userList[i].startTime,
+              endTime: userList[i].endTime,
+              dateCreated: userList[i].dateCreated,
+              department: userList[i].department,
+              examination: userList[i].examination,
+              examiner: userList[i].examiner,
+              id: userList[i].id,
+              labOrder: userList[i].labOrder,
+              note: userList[i].note,
+              patient: userList[i].patient,
+              purpose: userList[i].purpose,
+              referenceId: userList[i].referenceId,
+              status: userList[i].status,
+              treatment: userList[i].treatment,
+              visit: userList[i].visit));
+        } else {
+          today.clear();
+          today.add(AppointmentContent(
+              active: userList[i].active,
+              date: userList[i].date,
+              startTime: userList[i].startTime,
+              endTime: userList[i].endTime,
+              dateCreated: userList[i].dateCreated,
+              department: userList[i].department,
+              examination: userList[i].examination,
+              examiner: userList[i].examiner,
+              id: userList[i].id,
+              labOrder: userList[i].labOrder,
+              note: userList[i].note,
+              patient: userList[i].patient,
+              purpose: userList[i].purpose,
+              referenceId: userList[i].referenceId,
+              status: userList[i].status,
+              treatment: userList[i].treatment,
+              visit: userList[i].visit));
+        }
+        update();
       } else if (userList[i].active == true) {
-        upcoming.add(AppointmentContent(
-            active: userList[i].active,
-            date: userList[i].date,
-            startTime: userList[i].startTime,
-            endTime: userList[i].endTime,
-            dateCreated: userList[i].dateCreated,
-            department: userList[i].department,
-            examination: userList[i].examination,
-            examiner: userList[i].examiner,
-            id: userList[i].id,
-            labOrder: userList[i].labOrder,
-            note: userList[i].note,
-            patient: userList[i].patient,
-            purpose: userList[i].purpose,
-            referenceId: userList[i].referenceId,
-            status: userList[i].status,
-            treatment: userList[i].treatment,
-            visit: userList[i].visit));
+        if (upcoming.isEmpty) {
+          upcoming.add(AppointmentContent(
+              active: userList[i].active,
+              date: userList[i].date,
+              startTime: userList[i].startTime,
+              endTime: userList[i].endTime,
+              dateCreated: userList[i].dateCreated,
+              department: userList[i].department,
+              examination: userList[i].examination,
+              examiner: userList[i].examiner,
+              id: userList[i].id,
+              labOrder: userList[i].labOrder,
+              note: userList[i].note,
+              patient: userList[i].patient,
+              purpose: userList[i].purpose,
+              referenceId: userList[i].referenceId,
+              status: userList[i].status,
+              treatment: userList[i].treatment,
+              visit: userList[i].visit));
+        } else {
+          upcoming.clear();
+          upcoming.add(AppointmentContent(
+              active: userList[i].active,
+              date: userList[i].date,
+              startTime: userList[i].startTime,
+              endTime: userList[i].endTime,
+              dateCreated: userList[i].dateCreated,
+              department: userList[i].department,
+              examination: userList[i].examination,
+              examiner: userList[i].examiner,
+              id: userList[i].id,
+              labOrder: userList[i].labOrder,
+              note: userList[i].note,
+              patient: userList[i].patient,
+              purpose: userList[i].purpose,
+              referenceId: userList[i].referenceId,
+              status: userList[i].status,
+              treatment: userList[i].treatment,
+              visit: userList[i].visit));
+        }
+        update();
       }
     }
   }
@@ -334,6 +465,7 @@ class ScheduleController extends GetxController {
             status: userList1[i].status,
             treatment: userList1[i].treatment,
             visit: userList1[i].visit));
+        update();
       } else if (dateFormat(userList1[i].date ?? "") ==
               dateFormat(DateTime.now().toString()) &&
           userList1[i].active == true) {
@@ -355,6 +487,7 @@ class ScheduleController extends GetxController {
             status: userList1[i].status,
             treatment: userList1[i].treatment,
             visit: userList1[i].visit));
+        update();
       } else if (userList1[i].active == true) {
         upcoming1.add(AppointmentContent(
             active: userList1[i].active,
@@ -374,6 +507,7 @@ class ScheduleController extends GetxController {
             status: userList1[i].status,
             treatment: userList1[i].treatment,
             visit: userList1[i].visit));
+        update();
       }
     }
   }
@@ -384,6 +518,13 @@ class ScheduleController extends GetxController {
     upcomingPagingController.dispose();
     completedPagingController.dispose();
     super.onClose();
+    today.clear();
+    upcoming.clear();
+    completed.clear();
+    today1.clear();
+    upcoming1.clear();
+    completed1.clear();
+    update();
   }
 
   List getList(String tab) {

@@ -1,4 +1,5 @@
 import 'package:appointmentxpert/core/app_export.dart';
+import 'package:appointmentxpert/network/api/user_api.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
   AddPatientScreen({super.key});
 
   AddPatientController controller = Get.put(AddPatientController());
-
+  UserApi userApi = Get.put(UserApi());
   getDate() {
     DateTime? date = DateTime.now();
     WidgetsBinding.instance.addPostFrameCallback((_) {});
@@ -338,6 +339,16 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                                 ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                             onTap: () async {
                               bool a = await controller.trySubmit();
+                              if (a) {
+                                Map<String, dynamic> requestData = {
+                                  "email": controller.email.text,
+                                  "mobile": controller.mobile.text,
+                                  "password": controller.confirmPassword.text,
+                                  "role": "PATIENT",
+                                  "username": controller.mobile.text
+                                };
+                                controller.callRegister(requestData);
+                              }
                             }),
                       ),
                     ],

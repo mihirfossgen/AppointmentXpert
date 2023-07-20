@@ -61,6 +61,20 @@ class StaffApi {
       throw Exception(e);
     }
   }
+
+  Future<bool> staffUpdate(var data) async {
+    try {
+      final Response response =
+          await _apiService.post(Endpoints.staffUpdate, data: data);
+      return true;
+    } on DioError catch (e) {
+      print("e -- $e");
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
 }
 
 final staffProvider = Provider<StaffApi>((ref) => StaffApi());
