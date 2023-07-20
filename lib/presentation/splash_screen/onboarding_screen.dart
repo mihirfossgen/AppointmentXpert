@@ -73,7 +73,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
             globalFooter: Padding(
               padding: const EdgeInsets.all(12.0),
               child: SizedBox(
-                width: MediaQuery.of(context).size.width,
+                width: 300,
                 height: 50,
                 child: ElevatedButton(
                   child: const Text(

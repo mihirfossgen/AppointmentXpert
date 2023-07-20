@@ -285,7 +285,7 @@ class ListRecentPatients extends StatelessWidget {
 
   Widget _buildTitle() {
     return Text(
-      '${data.firstName} ' '${data.lastName}',
+      '${data.prefix}' '${data.firstName} ' '${data.lastName}',
       style: const TextStyle(fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

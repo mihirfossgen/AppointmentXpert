@@ -26,13 +26,12 @@ class LoginController extends GetxController {
     isShowPassword.value = !isShowPassword.value;
   }
 
-
   @override
   void onClose() {
     super.onClose();
     //formKey.currentState?.close();
-    emailController.dispose();
-    passwordController.dispose();
+    emailController.clear();
+    passwordController.clear();
   }
 
   Future<void> callCreateLogin(Map<String, dynamic> req) async {

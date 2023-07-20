@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/verify_otp.dart';
 import '../../../routes/app_routes.dart';
@@ -90,7 +92,7 @@ class VerifyNumberController extends GetxController {
         // AppointmentDetails.staffId = _model.staff!.id ?? 0;
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
-        Get.toNamed(AppRoutes.create_profile_screen,
+        Get.toNamed(AppRoutes.createProfileScreen,
             arguments: ScreenArguments(
                 model.response?.body?.roles?[0].name ?? "",
                 model.response?.body?.userId ?? 0,
@@ -104,7 +106,7 @@ class VerifyNumberController extends GetxController {
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
         Get.back();
-        Get.toNamed(AppRoutes.create_profile_screen,
+        Get.toNamed(AppRoutes.createProfileScreen,
             arguments: ScreenArguments(
                 model.response?.body?.roles?[0].name ?? "",
                 model.response?.body?.userId ?? 0,

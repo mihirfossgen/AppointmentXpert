@@ -136,8 +136,11 @@ class ProfilePage extends GetWidget<ProfileController> {
                     //transform: Matrix4.translationValues(0.0, -16.0, 0.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
                               decoration: const BoxDecoration(
@@ -155,6 +158,7 @@ class ProfilePage extends GetWidget<ProfileController> {
                               transform:
                                   Matrix4.translationValues(0.0, -15.0, 0.0),
                               child: CircleAvatar(
+                                backgroundColor: Colors.grey,
                                 radius: 70,
                                 child: ClipOval(
                                     child:
@@ -184,12 +188,14 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                     Image.asset(!Responsive
                                                             .isDesktop(
                                                                 Get.context!)
-                                                        ? 'assets' '/images/default_profile.png'
+                                                        ? 'assets'
+                                                            '/images/default_profile.png'
                                                         : '/images/default_profile.png'),
                                               )
                                             : Image.asset(!Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' '/images/default_profile.png'
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
                                                 : '/images/default_profile.png')
                                     // : CustomImageView(
                                     //     imagePath: !Responsive.isDesktop(
@@ -602,12 +608,14 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                     Image.asset(!Responsive
                                                             .isDesktop(
                                                                 Get.context!)
-                                                        ? 'assets' '/images/default_profile.png'
+                                                        ? 'assets'
+                                                            '/images/default_profile.png'
                                                         : '/images/default_profile.png'),
                                               )
                                             : Image.asset(!Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' '/images/default_profile.png'
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
                                                 : '/images/default_profile.png')
                                     // : CustomImageView(
                                     //     imagePath: !Responsive.isDesktop(

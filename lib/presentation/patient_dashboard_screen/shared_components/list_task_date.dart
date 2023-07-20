@@ -108,7 +108,9 @@ class ListAppointmentDate extends StatelessWidget {
 
   Widget _buildSubtitle() {
     return Text(
-      '${data.patient?.firstName} ' '${data.patient?.lastName}',
+      '${data.patient?.prefix}'
+      '${data.patient?.firstName} '
+      '${data.patient?.lastName}',
       maxLines: 1,
       style: const TextStyle(fontWeight: FontWeight.w600),
       overflow: TextOverflow.ellipsis,

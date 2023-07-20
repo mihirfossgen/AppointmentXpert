@@ -35,11 +35,10 @@ class CreateNewPasswordController extends GetxController {
     }
   }
 
-
   @override
   void onClose() {
     super.onClose();
-    inputController.dispose();
-    inputOneController.dispose();
+    inputController.clear();
+    inputOneController.clear();
   }
 }

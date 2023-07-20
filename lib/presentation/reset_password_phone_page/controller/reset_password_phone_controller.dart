@@ -20,10 +20,9 @@ class ResetPasswordPhoneController extends GetxController {
     }
   }
 
-
   @override
   void onClose() {
     super.onClose();
-    mobileNoController.dispose();
+    mobileNoController.clear();
   }
 }

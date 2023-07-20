@@ -1,6 +1,6 @@
-import 'package:appointmentxpert/presentation/splash_screen/onboarding_screen.dart';
 import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
 import 'package:appointmentxpert/presentation/add_patient_screens/bindings/add_patient_bindings.dart';
+import 'package:appointmentxpert/presentation/splash_screen/onboarding_screen.dart';
 import 'package:get/get.dart';
 
 import '../presentation/create_new_password_screen/binding/create_new_password_binding.dart';
@@ -85,10 +85,10 @@ class AppRoutes {
   static const String initialRoute = '/initialRoute';
 
   static const String appointmentDetailsPage = '/appointment_details_page';
-  static const String add_patient_visit = '/add_patient_visit';
-  static const String add_patient_dignosys = '/add_patient_dignosys';
-  static const String add_patient_treatment = '/add_patient_treatment';
-  static const String create_profile_screen = '/create_profile_screen';
+  // static const String add_patient_visit = '/add_patient_visit';
+  // static const String add_patient_dignosys = '/add_patient_dignosys';
+  // static const String add_patient_treatment = '/add_patient_treatment';
+  static const String createProfileScreen = '/create_profile_screen';
   static const String speciallizationScreen = '/speciallization_screen';
   static const String doctorProfilePage = '/doctor_profile_page';
   static const String settingsScreen = '/settings_screen';
@@ -162,7 +162,7 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: create_profile_screen,
+      name: createProfileScreen,
       page: () => CreateProfileScreen(),
       bindings: [
         CreateProfileBinding(),

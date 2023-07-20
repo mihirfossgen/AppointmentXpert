@@ -1,6 +1,7 @@
 import 'package:appointmentxpert/models/sign_up_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
@@ -52,16 +53,15 @@ class SignUpController extends GetxController {
     )
   ]);
 
-
   @override
   void onClose() {
     super.onClose();
     formKey.currentState?.dispose();
-    enternameController.dispose();
-    enteremailController.dispose();
-    enterpasswordController.dispose();
-    enternumberController.dispose();
-    selectedDropDownvalue.dispose();
+    enternameController.clear();
+    enteremailController.clear();
+    enterpasswordController.clear();
+    enternumberController.clear();
+    selectedDropDownvalue.clear();
   }
 
   final formKey = GlobalKey<FormState>();
