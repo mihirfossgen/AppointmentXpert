@@ -40,41 +40,6 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
 
   }
 
-  /*Widget getBody(
-      Size size, BuildContext context) {
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: Scaffold(
-        appBar: ResponsiveBuilder.isDesktop(context)
-            ? null
-            : AppbarImage(
-          backgroundColor: ColorConstant.whiteA70001,
-          height: 70,
-          width: width,
-          leading: IconButton(
-              onPressed: () {
-                //controller.onClose();
-                Get.back();
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              )),
-          imagePath: 'assets/images/login-logo.png',
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-              width: double.maxFinite,
-              padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
-              child: ResponsiveBuilder.isMobile(Get.context!)
-                  ? mobileUi(context)
-                  : webUi(context))
-        ),
-      ),
-    );
-  }*/
-
   Widget patientDetails() {
     return SizedBox(
       child: ListView.builder(
@@ -172,10 +137,10 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       imageUrl: Uri.encodeFull(
                                         Endpoints.baseURL +
                                             Endpoints
-                                                .downLoadPatientPhoto +
-                                            SharedPrefUtils
+                                                .downLoadPatientPhoto + patientData.profilePicture
+/*                                            SharedPrefUtils
                                                 .readPrefINt(
-                                                'patient_Id')
+                                                'patient_Id')*/
                                                 .toString(),
                                       ),
                                       imageBuilder:

@@ -233,7 +233,7 @@ class PatientsList extends GetView<DashboardController> {
                                                       [], item)));
                                         },
                                         onFirstButtonTap: () {
-                                          Get.to(PatientDetailsPage(item));
+                                          Get.to(() => (PatientDetailsPage(item)));
                                         },
                                         //focusColor: ,
                                         focusNode: FocusNode(),
