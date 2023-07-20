@@ -32,6 +32,8 @@ class StaffData {
   String? joinedDate;
   String? terminatedDate;
   String? profilePicture;
+  String? startTime;
+  String? endTime;
 
   StaffData(
       {this.id,
@@ -56,7 +58,9 @@ class StaffData {
       this.status,
       this.joinedDate,
       this.terminatedDate,
-      this.profilePicture});
+      this.profilePicture,
+      this.startTime,
+      this.endTime});
 
   StaffData copyWith({
     int? id,
@@ -82,32 +86,35 @@ class StaffData {
     String? joinedDate,
     String? terminatedDate,
     String? profilePicture,
+    String? startTime,
+    String? endTime,
   }) =>
       StaffData(
-        id: id ?? this.id,
-        prefix: prefix ?? this.prefix,
-        staffId: staffId ?? this.staffId,
-        firstName: firstName ?? this.firstName,
-        userId: userId ?? this.userId,
-        fatherName: fatherName ?? this.fatherName,
-        lastName: lastName ?? this.lastName,
-        sex: sex ?? this.sex,
-        dob: dob ?? this.dob,
-        clinicName: clinicName ?? this.clinicName,
-        clinicId: clinicId ?? this.clinicId,
-        departmentName: departmentName ?? this.departmentName,
-        departmentId: departmentId ?? this.departmentId,
-        email: email ?? this.email,
-        mobile: mobile ?? this.mobile,
-        address: address ?? this.address,
-        profession: profession ?? this.profession,
-        employment: employment ?? this.employment,
-        qualification: qualification ?? this.qualification,
-        status: status ?? this.status,
-        joinedDate: joinedDate ?? this.joinedDate,
-        terminatedDate: terminatedDate ?? this.terminatedDate,
-        profilePicture: profilePicture ?? this.profilePicture,
-      );
+          id: id ?? this.id,
+          prefix: prefix ?? this.prefix,
+          staffId: staffId ?? this.staffId,
+          firstName: firstName ?? this.firstName,
+          userId: userId ?? this.userId,
+          fatherName: fatherName ?? this.fatherName,
+          lastName: lastName ?? this.lastName,
+          sex: sex ?? this.sex,
+          dob: dob ?? this.dob,
+          clinicName: clinicName ?? this.clinicName,
+          clinicId: clinicId ?? this.clinicId,
+          departmentName: departmentName ?? this.departmentName,
+          departmentId: departmentId ?? this.departmentId,
+          email: email ?? this.email,
+          mobile: mobile ?? this.mobile,
+          address: address ?? this.address,
+          profession: profession ?? this.profession,
+          employment: employment ?? this.employment,
+          qualification: qualification ?? this.qualification,
+          status: status ?? this.status,
+          joinedDate: joinedDate ?? this.joinedDate,
+          terminatedDate: terminatedDate ?? this.terminatedDate,
+          profilePicture: profilePicture ?? this.profilePicture,
+          startTime: startTime ?? this.startTime,
+          endTime: endTime ?? this.endTime);
 
   factory StaffData.fromJson(Map<String, dynamic> json) => StaffData(
         id: json["id"],
@@ -133,6 +140,8 @@ class StaffData {
         joinedDate: json["joinedDate"],
         terminatedDate: json["terminatedDate"],
         profilePicture: json["uploadedProfilePath"],
+        startTime: json['startTime'],
+        endTime: json['endTime'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -159,5 +168,7 @@ class StaffData {
         "joinedDate": joinedDate,
         "terminatedDate": terminatedDate,
         "uploadedProfilePath": profilePicture,
+        "startTime": startTime,
+        "endTime": endTime
       };
 }

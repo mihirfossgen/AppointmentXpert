@@ -218,19 +218,19 @@ class SignUpScreen extends GetWidget<SignUpController> {
               child: Column(
                 children: [
                   /// username
-                  CustomTextFormField(
-                      labelText: "lbl_enter_your_name".tr,
-                      controller: controller.enternameController,
-                      padding: TextFormFieldPadding.PaddingT14,
-                      isRequired: true,
-                      validator: (value) {
-                        return controller.userNameValidator(value ?? "");
-                      },
-                      prefixConstraints:
-                          BoxConstraints(maxHeight: getVerticalSize(56))),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
+                  // CustomTextFormField(
+                  //     labelText: "lbl_enter_your_name".tr,
+                  //     controller: controller.enternameController,
+                  //     padding: TextFormFieldPadding.PaddingT14,
+                  //     isRequired: true,
+                  //     validator: (value) {
+                  //       return controller.userNameValidator(value ?? "");
+                  //     },
+                  //     prefixConstraints:
+                  //         BoxConstraints(maxHeight: getVerticalSize(56))),
+                  // SizedBox(
+                  //   height: size.height * 0.03,
+                  // ),
                   CustomTextFormField(
                       labelText: "Enter your Email",
                       controller: controller.enteremailController,
@@ -384,11 +384,11 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
   Future<void> onTapSignup() async {
     Map<String, dynamic> requestData = {
-      "email": "",
+      "email": controller.enteremailController.text,
       "mobile": controller.enternumberController.text,
       "password": "qwerty",
       "role": "PATIENT",
-      "username": controller.enteremailController.text
+      "username": controller.enternumberController.text
     };
     print(jsonEncode(requestData));
     try {

@@ -133,7 +133,7 @@ class DashboardController extends GetxController {
     try {
       isloadingRecentPatients.value = true;
       var response = (await Get.find<PatientApi>().getAllPatientsList(pageNo));
-      //getAllPatientsList.value = response.content ?? [];
+      getAllPatientsList.value = response.content ?? [];
       PatientList patientListData = response;
       //patientPagingController.itemList = [];
       final isLastPage = patientListData.totalElements! < _pageSize;
@@ -142,6 +142,7 @@ class DashboardController extends GetxController {
         patientPagingController.appendLastPage(list);
       } else {
         List<Content> list = patientListData.content ?? [];
+        getAllPatientsList.value = response.content ?? [];
         final nextPageKey = pageNo + list.length;
         patientPagingController.appendPage(list, nextPageKey);
       }

@@ -115,7 +115,7 @@ class AddPatientController extends GetxController {
   }
 
   String? addressValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
+    if (value.isEmpty) {
       return 'Please enter address';
     }
     return null;
@@ -227,23 +227,17 @@ class AddPatientController extends GetxController {
 
   Future<void> callCreatePatient(int roleID) async {
     var data = {
-      "address": "",
+      "address": address.text,
       "age": calculateAge(dob.text),
-      "bloodType": "",
       "country": country.text,
       "countryOfBirth": country.text,
       "dateCreated": DateTime.now().toIso8601String(),
       "dob": dob.text,
       "email": email.text,
-      "fatherName": "",
       "firstName": firstName.text,
       "lastName": lastName.text,
       "mobile": mobile.text,
-      "motherName": "",
-      "nationality": "",
-      // "placeOfBirth": controller.placeOfBirth.text,
       "prefix": "",
-      // "regions": controller.regions.text,
       "sex": gender.text,
       "userId": roleID,
       "visits": []

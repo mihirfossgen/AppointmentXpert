@@ -47,7 +47,9 @@ class ProfilePage extends GetWidget<ProfileController> {
                 internship: staffData?.clinicName,
                 fellowship: staffData?.employment,
                 address: staffData?.address,
-                profile: staffData?.profilePicture);
+                profile: staffData?.profilePicture,
+                startTime: staffData?.startTime,
+                endTime: staffData?.endTime);
           }),
     );
     // : Container(
@@ -91,21 +93,22 @@ class ProfilePage extends GetWidget<ProfileController> {
     );
   }
 
-  Widget doctorCard({
-    int? id,
-    String? firstName,
-    String? lastName,
-    String? prefix,
-    String? specialty,
-    String? imagePath,
-    double? rank,
-    String? medicalEducation,
-    String? residency,
-    String? internship,
-    String? fellowship,
-    String? address,
-    String? profile,
-  }) {
+  Widget doctorCard(
+      {int? id,
+      String? firstName,
+      String? lastName,
+      String? prefix,
+      String? specialty,
+      String? imagePath,
+      double? rank,
+      String? medicalEducation,
+      String? residency,
+      String? internship,
+      String? fellowship,
+      String? address,
+      String? profile,
+      String? startTime,
+      String? endTime}) {
     return Container(
       width: MediaQuery.of(Get.context!).size.width * 1.0,
       alignment: Alignment.center, // where to position the child
@@ -341,69 +344,6 @@ class ProfilePage extends GetWidget<ProfileController> {
                                         ),
                                       )
                                     : Container(),
-                                (internship != null)
-                                    ? Container(
-                                        margin: const EdgeInsets.only(
-                                          top: 20.0,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'INTERNSHIP',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                                color: Color(0xFF6f6f6f),
-                                              ),
-                                            ),
-                                            Text(
-                                              internship,
-                                              style: const TextStyle(
-                                                color: Color(0xFF9f9f9f),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                (residency != null)
-                                    ? SizedBox(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'RESIDENCY',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12,
-                                                color: Color(0xFF6f6f6f),
-                                              ),
-                                            ),
-                                            Text(
-                                              residency,
-                                              style: const TextStyle(
-                                                color: Color(0xFF9f9f9f),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    : Container(),
                                 (fellowship != null)
                                     ? Container(
                                         margin: const EdgeInsets.only(
@@ -433,6 +373,95 @@ class ProfilePage extends GetWidget<ProfileController> {
                                         ),
                                       )
                                     : Container(),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                (startTime != null && endTime != null)
+                                    ? SizedBox(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Clinic Timmings',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                color: Color(0xFF6f6f6f),
+                                              ),
+                                            ),
+                                            Text(
+                                              '$startTime - $endTime',
+                                              style: const TextStyle(
+                                                color: Color(0xFF9f9f9f),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                                (residency != null)
+                                    ? SizedBox(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'RESIDENCY',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                                color: Color(0xFF6f6f6f),
+                                              ),
+                                            ),
+                                            Text(
+                                              residency,
+                                              style: const TextStyle(
+                                                color: Color(0xFF9f9f9f),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : Container(),
+                                // (fellowship != null)
+                                //     ? Container(
+                                //         margin: const EdgeInsets.only(
+                                //           top: 20.0,
+                                //         ),
+                                //         child: Column(
+                                //           crossAxisAlignment:
+                                //               CrossAxisAlignment.start,
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.start,
+                                //           children: [
+                                //             const Text(
+                                //               'FELLOWSHIP',
+                                //               style: TextStyle(
+                                //                 fontWeight: FontWeight.bold,
+                                //                 fontSize: 12,
+                                //                 color: Color(0xFF6f6f6f),
+                                //               ),
+                                //             ),
+                                //             Text(
+                                //               fellowship,
+                                //               style: const TextStyle(
+                                //                 color: Color(0xFF9f9f9f),
+                                //               ),
+                                //             )
+                                //           ],
+                                //         ),
+                                //       )
+                                //     : Container(),
                               ],
                             ),
                           ),
@@ -835,112 +864,122 @@ class ProfilePage extends GetWidget<ProfileController> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {
-                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Update'),
-                          actions: [
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  SizedBox(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        FocusScope.of(context).unfocus();
-                                        DateTime a = await controller.getDate();
+              SharedPrefUtils.readPrefStr('role') == "DOCTOR"
+                  ? Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((timeStamp) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Update'),
+                                actions: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: size.height * 0.02,
+                                        ),
+                                        SizedBox(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              FocusScope.of(context).unfocus();
+                                              DateTime a =
+                                                  await controller.getDate();
 
-                                        final DateFormat formatter =
-                                            DateFormat('yyyy-MM-dd');
-                                        controller.dob.text =
-                                            formatter.format(a);
-                                      },
-                                      child: AbsorbPointer(
-                                        child: CustomTextFormField(
-                                            controller: controller.dob,
-                                            labelText: "Date",
+                                              final DateFormat formatter =
+                                                  DateFormat('dd-MM-yyyy');
+                                              controller.dob.text =
+                                                  formatter.format(a);
+                                            },
+                                            child: AbsorbPointer(
+                                              child: CustomTextFormField(
+                                                  controller: controller.dob,
+                                                  labelText: "Date",
+                                                  isRequired: true,
+                                                  padding: TextFormFieldPadding
+                                                      .PaddingT14,
+                                                  textInputType: TextInputType
+                                                      .emailAddress,
+                                                  suffix: Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              right: 10),
+                                                      child: const Icon(Icons
+                                                          .calendar_month)),
+                                                  suffixConstraints:
+                                                      BoxConstraints(
+                                                          maxHeight:
+                                                              getVerticalSize(
+                                                                  56))),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: size.height * 0.02,
+                                        ),
+                                        CustomTextFormField(
+                                            labelText: "Time Interval",
                                             isRequired: true,
+                                            controller: controller.timeInterval,
                                             padding:
                                                 TextFormFieldPadding.PaddingT14,
-                                            textInputType:
-                                                TextInputType.emailAddress,
-                                            suffix: Container(
-                                                margin: const EdgeInsets.only(
-                                                    right: 10),
-                                                child: const Icon(
-                                                    Icons.calendar_month)),
-                                            suffixConstraints: BoxConstraints(
+                                            textInputType: TextInputType.number,
+                                            prefixConstraints: BoxConstraints(
                                                 maxHeight:
                                                     getVerticalSize(56))),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  CustomTextFormField(
-                                      labelText: "Time Interval",
-                                      isRequired: true,
-                                      controller: controller.timeInterval,
-                                      padding: TextFormFieldPadding.PaddingT14,
-                                      textInputType: TextInputType.number,
-                                      prefixConstraints: BoxConstraints(
-                                          maxHeight: getVerticalSize(56))),
-                                  SizedBox(
-                                    height: size.height * 0.02,
-                                  ),
-                                  CustomButton(
-                                    height: 60,
-                                    shape: ButtonShape.RoundedBorder8,
-                                    text: "Update",
-                                    onTap: () async {
-                                      Map<String, dynamic> data = {
-                                        "rescheduleDate": controller.dob.text,
-                                        "rescheduleTimeInMin":
-                                            controller.timeInterval.text,
-                                        "id": staffData?.id ?? 0
-                                      };
-                                      print(jsonEncode(data));
+                                        SizedBox(
+                                          height: size.height * 0.02,
+                                        ),
+                                        CustomButton(
+                                          height: 60,
+                                          shape: ButtonShape.RoundedBorder8,
+                                          text: "Update",
+                                          onTap: () async {
+                                            Map<String, dynamic> data = {
+                                              "rescheduleDate":
+                                                  controller.dob.text,
+                                              "rescheduleTimeInMin":
+                                                  controller.timeInterval.text,
+                                              "id": staffData?.id ?? 0
+                                            };
+                                            print(jsonEncode(data));
 
-                                      await controller.staffUpdate(data);
-                                    },
+                                            await controller.staffUpdate(data);
+                                          },
+                                        )
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
-                            )
-                          ],
+                            ).then((value) {
+                              if (value == null) {
+                                controller.dob.clear();
+                              }
+                            });
+                          });
+                        },
+                        child: Text(
+                          'Edit Time Slot',
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: ColorConstant.black900,
+                            fontSize: getFontSize(
+                              14,
+                            ),
+                            decoration: TextDecoration.underline,
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ).then((value) {
-                        if (value == null) {
-                          controller.dob.clear();
-                        }
-                      });
-                    });
-                  },
-                  child: Text(
-                    'Edit Time Slot',
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: ColorConstant.black900,
-                      fontSize: getFontSize(
-                        14,
                       ),
-                      decoration: TextDecoration.underline,
-                      fontFamily: 'Raleway',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
+                    )
+                  : const SizedBox(),
               (SharedPrefUtils.readPrefStr("role") != 'PATIENT')
                   ? doctorProfile()
                   : patientProfile(),

@@ -156,7 +156,7 @@ class ListRecentPatients extends StatelessWidget {
         secondButtonTextStyle: const TextStyle(
             color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
         onSecondButtonTap: () {
-          Get.to(AppointmentBookingScreen(
+          Get.to(() => AppointmentBookingScreen(
               patientDetailsArguments: PatientDetailsArguments([], data)));
         },
         onFirstButtonTap: () {},

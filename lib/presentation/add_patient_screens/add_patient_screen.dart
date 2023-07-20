@@ -274,6 +274,20 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                         height: size.height * 0.03,
                       ),
                       CustomTextFormField(
+                          controller: controller.address,
+                          labelText: "Address",
+                          isRequired: true,
+                          padding: TextFormFieldPadding.PaddingT14,
+                          validator: (value) {
+                            return controller.addressValidator(value ?? '');
+                          },
+                          textInputType: TextInputType.emailAddress,
+                          prefixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                      SizedBox(
+                        height: size.height * 0.03,
+                      ),
+                      CustomTextFormField(
                           controller: controller.city,
                           labelText: "City",
                           isRequired: true,
@@ -609,6 +623,23 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       Flexible(
                         fit: FlexFit.tight,
                         child: CustomTextFormField(
+                            controller: controller.address,
+                            labelText: "Address",
+                            isRequired: true,
+                            padding: TextFormFieldPadding.PaddingT14,
+                            validator: (value) {
+                              return controller.addressValidator(value ?? '');
+                            },
+                            textInputType: TextInputType.emailAddress,
+                            prefixConstraints:
+                                BoxConstraints(maxHeight: getVerticalSize(56))),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.02,
+                      ),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: CustomTextFormField(
                             controller: controller.city,
                             labelText: "City",
                             isRequired: true,
@@ -686,7 +717,17 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                     margin: getMargin(left: 0, right: 10),
                     fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                     onTap: () async {
-                      bool a = controller.trySubmit();
+                      bool a = await controller.trySubmit();
+                      if (a) {
+                        Map<String, dynamic> requestData = {
+                          "email": controller.email.text,
+                          "mobile": controller.mobile.text,
+                          "password": controller.confirmPassword.text,
+                          "role": "PATIENT",
+                          "username": controller.mobile.text
+                        };
+                        controller.callRegister(requestData);
+                      }
                     }),
               ),
               SizedBox(

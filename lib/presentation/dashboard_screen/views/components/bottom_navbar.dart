@@ -26,7 +26,7 @@ class _BottomNavbarState extends State<_BottomNavbar> {
     return BottomNavigationBar(
       currentIndex: index,
       elevation: 10,
-      backgroundColor: ColorConstant.blue700,
+      backgroundColor: ColorConstant.blue60001,
       items: [
         const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.home),

@@ -753,7 +753,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                           ),
                                                           radius: 10.0);
                                                     },
-                                                    child: const Text('Book Now')))
+                                                    child:
+                                                        const Text('Book Now')))
                                           ]),
                                     ))
                                 : const SizedBox(),
@@ -791,7 +792,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                                         .patientTodaysData)
                                                 : Container(
                                                     color: Colors.white,
-                                                    padding: const EdgeInsets.all(10),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
                                                     child: const Center(
                                                       child: Column(
                                                         crossAxisAlignment:
@@ -844,6 +847,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ),
                               ),
                             ),
+                            const SizedBox(height: 10),
                             (SharedPrefUtils.readPrefStr("role") ==
                                     'RECEPTIONIST')
                                 //? SharedPrefUtils.readPrefStr("role") == 'RECEPTIONIST'
@@ -851,6 +855,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                     elevation: 4,
                                     color: Colors.white,
                                     shadowColor: ColorConstant.gray400,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
@@ -1042,8 +1049,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       : Container(
                                                           color: Colors.white,
                                                           padding:
-                                                              const EdgeInsets.all(
-                                                                  10),
+                                                              const EdgeInsets
+                                                                  .all(10),
                                                           child: const Center(
                                                             child: Column(
                                                               crossAxisAlignment:
@@ -1220,7 +1227,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                       height: 10,
                                     ),
                                     Text(
-                                      '${controller.patientData.value.patient?.firstName} ' '${controller.patientData.value.patient?.lastName}',
+                                      '${controller.patientData.value.patient?.firstName} '
+                                      '${controller.patientData.value.patient?.lastName}',
                                       style: TextStyle(
                                           color: Colors.yellow.shade800,
                                           fontSize: 20,
@@ -1442,9 +1450,8 @@ class DashboardScreen extends GetView<DashboardController> {
           height: MediaQuery.of(Get.context!).size.height,
           //color: Colors.red,
           child: PatientsList(
-              //data: controller.getAllPatientsList,
-
-              )),
+            data: controller.getAllPatientsList,
+          )),
       // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
       //     ? AddPatientScreen()
       //     : Column(
@@ -1629,14 +1636,16 @@ class DashboardScreen extends GetView<DashboardController> {
                                   errorWidget: (context, url, error) =>
                                       Image.asset(
                                           !Responsive.isDesktop(Get.context!)
-                                              ? 'assets' '/images/default_profile.png'
+                                              ? 'assets'
+                                                  '/images/default_profile.png'
                                               : '/images/default_profile.png'),
                                 )
                               : Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Image.asset(
                                       !Responsive.isDesktop(Get.context!)
-                                          ? 'assets' '/images/default_profile.png'
+                                          ? 'assets'
+                                              '/images/default_profile.png'
                                           : '/images/default_profile.png'),
                                 ),
                     ),
@@ -1758,7 +1767,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                 errorWidget: (context, url, error) =>
                                     Image.asset(
                                         !Responsive.isDesktop(Get.context!)
-                                            ? 'assets' '/images/default_profile.png'
+                                            ? 'assets'
+                                                '/images/default_profile.png'
                                             : '/images/default_profile.png'),
                               )
                             : Padding(

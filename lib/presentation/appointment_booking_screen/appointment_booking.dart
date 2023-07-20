@@ -65,16 +65,16 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       controller.address.text = patientDetailsArguments?.details?.address ?? "";
       controller.list = patientDetailsArguments?.list;
 
-      controller.genderList.value.any((element) {
-        if (element.title.toLowerCase() ==
-            patientDetailsArguments?.details?.sex?.toLowerCase()) {
-          element.isSelected = true;
-          controller.genderList.refresh();
-          return true;
-        } else {
-          return false;
-        }
-      });
+      // controller.genderList.value.any((element) {
+      //   if (element.title.toLowerCase() ==
+      //       patientDetailsArguments?.details?.sex?.toLowerCase()) {
+      //     element.isSelected = true;
+      //     controller.genderList.refresh();
+      //     return true;
+      //   } else {
+      //     return false;
+      //   }
+      // });
     }
 
     if (doctorDetailsArguments?.appointmentData != null) {

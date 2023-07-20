@@ -23,7 +23,7 @@ class PatientsList extends GetView<DashboardController> {
 
   DashboardController dashboardController = Get.put(DashboardController());
 
-  PatientsList({super.key});
+  PatientsList({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,22 @@ class PatientsList extends GetView<DashboardController> {
                           ),
                           SearchField(
                             onSearch: (value) {
-                              print(value);
+                              if (value.length > 3) {
+                                data?.forEach((element) {
+                                  if (element.firstName!
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase())) {
+                                    print(true);
+                                    List<Content> a = [];
+                                    a.add(element);
+                                    dashboardController
+                                        .patientPagingController.itemList = a;
+                                  }
+                                });
+                              } else {
+                                dashboardController
+                                    .patientPagingController.itemList = data;
+                              }
                             },
                           ),
                         ],
@@ -113,6 +128,7 @@ class PatientsList extends GetView<DashboardController> {
                     const SizedBox(
                       height: 10.0,
                     ),
+
                     SizedBox(
                         height: 700,
                         child: Responsive.isMobile(context)
