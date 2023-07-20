@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/app_export.dart';
 import '../../core/utils/color_constant.dart';
@@ -293,9 +294,34 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                   ],
                                 ),
                               ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'DOB',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      color: Color(0xFF6f6f6f),
+                                    ),
+                                  ),
+                                  Text(
+                                    dateFormatter(patientData.dob.toString())??
+                                        '',
+                                    style: const TextStyle(
+                                      color: Color(0xFF9f9f9f),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ),
+
                         Expanded(
                           flex: 5,
                           child: Column(
@@ -348,6 +374,30 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                   ],
                                 ),
                               ),
+
+                              const SizedBox(
+                                height: 20,
+                              ),
+                                  Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Country',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: Color(0xFF6f6f6f),
+                                      ),
+                                    ),
+                                    Text(
+                                      patientData?.country ?? '',
+                                      style: const TextStyle(
+                                        color: Color(0xFF9f9f9f),
+                                      ),
+                                    )
+                                  ],
+                                ),
                             ],
                           ),
                         ),
@@ -396,6 +446,16 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
         ),
       ),
     );
+  }
+}
+
+String dateFormatter(String txt) {
+  if (txt != '') {
+    DateTime a = DateTime.parse(txt);
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(DateTime.parse(a.toString()));
+  } else {
+    return '';
   }
 }
 
