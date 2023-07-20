@@ -40,7 +40,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       var response = await _apiService
-          .get(Endpoints.getAllAppoinmentByPatirntId + '${value}/true/');
+          .get('${Endpoints.getAllAppoinmentByPatirntId}$value/true/');
       //var newResponse = {"data": response.data};
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
@@ -150,7 +150,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       final Response response = await _apiService.get(
-          Endpoints.getTodaysAppointmentByPatientId + '$patientId/$active');
+          '${Endpoints.getTodaysAppointmentByPatientId}$patientId/$active');
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
@@ -165,7 +165,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       final Response response = await _apiService
-          .get(Endpoints.getTodaysAppointmentByExaminerId + '$staffId/$active');
+          .get('${Endpoints.getTodaysAppointmentByExaminerId}$staffId/$active');
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
@@ -240,7 +240,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       var response = await _apiService
-          .get(Endpoints.getAllAppointments + '/' + value.toString());
+          .get('${Endpoints.getAllAppointments}/$value');
       GetAllAppointments appointmentContent =
           GetAllAppointments.fromJson(response.data);
       List<AppointmentContent>? list = appointmentContent.content;
@@ -339,7 +339,7 @@ class AppointmentApi {
   Future<String> callGeneratePrecription(
       int patientId, int appointmentId, int examinationId) async {
     try {
-      String fileName = 'Precription_${appointmentId}_${patientId}.pdf';
+      String fileName = 'Precription_${appointmentId}_$patientId.pdf';
       ProgressDialogUtils.showProgressDialog();
       var response = await _apiService.post(
         Endpoints.generatePrecription,
@@ -367,13 +367,13 @@ class AppointmentApi {
 
         Directory(fullPath).createSync(recursive: true);
         File? file;
-        final path = '${directory?.path}/Precriptions/${fileName}';
+        final path = '${directory?.path}/Precriptions/$fileName';
         file = File(path);
 
         try {
           await file.writeAsBytes(
               data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-        } on FileSystemException catch (err) {
+        } on FileSystemException {
           // handle error
         }
         return path;
@@ -411,7 +411,7 @@ class AppointmentApi {
           });
       //var newResponse = {"data": response.data};
       var data = response.data;
-      String fileName = 'Invoice_${appointmentId}_${patientId}.pdf';
+      String fileName = 'Invoice_${appointmentId}_$patientId.pdf';
       //var bytes = base64Decode(data);
       if (Responsive.isMobile(Get.Get.context!)) {
         Directory? directory = Platform.isAndroid
@@ -422,13 +422,13 @@ class AppointmentApi {
 
         Directory(fullPath).createSync(recursive: true);
         File? file;
-        final path = '${directory?.path}/Invoices/${fileName}';
+        final path = '${directory?.path}/Invoices/$fileName';
         file = File(path);
 
         try {
           await file.writeAsBytes(
               data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-        } on FileSystemException catch (err) {
+        } on FileSystemException {
           // handle error
         }
         //DocumentFileSavePlus.saveFile(data, fileName, "appliation/pdf");

@@ -3,18 +3,16 @@ import 'dart:convert';
 import 'package:appointmentxpert/core/utils/color_constant.dart';
 import 'package:appointmentxpert/widgets/custom_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import '../../core/utils/size_utils.dart';
 import '../../models/patient_model.dart';
 import '../../models/staff_model.dart';
 import '../../network/endpoints.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
-import '../../theme/app_style.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
 import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
@@ -24,8 +22,9 @@ import 'controller/profile_controller.dart';
 class ProfilePage extends GetWidget<ProfileController> {
   final StaffData? staffData;
   final PatientData? patientData;
-  ProfilePage(this.staffData, this.patientData);
+  ProfilePage(this.staffData, this.patientData, {super.key});
 
+  @override
   ProfileController controller = Get.put(ProfileController());
 
   Widget doctorProfile() {
@@ -163,32 +162,34 @@ class ProfilePage extends GetWidget<ProfileController> {
                                         //     ?
                                         profile != null
                                             ? CachedNetworkImage(
-                                                imageUrl: imagePath ?? '',
+                                                imageUrl: Uri.encodeFull(
+                                                  '${Endpoints.baseURL}${Endpoints.downLoadEmployePhoto}$profile',
+                                                ),
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(
                                                   decoration: BoxDecoration(
                                                     image: DecorationImage(
                                                       image: imageProvider,
-                                                      fit: BoxFit.cover,
+                                                      fit: BoxFit.contain,
                                                     ),
                                                   ),
                                                 ),
                                                 placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
+                                                    const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
                                                 errorWidget: (context, url,
                                                         error) =>
                                                     Image.asset(!Responsive
                                                             .isDesktop(
                                                                 Get.context!)
-                                                        ? 'assets' +
-                                                            '/images/default_profile.png'
+                                                        ? 'assets' '/images/default_profile.png'
                                                         : '/images/default_profile.png'),
                                               )
                                             : Image.asset(!Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' +
-                                                    '/images/default_profile.png'
+                                                ? 'assets' '/images/default_profile.png'
                                                 : '/images/default_profile.png')
                                     // : CustomImageView(
                                     //     imagePath: !Responsive.isDesktop(
@@ -579,13 +580,8 @@ class ProfilePage extends GetWidget<ProfileController> {
                                         //     ?
                                         profile != null
                                             ? CachedNetworkImage(
-                                                width: 140,
-                                                height: 140,
                                                 imageUrl: Uri.encodeFull(
-                                                  Endpoints.baseURL +
-                                                      Endpoints
-                                                          .downLoadPatientPhoto +
-                                                      profile.toString(),
+                                                  '${Endpoints.baseURL}${Endpoints.downLoadPatientPhoto}$profile',
                                                 ),
                                                 imageBuilder:
                                                     (context, imageProvider) =>
@@ -606,14 +602,12 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                     Image.asset(!Responsive
                                                             .isDesktop(
                                                                 Get.context!)
-                                                        ? 'assets' +
-                                                            '/images/default_profile.png'
+                                                        ? 'assets' '/images/default_profile.png'
                                                         : '/images/default_profile.png'),
                                               )
                                             : Image.asset(!Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' +
-                                                    '/images/default_profile.png'
+                                                ? 'assets' '/images/default_profile.png'
                                                 : '/images/default_profile.png')
                                     // : CustomImageView(
                                     //     imagePath: !Responsive.isDesktop(

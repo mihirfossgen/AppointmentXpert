@@ -9,7 +9,7 @@ import 'controller/verify_number_controller.dart';
 class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
   final String? phoneNumber;
 
-  VerifyPhoneNumberScreen({this.phoneNumber});
+  const VerifyPhoneNumberScreen({super.key, this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
             controller: controller.scrollController,
             children: [
           Text(
-            "We've sent an SMS with a verification code to ${phoneNumber}",
+            "We've sent an SMS with a verification code to $phoneNumber",
             style: const TextStyle(fontSize: 25),
           ),
           const SizedBox(height: 10),
@@ -52,12 +52,13 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
           ),
           const SizedBox(height: 10),
           ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 300, maxHeight: 100),
+              constraints: const BoxConstraints(maxWidth: 300, maxHeight: 100),
               child: PinInputField(
                   length: 4,
                   onFocusChange: (hasFocus) async {
-                    if (hasFocus)
+                    if (hasFocus) {
                       await controller.scrollToBottomOnKeyboardOpen();
+                    }
                   },
                   onSubmit: (enteredOtp) async {
                     controller.enteredOtpp.value = enteredOtp;

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 
 // ignore_for_file: must_be_immutable
 class SignUpSuccessDialog extends StatelessWidget {
-  SignUpSuccessDialog(this.controller);
+  SignUpSuccessDialog(this.controller, {super.key});
 
   SignUpSuccessController controller;
 
@@ -31,7 +31,7 @@ class SignUpSuccessDialog extends StatelessWidget {
               Card(
                   clipBehavior: Clip.antiAlias,
                   elevation: 0,
-                  margin: EdgeInsets.all(0),
+                  margin: const EdgeInsets.all(0),
                   color: ColorConstant.gray50,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadiusStyle.circleBorder51),

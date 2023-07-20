@@ -1,24 +1,19 @@
-import 'package:appointmentxpert/core/utils/size_utils.dart';
-import 'package:appointmentxpert/models/patient_model.dart';
 import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
-import 'package:appointmentxpert/presentation/patient_details_page/patient_details_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../../../core/utils/color_constant.dart';
 import '../../../../models/patient_list_model.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
-import '../../../../theme/app_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../controller/dashboard_controller.dart';
-import '../../shared_components/list_recent_patient.dart';
 import '../../shared_components/search_field.dart';
 import '../screens/dashboard_screen.dart';
 
@@ -26,6 +21,8 @@ class PatientsList extends GetView<DashboardController> {
   List<Content>? data;
 
   DashboardController dashboardController = Get.put(DashboardController());
+
+  PatientsList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,280 +38,289 @@ class PatientsList extends GetView<DashboardController> {
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: SingleChildScrollView(
-          child: Container(
-              padding: const EdgeInsets.all(defaultPadding),
-              decoration: const BoxDecoration(
-                color: secondaryColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (Responsive.isMobile(context))
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            textView(),
-                            InkWell(
-                              onTap: () async {
-                                controller.onClose();
-                                await controller.callRecentPatientList(0);
-                                data = controller.getAllPatientsList;
-                              },
-                              child: Card(
-                                color: ColorConstant.blue700,
-                                elevation: 4,
-                                shadowColor: ColorConstant.gray400,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 150,
-                                  child: Text(
-                                    'Refresh',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: AppStyle
-                                        .txtRalewayRomanMedium14WhiteA700,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        SearchField(
-                          onSearch: (value) {
-                            print(value);
-                          },
-                        ),
-                      ],
+        body: Container(
+            padding: const EdgeInsets.all(defaultPadding),
+            decoration: const BoxDecoration(
+              color: secondaryColor,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: LiquidPullToRefresh(
+              showChildOpacityTransition: false,
+              onRefresh: () async {
+                controller.isloadingRecentPatients.value = true;
+                controller.patientPagingController =
+                    PagingController(firstPageKey: 0);
+                controller.callRecentPatientList(0);
+              },
+              child: ListView(children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (Responsive.isMobile(context))
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     textView(),
+                          //     InkWell(
+                          //       onTap: () async {
+                          //         controller.onClose();
+                          //         await controller.callRecentPatientList(0);
+                          //         data = controller.getAllPatientsList;
+                          //       },
+                          //       child: Card(
+                          //         color: ColorConstant.blue700,
+                          //         elevation: 4,
+                          //         shadowColor: ColorConstant.gray400,
+                          //         child: Container(
+                          //           alignment: Alignment.center,
+                          //           height: 50,
+                          //           width: 150,
+                          //           child: Text(
+                          //             'Refresh',
+                          //             overflow: TextOverflow.ellipsis,
+                          //             textAlign: TextAlign.center,
+                          //             style: AppStyle
+                          //                 .txtRalewayRomanMedium14WhiteA700,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          SearchField(
+                            onSearch: (value) {
+                              print(value);
+                            },
+                          ),
+                        ],
+                      ),
+                    if (!Responsive.isMobile(context))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(flex: 3, child: textView()),
+                          //Expanded(flex: 5, child: SearchField())
+                        ],
+                      ),
+                    const SizedBox(
+                      height: 10.0,
                     ),
-                  if (!Responsive.isMobile(context))
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(flex: 3, child: textView()),
-                        //Expanded(flex: 5, child: SearchField())
-                      ],
-                    ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  SizedBox(
-                      height: 700,
-                      child: Responsive.isMobile(context)
-                          ? RefreshIndicator(
-                              onRefresh: () async {
-                                Future.sync(() => dashboardController
-                                    .patientPagingController
-                                    .refresh());
-                                dashboardController.isloading.value = true;
-                                dashboardController.callRecentPatientList(0);
-                              },
-                              child: PagedListView<int, Content>.separated(
-                                shrinkWrap: true,
-                                pagingController:
-                                    dashboardController.patientPagingController,
-                                builderDelegate:
-                                    PagedChildBuilderDelegate<Content>(
-                                  animateTransitions: true,
-                                  itemBuilder: (context, item, index) =>
-                                      Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: GFListTile(
-                                      icon: const Icon(Icons.arrow_right),
-                                      avatar: item.profilePicture != null
-                                          ? CachedNetworkImage(
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.contain,
-                                              imageUrl: Uri.encodeFull(
-                                                Endpoints.baseURL +
-                                                    Endpoints
-                                                        .downLoadPatientPhoto +
-                                                    item.profilePicture
-                                                        .toString(),
+                    SizedBox(
+                        height: 700,
+                        child: Responsive.isMobile(context)
+                            ? RefreshIndicator(
+                                onRefresh: () async {
+                                  Future.sync(() => dashboardController
+                                      .patientPagingController
+                                      .refresh());
+                                  dashboardController
+                                      .isloadingRecentPatients.value = true;
+                                  dashboardController.callRecentPatientList(0);
+                                },
+                                child: PagedListView<int, Content>.separated(
+                                  shrinkWrap: true,
+                                  pagingController: dashboardController
+                                      .patientPagingController,
+                                  builderDelegate:
+                                      PagedChildBuilderDelegate<Content>(
+                                    animateTransitions: true,
+                                    itemBuilder: (context, item, index) =>
+                                        Padding(
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: GFListTile(
+                                        icon: const Icon(Icons.arrow_right),
+                                        avatar: item.profilePicture != null
+                                            ? CachedNetworkImage(
+                                                width: 80,
+                                                height: 80,
+                                                fit: BoxFit.contain,
+                                                imageUrl: Uri.encodeFull(
+                                                  Endpoints.baseURL +
+                                                      Endpoints
+                                                          .downLoadPatientPhoto +
+                                                      item.profilePicture
+                                                          .toString(),
+                                                ),
+                                                httpHeaders: {
+                                                  "Authorization":
+                                                      "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                                                },
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress),
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  print(error);
+                                                  return CustomImageView(
+                                                    imagePath: !Responsive
+                                                            .isDesktop(
+                                                                Get.context!)
+                                                        ? 'assets'
+                                                            '/images/default_profile.png'
+                                                        : '/images/default_profile.png',
+                                                  );
+                                                },
+                                              )
+                                            : CustomImageView(
+                                                width: 80,
+                                                height: 80,
+                                                imagePath: !Responsive
+                                                        .isDesktop(Get.context!)
+                                                    ? 'assets'
+                                                        '/images/default_profile.png'
+                                                    : '/images/default_profile.png',
                                               ),
-                                              httpHeaders: {
-                                                "Authorization":
-                                                    "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                                              },
-                                              progressIndicatorBuilder:
-                                                  (context, url,
-                                                          downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                          value:
-                                                              downloadProgress
-                                                                  .progress),
-                                              errorWidget:
-                                                  (context, url, error) {
-                                                print(error);
-                                                return CustomImageView(
-                                                  imagePath: !Responsive
-                                                          .isDesktop(
-                                                              Get.context!)
-                                                      ? 'assets' +
-                                                          '/images/default_profile.png'
-                                                      : '/images/default_profile.png',
-                                                );
-                                              },
-                                            )
-                                          : CustomImageView(
-                                              width: 80,
-                                              height: 80,
-                                              imagePath: !Responsive.isDesktop(
-                                                      Get.context!)
-                                                  ? 'assets' +
-                                                      '/images/default_profile.png'
-                                                  : '/images/default_profile.png',
+                                        //autofocus: true,
+                                        color: Colors.white,
+                                        description: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(
+                                              height: 5,
                                             ),
-                                      //autofocus: true,
-                                      color: Colors.white,
-                                      description: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Email: ${item.email.toString()}',
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Address: ${item.address}',
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Age: ${item.age}',
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                      enabled: true,
-                                      firstButtonTextStyle: const TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold),
-                                      firstButtonTitle: 'View Details',
-                                      secondButtonTitle: 'Book Appointment',
-                                      secondButtonTextStyle: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                      onSecondButtonTap: () {
-                                        Get.to(AppointmentBookingScreen(
-                                            patientDetailsArguments:
-                                                PatientDetailsArguments(
-                                                    [], item)));
-                                      },
-                                      onFirstButtonTap: () {
-                                        Get.to(PatientDetailsPage(item));
-                                      },
-                                      //focusColor: ,
-                                      focusNode: FocusNode(),
-                                      //hoverColor: Colors.blue,
-                                      //icon: ,
-                                      listItemTextColor: GFColors.DARK,
-                                      //margin: getMarginOrPadding(all: 8.0),
-                                      //onFirstButtonTap: ,
-                                      //onLongPress: ,
-                                      //onSecondButtonTap: ,
-                                      onTap: () {},
-                                      //padding: ,
-                                      radius: 8,
-                                      //secondButtonTextStyle: ,
-                                      //secondButtonTitle: 'Delete',
-                                      selected: false,
-                                      //shadow: BoxShadow,
-                                      //subTitleText: 'Address: ${data.address}',
-                                      title: Text(
-                                        '${item.firstName} ' +
-                                            '${item.lastName}',
-                                        style: const TextStyle(
-                                            fontSize: 16,
+                                            Text(
+                                              'Email: ${item.email.toString()}',
+                                              style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'Address: ${item.address}',
+                                              style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'Age: ${item.age}',
+                                              style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                            ),
+                                          ],
+                                        ),
+                                        enabled: true,
+                                        firstButtonTextStyle: const TextStyle(
+                                            color: Colors.blue,
                                             fontWeight: FontWeight.bold),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                        firstButtonTitle: 'View Details',
+                                        secondButtonTitle: 'Book Appointment',
+                                        secondButtonTextStyle: const TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
+                                        onSecondButtonTap: () {
+                                          Get.to(AppointmentBookingScreen(
+                                              patientDetailsArguments:
+                                                  PatientDetailsArguments(
+                                                      [], item)));
+                                        },
+                                        onFirstButtonTap: () {},
+                                        //focusColor: ,
+                                        focusNode: FocusNode(),
+                                        //hoverColor: Colors.blue,
+                                        //icon: ,
+                                        listItemTextColor: GFColors.DARK,
+                                        //margin: getMarginOrPadding(all: 8.0),
+                                        //onFirstButtonTap: ,
+                                        //onLongPress: ,
+                                        //onSecondButtonTap: ,
+                                        onTap: () {},
+                                        //padding: ,
+                                        radius: 8,
+                                        //secondButtonTextStyle: ,
+                                        //secondButtonTitle: 'Delete',
+                                        selected: false,
+                                        //shadow: BoxShadow,
+                                        //subTitleText: 'Address: ${data.address}',
+                                        title: Text(
+                                          '${item.prefix}'
+                                          '${item.firstName} '
+                                          '${item.lastName}',
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        //titleText: '${data.firstName} ' + '${data.lastName}',
                                       ),
-                                      //titleText: '${data.firstName} ' + '${data.lastName}',
                                     ),
                                   ),
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(),
                                 ),
-                                separatorBuilder: (context, index) =>
-                                    const Divider(),
-                              ),
-                            )
-                          //loadList()
-                          : Container()
-                      //loadDataTable(),
-                      ),
+                              )
+                            //loadList()
+                            : Container()
+                        //loadDataTable(),
+                        ),
 
-                  // Container(
-                  //   width: double.infinity,
-                  //   height: 680,
-                  //   child: DataTable2(
-                  //     columnSpacing: defaultPadding,
-                  //     headingRowHeight: defaultPadding * 5,
-                  //     minWidth: 00,
-                  //     //decoration: BoxDecoration(color: Color(0xFF2CABB8)),
-                  //     columns: [
-                  //       DataColumn(
-                  //         label: Text(
-                  //           "Patient Name",
-                  //           style: AppStyle.txtInterSemiBold14,
-                  //         ),
-                  //       ),
-                  //       DataColumn(
-                  //         label: Text(
-                  //           "Age",
-                  //           style: AppStyle.txtInterSemiBold14,
-                  //         ),
-                  //       ),
-                  //       DataColumn(
-                  //         label: Text(
-                  //           "Date of Birth",
-                  //           style: AppStyle.txtInterSemiBold14,
-                  //         ),
-                  //       ),
-                  //       DataColumn(
-                  //         label: Text(
-                  //           "Blood Type",
-                  //           style: AppStyle.txtInterSemiBold14,
-                  //         ),
-                  //       ),
-                  //       DataColumn(
-                  //         label: Text(
-                  //           "Gender",
-                  //           style: AppStyle.txtInterSemiBold14,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //     rows: List.generate(data.length,
-                  //         (index) => patientDataRow(data[index], context, size),
-                  //         growable: true),
-                  //   ),
-                  // ),
-                ],
-              )),
-        ),
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: 680,
+                    //   child: DataTable2(
+                    //     columnSpacing: defaultPadding,
+                    //     headingRowHeight: defaultPadding * 5,
+                    //     minWidth: 00,
+                    //     //decoration: BoxDecoration(color: Color(0xFF2CABB8)),
+                    //     columns: [
+                    //       DataColumn(
+                    //         label: Text(
+                    //           "Patient Name",
+                    //           style: AppStyle.txtInterSemiBold14,
+                    //         ),
+                    //       ),
+                    //       DataColumn(
+                    //         label: Text(
+                    //           "Age",
+                    //           style: AppStyle.txtInterSemiBold14,
+                    //         ),
+                    //       ),
+                    //       DataColumn(
+                    //         label: Text(
+                    //           "Date of Birth",
+                    //           style: AppStyle.txtInterSemiBold14,
+                    //         ),
+                    //       ),
+                    //       DataColumn(
+                    //         label: Text(
+                    //           "Blood Type",
+                    //           style: AppStyle.txtInterSemiBold14,
+                    //         ),
+                    //       ),
+                    //       DataColumn(
+                    //         label: Text(
+                    //           "Gender",
+                    //           style: AppStyle.txtInterSemiBold14,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //     rows: List.generate(data.length,
+                    //         (index) => patientDataRow(data[index], context, size),
+                    //         growable: true),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ]),
+            )),
       ),
     );
   }
@@ -503,8 +509,8 @@ DataRow patientDataRow(Content fileInfo, BuildContext context, Size size) {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text('${fileInfo.firstName.toString()} ' +
-                    '${fileInfo.lastName.toString()}'),
+                child: Text('${fileInfo.firstName.toString()} ',
+                    semanticsLabel: fileInfo.lastName.toString()),
               ),
             ],
           ), onTap: () {

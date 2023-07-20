@@ -1,7 +1,6 @@
 import 'package:appointmentxpert/core/utils/app_helpers.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/getAllApointments.dart';
@@ -100,7 +99,7 @@ class CardAppointment extends StatelessWidget {
 
   Widget _buildPatientName() {
     return Text(
-      '${appointment.patient?.firstName} ' + '${appointment.patient?.lastName}',
+      '${appointment.patient?.firstName} ' '${appointment.patient?.lastName}',
       style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w800,
@@ -114,8 +113,7 @@ class CardAppointment extends StatelessWidget {
 
   Widget _buildDoctorName() {
     return Text(
-      '${appointment.examiner?.firstName} ' +
-          '${appointment.examiner?.lastName}',
+      '${appointment.examiner?.firstName} ' '${appointment.examiner?.lastName}',
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w800,
@@ -167,8 +165,7 @@ class CardAppointment extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
-        primary: onPrimary,
-        onPrimary: primary,
+        foregroundColor: primary, backgroundColor: onPrimary,
       ),
       icon: const Icon(EvaIcons.checkmarkCircle2Outline),
       label: const Text("Done"),

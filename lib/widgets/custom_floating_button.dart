@@ -5,7 +5,7 @@ import '../core/utils/size_utils.dart';
 
 class CustomFloatingButton extends StatelessWidget {
   CustomFloatingButton(
-      {this.shape,
+      {super.key, this.shape,
       this.variant,
       this.alignment,
       this.margin,

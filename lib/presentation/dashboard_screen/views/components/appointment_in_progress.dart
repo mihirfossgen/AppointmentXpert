@@ -70,6 +70,7 @@ class _AppointmentInProgress extends StatelessWidget {
                   (index) => DataRow(cells: [
                         DataCell(
                             Text(
+                              '${data[index].patient?.prefix}'
                               '${data[index].patient?.firstName} '
                               '${data[index].patient?.lastName}',
                               overflow: TextOverflow.clip,
@@ -178,12 +179,10 @@ class _AppointmentInProgress extends StatelessWidget {
                                           CircularProgressIndicator(
                                               value: downloadProgress.progress),
                                       errorWidget: (context, url, error) {
-                                        print(error);
                                         return CustomImageView(
                                           imagePath: !Responsive.isDesktop(
                                                   Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
+                                              ? 'assets' '/images/default_profile.png'
                                               : '/images/default_profile.png',
                                         );
                                       },
@@ -194,14 +193,14 @@ class _AppointmentInProgress extends StatelessWidget {
                                       fit: BoxFit.contain,
                                       imagePath:
                                           !Responsive.isDesktop(Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
+                                              ? 'assets' '/images/default_profile.png'
                                               : '/images/default_profile.png',
                                     ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Text(
+                                '${data[index].patient?.prefix}'
                                 '${data[index].patient?.firstName} '
                                 '${data[index].patient?.lastName}',
                                 overflow: TextOverflow.clip,
@@ -235,7 +234,7 @@ class _AppointmentInProgress extends StatelessWidget {
                               //               appointmentid: data[index].id!,
                               //             )));
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.remove_red_eye,
                               color: Colors.green,
                             ),

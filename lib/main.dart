@@ -30,7 +30,7 @@ void main() async {
     //   enabled: !kReleaseMode,
     //   builder: (context) => MyApp(), // Wrap your app
     // ));
-    runApp(MyApp());
+    runApp(const MyApp());
     // DevicePreview(
     //   enabled: !kReleaseMode,
     //   builder: (context) => MyApp(), // Wrap your app
@@ -39,6 +39,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -58,10 +60,10 @@ class MyApp extends StatelessWidget {
       ),
       translations: AppLocalization(),
       locale: Get.deviceLocale, //for setting localization strings
-      fallbackLocale: Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
       title: 'clinic_app',
       initialBinding: InitialBindings(),
-      home: SplashScreen(),
+      home: const SplashScreen(),
       initialRoute: AppRoutes.initialRoute,
       scrollBehavior: CustomScrollBehaviour(),
       getPages: AppRoutes.pages,

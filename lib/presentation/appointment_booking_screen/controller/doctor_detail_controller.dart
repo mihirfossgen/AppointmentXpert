@@ -111,8 +111,8 @@ class DoctorDetailController extends GetxController {
 
   String? numberValidator(String value) {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
       return 'Please enter mobile number';
     } else if (!regExp.hasMatch(value)) {
       return 'Please enter valid mobile number';
@@ -120,8 +120,10 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
-  String? addressValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
+  String? addressValidator(String? value) {
+    if (value == null) {
+      return 'Please enter address';
+    } else if (value == "") {
       return 'Please enter address';
     }
     return null;
@@ -139,12 +141,13 @@ class DoctorDetailController extends GetxController {
     return dt;
   }
 
-  String? fromValidator(String value, String startTime) {
+  String? fromValidator(String value, String startTime, String endTime) {
     print(startTime);
     print(timeFormat(value).isBefore(timeFormat(startTime)));
     if (value.isEmpty) {
       return 'Please select time';
-    } else if (timeFormat(value).isBefore(timeFormat(startTime))) {
+    } else if (timeFormat(value).isAfter(timeFormat(startTime)) &&
+        timeFormat(value).isBefore(timeFormat(endTime))) {
       return "Please select time between 12 to 6 PM";
     }
     return null;
@@ -206,25 +209,25 @@ class DoctorDetailController extends GetxController {
 
   onSelectedGender(dynamic value) {
     selectedgender = value as SelectionPopupModel;
-    genderList.value.forEach((element) {
+    for (var element in genderList.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         element.isSelected = true;
       }
-    });
+    }
     genderList.refresh();
   }
 
   Rx<List<SelectionPopupModel>> counsultingDoctor = Rx(<SelectionPopupModel>[]);
 
   onConsultingDoctorSelect(dynamic value) {
-    counsultingDoctor.value.forEach((element) {
+    for (var element in counsultingDoctor.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         examinerId = element.id;
         element.isSelected = true;
       }
-    });
+    }
     counsultingDoctor.refresh();
   }
 
@@ -244,24 +247,19 @@ class DoctorDetailController extends GetxController {
     }
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-    // gettomeSlots();
-  }
 
   @override
   void onClose() {
     super.onClose();
-    firstname.dispose();
-    lastname.dispose();
-    email.dispose();
-    mobile.dispose();
-    gender.dispose();
-    from.value.dispose();
-    to.dispose();
-    consultingDoctor.dispose();
-    treatment.dispose();
-    notes.dispose();
+    firstname.clear();
+    lastname.clear();
+    email.clear();
+    mobile.clear();
+    gender.clear();
+    from.value.clear();
+    to.clear();
+    consultingDoctor.clear();
+    treatment.clear();
+    notes.clear();
   }
 }

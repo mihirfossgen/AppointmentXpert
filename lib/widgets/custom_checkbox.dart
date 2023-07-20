@@ -5,7 +5,7 @@ import '../core/utils/size_utils.dart';
 
 class CustomCheckbox extends StatelessWidget {
   CustomCheckbox(
-      {this.fontStyle,
+      {super.key, this.fontStyle,
       this.alignment,
       this.isRightCheck = false,
       this.iconSize,
@@ -62,7 +62,7 @@ class CustomCheckbox extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             right: 8,
           ),
           child: getTextWidget(),
@@ -77,7 +77,7 @@ class CustomCheckbox extends StatelessWidget {
       children: [
         getCheckboxWidget(),
         Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: 8,
           ),
           child: getTextWidget(),
@@ -104,7 +104,7 @@ class CustomCheckbox extends StatelessWidget {
           onChange!(value!);
         },
         checkColor: ColorConstant.fromHex("#ffffffff"),
-        visualDensity: VisualDensity(
+        visualDensity: const VisualDensity(
           vertical: -4,
           horizontal: -4,
         ),

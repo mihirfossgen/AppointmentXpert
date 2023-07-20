@@ -3,7 +3,6 @@ import '../../core/utils/logger.dart';
 import '../../models/verify_otp_model.dart';
 import '../dio_client.dart';
 import '../endpoints.dart';
-import 'package:http/http.dart' as http;
 
 class VerifyOtpApi {
   final DioClient _apiService = DioClient();

@@ -68,8 +68,7 @@ class UserApi {
     try {
       //await isNetworkConnected();
       final Response response = await _apiService.post(
-        Endpoints.forgotpassword +
-            "confirmPassword=$confirmPassword&newPassword=$newPassword&userName=$username",
+        "${Endpoints.forgotpassword}confirmPassword=$confirmPassword&newPassword=$newPassword&userName=$username",
       );
 
       if (response.statusCode == 200) {

@@ -79,36 +79,36 @@ class VerifyNumberController extends GetxController {
         otpModel.response?.body?.userId ?? 0, otpModel);
   }
 
-  getPatientOrEmplyeeId(String role, int id, OtpModel _model) async {
+  getPatientOrEmplyeeId(String role, int id, OtpModel model) async {
     if (role.toLowerCase() == "examiner" ||
         role.toLowerCase() == "receptionist" ||
         role.toLowerCase() == "admin" ||
         role.toLowerCase() == "doctor") {
-      if (_model.response?.body?.staff != null) {
+      if (model.response?.body?.staff != null) {
         SharedPrefUtils.saveInt(
-            'employee_Id', _model.response?.body?.staff?.id ?? 0);
+            'employee_Id', model.response?.body?.staff?.id ?? 0);
         // AppointmentDetails.staffId = _model.staff!.id ?? 0;
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
         Get.toNamed(AppRoutes.create_profile_screen,
             arguments: ScreenArguments(
-                _model.response?.body?.roles?[0].name ?? "",
-                _model.response?.body?.userId ?? 0,
-                _model.response?.body?.userName ?? ""));
+                model.response?.body?.roles?[0].name ?? "",
+                model.response?.body?.userId ?? 0,
+                model.response?.body?.userName ?? ""));
       }
     } else {
-      if (_model.response?.body?.patient != null) {
+      if (model.response?.body?.patient != null) {
         SharedPrefUtils.saveInt(
-            'patient_Id', _model.response?.body?.patient!.id ?? 0);
+            'patient_Id', model.response?.body?.patient!.id ?? 0);
         //Get.offNamed(AppRoutes.homeContainerScreen);
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
         Get.back();
         Get.toNamed(AppRoutes.create_profile_screen,
             arguments: ScreenArguments(
-                _model.response?.body?.roles?[0].name ?? "",
-                _model.response?.body?.userId ?? 0,
-                _model.response?.body?.userName ?? ""));
+                model.response?.body?.roles?[0].name ?? "",
+                model.response?.body?.userId ?? 0,
+                model.response?.body?.userName ?? ""));
       }
     }
   }
@@ -125,7 +125,7 @@ class VerifyNumberController extends GetxController {
     scrollController = ScrollController();
     final bottomViewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
     isKeyboardVisible = bottomViewInsets > 0;
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       showResendText.value = true;
     });
   }

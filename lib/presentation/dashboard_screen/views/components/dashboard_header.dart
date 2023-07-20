@@ -14,8 +14,8 @@ class HeaderDashboard extends StatelessWidget {
       children: [
         const HeaderText("Dashboard"),
         const SizedBox(width: 10),
-        Icon(Icons.arrow_right),
-        Text('${role} Dashboard')
+        const Icon(Icons.arrow_right),
+        Text('$role Dashboard')
       ],
     );
   }

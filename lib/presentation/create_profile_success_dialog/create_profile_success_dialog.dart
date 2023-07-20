@@ -13,7 +13,7 @@ import 'controller/create_profile_success_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class CreateProfileSuccessDialog extends StatelessWidget {
-  CreateProfileSuccessDialog(this.controller);
+  CreateProfileSuccessDialog(this.controller, {super.key});
 
   CreateProfileSuccessContoller controller;
 

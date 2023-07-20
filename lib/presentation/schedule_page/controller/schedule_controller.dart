@@ -1,5 +1,4 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -41,10 +40,10 @@ class ScheduleController extends GetxController {
   Rx<TextEditingController> from = TextEditingController().obs;
   TextEditingController to = TextEditingController();
 
-  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  TextEditingController _timeController = TextEditingController();
+  TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
+  final TextEditingController _timeController = TextEditingController();
   String? _hour, _minute, _time;
-  Future<Null> selectTime(BuildContext context) async {
+  Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
@@ -52,7 +51,7 @@ class ScheduleController extends GetxController {
     if (picked != null) selectedTime = picked;
     _hour = selectedTime.hour.toString();
     _minute = selectedTime.minute.toString();
-    _time = _hour! + ' : ' + _minute!;
+    _time = '${_hour!} : ${_minute!}';
     _timeController.text = _time!;
     from.value.text = formatDate(
         DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
@@ -95,11 +94,11 @@ class ScheduleController extends GetxController {
   }
 
   static const _pageSize = 20;
-  final PagingController<int, AppointmentContent> todayPagingController =
+  PagingController<int, AppointmentContent> todayPagingController =
       PagingController(firstPageKey: 0);
-  final PagingController<int, AppointmentContent> upcomingPagingController =
+  PagingController<int, AppointmentContent> upcomingPagingController =
       PagingController(firstPageKey: 0);
-  final PagingController<int, AppointmentContent> completedPagingController =
+  PagingController<int, AppointmentContent> completedPagingController =
       PagingController(firstPageKey: 0);
 
   getformattedDate(String date) {

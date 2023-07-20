@@ -5,7 +5,7 @@ import '../core/utils/size_utils.dart';
 
 class CustomTextFormField extends StatefulWidget {
   CustomTextFormField(
-      {this.shape,
+      {super.key, this.shape,
       this.padding,
       this.variant,
       this.fontStyle,

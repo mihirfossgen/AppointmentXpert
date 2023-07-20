@@ -6,7 +6,7 @@ import '../custom_image_view.dart';
 // ignore: must_be_immutable
 class AppbarImage extends StatelessWidget implements PreferredSizeWidget {
   AppbarImage(
-      {required this.height,
+      {super.key, required this.height,
       required this.width,
       this.imagePath,
       this.svgPath,

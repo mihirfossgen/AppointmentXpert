@@ -97,8 +97,8 @@ class AddPatientController extends GetxController {
 
   String? numberValidator(String value) {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
       return 'Please enter mobile number';
     } else if (!regExp.hasMatch(value)) {
       return 'Please enter valid mobile number';
@@ -142,12 +142,12 @@ class AddPatientController extends GetxController {
 
   onSelectedGender(dynamic value) {
     selectedgender = value as SelectionPopupModel;
-    genderList.value.forEach((element) {
+    for (var element in genderList.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         element.isSelected = true;
       }
-    });
+    }
     genderList.refresh();
   }
 
@@ -191,7 +191,7 @@ class AddPatientController extends GetxController {
     return false;
   }
 
-  Map postRegisterResp = Map();
+  Map postRegisterResp = {};
   Future<void> callRegister(Map<String, dynamic> req) async {
     try {
       SignUpModel model = await Get.find<UserApi>().callRegister(
@@ -257,11 +257,11 @@ class AddPatientController extends GetxController {
       ));
       print("create api called for patient");
       Get.dialog(Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: AlertDialog(
             backgroundColor: Colors.transparent,
             contentPadding: EdgeInsets.zero,
-            insetPadding: EdgeInsets.only(left: 0),
+            insetPadding: const EdgeInsets.only(left: 0),
             content: Container(
                 //width: getHorizontalSize(327),
                 padding: getPadding(left: 24, top: 36, right: 24, bottom: 36),

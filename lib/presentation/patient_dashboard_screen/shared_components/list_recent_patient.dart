@@ -49,7 +49,7 @@ class ListRecentPatients extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GFListTile(
-        icon: Icon(Icons.arrow_right),
+        icon: const Icon(Icons.arrow_right),
         avatar: data.profilePicture != null
             ? CachedNetworkImage(
                 width: 80,
@@ -70,7 +70,7 @@ class ListRecentPatients extends StatelessWidget {
                   print(error);
                   return CustomImageView(
                     imagePath: !Responsive.isDesktop(Get.context!)
-                        ? 'assets' + '/images/default_profile.png'
+                        ? 'assets' '/images/default_profile.png'
                         : '/images/default_profile.png',
                   );
                 },
@@ -79,7 +79,7 @@ class ListRecentPatients extends StatelessWidget {
                 width: 80,
                 height: 80,
                 imagePath: !Responsive.isDesktop(Get.context!)
-                    ? 'assets' + '/images/default_profile.png'
+                    ? 'assets' '/images/default_profile.png'
                     : '/images/default_profile.png',
               ),
         //autofocus: true,
@@ -87,26 +87,26 @@ class ListRecentPatients extends StatelessWidget {
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Email: ${data.email.toString()}',
-              style: TextStyle(fontSize: 14, color: Colors.black),
+              style: const TextStyle(fontSize: 14, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Address: ${data.address}',
-              style: TextStyle(fontSize: 13, color: Colors.black),
+              style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Age: ${data.age}',
-              style: TextStyle(fontSize: 13, color: Colors.black),
+              style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
           ],
         ),
@@ -174,20 +174,20 @@ class ListRecentPatients extends StatelessWidget {
                 print(error);
                 return CustomImageView(
                   imagePath: !Responsive.isDesktop(Get.context!)
-                      ? 'assets' + '/images/default_profile.png'
+                      ? 'assets' '/images/default_profile.png'
                       : '/images/default_profile.png',
                 );
               },
             )
           : CustomImageView(
               imagePath: !Responsive.isDesktop(Get.context!)
-                  ? 'assets' + '/images/default_profile.png'
+                  ? 'assets' '/images/default_profile.png'
                   : '/images/default_profile.png',
             ),
       //_buildIcon(),
       title: Text(
-        '${data.firstName} ' + '${data.lastName}',
-        style: TextStyle(
+        '${data.firstName} ' '${data.lastName}',
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: Colors.black,
@@ -197,26 +197,26 @@ class ListRecentPatients extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             'Email: ${data.email.toString()}',
-            style: TextStyle(fontSize: 14, color: Colors.black),
+            style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             'Address: ${data.address}',
-            style: TextStyle(fontSize: 13, color: Colors.black),
+            style: const TextStyle(fontSize: 13, color: Colors.black),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
             'Age: ${data.age}',
-            style: TextStyle(fontSize: 13, color: Colors.black),
+            style: const TextStyle(fontSize: 13, color: Colors.black),
           ),
         ],
       ),
@@ -229,7 +229,7 @@ class ListRecentPatients extends StatelessWidget {
             size: 30,
             color: Colors.blue.shade600,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -285,7 +285,7 @@ class ListRecentPatients extends StatelessWidget {
 
   Widget _buildTitle() {
     return Text(
-      '${data.firstName} ' + '${data.lastName}',
+      '${data.firstName} ' '${data.lastName}',
       style: const TextStyle(fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -298,7 +298,7 @@ class ListRecentPatients extends StatelessWidget {
       edit = data.dob ?? '';
     }
     return Text(
-      data.address ?? '' + edit,
+      data.address ?? edit,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

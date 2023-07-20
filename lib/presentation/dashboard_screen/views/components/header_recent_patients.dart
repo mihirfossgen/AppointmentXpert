@@ -5,12 +5,12 @@ class _HeaderRecentPatients extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        const HeaderText("Recent Patients"),
-        const Spacer(),
+        HeaderText("Recent Patients"),
+        Spacer(),
         //_buildArchive(),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         //_buildAddNewButton(),
       ],
     );
@@ -37,8 +37,7 @@ class _HeaderRecentPatients extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
-        primary: Colors.grey[100],
-        onPrimary: Colors.grey[850],
+        foregroundColor: Colors.grey[850], backgroundColor: Colors.grey[100],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),

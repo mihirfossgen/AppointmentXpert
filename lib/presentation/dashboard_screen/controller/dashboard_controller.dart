@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:appointmentxpert/models/staff_list_model.dart';
-import 'package:appointmentxpert/models/temp_hold.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +41,7 @@ class DashboardController extends GetxController {
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  Map postAppointmentResp = Map();
+  Map postAppointmentResp = {};
 
   //final member = ["Avril Kimberly", "Michael Greg"];
 
@@ -88,10 +87,18 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
 
   static const _pageSize = 20;
-  final PagingController<int, Content> patientPagingController =
+  PagingController<int, Content> patientPagingController =
       PagingController(firstPageKey: 0);
 
-  var isloading = false.obs;
+  var isloadingPatientData = false.obs;
+  var isloadingPatientTodaysAppointments = false.obs;
+  var isloadingPatientUpcomingAppointments = false.obs;
+  var isloadingStaffData = false.obs;
+  var isloadingStaffTodayAppointments = false.obs;
+  var isloadingStaffUpcomingAppointments = false.obs;
+  var isloadingStaffList = false.obs;
+  var isloadingRecentPatients = false.obs;
+  var isloadingEmergancyPatients = false.obs;
 
   getformattedDate(String date) {
     final DateFormat formatter = DateFormat('dd/MM/yyyy');
@@ -106,24 +113,29 @@ class DashboardController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    print(role);
-    isloading.value = true;
     if (role == "PATIENT") {
       getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
+      callTodayAppointmentsByPatient();
+      getUpcomingAppointments(0, true);
     } else {
-      callDoctorsData(SharedPrefUtils.readPrefINt('employee_Id'));
+      patientPagingController = PagingController(firstPageKey: 0);
+      patientPagingController.itemList = [];
+      callStaffData(SharedPrefUtils.readPrefINt('employee_Id'));
+      callStaffTodayAppointments();
+      callStaffUpcomingAppointments();
       callStaffList(0);
+      callRecentPatientList(0);
       callEmergencyPatientList();
     }
   }
 
   Future<void> callRecentPatientList(int pageNo) async {
     try {
+      isloadingRecentPatients.value = true;
       var response = (await Get.find<PatientApi>().getAllPatientsList(pageNo));
-      print(response.content);
       //getAllPatientsList.value = response.content ?? [];
       PatientList patientListData = response;
-      patientPagingController.itemList = [];
+      //patientPagingController.itemList = [];
       final isLastPage = patientListData.totalElements! < _pageSize;
       if (isLastPage) {
         List<Content> list = patientListData.content ?? [];
@@ -134,52 +146,48 @@ class DashboardController extends GetxController {
         patientPagingController.appendPage(list, nextPageKey);
       }
       update();
-      //getUpcomingAppointments(0, true);
-      isloading(false);
-      //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
-      // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;
       rethrow;
     } finally {
-      isloading(false);
+      isloadingRecentPatients.value = false;
     }
   }
 
   Future<void> callEmergencyPatientList() async {
     try {
+      isloadingEmergancyPatients.value = true;
       var response =
           (await Get.find<AppointmentApi>().getEmergencyPatientsList());
       //print(response.content);
       getEmergencyPatientsList.value = response;
       //getUpcomingAppointments(0, true);
-      isloading(false);
       //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;
       rethrow;
     } finally {
-      isloading(false);
+      isloadingEmergancyPatients.value = false;
     }
   }
 
-  Future<void> callDoctorsData(int staffId) async {
+  Future<void> callStaffData(int staffId) async {
     try {
+      isloadingStaffData.value = true;
       var response = (await Get.find<StaffApi>().getstaffbyid(staffId));
-      print(response);
       staffData.value = response;
-      //callAppointmentsByStaffId(
-      //    SharedPrefUtils.readPrefINt('employee_Id'), true);
-      callReceiptionTodayAppointments();
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isloadingStaffData.value = false;
     }
   }
 
   Future<void> callStaffList(int pageNumber) async {
     try {
+      isloadingStaffList.value = true;
       StaffList response = (await Get.find<StaffApi>().staffList(pageNumber));
       print(response);
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
@@ -188,34 +196,34 @@ class DashboardController extends GetxController {
               'doctor_details', jsonEncode(response.content![i]));
         }
       }
-
-      callReceiptionTodayAppointments();
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isloadingStaffList.value = false;
     }
   }
 
-  Future<void> callAppointmentsByStaffId(int staffId, bool active) async {
-    try {
-      //isloading(true);
-      var response = (await Get.find<AppointmentApi>()
-          .getTodaysAppointmentsByExaminerId(staffId, active));
-      print(response);
-      staffTodaysData.value = response;
-      callRecentPatientList(0);
-      //isloading(false);
-      // _handleCreateLoginSuccess(loginModelObj);
-    } on Map {
-      //postLoginResp = e;
-      isloading(false);
-      rethrow;
-    }
-  }
+  // Future<void> callAppointmentsByStaffId(int staffId, bool active) async {
+  //   try {
+  //     //isloading(true);
+  //     var response = (await Get.find<AppointmentApi>()
+  //         .getTodaysAppointmentsByExaminerId(staffId, active));
+  //     print(response);
+  //     staffTodaysData.value = response;
 
-  Future<void> callAppointmentstodaybypatientid() async {
+  //     //isloading(false);
+  //     // _handleCreateLoginSuccess(loginModelObj);
+  //   } on Map {
+  //     //postLoginResp = e;
+  //     isloading(false);
+  //     rethrow;
+  //   }
+  // }
+
+  Future<void> callTodayAppointmentsByPatient() async {
     try {
-      //isloading(true);
+      isloadingPatientTodaysAppointments.value = true;
       var response = (await Get.find<AppointmentApi>().getTodaysAppointments(
           SharedPrefUtils.readPrefINt('patient_Id'), true));
       List<AppointmentContent> list = response;
@@ -226,45 +234,44 @@ class DashboardController extends GetxController {
               now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
           .toList();
       patientTodaysData.value = appointments;
-      getUpcomingAppointments(0, true);
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isloadingPatientTodaysAppointments.value = false;
     }
   }
 
-  Future<void> callReceiptionTodayAppointments() async {
+  Future<void> callStaffTodayAppointments() async {
     try {
+      isloadingStaffTodayAppointments.value = true;
       var response = (await Get.find<AppointmentApi>()
           .getAllReceiptionstTodayAppointment());
       List<AppointmentContent> list = response;
       //List<AppointmentContent> match = [];
-      var now = DateTime.now();
       List<AppointmentContent> appointments = list
           .where((i) =>
-              i.status?.toLowerCase() != 'completed' ||
-              now.isAfter(DateTime.parse(i.date!)))
+              i.status?.toLowerCase() != 'completed' &&
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
-
-      // list.any((element) {
-      //   if (element.status?.toLowerCase() != 'completed') {
-      //     print('Matched obj: ${element}');
-      //     match.add(element);
-      //     return true;
-      //   }
-      //   return false;
-      // });
       staffTodaysData.value = appointments;
-      callReceiptionUpcomingAppointments();
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isloadingStaffTodayAppointments.value = false;
     }
   }
 
-  Future<void> callReceiptionUpcomingAppointments() async {
+  dateFormat(String a) {
+    final DateFormat formatter = DateFormat('dd-MMM-yyyy');
+    return formatter.format(DateTime.parse(a));
+  }
+
+  Future<void> callStaffUpcomingAppointments() async {
     try {
+      isloadingStaffUpcomingAppointments.value = true;
       var response =
           (await Get.find<AppointmentApi>().getAllReceiptionstAppointment(0));
       List<AppointmentContent> list = response;
@@ -281,16 +288,17 @@ class DashboardController extends GetxController {
           )
           .toList();
       upComingAppointments.value = appointmentsUpcoming;
-      callRecentPatientList(0);
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isloadingStaffUpcomingAppointments.value = false;
     }
   }
 
   Future<void> getUpcomingAppointments(int pageIndex, bool isForPatient) async {
     try {
-      //isloading(true);
+      isloadingPatientUpcomingAppointments.value = true;
       if (isForPatient == true) {
         var patientId = SharedPrefUtils.readPrefINt('patient_Id');
         var response = (await Get.find<AppointmentApi>()
@@ -327,13 +335,11 @@ class DashboardController extends GetxController {
             .toList();
         upComingAppointments.value = appointmentsUpcoming;
       }
-
-      isloading(false);
     } on Map {
       //postLoginResp = e;
       rethrow;
     } finally {
-      isloading(false);
+      isloadingPatientUpcomingAppointments.value = false;
     }
   }
 
@@ -357,27 +363,16 @@ class DashboardController extends GetxController {
 
   Future<void> getPatientDetails(int id) async {
     try {
+      isloadingPatientData.value = true;
       patientData.value =
           (await Get.find<PatientApi>().getPatientDetails(headers: {
         'Content-type': 'application/json',
       }, id: id));
-      callAppointmentstodaybypatientid();
-      // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;
       rethrow;
-    }
-  }
-
-  Future<void> getEmergencyPatientDetails() async {
-    try {
-      getEmergencyPatientsList.value = (await Get.find<AppointmentApi>()
-          .getEmergencyPatientsList()) as List<EmergencyContent>;
-      callEmergencyPatientList();
-      // _handleCreateLoginSuccess(loginModelObj);
-    } on Map {
-      //postLoginResp = e;
-      rethrow;
+    } finally {
+      isloadingPatientData.value = false;
     }
   }
 

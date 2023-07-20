@@ -13,7 +13,7 @@ import '../../widgets/custom_image_view.dart';
 import 'controller/log_out_pop_up_controller.dart';
 
 class LogOutPopUpDialog extends StatelessWidget {
-  LogOutPopUpDialog(this.controller);
+  LogOutPopUpDialog(this.controller, {super.key});
 
   LogOutPopUpController controller;
 

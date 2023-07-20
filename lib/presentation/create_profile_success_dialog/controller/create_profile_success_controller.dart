@@ -6,13 +6,5 @@ class CreateProfileSuccessContoller extends GetxController {
   Rx<CreateprofileSuccessmodel> loginSuccessModelObj =
       CreateprofileSuccessmodel().obs;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

@@ -29,7 +29,7 @@ class EmergencyPatientList {
     if (json['content'] != null) {
       content = <EmergencyContent>[];
       json['content'].forEach((v) {
-        content!.add(new EmergencyContent.fromJson(v));
+        content!.add(EmergencyContent.fromJson(v));
       });
     }
   /*  pageable = json['pageable'] != null
@@ -47,9 +47,9 @@ class EmergencyPatientList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.content != null) {
-      data['content'] = this.content!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (content != null) {
+      data['content'] = content!.map((v) => v.toJson()).toList();
     }
     /*if (this.pageable != null) {
       data['pageable'] = this.pageable!.toJson();
@@ -103,14 +103,14 @@ class EmergencyContent {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['userId'] = this.userId;
-    data['patientName'] = this.patientName;
-    data['mobileNumber'] = this.mobileNumber;
-    data['emailId'] = this.emailId;
-    data['date'] = this.date;
-    data['patientType'] = this.patientType;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['userId'] = userId;
+    data['patientName'] = patientName;
+    data['mobileNumber'] = mobileNumber;
+    data['emailId'] = emailId;
+    data['date'] = date;
+    data['patientType'] = patientType;
     return data;
   }
 }
@@ -132,7 +132,7 @@ class Pageable {
         this.unpaged});
 
   Pageable.fromJson(Map<String, dynamic> json) {
-    sort = json['sort'] != null ? new Sort.fromJson(json['sort']) : null;
+    sort = json['sort'] != null ? Sort.fromJson(json['sort']) : null;
     offset = json['offset'];
     pageNumber = json['pageNumber'];
     pageSize = json['pageSize'];
@@ -141,15 +141,15 @@ class Pageable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.sort != null) {
-      data['sort'] = this.sort!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (sort != null) {
+      data['sort'] = sort!.toJson();
     }
-    data['offset'] = this.offset;
-    data['pageNumber'] = this.pageNumber;
-    data['pageSize'] = this.pageSize;
-    data['paged'] = this.paged;
-    data['unpaged'] = this.unpaged;
+    data['offset'] = offset;
+    data['pageNumber'] = pageNumber;
+    data['pageSize'] = pageSize;
+    data['paged'] = paged;
+    data['unpaged'] = unpaged;
     return data;
   }
 }
@@ -168,10 +168,10 @@ class Sort {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['sorted'] = this.sorted;
-    data['unsorted'] = this.unsorted;
-    data['empty'] = this.empty;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['sorted'] = sorted;
+    data['unsorted'] = unsorted;
+    data['empty'] = empty;
     return data;
   }
 }

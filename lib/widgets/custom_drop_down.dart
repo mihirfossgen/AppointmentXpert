@@ -6,7 +6,7 @@ import '../data/models/selectionPopupModel/selection_popup_model.dart';
 
 class CustomDropDown extends StatelessWidget {
   CustomDropDown(
-      {this.shape,
+      {super.key, this.shape,
       this.padding,
       this.variant,
       this.fontStyle,
@@ -109,18 +109,18 @@ class CustomDropDown extends StatelessWidget {
         child: Row(
           children: [
             Text(labelText ?? ""),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(3.0),
             ),
             isRequired != null
                 ? const Text('*', style: TextStyle(color: Colors.red))
-                : SizedBox(
+                : const SizedBox(
                     width: 0,
                   ),
           ],
         ),
       ),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
           color: Colors.black, fontWeight: FontWeight.w400, fontSize: 20),
       prefixIconConstraints: prefixConstraints,
       fillColor: _setFillColor(),

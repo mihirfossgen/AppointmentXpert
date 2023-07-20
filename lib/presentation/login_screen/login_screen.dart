@@ -27,6 +27,8 @@ import 'controller/login_controller.dart';
 class LoginScreen extends GetWidget<LoginController> {
   final _formKey = GlobalKey<FormState>();
 
+  LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -123,7 +125,7 @@ class LoginScreen extends GetWidget<LoginController> {
           Center(
             child: Image.asset(
               !Responsive.isDesktop(Get.context!)
-                  ? 'assets' + '/images/logo-opdxpert.png'
+                  ? 'assets' '/images/logo-opdxpert.png'
                   : '/images/logo-opdxpert.png',
               fit: BoxFit.contain,
               height: size.height * 0.2,
@@ -435,7 +437,7 @@ onTapLoginOne() {
   Get.dialog(AlertDialog(
     backgroundColor: Colors.transparent,
     contentPadding: EdgeInsets.zero,
-    insetPadding: EdgeInsets.only(left: 0),
+    insetPadding: const EdgeInsets.only(left: 0),
     content: LoginSuccessDialog(
       Get.put(
         LoginSuccessController(),

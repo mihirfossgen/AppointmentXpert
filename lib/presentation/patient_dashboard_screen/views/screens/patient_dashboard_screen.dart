@@ -226,7 +226,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
               padding: const EdgeInsets.all(kSpacing),
               child: Text(
                 "2023 Fossgentechnologies Pvt Ltd.",
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ],
@@ -277,9 +277,9 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                                             onPressed: () {
                                               Get.back();
                                             },
-                                            child: Text('Close'))
+                                            child: const Text('Close'))
                                       ],
-                                      title: Text('Book new appointment'),
+                                      title: const Text('Book new appointment'),
                                       content: SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width,
@@ -310,8 +310,8 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                           ),
                         ),
                       )
-                    : SizedBox()
-                : SizedBox(),
+                    : const SizedBox()
+                : const SizedBox(),
             const SizedBox(height: kSpacing),
             Obx(() => _welcomeWidget(
                 (controller.staffData.value.firstName ??
@@ -363,7 +363,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                                                     .patientTodaysData)
                                             : Container(
                                                 color: Colors.white,
-                                                padding: EdgeInsets.all(10),
+                                                padding: const EdgeInsets.all(10),
                                                 child: const Center(
                                                   child: Column(
                                                     crossAxisAlignment:
@@ -487,7 +487,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           child: Container(
-                            padding: EdgeInsets.fromLTRB(70, 50, 70, 50),
+                            padding: const EdgeInsets.fromLTRB(70, 50, 70, 50),
                             /*EdgeInsets.all(
                                 ResponsiveBuilder.isMobile(context) ? 70 : 40),*/
                             decoration: BoxDecoration(
@@ -577,7 +577,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                                                   : Container(
                                                       color: Colors.white,
                                                       padding:
-                                                          EdgeInsets.all(10),
+                                                          const EdgeInsets.all(10),
                                                       child: const Center(
                                                         child: Column(
                                                           crossAxisAlignment:
@@ -777,7 +777,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                 controller.patientData.value.patient)));
   }*/
 
-  Widget _buildChatPageContent({Function()? onPressedMenu}) {
+  Widget _buildChatPageContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
       child: SizedBox(
@@ -786,7 +786,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  Widget _buildProfilePageContent({Function()? onPressedMenu}) {
+  Widget _buildProfilePageContent() {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: kSpacing),
         child: SizedBox(
@@ -796,7 +796,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
         ));
   }
 
-  Widget _buildPatientsListPageContent({Function()? onPressedMenu}) {
+  Widget _buildPatientsListPageContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: Column(
@@ -821,7 +821,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
           //   ],
           // ),
           //const SizedBox(height: kSpacing),
-          Container(
+          SizedBox(
               width: MediaQuery.of(Get.context!).size.width,
               height: MediaQuery.of(Get.context!).size.height,
               //color: Colors.red,
@@ -920,11 +920,11 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                                   child: CircularProgressIndicator()),
                               errorWidget: (context, url, error) => Image.asset(
                                   !Responsive.isDesktop(Get.context!)
-                                      ? 'assets' + '/images/default_profile.png'
+                                      ? 'assets' '/images/default_profile.png'
                                       : '/images/default_profile.png'),
                             )
                           : Image.asset(!Responsive.isDesktop(Get.context!)
-                              ? 'assets' + '/images/default_profile.png'
+                              ? 'assets' '/images/default_profile.png'
                               : '/images/default_profile.png'),
                     ),
                     Column(
@@ -1012,11 +1012,11 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                                 child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) => Image.asset(
                                 !Responsive.isDesktop(Get.context!)
-                                    ? 'assets' + '/images/default_profile.png'
+                                    ? 'assets' '/images/default_profile.png'
                                     : '/images/default_profile.png'),
                           )
                         : Image.asset(!Responsive.isDesktop(Get.context!)
-                            ? 'assets' + '/images/default_profile.png'
+                            ? 'assets' '/images/default_profile.png'
                             : '/images/default_profile.png'),
                   ),
                   Padding(
@@ -1040,7 +1040,7 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                             ),
                             role == "PATIENT"
                                 ? Text(
-                                    "${firstName} ${lastName}",
+                                    "$firstName $lastName",
                                     maxLines: 2,
                                     style: TextStyle(
                                       fontSize: Responsive.isDesktop(context)
@@ -1053,8 +1053,8 @@ class PatientDashboardScreen extends GetView<DashboardController> {
                                 : Text(
                                     (SharedPrefUtils.readPrefStr('role') ==
                                             "DOCTOR")
-                                        ? 'Dr.' + "${firstName} ${lastName}"
-                                        : "${firstName} ${lastName}",
+                                        ? 'Dr.' "$firstName $lastName"
+                                        : "$firstName $lastName",
                                     maxLines: 2,
                                     style: TextStyle(
                                       fontSize: Responsive.isDesktop(context)
@@ -1178,7 +1178,7 @@ Widget _dailyNumbers(List<AppointmentContent> list) {
                                                 print(value);
                                               },
                                             activeColor: Colors.blue,)*/
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 30.0,
                                             )
                                           ]),
@@ -1255,7 +1255,7 @@ Widget _dailyNumbers(List<AppointmentContent> list) {
                                       ),
                                       radius: 10.0);
                                 },
-                                child: Text('Book Now')))
+                                child: const Text('Book Now')))
                       ])
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1314,7 +1314,7 @@ Widget _dailyNumbers(List<AppointmentContent> list) {
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: Color(0xff013f88)),
+                                  color: const Color(0xff013f88)),
                               child: const Icon(Icons.person_outline_outlined,
                                   size: 60, color: Colors.white),
                             ),

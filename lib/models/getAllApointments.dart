@@ -389,7 +389,7 @@ class ContentExaminer {
           status: json["status"],
           joinedDate: json["joinedDate"],
           terminatedDate: json["terminatedDate"],
-          profilePicture: json["profilePicture"]);
+          profilePicture: json["uploadedProfilePath"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -414,7 +414,7 @@ class ContentExaminer {
         "status": status,
         "joinedDate": joinedDate,
         "terminatedDate": terminatedDate,
-        "profilePicture": profilePicture
+        "uploadedProfilePath": profilePicture
       };
 }
 
@@ -555,7 +555,7 @@ class Patient {
         dateCreated: json["dateCreated"],
         visits: json["visits"],
         age: json["age"],
-        profilePicture: json["profilePicture"],
+        profilePicture: json["uploadedProfilePath"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -583,7 +583,7 @@ class Patient {
         "dateCreated": dateCreated,
         "visits": visits,
         "age": age,
-        "profilePicture": profilePicture,
+        "uploadedProfilePath": profilePicture,
       };
 }
 

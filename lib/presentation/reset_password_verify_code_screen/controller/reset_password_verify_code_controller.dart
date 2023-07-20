@@ -22,13 +22,5 @@ class ResetPasswordVerifyCodeController extends GetxController
     listenForCode();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

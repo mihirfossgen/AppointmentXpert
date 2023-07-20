@@ -12,6 +12,8 @@ import 'controller/reset_password_email_tab_container_controller.dart';
 
 class ResetPasswordEmailTabContainerScreen
     extends GetWidget<ResetPasswordEmailTabContainerController> {
+  const ResetPasswordEmailTabContainerScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,7 +30,7 @@ class ResetPasswordEmailTabContainerScreen
                       onTap: () {
                         Get.back();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Colors.black,
                       ),
@@ -42,7 +44,7 @@ class ResetPasswordEmailTabContainerScreen
   }
 
   Widget getBody(double width) {
-    return Container(
+    return SizedBox(
         width: width,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Align(
@@ -88,7 +90,7 @@ class ResetPasswordEmailTabContainerScreen
                             color: ColorConstant.black9000c,
                             spreadRadius: getHorizontalSize(2),
                             blurRadius: getHorizontalSize(2),
-                            offset: Offset(0, 0))
+                            offset: const Offset(0, 0))
                       ]),
                   tabs: [
                     Tab(
@@ -98,7 +100,7 @@ class ResetPasswordEmailTabContainerScreen
                         child: Text("lbl_phone".tr,
                             overflow: TextOverflow.ellipsis))
                   ])),
-          Container(
+          SizedBox(
               height: getVerticalSize(525),
               child: TabBarView(
                   controller: controller.tabController,

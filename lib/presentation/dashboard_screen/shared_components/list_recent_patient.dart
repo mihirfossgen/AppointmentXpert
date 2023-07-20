@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/image_constant.dart';
 import '../../../models/patient_list_model.dart';
-import '../../../models/patient_model.dart';
 import '../../../network/endpoints.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../widgets/custom_image_view.dart';
@@ -75,7 +74,7 @@ class ListRecentPatients extends StatelessWidget {
                   print(error);
                   return CustomImageView(
                     imagePath: !Responsive.isDesktop(Get.context!)
-                        ? 'assets' + '/images/default_profile.png'
+                        ? 'assets' '/images/default_profile.png'
                         : '/images/default_profile.png',
                   );
                 },
@@ -84,7 +83,7 @@ class ListRecentPatients extends StatelessWidget {
                 width: 60,
                 height: 60,
                 imagePath: !Responsive.isDesktop(Get.context!)
-                    ? 'assets' + '/images/default_profile.png'
+                    ? 'assets' '/images/default_profile.png'
                     : '/images/default_profile.png',
               ),
         //autofocus: true,
@@ -219,22 +218,21 @@ class ListRecentPatients extends StatelessWidget {
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   CircularProgressIndicator(value: downloadProgress.progress),
               errorWidget: (context, url, error) {
-                print(error);
                 return CustomImageView(
                   imagePath: !Responsive.isDesktop(Get.context!)
-                      ? 'assets' + '/images/default_profile.png'
+                      ? 'assets' '/images/default_profile.png'
                       : '/images/default_profile.png',
                 );
               },
             )
           : CustomImageView(
               imagePath: !Responsive.isDesktop(Get.context!)
-                  ? 'assets' + '/images/default_profile.png'
+                  ? 'assets' '/images/default_profile.png'
                   : '/images/default_profile.png',
             ),
       //_buildIcon(),
       title: Text(
-        '${data.firstName} ' + '${data.lastName}',
+        '${data.prefix}' '${data.firstName} ' '${data.lastName}',
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -333,7 +331,7 @@ class ListRecentPatients extends StatelessWidget {
 
   Widget _buildTitle() {
     return Text(
-      '${data.firstName} ' + '${data.lastName}',
+      '${data.prefix} ' '${data.firstName} ' '${data.lastName}',
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -346,7 +344,7 @@ class ListRecentPatients extends StatelessWidget {
       edit = data.dob ?? '';
     }
     return Text(
-      data.address ?? '' + edit,
+      data.address ?? edit,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

@@ -17,12 +17,14 @@ import '../sign_up_success_dialog/sign_up_success_dialog.dart';
 import 'controller/app_navigation_controller.dart';
 
 class AppNavigationScreen extends GetWidget<AppNavigationController> {
+  const AppNavigationScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
             backgroundColor: ColorConstant.whiteA700,
-            body: Container(
+            body: SizedBox(
                 width: double.maxFinite,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1261,7 +1263,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: LoginSuccessDialog(
         Get.put(
           LoginSuccessController(),
@@ -1280,7 +1282,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: SignUpSuccessDialog(
         Get.put(
           SignUpSuccessController(),
@@ -1311,7 +1313,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: CreateNewPasswordSuccessDialog(
         Get.put(
           CreateNewPasswordSuccessController(),
@@ -1402,7 +1404,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: LogOutPopUpDialog(
         Get.put(
           LogOutPopUpController(),

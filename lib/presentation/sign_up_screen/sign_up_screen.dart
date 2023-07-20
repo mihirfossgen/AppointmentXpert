@@ -29,6 +29,8 @@ class SignUpScreen extends GetWidget<SignUpController> {
     {"id": 10, "name": "Nurse"}
   ];
 
+  SignUpScreen({super.key});
+
   getStringValue(String text) {
     switch (text.toLowerCase()) {
       case "admin":
@@ -92,7 +94,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                 onTap: () {
                                   onTapArrowleft1();
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   Icons.arrow_back,
                                   color: Colors.black,
                                 ),
@@ -137,7 +139,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
             quarterTurns: 0,
             child: Image.asset(
               !Responsive.isDesktop(Get.context!)
-                  ? 'assets' + '/images/bannerbg.png'
+                  ? 'assets' '/images/bannerbg.png'
                   : '/images/bannerbg.png',
               fit: BoxFit.contain,
               // height: size.height * 0.2,
@@ -177,7 +179,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
               : Center(
                   child: Image.asset(
                     !Responsive.isDesktop(Get.context!)
-                        ? 'assets' + '/images/logo-opdxpert.png'
+                        ? 'assets' '/images/logo-opdxpert.png'
                         : '/images/logo-opdxpert.png',
                     fit: BoxFit.contain,
                     width: 300,
@@ -411,7 +413,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: SignUpSuccessDialog(
         Get.put(
           SignUpSuccessController(),

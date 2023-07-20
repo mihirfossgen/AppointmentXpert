@@ -15,6 +15,8 @@ import '../create_new_password_success_dialog/create_new_password_success_dialog
 import 'controller/create_new_password_controller.dart';
 
 class CreateNewPasswordScreen extends GetWidget<CreateNewPasswordController> {
+  const CreateNewPasswordScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,7 +34,7 @@ class CreateNewPasswordScreen extends GetWidget<CreateNewPasswordController> {
                       onTap: () {
                         Get.back();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Colors.black,
                       ),
@@ -66,7 +68,9 @@ class CreateNewPasswordScreen extends GetWidget<CreateNewPasswordController> {
                         textInputAction: TextInputAction.done,
                         isRequired: true,
                         textInputType: TextInputType.emailAddress,
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         padding: TextFormFieldPadding.PaddingT14,
                         prefixConstraints:
                             BoxConstraints(maxHeight: getVerticalSize(56)),
@@ -80,7 +84,9 @@ class CreateNewPasswordScreen extends GetWidget<CreateNewPasswordController> {
                           textInputAction: TextInputAction.done,
                           textInputType: TextInputType.visiblePassword,
                           isRequired: true,
-                          validator: (value) {},
+                          validator: (value) {
+                            return null;
+                          },
                           padding: TextFormFieldPadding.PaddingT14,
                           prefixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56)),
@@ -122,7 +128,7 @@ class CreateNewPasswordScreen extends GetWidget<CreateNewPasswordController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: CreateNewPasswordSuccessDialog(
         Get.put(
           CreateNewPasswordSuccessController(),

@@ -24,6 +24,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
   final String tab;
   SchedulePage(this.tab, {super.key});
 
+  @override
   ScheduleController controller = Get.put(ScheduleController());
 
   @override
@@ -31,117 +32,36 @@ class SchedulePage extends GetWidget<ScheduleController> {
     return SizedBox(
       width: double.maxFinite,
       height: MediaQuery.of(context).size.height,
-      child:
-          // controller.isloading.value
-          //     ? const SizedBox(child: Center(child: CircularProgressIndicator()))
-          //:
-          SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SharedPrefUtils.readPrefStr('role') != "PATIENT"
-                ? Obx(() => Padding(
-                      padding: getPadding(left: 0, top: 12, right: 0),
-                      child: SizedBox(
-                        //height: 600,
-                        child: Responsive.isMobile(context)
-                            ? controller.isloading.value
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : RefreshIndicator(
-                                    onRefresh: () async {
-                                      controller.isloading.value = true;
-                                      controller.callGetAllAppointments(0, 20);
-                                      Future.sync(
-                                        () => tab.toLowerCase() == 'today'
-                                            ? controller.todayPagingController
-                                                .refresh()
-                                            : tab.toLowerCase() == 'upcoming'
-                                                ? controller
-                                                    .upcomingPagingController
-                                                    .refresh()
-                                                : controller
-                                                    .completedPagingController
-                                                    .refresh(),
-                                      );
-                                    },
-                                    child: PagedListView<int,
-                                        AppointmentContent>.separated(
-                                      shrinkWrap: true,
-                                      pagingController: tab.toLowerCase() ==
-                                              'today'
-                                          ? controller.todayPagingController
-                                          : tab.toLowerCase() == 'upcoming'
-                                              ? controller
-                                                  .upcomingPagingController
-                                              : controller
-                                                  .completedPagingController,
-                                      builderDelegate:
-                                          PagedChildBuilderDelegate<
-                                              AppointmentContent>(
-                                        animateTransitions: true,
-                                        itemBuilder: (context, item, index) =>
-                                            ScheduleItemWidget(
-                                                item,
-                                                item.patient?.id ?? 0,
-                                                item.examiner?.id ?? 0,
-                                                tab),
-                                        // firstPageErrorIndicatorBuilder: (_) =>
-                                        //     FirstPageErrorIndicator(
-                                        //   error: _pagingController.error,
-                                        //   onTryAgain: () =>
-                                        //       _pagingController.refresh(),
-                                        // ),
-                                        // newPageErrorIndicatorBuilder: (_) =>
-                                        //     NewPageErrorIndicator(
-                                        //   error: _pagingController.error,
-                                        //   onTryAgain: () => _pagingController
-                                        //       .retryLastFailedRequest(),
-                                        // ),
-                                        // firstPageProgressIndicatorBuilder: (_) =>
-                                        //     FirstPageProgressIndicator(),
-                                        // newPageProgressIndicatorBuilder: (_) =>
-                                        //     NewPageProgressIndicator(),
-                                        noItemsFoundIndicatorBuilder: (_) =>
-                                            const Text(
-                                                'No appointments found.'),
-                                        noMoreItemsIndicatorBuilder: (_) =>
-                                            const Text(
-                                          'No more appointments.',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      separatorBuilder: (context, index) =>
-                                          const Divider(),
-                                    ),
-                                  )
-                            //loadStaffAppointmentList()
-                            : loadStaffAppointmentsDataTable(),
-                      ),
-                    ))
-                : Obx(() => Padding(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SharedPrefUtils.readPrefStr('role') != "PATIENT"
+              ? Obx(() => Padding(
                     padding: getPadding(left: 0, top: 12, right: 0),
                     child: SizedBox(
-                      height: 600,
+                      //height: 600,
                       child: Responsive.isMobile(context)
                           ? controller.isloading.value
                               ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
                               : RefreshIndicator(
-                                  onRefresh: () => Future.sync(
-                                    () => tab.toLowerCase() == 'today'
-                                        ? controller.todayPagingController
-                                            .refresh()
-                                        : tab.toLowerCase() == 'upcoming'
-                                            ? controller
-                                                .upcomingPagingController
-                                                .refresh()
-                                            : controller
-                                                .completedPagingController
-                                                .refresh(),
-                                  ),
+                                  onRefresh: () async {
+                                    controller.isloading.value = true;
+                                    controller.callGetAllAppointments(0, 20);
+                                    Future.sync(
+                                      () => tab.toLowerCase() == 'today'
+                                          ? controller.todayPagingController
+                                              .refresh()
+                                          : tab.toLowerCase() == 'upcoming'
+                                              ? controller
+                                                  .upcomingPagingController
+                                                  .refresh()
+                                              : controller
+                                                  .completedPagingController
+                                                  .refresh(),
+                                    );
+                                  },
                                   child: PagedListView<int,
                                       AppointmentContent>.separated(
                                     shrinkWrap: true,
@@ -156,28 +76,97 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     builderDelegate: PagedChildBuilderDelegate<
                                         AppointmentContent>(
                                       animateTransitions: true,
-                                      // noMoreItemsIndicatorBuilder: (context) {
-                                      //   return loadEmptyWidget();
-                                      // },
-                                      // noItemsFoundIndicatorBuilder: (context) {
-                                      //   return loadEmptyWidget();
-                                      // },
                                       itemBuilder: (context, item, index) =>
                                           ScheduleItemWidget(
                                               item,
                                               item.patient?.id ?? 0,
                                               item.examiner?.id ?? 0,
                                               tab),
+                                      // firstPageErrorIndicatorBuilder: (_) =>
+                                      //     FirstPageErrorIndicator(
+                                      //   error: _pagingController.error,
+                                      //   onTryAgain: () =>
+                                      //       _pagingController.refresh(),
+                                      // ),
+                                      // newPageErrorIndicatorBuilder: (_) =>
+                                      //     NewPageErrorIndicator(
+                                      //   error: _pagingController.error,
+                                      //   onTryAgain: () => _pagingController
+                                      //       .retryLastFailedRequest(),
+                                      // ),
+                                      // firstPageProgressIndicatorBuilder: (_) =>
+                                      //     FirstPageProgressIndicator(),
+                                      // newPageProgressIndicatorBuilder: (_) =>
+                                      //     NewPageProgressIndicator(),
+                                      noItemsFoundIndicatorBuilder: (_) =>
+                                          const Text('No appointments found.'),
+                                      noMoreItemsIndicatorBuilder: (_) =>
+                                          const Text(
+                                        'No more appointments.',
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                     separatorBuilder: (context, index) =>
                                         const Divider(),
                                   ),
                                 )
-                          //loadPatientAppointmentsList()
-                          : loadPatientAppointmentsDataTable(),
-                    )))
-          ],
-        ),
+                          //loadStaffAppointmentList()
+                          : loadStaffAppointmentsDataTable(),
+                    ),
+                  ))
+              : Obx(() => Padding(
+                  padding: getPadding(left: 0, top: 12, right: 0),
+                  child: SizedBox(
+                    height: 600,
+                    child: Responsive.isMobile(context)
+                        ? controller.isloading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : RefreshIndicator(
+                                onRefresh: () => Future.sync(
+                                  () => tab.toLowerCase() == 'today'
+                                      ? controller.todayPagingController
+                                          .refresh()
+                                      : tab.toLowerCase() == 'upcoming'
+                                          ? controller.upcomingPagingController
+                                              .refresh()
+                                          : controller.completedPagingController
+                                              .refresh(),
+                                ),
+                                child: PagedListView<int,
+                                    AppointmentContent>.separated(
+                                  shrinkWrap: true,
+                                  pagingController: tab.toLowerCase() == 'today'
+                                      ? controller.todayPagingController
+                                      : tab.toLowerCase() == 'upcoming'
+                                          ? controller.upcomingPagingController
+                                          : controller
+                                              .completedPagingController,
+                                  builderDelegate: PagedChildBuilderDelegate<
+                                      AppointmentContent>(
+                                    animateTransitions: true,
+                                    // noMoreItemsIndicatorBuilder: (context) {
+                                    //   return loadEmptyWidget();
+                                    // },
+                                    // noItemsFoundIndicatorBuilder: (context) {
+                                    //   return loadEmptyWidget();
+                                    // },
+                                    itemBuilder: (context, item, index) =>
+                                        ScheduleItemWidget(
+                                            item,
+                                            item.patient?.id ?? 0,
+                                            item.examiner?.id ?? 0,
+                                            tab),
+                                  ),
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(),
+                                ),
+                              )
+                        //loadPatientAppointmentsList()
+                        : loadPatientAppointmentsDataTable(),
+                  )))
+        ],
       ),
     );
   }
@@ -445,8 +434,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                           return CustomImageView(
                                             imagePath: !Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' +
-                                                    '/images/default_profile.png'
+                                                ? 'assets' '/images/default_profile.png'
                                                 : '/images/default_profile.png',
                                           );
                                         },
@@ -457,8 +445,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                         fit: BoxFit.contain,
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
+                                            ? 'assets' '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       ),
                                 const SizedBox(
@@ -666,8 +653,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                       return CustomImageView(
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
+                                            ? 'assets' '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       );
                                     },
@@ -678,8 +664,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     fit: BoxFit.contain,
                                     imagePath:
                                         !Responsive.isDesktop(Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
+                                            ? 'assets' '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                   ),
                             const SizedBox(
@@ -975,7 +960,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                   print(error);
                   return CustomImageView(
                     imagePath: !Responsive.isDesktop(Get.context!)
-                        ? 'assets' + '/images/default_profile.png'
+                        ? 'assets' '/images/default_profile.png'
                         : '/images/default_profile.png',
                   );
                 },
@@ -985,7 +970,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                 height: 80,
                 fit: BoxFit.contain,
                 imagePath: !Responsive.isDesktop(Get.context!)
-                    ? 'assets' + '/images/default_profile.png'
+                    ? 'assets' '/images/default_profile.png'
                     : '/images/default_profile.png',
               ),
         //autofocus: true,

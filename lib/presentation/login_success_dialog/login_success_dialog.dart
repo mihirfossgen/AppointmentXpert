@@ -13,7 +13,7 @@ import 'controller/login_success_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class LoginSuccessDialog extends StatelessWidget {
-  LoginSuccessDialog(this.controller);
+  LoginSuccessDialog(this.controller, {super.key});
 
   LoginSuccessController controller;
 

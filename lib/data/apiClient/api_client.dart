@@ -11,7 +11,7 @@ class ApiClient extends GetConnect {
   @override
   void onInit() {
     super.onInit();
-    httpClient.timeout = Duration(seconds: 60);
+    httpClient.timeout = const Duration(seconds: 60);
   }
 
   ///method can be used for checking internet connection
@@ -62,7 +62,7 @@ class ApiClient extends GetConnect {
     try {
       await isNetworkConnected();
       Response response = await httpClient.post(
-        '${Endpoints.login}',
+        Endpoints.login,
         headers: headers,
         body: requestData,
       );
@@ -94,7 +94,7 @@ class ApiClient extends GetConnect {
     try {
       await isNetworkConnected();
       Response response = await httpClient.post(
-        '${Endpoints.register}',
+        Endpoints.register,
         headers: headers,
         body: requestData,
       );
