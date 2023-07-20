@@ -3,16 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../core/app_export.dart';
+import '../../core/utils/color_constant.dart';
+import '../../core/utils/size_utils.dart';
+import '../../models/patient_list_model.dart';
 import '../../models/patient_model.dart';
 import '../../models/staff_model.dart';
 import '../../network/endpoints.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/responsive.dart';
+import '../dashboard_screen/shared_components/responsive_builder.dart';
+import '../dashboard_screen/views/screens/dashboard_screen.dart';
 import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
 import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
 
 class PatientDetailsPage extends StatefulWidget {
-  final PatientData? patientData;
+
+  Content patientData;
+  //int? id;
+
   PatientDetailsPage(this.patientData);
 
   @override
@@ -20,440 +29,74 @@ class PatientDetailsPage extends StatefulWidget {
 }
 
 class _PatientDetailsPageState extends State<PatientDetailsPage> {
-  final PatientData? patientData;
+
+  Content patientData;
+  //int? id;
   _PatientDetailsPageState(this.patientData);
 
   @override
   void initState() {
     super.initState();
+
   }
 
-  Widget patientProfile() {
+  /*Widget getBody(
+      Size size, BuildContext context) {
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Scaffold(
+        appBar: ResponsiveBuilder.isDesktop(context)
+            ? null
+            : AppbarImage(
+          backgroundColor: ColorConstant.whiteA70001,
+          height: 70,
+          width: width,
+          leading: IconButton(
+              onPressed: () {
+                //controller.onClose();
+                Get.back();
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              )),
+          imagePath: 'assets/images/login-logo.png',
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+              width: double.maxFinite,
+              padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
+              child: ResponsiveBuilder.isMobile(Get.context!)
+                  ? mobileUi(context)
+                  : webUi(context))
+        ),
+      ),
+    );
+  }*/
+
+  Widget patientDetails() {
     return SizedBox(
       child: ListView.builder(
           itemCount: 1,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            return patientCard(
-                firstName: patientData?.patient?.firstName,
-                lastName: patientData?.patient?.lastName,
-                prefix: patientData?.patient?.prefix ?? '',
-                imagePath: patientData?.patient?.profilePicture,
-                address: patientData?.patient?.address,
-                age: patientData?.patient?.age.toString(),
-                email: patientData?.patient?.email,
-                mobile: patientData?.patient?.mobile,
-                profile: patientData?.patient?.profilePicture);
+            return patientDetailsCard(
+                firstName: patientData?.firstName,
+                lastName: patientData?.lastName,
+                prefix: patientData?.prefix ?? '',
+                imagePath: patientData?.profilePicture,
+                address: patientData?.address,
+                age: patientData?.age.toString(),
+                email: patientData?.email,
+                mobile: patientData?.mobile,
+                profile: patientData?.profilePicture);
           }),
     );
   }
 
-  Widget doctorCard({
-    String? firstName,
-    String? lastName,
-    String? prefix,
-    String? specialty,
-    String? imagePath,
-    double? rank,
-    String? medicalEducation,
-    String? residency,
-    String? internship,
-    String? fellowship,
-    String? address,
-    String? profile,
-  }) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 1.0,
-      alignment: Alignment.center, // where to position the child
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(
-              top: 45.0,
-            ),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 20.0,
-                  offset: Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  //transform: Matrix4.translationValues(0.0, -16.0, 0.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 15.0,
-                                  offset: Offset(0, 0),
-                                ),
-                              ],
-                            ),
-                            transform:
-                            Matrix4.translationValues(0.0, -15.0, 0.0),
-                            child: CircleAvatar(
-                              radius: 70,
-                              child: ClipOval(
-                                  child:
-                                  // imagePath != null
-                                  //     ?
-                                  profile != null
-                                      ? CachedNetworkImage(
-                                    imageUrl: imagePath ?? '',
-                                    imageBuilder:
-                                        (context, imageProvider) =>
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                    placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                    errorWidget: (context, url,
-                                        error) =>
-                                        Image.asset(!Responsive
-                                            .isDesktop(
-                                            Get.context!)
-                                            ? 'assets' +
-                                            '/images/default_profile.png'
-                                            : '/images/default_profile.png'),
-                                  )
-                                      : Image.asset(!Responsive.isDesktop(
-                                      Get.context!)
-                                      ? 'assets' +
-                                      '/images/default_profile.png'
-                                      : '/images/default_profile.png')
-                                // : CustomImageView(
-                                //     imagePath: !Responsive.isDesktop(
-                                //             Get.context!)
-                                //         ? 'assets' +
-                                //             '/images/default_profile.png'
-                                //         : '/images/default_profile.png',
-                                //   ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(
-                    top: 15.0,
-                    bottom: 5.0,
-                  ),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${prefix ?? ''} $firstName $lastName',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Color(0xFF6f6f6f),
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: TextButton(
-                          // color: Colors.transparent,
-                          // splashColor: Colors.black26,
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           CategoryPage(specialty)),
-                            // );
-                          },
-                          child: Text(
-                            specialty ?? "specialty not found",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: RatingBar.builder(
-                      initialRating: rank ?? 0.0,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      unratedColor: Colors.amber.withAlpha(50),
-                      itemCount: 5,
-                      itemSize: 30.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          //_rating = rating;
-                        });
-                      },
-                      updateOnDrag: true,
-                    ),
-                  ),
-                ),
-                address != null
-                    ? sectionTitle(context, "Address")
-                    : Container(),
-                address != null
-                    ? Container(
-                  margin: const EdgeInsets.only(
-                    left: 20.0,
-                    right: 20.0,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      address,
-                      style: const TextStyle(
-                        color: Color(0xFF9f9f9f),
-                      ),
-                    ),
-                  ),
-                )
-                    : Container(),
-                sectionTitle(context, "Physician History"),
-                Container(
-                  margin: const EdgeInsets.only(
-                    left: 20.0,
-                    right: 20.0,
-                  ),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              (medicalEducation != null)
-                                  ? SizedBox(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'MEDICAL EDUCATION',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Color(0xFF6f6f6f),
-                                      ),
-                                    ),
-                                    Text(
-                                      medicalEducation,
-                                      style: const TextStyle(
-                                        color: Color(0xFF9f9f9f),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                                  : Container(),
-                              (internship != null)
-                                  ? Container(
-                                margin: const EdgeInsets.only(
-                                  top: 20.0,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'INTERNSHIP',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Color(0xFF6f6f6f),
-                                      ),
-                                    ),
-                                    Text(
-                                      internship,
-                                      style: const TextStyle(
-                                        color: Color(0xFF9f9f9f),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                                  : Container(),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              (residency != null)
-                                  ? SizedBox(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'RESIDENCY',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Color(0xFF6f6f6f),
-                                      ),
-                                    ),
-                                    Text(
-                                      residency,
-                                      style: const TextStyle(
-                                        color: Color(0xFF9f9f9f),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                                  : Container(),
-                              (fellowship != null)
-                                  ? Container(
-                                margin: const EdgeInsets.only(
-                                  top: 20.0,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'FELLOWSHIP',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Color(0xFF6f6f6f),
-                                      ),
-                                    ),
-                                    Text(
-                                      fellowship,
-                                      style: const TextStyle(
-                                        color: Color(0xFF9f9f9f),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                                  : Container(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                sectionTitle(context, "Office Gallery"),
-                SizedBox(
-                  height: 150,
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      officePhotos(context, "https://i.imgur.com/gKdDh8p.jpg"),
-                      officePhotos(context, "https://i.imgur.com/bJ6gU02.jpg"),
-                      officePhotos(context, "https://i.imgur.com/ZJZIrIB.jpg"),
-                      officePhotos(context, "https://i.imgur.com/pTAuS44.jpg"),
-                      officePhotos(context, "https://i.imgur.com/eY1lW0A.jpg"),
-                    ],
-                  ),
-                ),
-                // sectionTitle(context, "Appointments"),
-                // Container(
-                //   margin: const EdgeInsets.only(
-                //     bottom: 15.0,
-                //   ),
-                //   height: 60,
-                //   child: ListView(
-                //     padding: EdgeInsets.zero,
-                //     scrollDirection: Axis.horizontal,
-                //     children: <Widget>[
-                //       appointmentDays("Monday", "June 15th", context),
-                //       appointmentDays("Tuesday", "June 19th`", context),
-                //       appointmentDays("Wednesday", "July 24th", context),
-                //       appointmentDays("Thursday", "July 12th", context),
-                //       appointmentDays("Friday", "July 13th", context),
-                //       appointmentDays("Saturday", "August 7th", context),
-                //       appointmentDays("Sunday", "August 9th", context),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   margin: const EdgeInsets.only(
-                //     bottom: 15.0,
-                //   ),
-                //   height: 50,
-                //   child: ListView(
-                //     padding: EdgeInsets.zero,
-                //     scrollDirection: Axis.horizontal,
-                //     children: <Widget>[
-                //       appointmentTimes("9:00 AM", context),
-                //       appointmentTimes("9:30 AM", context),
-                //       appointmentTimes("10:00 AM", context),
-                //       appointmentTimes("10:30 AM", context),
-                //       appointmentTimes("11:00 AM", context),
-                //     ],
-                //   ),
-                // ),
-                const SizedBox(height: 50),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget patientCard({
+  Widget patientDetailsCard({
     String? firstName,
     String? lastName,
     String? prefix,
@@ -470,13 +113,15 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(
-              top: 45.0,
+            margin: const EdgeInsets.all(
+              20.0,
             ),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
               ),
               color: Colors.white,
               boxShadow: [
@@ -619,7 +264,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                     ],
                   ),
                 ),
-                sectionTitle(context, "Basic information"),
+                sectionTitle(context, "Patient information"),
                 Container(
                   margin: const EdgeInsets.only(
                     left: 20.0,
@@ -650,7 +295,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      patientData?.patient?.age.toString() ??
+                                      patientData?.age.toString() ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
@@ -676,7 +321,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      patientData?.patient?.sex.toString() ??
+                                      patientData?.sex.toString() ??
                                           '',
                                       style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
@@ -707,7 +352,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      patientData?.patient?.email ?? '',
+                                      patientData?.email ?? '',
                                       style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
@@ -732,7 +377,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      patientData?.patient?.mobile ?? '',
+                                      patientData?.mobile ?? '',
                                       style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
@@ -759,133 +404,33 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: ResponsiveBuilder.isDesktop(context)
+          ? null
+          : AppbarImage(
+        backgroundColor: ColorConstant.whiteA70001,
+        height: 70,
+        width: width,
+        leading: IconButton(
+            onPressed: () {
+              //controller.onClose();
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            )),
+        imagePath: 'assets/images/login-logo.png',
+      ),
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width * 1.0,
           alignment: Alignment.center, // where to position the child
           child: Column(
             children: [
-              patientProfile(),
+              patientDetails(),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-Material appointmentDays(
-    String appointmentDay, String appointmentDate, context) {
-  return Material(
-    color: Colors.white,
-    child: Container(
-      margin: const EdgeInsets.only(
-        right: 1.0,
-        left: 20.0,
-        top: 5.0,
-        bottom: 5.0,
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            Text(
-              appointmentDay,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              appointmentDate,
-              style: const TextStyle(fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Material appointmentTimes(String appointmentDay, context) {
-  return Material(
-    color: Colors.white,
-    child: Container(
-      margin: const EdgeInsets.only(
-        right: 1.0,
-        left: 20.0,
-        top: 5.0,
-        bottom: 5.0,
-      ),
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          appointmentDay,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget officePhotos(context, String officePhotoUrl) {
-  return Container(
-    margin: const EdgeInsets.only(
-      left: 20.0,
-    ),
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-    ),
-    child: Material(
-      child: Ink(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(officePhotoUrl),
-          ),
-        ),
-        child: InkWell(
-          onTap: () async {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => ImageGallery(officePhotoUrl)),
-            // );
-          },
-          child: Container(
-            width: 150.0,
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-class SimpleDialogItem extends StatelessWidget {
-  const SimpleDialogItem(
-      {Key? key,
-        required this.icon,
-        required this.color,
-        required this.text,
-        required this.onPressed})
-      : super(key: key);
-
-  final IconData icon;
-  final Color color;
-  final String text;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialogOption(
-      onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 36.0, color: color),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 16.0),
-            child: Text(text),
-          ),
-        ],
       ),
     );
   }

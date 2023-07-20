@@ -41,6 +41,28 @@ class PatientApi {
       rethrow;
     }
   }
+
+  /*Future<PatientData> getPatientAllDetails(
+      {Map<String, String> headers = const {}, int? id}) async {
+    //ProgressDialogUtils.showProgressDialog();
+    try {
+      //await isNetworkConnected();
+      final Response response = await _apiService.get(
+        Endpoints.getPatientById + id.toString(),
+      );
+      //ProgressDialogUtils.hideProgressDialog();
+      PatientData model = PatientData.fromJson(response.data);
+      return model;
+    } catch (error, stackTrace) {
+      //ProgressDialogUtils.hideProgressDialog();
+      Logger.log(
+        error,
+        stackTrace: stackTrace,
+      );
+
+      rethrow;
+    }
+  }*/
 }
 
 final patientProvider = Provider<PatientApi>((ref) => PatientApi());
