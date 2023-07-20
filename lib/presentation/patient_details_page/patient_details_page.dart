@@ -78,9 +78,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
       child: Column(
         children: [
           Container(
-            margin: const EdgeInsets.all(
-              20.0,
-            ),
+            margin: const EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
