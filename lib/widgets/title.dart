@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Titles extends StatelessWidget {
   final String value;
   final bool impReq;
-  Titles(this.value, this.impReq);
+  const Titles(this.value, this.impReq, {super.key});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,7 +15,7 @@ class Titles extends StatelessWidget {
             style: const TextStyle(color: Colors.grey, fontSize: 16),
           ),
           impReq
-              ? Text(
+              ? const Text(
                   " *",
                   style: TextStyle(color: Colors.red),
                 )

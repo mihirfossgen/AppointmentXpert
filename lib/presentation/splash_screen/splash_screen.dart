@@ -7,6 +7,8 @@ import '../../widgets/custom_image_view.dart';
 import 'controller/splash_controller.dart';
 
 class SplashScreen extends GetWidget<SplashController> {
+  const SplashScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -14,7 +16,7 @@ class SplashScreen extends GetWidget<SplashController> {
         bottom: false,
         child: Scaffold(
             //backgroundColor: ColorConstant.blue700,
-            body: Container(
+            body: SizedBox(
                 width: double.maxFinite,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

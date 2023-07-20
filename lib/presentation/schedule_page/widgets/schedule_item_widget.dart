@@ -1,7 +1,9 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/app_export.dart';
 import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
@@ -118,6 +120,7 @@ class ScheduleItemWidget extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
+                    '${appointment.patient?.prefix.toString()}'
                     '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
                     style: AppStyle.txtInterSemiBold14,
                   ),
@@ -178,26 +181,92 @@ class ScheduleItemWidget extends StatelessWidget {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // InkWell(
-              //   onTap: () {
-              //     // Call accept appointment
-              //   },
-              //   child: Container(
-              //     padding: EdgeInsets.all(15),
-              //     decoration: AppDecoration.txtFillGray10002.copyWith(
-              //       borderRadius: BorderRadiusStyle.txtRoundedBorder8,
-              //     ),
-              //     child: Text(
-              //       'Accecpt',
-              //       overflow: TextOverflow.ellipsis,
-              //       textAlign: TextAlign.center,
-              //       style: AppStyle.txtRalewayRomanSemiBold14Gray700,
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(
-              //   width: 10,
-              // ),
+              InkWell(
+                onTap: () {
+                  // Call accept appointment
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    showDialog(
+                      context: Get.context!,
+                      builder: (context) => AlertDialog(
+                        title: const Text(
+                            'Are you sure appointment is completed?'),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  var data = {
+                                    "active": false,
+                                    "id": appointment.id,
+                                    "date": appointment.date,
+                                    "examinerId": examninerId,
+                                    "note": appointment.note,
+                                    "patientId": patientId,
+                                    "purpose": appointment.purpose,
+                                    "status": "Completed"
+                                  };
+                                  controller.updateAppointment(data);
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      color: ColorConstant.blue700,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Yes',
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: AppStyle
+                                        .txtRalewayRomanRegular14WhiteA700,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      color: ColorConstant.blue700,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'No',
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: AppStyle
+                                        .txtRalewayRomanRegular14WhiteA700,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: AppDecoration.txtFillGray10002.copyWith(
+                    borderRadius: BorderRadiusStyle.txtRoundedBorder8,
+                  ),
+                  child: Text(
+                    'Complete',
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: AppStyle.txtRalewayRomanSemiBold14Gray700,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               InkWell(
                 onTap: () {
                   // Call cancel appointment

@@ -312,8 +312,4 @@ class DashboardController extends GetxController {
     return 'Good Evening, ';
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

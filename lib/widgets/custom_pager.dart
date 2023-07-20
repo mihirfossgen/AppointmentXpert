@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class PageNumber extends StatefulWidget {
   const PageNumber({
-    Key? key,
+    super.key,
     required PaginatorController controller,
   }) : _controller = controller;
 
@@ -47,7 +47,7 @@ class PageNumberState extends State<PageNumber> {
 }
 
 class CustomPager extends StatefulWidget {
-  const CustomPager(this.controller, {Key? key});
+  const CustomPager(this.controller, {super.key});
 
   final PaginatorController controller;
 

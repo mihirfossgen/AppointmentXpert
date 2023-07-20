@@ -37,7 +37,7 @@ class StaffApi {
   Future<StaffData> getstaffbyid(int value) async {
     try {
       final Response response =
-          await _apiService.get(Endpoints.getStaffById + "$value");
+          await _apiService.get("${Endpoints.getStaffById}$value");
       return StaffData.fromJson(response.data);
     } on DioError catch (e) {
       print("e -- $e");

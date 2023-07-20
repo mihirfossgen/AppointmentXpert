@@ -26,14 +26,16 @@ import '../dashboard_screen/shared_components/responsive_builder.dart';
 import 'controller/create_profile_controller.dart';
 
 class CreateProfileScreen extends GetWidget<CreateProfileController> {
-  CreateStaff _staffModel = CreateStaff();
-  CreatepatientModel _model = CreatepatientModel();
+  final CreateStaff _staffModel = CreateStaff();
+  final CreatepatientModel _model = CreatepatientModel();
 
   List<String>? deptname;
   late ImageSource sourcee;
   //late GetAllClinic _getAllClinic;
   String? finalDob;
   String fileName = "";
+
+  CreateProfileScreen({super.key});
 
   // storingPatientOrEmployeeId(int id) async {
   //   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -122,7 +124,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
               labelText: "Prefix",
               icon: Container(
                   margin: getMargin(left: 30, right: 16),
-                  child: Icon(Icons.arrow_drop_down)),
+                  child: const Icon(Icons.arrow_drop_down)),
               margin: getMargin(top: 12),
               variant: DropDownVariant.GreyOutline,
               fontStyle: DropDownFontStyle.ManropeMedium14Bluegray500,
@@ -228,7 +230,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           child: CustomDropDown(
               icon: Container(
                   margin: getMargin(left: 30, right: 16),
-                  child: Icon(Icons.arrow_drop_down)),
+                  child: const Icon(Icons.arrow_drop_down)),
               hintText: 'Gender',
               margin: getMargin(top: 12),
               variant: DropDownVariant.GreyOutline,
@@ -244,7 +246,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           child: CustomDropDown(
               icon: Container(
                   margin: getMargin(left: 30, right: 16),
-                  child: Icon(Icons.arrow_drop_down)),
+                  child: const Icon(Icons.arrow_drop_down)),
               hintText: 'Job Type',
               margin: getMargin(top: 12),
               variant: DropDownVariant.GreyOutline,
@@ -276,7 +278,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   Widget patientUI(Size size, BuildContext context) {
     return Form(
         key: controller.formKey,
-        child: size.width > 600
+        child: Responsive.isMobile(context) || Responsive.isTablet(context)
             ? SizedBox(
                 width: size.width,
                 child: Column(
@@ -291,8 +293,8 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: Text("Basic Informations",
                                   style: TextStyle(
                                       fontSize: 18,
@@ -336,7 +338,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                                     .camera);
                                                           }
                                                         }),
-                                                        values: [],
+                                                        values: const [],
                                                       );
                                                     });
                                           },
@@ -351,7 +353,8 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                     () => controller
                                                                 .selectedImage ==
                                                             ""
-                                                        ? Icon(Icons.person)
+                                                        ? const Icon(
+                                                            Icons.person)
                                                         : Responsive.isDesktop(
                                                                 context)
                                                             ? Image.network(
@@ -385,7 +388,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                 decoration: BoxDecoration(
                                                     color: Colors.grey.shade100,
                                                     shape: BoxShape.circle),
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.camera_alt_outlined,
                                                   color: Colors.grey,
                                                 )))
@@ -399,7 +402,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 ),
                                 Column(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: size.width * 0.30,
                                       child: Row(
                                         // mainAxisAlignment:
@@ -455,7 +458,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                     SizedBox(
                                       height: size.height * 0.02,
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width: size.width * 0.30,
                                       child: Row(
                                         children: [
@@ -490,7 +493,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                       textInputType:
                                                           TextInputType
                                                               .emailAddress,
-                                                      suffix: Icon(
+                                                      suffix: const Icon(
                                                           Icons.calendar_month),
                                                       prefixConstraints:
                                                           BoxConstraints(
@@ -516,7 +519,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                   icon: Container(
                                                       margin: getMargin(
                                                           left: 15, right: 5),
-                                                      child: Icon(Icons
+                                                      child: const Icon(Icons
                                                           .arrow_drop_down)),
                                                   items: controller
                                                       .genderList.value,
@@ -550,8 +553,8 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: Text("Contact Informations",
                                   style: TextStyle(
                                       fontSize: 18,
@@ -576,7 +579,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             ),
                             Align(
                               alignment: Alignment.center,
-                              child: Container(
+                              child: SizedBox(
                                 width: size.width * 0.72,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -623,7 +626,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             ),
                             Align(
                               alignment: Alignment.center,
-                              child: Container(
+                              child: SizedBox(
                                 width: size.width * 0.72,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -688,8 +691,8 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(20, 20, 0, 20),
                               child: Text("Basic Informations",
                                   style: TextStyle(
                                       fontSize: 18,
@@ -722,7 +725,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                       ImageSource.camera);
                                                 }
                                               }),
-                                              values: [],
+                                              values: const [],
                                             );
                                           });
                                     },
@@ -736,7 +739,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                             child: Obx(
                                               () =>
                                                   controller.selectedImage == ""
-                                                      ? Icon(Icons.person)
+                                                      ? const Icon(Icons.person)
                                                       : Image.file(
                                                           File(controller
                                                               .imageFileList![0]
@@ -755,10 +758,10 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       child: Container(
                                           height: 40,
                                           width: 60,
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                               color: Colors.grey,
                                               shape: BoxShape.circle),
-                                          child: Icon(
+                                          child: const Icon(
                                             Icons.camera_alt_outlined,
                                             color: Colors.white,
                                           )))
@@ -871,7 +874,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   },
                                   icon: Container(
                                       margin: getMargin(left: 30, right: 16),
-                                      child: Icon(Icons.arrow_drop_down)),
+                                      child: const Icon(Icons.arrow_drop_down)),
                                   items: controller.genderList.value,
                                   onChanged: (value) {
                                     controller.gender = value.title;
@@ -894,8 +897,8 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(20, 20, 0, 20),
                           child: Text("Contact Informations",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w500)),
@@ -1018,7 +1021,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             onPressed: () {
                               onTapArrowleft();
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.arrow_back,
                               color: Colors.black,
                             ))
@@ -1058,7 +1061,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             quarterTurns: 0,
             child: Image.asset(
               !Responsive.isDesktop(Get.context!)
-                  ? 'assets' + '/images/bannerbg.png'
+                  ? 'assets' '/images/bannerbg.png'
                   : '/images/bannerbg.png',
               fit: BoxFit.contain,
               // height: size.height * 0.2,
@@ -1126,7 +1129,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           "email": controller.email.text,
           "fatherName": controller.fathername.text,
           "firstName": controller.firstname.text,
-          "id": 0,
+          //"id": 0,
           "lastName": controller.lastname.text,
           "mobile": controller.mobile.text,
           "motherName": controller.motherName.text,
@@ -1185,7 +1188,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
     Get.dialog(AlertDialog(
       backgroundColor: Colors.transparent,
       contentPadding: EdgeInsets.zero,
-      insetPadding: EdgeInsets.only(left: 0),
+      insetPadding: const EdgeInsets.only(left: 0),
       content: CreateProfileSuccessDialog(
         Get.put(
           CreateProfileSuccessContoller(),
@@ -1200,7 +1203,7 @@ class Bottomsheet extends StatefulWidget {
   final selectedvalue;
   final widgetName;
   final Function(String) onchanged;
-  Bottomsheet(
+  const Bottomsheet(
       {Key? key,
       this.widgetName,
       required this.values,
@@ -1254,7 +1257,7 @@ class _BottomsheetState extends State<Bottomsheet> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 )
               ],
@@ -1282,7 +1285,7 @@ class _BottomsheetState extends State<Bottomsheet> {
                                     BorderSide(color: Colors.grey.shade300))),
                         padding:
                             const EdgeInsets.only(left: 10, right: 10, top: 5),
-                        child: Text("Select Gallery")),
+                        child: const Text("Select Gallery")),
                   ),
                   InkWell(
                     onTap: () {
@@ -1297,7 +1300,7 @@ class _BottomsheetState extends State<Bottomsheet> {
                         alignment: Alignment.center,
                         padding:
                             const EdgeInsets.only(left: 10, right: 10, top: 5),
-                        child: Text("Select Camera")),
+                        child: const Text("Select Camera")),
                   )
                 ],
               ),

@@ -1,16 +1,16 @@
 class Endpoints {
   Endpoints._();
 
-  static const String baseURL = 'http://192.168.0.106:7070/';
+  static const String baseURL = 'http://172.20.10.6:7070/';
 
   static const int receiveTimeout = 5000;
 
   static const int connectionTimeout = 3000;
 
   static const String signIn = '/generate-token';
-  static const String register = baseURL + 'authenticate/signup';
-  static const String login = baseURL + "authenticate/signin?";
-  static const String forgotpassword = baseURL + "authenticate/forgotPassword?";
+  static const String register = '${baseURL}authenticate/signup';
+  static const String login = "${baseURL}authenticate/signin?";
+  static const String forgotpassword = "${baseURL}authenticate/forgotPassword?";
   static const String getUser = '/user/getUser';
   static const String deleteUser = '/user/deleteUser';
   static const String getPatientsList = 'patient/list';
@@ -30,9 +30,9 @@ class Endpoints {
   static const String uploadPatientPhoto = 'patient/uploadPhoto/';
   static const String downLoadEmployePhoto = "staff/profilePhoto/";
   static const String downLoadPatientPhoto = "patient/profilePhoto/";
-  static const String createPatientCase = baseURL + 'patientCases/create';
-  static const String createAppointment = baseURL + 'appointment/create';
-  static const String updateAppointment = baseURL + "appointment/update";
+  static const String createPatientCase = '${baseURL}patientCases/create';
+  static const String createAppointment = '${baseURL}appointment/create';
+  static const String updateAppointment = "${baseURL}appointment/update";
   static const String getAllDept = "department/getAll";
   static const String getAllClinic = "clinic/getAll";
   static const String patientVisitAdd = "patientVisit/add";
@@ -50,12 +50,12 @@ class Endpoints {
   static const String verifyOtp = "otp/verifyOtp?";
   static const String generatePrecription = "report/patientReport/?";
   static const String generateInvoice = "report/patientInvoice/?";
-  static const String getServices = baseURL + 'service/list';
-  static const String visitUpdate = baseURL + 'patientVisit/update';
+  static const String getServices = '${baseURL}service/list';
+  static const String visitUpdate = '${baseURL}patientVisit/update';
   static const String examinationUpdate =
-      baseURL + 'examination/updateDiagnosis';
+      '${baseURL}examination/updateDiagnosis';
   static const String addEmergencyAppointment =
-      baseURL + 'emergencyAppointment/create';
+      '${baseURL}emergencyAppointment/create';
   static const String emergencyPatientList =
-      baseURL + 'emergencyAppointment/today';
+      '${baseURL}emergencyAppointment/today';
 }

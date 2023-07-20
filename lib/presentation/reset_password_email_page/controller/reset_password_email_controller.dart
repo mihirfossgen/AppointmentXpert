@@ -10,10 +10,6 @@ class ResetPasswordEmailController extends GetxController {
 
   Rx<ResetPasswordEmailModel> resetPasswordEmailModelObj;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {

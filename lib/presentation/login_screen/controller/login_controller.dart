@@ -4,9 +4,6 @@ import 'package:get/get.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
 import '../../../network/api/verify_otp.dart';
-import '../../../routes/app_routes.dart';
-import '../../../shared_prefrences_page/shared_prefrence_page.dart';
-import '../../create_profile/controller/create_profile_controller.dart';
 import '../models/login_model.dart';
 
 class LoginController extends GetxController {
@@ -29,10 +26,6 @@ class LoginController extends GetxController {
     isShowPassword.value = !isShowPassword.value;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -67,8 +60,8 @@ class LoginController extends GetxController {
 
   String? numberValidator(String value) {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
       return 'Please enter mobile number';
     } else if (!regExp.hasMatch(value)) {
       return 'Please enter valid mobile number';

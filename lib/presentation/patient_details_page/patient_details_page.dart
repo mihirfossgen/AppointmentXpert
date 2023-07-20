@@ -4,16 +4,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../core/app_export.dart';
 import '../../models/patient_model.dart';
-import '../../models/staff_model.dart';
 import '../../network/endpoints.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../widgets/responsive.dart';
-import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
-import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
 
 class PatientDetailsPage extends StatefulWidget {
   final PatientData? patientData;
-  PatientDetailsPage(this.patientData);
+  const PatientDetailsPage(this.patientData, {super.key});
 
   @override
   _PatientDetailsPageState createState() => _PatientDetailsPageState(patientData);
@@ -137,14 +134,12 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                         Image.asset(!Responsive
                                             .isDesktop(
                                             Get.context!)
-                                            ? 'assets' +
-                                            '/images/default_profile.png'
+                                            ? 'assets' '/images/default_profile.png'
                                             : '/images/default_profile.png'),
                                   )
                                       : Image.asset(!Responsive.isDesktop(
                                       Get.context!)
-                                      ? 'assets' +
-                                      '/images/default_profile.png'
+                                      ? 'assets' '/images/default_profile.png'
                                       : '/images/default_profile.png')
                                 // : CustomImageView(
                                 //     imagePath: !Responsive.isDesktop(
@@ -550,14 +545,12 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                           Image.asset(!Responsive
                                               .isDesktop(
                                               Get.context!)
-                                              ? 'assets' +
-                                              '/images/default_profile.png'
+                                              ? 'assets' '/images/default_profile.png'
                                               : '/images/default_profile.png'),
                                     )
                                         : Image.asset(!Responsive.isDesktop(
                                         Get.context!)
-                                        ? 'assets' +
-                                        '/images/default_profile.png'
+                                        ? 'assets' '/images/default_profile.png'
                                         : '/images/default_profile.png')
                                   // : CustomImageView(
                                   //     imagePath: !Responsive.isDesktop(

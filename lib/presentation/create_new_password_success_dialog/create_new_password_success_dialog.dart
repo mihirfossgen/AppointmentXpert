@@ -13,7 +13,7 @@ import 'controller/create_new_password_success_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class CreateNewPasswordSuccessDialog extends StatelessWidget {
-  CreateNewPasswordSuccessDialog(this.controller);
+  CreateNewPasswordSuccessDialog(this.controller, {super.key});
 
   CreateNewPasswordSuccessController controller;
 

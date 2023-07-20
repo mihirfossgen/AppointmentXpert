@@ -6,13 +6,5 @@ class CreateNewPasswordSuccessController extends GetxController {
   Rx<CreateNewPasswordSuccessModel> createNewPasswordSuccessModelObj =
       CreateNewPasswordSuccessModel().obs;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

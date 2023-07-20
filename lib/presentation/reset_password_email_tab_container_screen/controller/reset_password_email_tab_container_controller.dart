@@ -12,13 +12,5 @@ class ResetPasswordEmailTabContainerController extends GetxController
   late TabController tabController =
       Get.put(TabController(vsync: this, length: 2));
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

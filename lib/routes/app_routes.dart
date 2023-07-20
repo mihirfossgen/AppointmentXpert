@@ -102,7 +102,7 @@ class AppRoutes {
   static List<GetPage> pages = [
     GetPage(
       name: splashScreen,
-      page: () => SplashScreen(),
+      page: () => const SplashScreen(),
       bindings: [
         SplashBinding(),
       ],
@@ -123,28 +123,28 @@ class AppRoutes {
     ),
     GetPage(
       name: resetPasswordEmailTabContainerScreen,
-      page: () => ResetPasswordEmailTabContainerScreen(),
+      page: () => const ResetPasswordEmailTabContainerScreen(),
       bindings: [
         ResetPasswordEmailTabContainerBinding(),
       ],
     ),
     GetPage(
       name: resetPasswordVerifyCodeScreen,
-      page: () => ResetPasswordVerifyCodeScreen(),
+      page: () => const ResetPasswordVerifyCodeScreen(),
       bindings: [
         ResetPasswordVerifyCodeBinding(),
       ],
     ),
     GetPage(
       name: createNewPasswordScreen,
-      page: () => CreateNewPasswordScreen(),
+      page: () => const CreateNewPasswordScreen(),
       bindings: [
         CreateNewPasswordBinding(),
       ],
     ),
     GetPage(
       name: dashboardScreen,
-      page: () => DashboardScreen(),
+      page: () => const DashboardScreen(),
       bindings: [
         DasboardMainBinding(),
       ],
@@ -156,7 +156,7 @@ class AppRoutes {
     ),
     GetPage(
       name: initialRoute,
-      page: () => SplashScreen(),
+      page: () => const SplashScreen(),
       bindings: [
         SplashBinding(),
       ],

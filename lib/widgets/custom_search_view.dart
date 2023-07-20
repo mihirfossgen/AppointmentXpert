@@ -5,7 +5,7 @@ import '../core/utils/size_utils.dart';
 
 class CustomSearchView extends StatelessWidget {
   CustomSearchView(
-      {this.shape,
+      {super.key, this.shape,
       this.padding,
       this.variant,
       this.fontStyle,

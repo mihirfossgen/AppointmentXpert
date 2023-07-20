@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ProfileItemWidget extends StatelessWidget {
-  ProfileItemWidget(this.profileItemModelObj);
+  ProfileItemWidget(this.profileItemModelObj, {super.key});
 
   ProfileItemModel profileItemModelObj;
 

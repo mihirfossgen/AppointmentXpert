@@ -73,8 +73,8 @@ class DataSource extends DataTableSource {
       this.hasRowTaps = false,
       this.hasRowHeightOverrides = false,
       this.hasZebraStripes = false]) {
-    this.contents;
-    this.scheduleController;
+    contents;
+    scheduleController;
     if (sortedByDate) {
       sort((d) => d.dateCreated ?? '', true);
     }

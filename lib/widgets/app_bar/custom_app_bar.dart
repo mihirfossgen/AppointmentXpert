@@ -6,7 +6,7 @@ import '../../core/utils/size_utils.dart';
 // ignore: must_be_immutable
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar(
-      {required this.height,
+      {super.key, required this.height,
       this.styleType,
       this.leadingWidth,
       this.leading,
@@ -77,7 +77,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 blurRadius: getHorizontalSize(
                   2,
                 ),
-                offset: Offset(
+                offset: const Offset(
                   0,
                   10,
                 ),

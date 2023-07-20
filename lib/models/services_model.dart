@@ -16,19 +16,19 @@ class ServicesModel {
     if (json['packages'] != null) {
       packages = <Packages>[];
       json['packages'].forEach((v) {
-        packages!.add(new Packages.fromJson(v));
+        packages!.add(Packages.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['category'] = this.category;
-    if (this.packages != null) {
-      data['packages'] = this.packages!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['description'] = description;
+    data['category'] = category;
+    if (packages != null) {
+      data['packages'] = packages!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -60,13 +60,13 @@ class Packages {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['packageName'] = this.packageName;
-    data['serviceId'] = this.serviceId;
-    data['serviceName'] = this.serviceName;
-    data['price'] = this.price;
-    data['active'] = this.active;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['packageName'] = packageName;
+    data['serviceId'] = serviceId;
+    data['serviceName'] = serviceName;
+    data['price'] = price;
+    data['active'] = active;
     return data;
   }
 }

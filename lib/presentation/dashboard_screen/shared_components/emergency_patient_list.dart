@@ -1,8 +1,5 @@
 import 'package:appointmentxpert/models/emergency_patient_list.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:empty_widget/empty_widget.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
@@ -10,12 +7,8 @@ import 'package:intl/intl.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/image_constant.dart';
-import '../../../network/endpoints.dart';
-import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/responsive.dart';
-import '../../appointment_booking_screen/appointment_booking.dart';
-import '../views/screens/dashboard_screen.dart';
 
 class ListEmergencyPatientData {
   final String patientName;
@@ -31,7 +24,6 @@ class ListEmergencyPatientData {
     this.date,
     this.patientType,
   );
-
 }
 
 class ListEmergencyPatients extends StatelessWidget {
@@ -61,65 +53,70 @@ class ListEmergencyPatients extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-
-            Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children:[
-                  const Text(
-                    'Email: ',
-                    style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${data.emailId.toString()}',
-                    style: const TextStyle(fontSize: 13, color: Colors.black),
-                  ),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'Email: ',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                data.emailId.toString(),
+                style: const TextStyle(fontSize: 13, color: Colors.black),
+              ),
             ]),
             const SizedBox(
               height: 5,
             ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-            const Text(
-              'Mobile no.: ',
-              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${data.mobileNumber}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
-            ),
-          ]),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'Mobile no.: ',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${data.mobileNumber}',
+                style: const TextStyle(fontSize: 13, color: Colors.black),
+              ),
+            ]),
             const SizedBox(
               height: 5,
             ),
-
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-            const Text(
-              'Date: ',
-              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${dateFormatter(data.date.toString())}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
-            ),
-          ]),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'Date: ',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                dateFormatter(data.date.toString()),
+                style: const TextStyle(fontSize: 13, color: Colors.black),
+              ),
+            ]),
             const SizedBox(
               height: 5,
             ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-            const Text(
-              'Patient Type: ',
-              style: TextStyle(fontSize: 13, color: Colors.black,fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${data.patientType}',
-              style: const TextStyle(fontSize: 13, color: Colors.blueAccent,fontWeight: FontWeight.bold),
-            ),
-          ]),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'Patient Type: ',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${data.patientType}',
+                style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.bold),
+              ),
+            ]),
           ],
         ),
         enabled: true,
@@ -168,7 +165,7 @@ class ListEmergencyPatients extends StatelessWidget {
       ),
       leading: CustomImageView(
         imagePath: !Responsive.isDesktop(Get.context!)
-            ? 'assets' + '/images/default_profile.png'
+            ? 'assets' '/images/default_profile.png'
             : '/images/default_profile.png',
       ),
       //_buildIcon(),
@@ -204,7 +201,8 @@ class ListEmergencyPatients extends StatelessWidget {
           Text(
             'Date: ${data.date}',
             style: const TextStyle(fontSize: 13, color: Colors.black),
-          ),const SizedBox(
+          ),
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -299,5 +297,4 @@ class ListEmergencyPatients extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
     );
   }
-
 }

@@ -18,6 +18,7 @@ import 'controller/add_patient_controller.dart';
 class AddPatientScreen extends GetWidget<AddPatientController> {
   AddPatientScreen({super.key});
 
+  @override
   AddPatientController controller = Get.put(AddPatientController());
   UserApi userApi = Get.put(UserApi());
   getDate() {
@@ -338,7 +339,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                             fontStyle:
                                 ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                             onTap: () async {
-                              bool a = await controller.trySubmit();
+                              bool a = controller.trySubmit();
                               if (a) {
                                 Map<String, dynamic> requestData = {
                                   "email": controller.email.text,
@@ -359,7 +360,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
   Widget webOrTabUi() {
     return Form(
       key: controller.formKey,
-      child: Container(
+      child: SizedBox(
         width: double.maxFinite,
         child: Card(
           elevation: 4,
@@ -685,7 +686,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                     margin: getMargin(left: 0, right: 10),
                     fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                     onTap: () async {
-                      bool a = await controller.trySubmit();
+                      bool a = controller.trySubmit();
                     }),
               ),
               SizedBox(
@@ -696,7 +697,6 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
         ),
       ),
     );
-    ;
   }
 
   @override

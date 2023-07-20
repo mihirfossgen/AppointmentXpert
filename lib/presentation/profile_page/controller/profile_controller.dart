@@ -1,5 +1,4 @@
 import 'package:appointmentxpert/network/api/staff_api.dart';
-import 'package:appointmentxpert/theme/app_style.dart';
 import 'package:appointmentxpert/widgets/custom_button.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
@@ -62,8 +61,4 @@ class ProfileController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 }

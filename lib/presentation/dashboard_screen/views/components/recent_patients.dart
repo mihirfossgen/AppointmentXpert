@@ -128,8 +128,7 @@ class _RecentPatients extends StatelessWidget {
                                           return CustomImageView(
                                             imagePath: !Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' +
-                                                    '/images/default_profile.png'
+                                                ? 'assets' '/images/default_profile.png'
                                                 : '/images/default_profile.png',
                                           );
                                         },
@@ -140,17 +139,17 @@ class _RecentPatients extends StatelessWidget {
                                         fit: BoxFit.contain,
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' +
-                                                '/images/default_profile.png'
+                                            ? 'assets' '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Flexible(
                                   child: Text(
-                                    '${data[index].firstName} ' +
-                                        '${data[index].lastName}',
+                                    '${data[index].prefix}'
+                                    '${data[index].firstName} '
+                                    '${data[index].lastName}',
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 )
@@ -167,7 +166,7 @@ class _RecentPatients extends StatelessWidget {
                             onTap: () {}),
                         //DataCell(Text(
                         //    formatter.format(DateTime.parse('${data[index].date}')))),
-                        DataCell(Row(
+                        const DataCell(Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

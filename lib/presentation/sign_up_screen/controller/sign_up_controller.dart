@@ -15,7 +15,7 @@ class SignUpController extends GetxController {
 
   OtpModel? getOtp;
 
-  Map postRegisterResp = Map();
+  Map postRegisterResp = {};
 
   Rx<bool> isShowPassword = true.obs;
 
@@ -52,10 +52,6 @@ class SignUpController extends GetxController {
     )
   ]);
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -104,8 +100,8 @@ class SignUpController extends GetxController {
 
   String? numberValidator(String value) {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
       return 'Please enter mobile number';
     } else if (!regExp.hasMatch(value)) {
       return 'Please enter valid mobile number';
@@ -132,12 +128,12 @@ class SignUpController extends GetxController {
 
   onSelected(dynamic value) {
     selectedDropDownValue = value as SelectionPopupModel;
-    dropdownItemList.value.forEach((element) {
+    for (var element in dropdownItemList.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         element.isSelected = true;
       }
-    });
+    }
     dropdownItemList.refresh();
   }
 

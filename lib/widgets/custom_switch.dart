@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomSwitch extends StatelessWidget {
   CustomSwitch(
-      {this.alignment,
+      {super.key, this.alignment,
       this.margin,
       this.width,
       this.value,

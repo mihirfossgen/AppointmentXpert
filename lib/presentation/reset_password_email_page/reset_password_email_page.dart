@@ -11,6 +11,8 @@ class ResetPasswordEmailPage extends StatelessWidget {
   ResetPasswordEmailController controller =
       Get.put(ResetPasswordEmailController(ResetPasswordEmailModel().obs));
 
+  ResetPasswordEmailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,7 +40,9 @@ class ResetPasswordEmailPage extends StatelessWidget {
                         textInputAction: TextInputAction.done,
                         isRequired: true,
                         textInputType: TextInputType.emailAddress,
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         padding: TextFormFieldPadding.PaddingT14,
                         prefixConstraints:
                             BoxConstraints(maxHeight: getVerticalSize(56)),

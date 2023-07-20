@@ -13,7 +13,7 @@ import 'controller/booking_doctor_success_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class BookingDoctorSuccessDialog extends StatelessWidget {
-  BookingDoctorSuccessDialog(this.controller);
+  BookingDoctorSuccessDialog(this.controller, {super.key});
 
   BookingDoctorSuccessController controller;
 
@@ -47,22 +47,22 @@ class BookingDoctorSuccessDialog extends StatelessWidget {
                             radius: BorderRadius.circular(getHorizontalSize(3)),
                             alignment: Alignment.center)
                       ]))),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text('Appointment booked',
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: AppStyle.txtRalewayRomanBold20),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Container(
+              SizedBox(
                   child: Text('See all appointments to know status.',
                       maxLines: null,
                       textAlign: TextAlign.center,
                       style: AppStyle.txtRalewayRomanRegular16)),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               CustomButton(

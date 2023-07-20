@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ChipviewgroupthirtysixItemWidget extends StatelessWidget {
-  ChipviewgroupthirtysixItemWidget(this.chipviewgroupthirtysixItemModelObj);
+  ChipviewgroupthirtysixItemWidget(this.chipviewgroupthirtysixItemModelObj, {super.key});
 
   ChipviewgroupthirtysixItemModel chipviewgroupthirtysixItemModelObj;
 

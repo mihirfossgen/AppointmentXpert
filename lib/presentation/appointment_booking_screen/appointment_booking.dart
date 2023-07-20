@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:appointmentxpert/models/patient_list_model.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +28,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       {super.key, this.doctorDetailsArguments, this.patientDetailsArguments});
   DoctorDetailsArguments? doctorDetailsArguments;
   PatientDetailsArguments? patientDetailsArguments;
+  @override
   DoctorDetailController controller = Get.put(DoctorDetailController());
   Contents? content;
   Map<String, dynamic>? a;
@@ -44,8 +44,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
     TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 30);
     Duration step = const Duration(minutes: 30);
     TimeOfDay selectedTime = const TimeOfDay(hour: 12, minute: 00);
-    TextEditingController _timeController = TextEditingController();
-    String _hour, _minute, _time;
+    TextEditingController timeController = TextEditingController();
+    String hour, minute, time;
     controller.times = controller
         .getTimes(startTime, endTime, step)
         .map((tod) => tod.format(context))
@@ -132,7 +132,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
           barrierDismissible: false);
     }
 
-    Future<Null> _selectTime(BuildContext context) async {
+    Future<void> _selectTime(BuildContext context) async {
       final TimeOfDay? picked = await showTimePicker(
         context: context,
         initialTime: selectedTime,
@@ -142,20 +142,26 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         selectedTime = picked;
       }
       print(a!['timeSlotForBookingInMin'].runtimeType);
-      int intervalTime = a!['timeSlotForBookingInMin'];
-      _hour = selectedTime.hour.toString();
-      _minute = selectedTime.minute.toString();
-      _time = '$_hour : $_minute';
-      _timeController.text = _time;
+      int intervalTime = a?['timeSlotForBookingInMin'] != 0 ? 15 : 15;
+      hour = selectedTime.hour.toString();
+      minute = selectedTime.minute.toString();
+      time = '$hour : $minute';
+      timeController.text = time;
       controller.from.value.text = formatDate(
-          DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+          DateTime(DateTime.now().year, DateTime.now().month,
+              DateTime.now().day, selectedTime.hour, selectedTime.minute),
           [hh, ':', nn, " ", am]).toString();
       controller.to.text = formatDate(
-          DateTime(2019, 08, 1, selectedTime.hour,
+          DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+              selectedTime.hour,
               selectedTime.minute + intervalTime),
           [hh, ':', nn, " ", am]).toString();
-      _timeController.text = formatDate(
-          DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+      timeController.text = formatDate(
+          DateTime(DateTime.now().year, DateTime.now().month,
+              DateTime.now().day, selectedTime.hour, selectedTime.minute),
           [hh, ':', nn, " ", am]).toString();
     }
 
@@ -224,8 +230,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                     return controller
                                         .genderValidator(value?.title ?? "");
                                   },
-                                  icon: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                  icon: const Padding(
+                                    padding: EdgeInsets.all(8.0),
                                     child: Icon(Icons.arrow_drop_down),
                                   ),
                                   items: controller.genderList.value,
@@ -269,8 +275,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                   controller: controller.address,
                                   padding: TextFormFieldPadding.PaddingT14,
                                   validator: (value) {
-                                    return controller
-                                        .addressValidator(value ?? "");
+                                    return controller.addressValidator(value);
                                   },
                                   textInputType: TextInputType.emailAddress,
                                   prefixConstraints: BoxConstraints(
@@ -312,8 +317,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                         textInputType:
                                             TextInputType.emailAddress,
                                         suffix: Container(
-                                            margin: EdgeInsets.only(right: 10),
-                                            child: Icon(Icons.calendar_month)),
+                                            margin: const EdgeInsets.only(
+                                                right: 10),
+                                            child: const Icon(
+                                                Icons.calendar_month)),
                                         suffixConstraints: BoxConstraints(
                                             maxHeight: getVerticalSize(56))),
                                   ),
@@ -334,12 +341,14 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                       validator: (value) {
                                         return controller.fromValidator(
                                             value ?? "",
-                                            content?.startTime ?? "12:00 PM");
+                                            content?.startTime ?? "12:00 PM",
+                                            content?.endTime ?? "06:00 PM");
                                       },
                                       textInputType: TextInputType.emailAddress,
                                       suffix: Container(
-                                        margin: EdgeInsets.only(right: 10),
-                                        child: Icon(Icons.alarm),
+                                        margin:
+                                            const EdgeInsets.only(right: 10),
+                                        child: const Icon(Icons.alarm),
                                       ),
                                       suffixConstraints: BoxConstraints(
                                           maxHeight: getVerticalSize(56))),
@@ -360,8 +369,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                     // },
                                     textInputType: TextInputType.emailAddress,
                                     suffix: Container(
-                                      margin: EdgeInsets.only(right: 10),
-                                      child: Icon(Icons.alarm),
+                                      margin: const EdgeInsets.only(right: 10),
+                                      child: const Icon(Icons.alarm),
                                     ),
                                     suffixConstraints: BoxConstraints(
                                         maxHeight: getVerticalSize(56))),
@@ -427,8 +436,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                 fontStyle: ButtonFontStyle
                                                     .RalewayRomanSemiBold14WhiteA700,
                                                 onTap: () async {
-                                                  bool a = await controller
-                                                      .trySubmit();
+                                                  bool a =
+                                                      controller.trySubmit();
                                                   if (a) {
                                                     onTapBookapointmentOne(
                                                       controller.examinerId ??
@@ -446,7 +455,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
     Widget webUi(BuildContext context, PatientDetailsArguments args) {
       return Form(
         key: controller.formKey,
-        child: Container(
+        child: SizedBox(
           width: double.maxFinite,
           child: Card(
             elevation: 4,
@@ -515,8 +524,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                   return controller
                                       .genderValidator(value?.title ?? "");
                                 },
-                                icon: Padding(
-                                  padding: const EdgeInsets.only(right: 10),
+                                icon: const Padding(
+                                  padding: EdgeInsets.only(right: 10),
                                   child: Icon(Icons.arrow_drop_down),
                                 ),
                                 items: controller.genderList.value,
@@ -620,8 +629,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                     padding: TextFormFieldPadding.PaddingT14,
                                     textInputType: TextInputType.emailAddress,
                                     suffix: Container(
-                                        margin: EdgeInsets.only(right: 10),
-                                        child: Icon(Icons.calendar_month)),
+                                        margin:
+                                            const EdgeInsets.only(right: 10),
+                                        child:
+                                            const Icon(Icons.calendar_month)),
                                     suffixConstraints: BoxConstraints(
                                         maxHeight: getVerticalSize(56))),
                               ),
@@ -644,13 +655,15 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                   controller: controller.from.value,
                                   padding: TextFormFieldPadding.PaddingT14,
                                   validator: (value) {
-                                    return controller.fromValidator(value ?? "",
-                                        content?.startTime ?? "12:00 PM");
+                                    return controller.fromValidator(
+                                        value ?? "",
+                                        content?.startTime ?? "12:00 PM",
+                                        content?.endTime ?? "06:00 PM");
                                   },
                                   textInputType: TextInputType.emailAddress,
                                   suffix: Container(
-                                    margin: EdgeInsets.only(right: 10),
-                                    child: Icon(Icons.alarm),
+                                    margin: const EdgeInsets.only(right: 10),
+                                    child: const Icon(Icons.alarm),
                                   ),
                                   suffixConstraints: BoxConstraints(
                                       maxHeight: getVerticalSize(56))),
@@ -673,8 +686,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                 },
                                 textInputType: TextInputType.datetime,
                                 suffix: Container(
-                                  margin: EdgeInsets.only(right: 10),
-                                  child: Icon(Icons.alarm),
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: const Icon(Icons.alarm),
                                 ),
                                 suffixConstraints: BoxConstraints(
                                     maxHeight: getVerticalSize(56))),
@@ -749,9 +762,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                       fontStyle:
                           ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                       onTap: () async {
-                        bool a = await controller.trySubmit();
-                        if (a)
+                        bool a = controller.trySubmit();
+                        if (a) {
                           onTapBookapointmentOne(controller.examinerId ?? 0);
+                        }
                       }),
                 ),
                 SizedBox(

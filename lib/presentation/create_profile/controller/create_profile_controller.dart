@@ -80,12 +80,12 @@ class CreateProfileController extends GetxController {
 
   onSelectedJobType(dynamic value) {
     selectedjobtype = value as SelectionPopupModel;
-    jobType.value.forEach((element) {
+    for (var element in jobType.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         element.isSelected = true;
       }
-    });
+    }
     jobType.refresh();
   }
 
@@ -169,8 +169,8 @@ class CreateProfileController extends GetxController {
 
   String? numberValidator(String value) {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
       return 'Please enter mobile number';
     } else if (!regExp.hasMatch(value)) {
       return 'Please enter valid mobile number';
@@ -180,8 +180,8 @@ class CreateProfileController extends GetxController {
 
   String? pincodeValidator(String value) {
     String pattern = r"^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$";
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
       return 'Please enter pincode';
     }
     // else if (!regExp.hasMatch(value)) {
@@ -215,12 +215,12 @@ class CreateProfileController extends GetxController {
 
   onSelectedGender(dynamic value) {
     selectedgender = value as SelectionPopupModel;
-    genderList.value.forEach((element) {
+    for (var element in genderList.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         element.isSelected = true;
       }
-    });
+    }
     genderList.refresh();
   }
 
@@ -241,12 +241,12 @@ class CreateProfileController extends GetxController {
 
   onSelectedPrefix(dynamic value) {
     selectedprefix = value as SelectionPopupModel;
-    prefixesList.value.forEach((element) {
+    for (var element in prefixesList.value) {
       element.isSelected = false;
       if (element.id == value.id) {
         element.isSelected = true;
       }
-    });
+    }
     prefixesList.refresh();
   }
 
@@ -303,25 +303,25 @@ class CreateProfileController extends GetxController {
   }
 
   _handleCreateEmployeeSuccess(
-      CreateStaff model, String role, CreatepatientModel _model) {
+      CreateStaff sModel, String role, CreatepatientModel pModel) {
     storingPatientOrEmployeeID(
         role,
         ((role.toLowerCase() == "examiner" ||
                     role.toLowerCase() == "receptionist" ||
                     role.toLowerCase() == "admin" ||
                     role.toLowerCase() == "doctor")
-                ? model.t?.id
-                : _model.t?.id) ??
+                ? sModel.t?.id
+                : pModel.t?.id) ??
             0);
     if (imageFileList!.isNotEmpty) {
       if (role.toLowerCase() == "examiner" ||
           role.toLowerCase() == "receptionist" ||
           role.toLowerCase() == "admin" ||
           role.toLowerCase() == "doctor") {
-        UserApi().upLoadEmplyeePhoto(model.t?.id.toString() ?? "0",
+        UserApi().upLoadEmplyeePhoto(sModel.t?.id.toString() ?? "0",
             imageFileList![0].path, fileName ?? "");
       } else {
-        UserApi().upLoadPatientPhoto(_model.t?.id.toString() ?? "0",
+        UserApi().upLoadPatientPhoto(pModel.t?.id.toString() ?? "0",
             imageFileList![0].path, fileName ?? "");
       }
     }
@@ -337,21 +337,6 @@ class CreateProfileController extends GetxController {
     } else {
       SharedPrefUtils.saveInt("patient_Id", id);
     }
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    //callClinicsList();
-    // _controller = TextEditingController(
-    //   patternMatchMap: {RegExp('*'): TextStyle(color: Colors.red)},
-    //   onMatch: (match) {},
-    // );
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   Future<void> callClinicsList() async {

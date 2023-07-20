@@ -12,8 +12,11 @@ import 'controller/reset_password_phone_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
+  @override
   ResetPasswordPhoneController controller =
       Get.put(ResetPasswordPhoneController());
+
+  ResetPasswordPhonePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,9 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                   textInputAction: TextInputAction.done,
                                   isRequired: true,
                                   textInputType: TextInputType.emailAddress,
-                                  validator: (value) {},
+                                  validator: (value) {
+                                    return null;
+                                  },
                                   padding: TextFormFieldPadding.PaddingT14,
                                   prefixConstraints: BoxConstraints(
                                       maxHeight: getVerticalSize(56)),
@@ -95,10 +100,10 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                                                 onPressed: () {
                                                                   Get.back();
                                                                 },
-                                                                child: Text(
+                                                                child: const Text(
                                                                     'Close'))
                                                           ],
-                                                          title: Text(
+                                                          title: const Text(
                                                               'Verify Phone Number'),
                                                           content: SizedBox(
                                                               height: 300,

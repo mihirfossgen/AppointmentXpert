@@ -5,7 +5,7 @@ import '../core/utils/size_utils.dart';
 
 class CustomIconButton extends StatelessWidget {
   CustomIconButton(
-      {this.shape,
+      {super.key, this.shape,
       this.padding,
       this.variant,
       this.alignment,
@@ -47,12 +47,12 @@ class CustomIconButton extends StatelessWidget {
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: IconButton(
-        visualDensity: VisualDensity(
+        visualDensity: const VisualDensity(
           vertical: -4,
           horizontal: -4,
         ),
         iconSize: getSize(height ?? 0),
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         icon: Container(
           alignment: Alignment.center,
           width: getSize(width ?? 0),

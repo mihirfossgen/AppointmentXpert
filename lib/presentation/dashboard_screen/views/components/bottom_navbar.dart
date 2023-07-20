@@ -10,7 +10,7 @@ class _BottomNavbar extends StatefulWidget {
 
 class _BottomNavbarState extends State<_BottomNavbar> {
   int index = 0;
-
+  DashboardController controller = Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
     if (SharedPrefUtils.readPrefStr("role") == 'PATIENT') {
@@ -27,27 +27,40 @@ class _BottomNavbarState extends State<_BottomNavbar> {
       currentIndex: index,
       elevation: 10,
       backgroundColor: ColorConstant.blue700,
-      items: const [
-        BottomNavigationBarItem(
+      items: [
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.home),
           icon: Icon(EvaIcons.homeOutline),
           label: "Home",
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.list),
           icon: Icon(EvaIcons.list),
           label: "Appointments",
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.personAdd),
           icon: Icon(EvaIcons.personAdd),
           label: "Patients",
         ),
         BottomNavigationBarItem(
-          activeIcon: Icon(EvaIcons.alertCircle),
-          icon: Icon(EvaIcons.alertCircleOutline),
+          activeIcon: Obx(() => controller.getEmergencyPatientsList.isNotEmpty
+              ? Badge(
+                  label: Text(
+                      controller.getEmergencyPatientsList.length.toString()),
+                  child: const Icon(EvaIcons.alertCircle),
+                )
+              : const Icon(EvaIcons.alertCircle)),
+          icon: Obx(() => controller.getEmergencyPatientsList.isNotEmpty
+              ? Badge(
+                  label: Text(
+                      controller.getEmergencyPatientsList.length.toString()),
+                  child: const Icon(EvaIcons.alertCircleOutline),
+                )
+              : const Icon(EvaIcons.alertCircleOutline)),
           label: "Emergency",
-        ),BottomNavigationBarItem(
+        ),
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.settings),
           icon: Icon(EvaIcons.settingsOutline),
           label: "Settings",
@@ -110,18 +123,18 @@ class _BottomNavbarState extends State<_BottomNavbar> {
     return BottomNavigationBar(
       currentIndex: index,
       backgroundColor: ColorConstant.blue60001,
-      items: const [
-        BottomNavigationBarItem(
+      items: [
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.home),
           icon: Icon(EvaIcons.homeOutline),
           label: "Home",
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.bell),
           icon: Icon(EvaIcons.bellOutline),
           label: "Appointments",
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.people),
           icon: Icon(EvaIcons.people),
           label: "Patients",
@@ -132,11 +145,23 @@ class _BottomNavbarState extends State<_BottomNavbar> {
         //   label: "Chat",
         // ),
         BottomNavigationBarItem(
-          activeIcon: Icon(EvaIcons.alertCircle),
-          icon: Icon(EvaIcons.alertCircleOutline),
+          activeIcon: Obx(() => controller.getEmergencyPatientsList.isNotEmpty
+              ? Badge(
+                  label: Text(
+                      controller.getEmergencyPatientsList.length.toString()),
+                  child: const Icon(EvaIcons.alertCircle),
+                )
+              : const Icon(EvaIcons.alertCircle)),
+          icon: Obx(() => controller.getEmergencyPatientsList.isNotEmpty
+              ? Badge(
+                  label: Text(
+                      controller.getEmergencyPatientsList.length.toString()),
+                  child: const Icon(EvaIcons.alertCircleOutline),
+                )
+              : const Icon(EvaIcons.alertCircleOutline)),
           label: "Emergency",
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           activeIcon: Icon(EvaIcons.settings),
           icon: Icon(EvaIcons.settingsOutline),
           label: "Settings",

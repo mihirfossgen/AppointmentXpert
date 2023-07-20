@@ -26,10 +26,10 @@ class PatientsList extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
-          padding: EdgeInsets.all(defaultPadding),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(defaultPadding),
+          decoration: const BoxDecoration(
             color: secondaryColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class PatientsList extends StatelessWidget {
                 Column(
                   children: [
                     textView(),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     //SearchField(),
@@ -52,7 +52,7 @@ class PatientsList extends StatelessWidget {
                     //Expanded(flex: 5, child: SearchField())
                   ],
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 10.0,
               ),
               SizedBox(
@@ -120,7 +120,7 @@ class PatientsList extends StatelessWidget {
           minWidth: 600,
           showBottomBorder: true,
           //dataRowHeight: 70,
-          empty: Center(
+          empty: const Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -210,7 +210,7 @@ class PatientsList extends StatelessWidget {
                                       return CustomImageView(
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' +
+                                            ? 'assets'
                                                 '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       );
@@ -222,14 +222,14 @@ class PatientsList extends StatelessWidget {
                                     fit: BoxFit.contain,
                                     imagePath:
                                         !Responsive.isDesktop(Get.context!)
-                                            ? 'assets' +
+                                            ? 'assets'
                                                 '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                   ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
-                            Text('${data[index].firstName} ' +
+                            Text('${data[index].firstName} '
                                 '${data[index].lastName}')
                           ],
                         ),
@@ -243,7 +243,7 @@ class PatientsList extends StatelessWidget {
                     DataCell(Text('${data[index].bloodType}'), onTap: () {}),
                     //DataCell(Text(
                     //    formatter.format(DateTime.parse('${data[index].date}')))),
-                    DataCell(Row(
+                    const DataCell(Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -294,8 +294,8 @@ DataRow patientDataRow(Content fileInfo, BuildContext context, Size size) {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text('${fileInfo.firstName.toString()} ' +
-                    '${fileInfo.lastName.toString()}'),
+                child: Text('${fileInfo.firstName.toString()} ',
+                    semanticsLabel: fileInfo.lastName.toString()),
               ),
             ],
           ), onTap: () {
@@ -310,7 +310,7 @@ DataRow patientDataRow(Content fileInfo, BuildContext context, Size size) {
   );
 }
 
-Widget textView() => Text(
+Widget textView() => const Text(
       "Patients",
       style: TextStyle(
           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17.0),

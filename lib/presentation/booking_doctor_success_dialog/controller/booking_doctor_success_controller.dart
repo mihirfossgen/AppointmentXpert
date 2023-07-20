@@ -6,13 +6,5 @@ class BookingDoctorSuccessController extends GetxController {
   Rx<BookingDoctorSuccessModel> bookingDoctorSuccessModelObj =
       BookingDoctorSuccessModel().obs;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

@@ -60,7 +60,7 @@ class ListAppointmentDate extends StatelessWidget {
 
   Widget _buildHours() {
     DateTime parseDate =
-        new DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(data.date!);
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(data.date!);
     return Text(
       DateFormat.Hm().format(parseDate),
       style: const TextStyle(
@@ -96,7 +96,7 @@ class ListAppointmentDate extends StatelessWidget {
       text = data.purpose ?? 'N/A';
     }
     return Text(
-      'Appointment for ${text}',
+      'Appointment for $text',
       maxLines: 2,
       style: const TextStyle(
         fontSize: 12,
@@ -108,7 +108,7 @@ class ListAppointmentDate extends StatelessWidget {
 
   Widget _buildSubtitle() {
     return Text(
-      '${data.patient?.firstName} ' + '${data.patient?.lastName}',
+      '${data.patient?.firstName} ' '${data.patient?.lastName}',
       maxLines: 1,
       style: const TextStyle(fontWeight: FontWeight.w600),
       overflow: TextOverflow.ellipsis,
