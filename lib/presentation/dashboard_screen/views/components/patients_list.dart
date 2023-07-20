@@ -1,4 +1,5 @@
 import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
+import 'package:appointmentxpert/presentation/patient_details_page/patient_details_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -231,7 +232,9 @@ class PatientsList extends GetView<DashboardController> {
                                                   PatientDetailsArguments(
                                                       [], item)));
                                         },
-                                        onFirstButtonTap: () {},
+                                        onFirstButtonTap: () {
+                                          Get.to(PatientDetailsPage(item));
+                                        },
                                         //focusColor: ,
                                         focusNode: FocusNode(),
                                         //hoverColor: Colors.blue,
