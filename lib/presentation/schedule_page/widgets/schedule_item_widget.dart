@@ -200,7 +200,7 @@ class ScheduleItemWidget extends StatelessWidget {
                                     "active": false,
                                     "id": appointment.id,
                                     "date": appointment.date,
-                                    "examinerId": examninerId,
+                                    "examinerId": appointment.examiner!.id,
                                     "note": appointment.note,
                                     "patientId": patientId,
                                     "purpose": appointment.purpose,
@@ -274,11 +274,11 @@ class ScheduleItemWidget extends StatelessWidget {
                     "active": false,
                     "id": appointment.id,
                     "date": appointment.date,
-                    "examinerId": examninerId,
+                    "examinerId": appointment.examiner!.id,
                     "note": appointment.note,
                     "patientId": patientId,
                     "purpose": appointment.purpose,
-                    "status": "Cancel"
+                    "status": "Canceled"
                   };
                   controller.updateAppointment(data);
                 },
@@ -321,12 +321,11 @@ class ScheduleItemWidget extends StatelessWidget {
                                         "active": false,
                                         "id": appointment.id,
                                         "date": appointment.date,
-                                        "examinerId":
-                                            examninerId == 0 ? 1 : examninerId,
+                                        "examinerId": appointment.examiner!.id,
                                         "note": appointment.note,
                                         "patientId": patientId,
                                         "purpose": appointment.purpose,
-                                        "status": "Cancel"
+                                        "status": "Canceled"
                                       };
                                       controller.updateAppointment(data);
                                     },
@@ -518,13 +517,14 @@ class ScheduleItemWidget extends StatelessWidget {
                                             "startTime":
                                                 controller.from.value.text,
                                             "endTime": controller.to.value.text,
-                                            "examinerId": 1,
-                                            "note": "Reschdule",
+                                            "examinerId":
+                                                appointment.examiner!.id,
+                                            "note": appointment.note,
                                             "id": appointment.id,
                                             "patientId":
                                                 appointment.patient?.id,
                                             "purpose": "CHECKUP",
-                                            "status": "Pending",
+                                            "status": "Reschduled",
                                             "update_time_in_min": 0
                                           };
                                           print(jsonEncode(requestData));

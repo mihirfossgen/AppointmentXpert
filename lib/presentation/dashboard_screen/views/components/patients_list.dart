@@ -243,13 +243,14 @@ class PatientsList extends GetView<DashboardController> {
                                             color: Colors.red,
                                             fontWeight: FontWeight.bold),
                                         onSecondButtonTap: () {
-                                          Get.to(AppointmentBookingScreen(
+                                          Get.to(() => AppointmentBookingScreen(
                                               patientDetailsArguments:
                                                   PatientDetailsArguments(
                                                       [], item)));
                                         },
                                         onFirstButtonTap: () {
-                                          Get.to(() => (PatientDetailsPage(item)));
+                                          Get.to(
+                                              () => (PatientDetailsPage(item)));
                                         },
                                         //focusColor: ,
                                         focusNode: FocusNode(),

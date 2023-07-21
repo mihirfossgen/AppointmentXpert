@@ -1,7 +1,9 @@
+import 'package:appointmentxpert/core/app_export.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
-import 'package:dio/dio.dart';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
+import 'package:dio/dio.dart' as DIO;
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart' as Get;
+import 'package:get/get.dart' as GET;
 
 import '../network/endpoints.dart';
 import '../shared_prefrences_page/shared_prefrence_page.dart';
@@ -9,38 +11,57 @@ import 'dio_exception.dart';
 import 'interceptors/authorization_interceptor.dart';
 
 class DioClient {
-  static final _options = BaseOptions(
+  static final _options = DIO.BaseOptions(
     baseUrl: Endpoints.baseURL,
     connectTimeout: Endpoints.connectionTimeout,
     receiveTimeout: Endpoints.receiveTimeout,
-    responseType: ResponseType.json,
+    responseType: DIO.ResponseType.json,
   );
 
   // dio instance
-  final Dio _dio = Dio(_options)
-    ..interceptors.addAll([AuthorizationInterceptor(), LogInterceptor()]);
+  final DIO.Dio _dio = DIO.Dio(_options)
+    ..interceptors.addAll([AuthorizationInterceptor(), DIO.LogInterceptor()]);
+
+  Future<bool> checkInternetConnectivity() async {
+    bool result = await ConnectivityWrapper.instance.isConnected;
+    if (result == false) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   // GET request
-  Future<Response> get(
+  Future<DIO.Response> get(
     String url, {
     Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onReceiveProgress,
+    DIO.Options? options,
+    DIO.CancelToken? cancelToken,
+    DIO.ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response response = await _dio.get(
-        url,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress,
-      );
-      return response;
-    } on DioError catch (err) {
+      bool isInternetConnected = await checkInternetConnectivity();
+      if (isInternetConnected == true) {
+        final DIO.Response response = await _dio.get(
+          url,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress,
+        );
+        return response;
+      } else {
+        GET.Get.showSnackbar(const GetSnackBar(
+          title: 'No Network',
+          message:
+              'No network found. Please check your internet connection and try again',
+        ));
+        throw 'Network problem';
+      }
+    } on DIO.DioError catch (err) {
       if (err.response?.statusCode == 500) {
         SharedPrefUtils.clearPreferences();
-        Get.Get.offAllNamed(AppRoutes.loginScreen);
+        Get.offAllNamed(AppRoutes.loginScreen);
         final errorMessage = DioException.fromDioError(err).toString();
         throw errorMessage;
       } else {
@@ -54,30 +75,40 @@ class DioClient {
   }
 
   // POST request
-  Future<Response> post(
+  Future<DIO.Response> post(
     String url, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    DIO.Options? options,
+    DIO.CancelToken? cancelToken,
+    DIO.ProgressCallback? onSendProgress,
+    DIO.ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response response = await _dio.post(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      return response;
-    } on DioError catch (err) {
+      bool isInternetConnected = await checkInternetConnectivity();
+      if (isInternetConnected == true) {
+        final DIO.Response response = await _dio.post(
+          url,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        );
+        return response;
+      } else {
+        GET.Get.showSnackbar(const GetSnackBar(
+          title: 'No Network',
+          message:
+              'No network found. Please check your internet connection and try again',
+        ));
+        throw 'Network problem';
+      }
+    } on DIO.DioError catch (err) {
       if (err.response?.statusCode == 500) {
         SharedPrefUtils.clearPreferences();
-        Get.Get.offAllNamed(AppRoutes.loginScreen);
+        Get.offAllNamed(AppRoutes.loginScreen);
         final errorMessage = DioException.fromDioError(err).toString();
         throw errorMessage;
       } else {
@@ -91,25 +122,35 @@ class DioClient {
   }
 
   // POST request
-  Future<Response> download(
+  Future<DIO.Response> download(
     String url,
     String savePath, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    DIO.Options? options,
+    DIO.CancelToken? cancelToken,
+    DIO.ProgressCallback? onSendProgress,
+    DIO.ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response response = await _dio.download(url, savePath,
-          cancelToken: cancelToken,
-          data: data,
-          onReceiveProgress: onReceiveProgress,
-          options: options,
-          queryParameters: queryParameters);
-      return response;
-    } on DioError catch (err) {
+      bool isInternetConnected = await checkInternetConnectivity();
+      if (isInternetConnected == true) {
+        final DIO.Response response = await _dio.download(url, savePath,
+            cancelToken: cancelToken,
+            data: data,
+            onReceiveProgress: onReceiveProgress,
+            options: options,
+            queryParameters: queryParameters);
+        return response;
+      } else {
+        GET.Get.showSnackbar(const GetSnackBar(
+          title: 'No Network',
+          message:
+              'No network found. Please check your internet connection and try again',
+        ));
+        throw 'Network problem';
+      }
+    } on DIO.DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
       throw errorMessage;
     } catch (e) {
@@ -119,27 +160,37 @@ class DioClient {
   }
 
   // PUT request
-  Future<Response> put(
+  Future<DIO.Response> put(
     String url, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    DIO.Options? options,
+    DIO.CancelToken? cancelToken,
+    DIO.ProgressCallback? onSendProgress,
+    DIO.ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response response = await _dio.put(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      );
-      return response;
-    } on DioError catch (err) {
+      bool isInternetConnected = await checkInternetConnectivity();
+      if (isInternetConnected == true) {
+        final DIO.Response response = await _dio.put(
+          url,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        );
+        return response;
+      } else {
+        GET.Get.showSnackbar(const GetSnackBar(
+          title: 'No Network',
+          message:
+              'No network found. Please check your internet connection and try again',
+        ));
+        throw 'Network problem';
+      }
+    } on DIO.DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
       throw errorMessage;
     } catch (e) {
@@ -149,25 +200,35 @@ class DioClient {
   }
 
   // DELETE request
-  Future<Response> delete(
+  Future<DIO.Response> delete(
     String url, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
+    DIO.Options? options,
+    DIO.CancelToken? cancelToken,
+    DIO.ProgressCallback? onSendProgress,
+    DIO.ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response response = await _dio.delete(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-      );
-      return response;
-    } on DioError catch (err) {
+      bool isInternetConnected = await checkInternetConnectivity();
+      if (isInternetConnected == true) {
+        final DIO.Response response = await _dio.delete(
+          url,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+        );
+        return response;
+      } else {
+        GET.Get.showSnackbar(const GetSnackBar(
+          title: 'No Network',
+          message:
+              'No network found. Please check your internet connection and try again',
+        ));
+        throw 'Network problem';
+      }
+    } on DIO.DioError catch (err) {
       final errorMessage = DioException.fromDioError(err).toString();
       throw errorMessage;
     } catch (e) {

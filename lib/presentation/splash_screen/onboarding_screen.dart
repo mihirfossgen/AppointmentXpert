@@ -1,4 +1,5 @@
 import 'package:appointmentxpert/core/utils/color_constant.dart';
+import 'package:appointmentxpert/widgets/responsive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -34,7 +35,11 @@ class OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.asset('assets/images/$assetName', width: width);
+    return Image.asset(
+      'assets/images/$assetName',
+      width: width,
+      //height: 60,
+    );
   }
 
   @override
@@ -59,14 +64,17 @@ class OnBoardingPageState extends State<OnBoardingPage> {
             key: introKey,
             globalBackgroundColor: Colors.white,
             allowImplicitScrolling: true,
-            autoScrollDuration: 5000,
+            autoScrollDuration: 3000,
             infiniteAutoScroll: false,
-            globalHeader: Align(
-              alignment: Alignment.topCenter,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16, right: 16),
-                  child: _buildImage('logo-opdxpert.png', 280),
+            globalHeader: Container(
+              color: ColorConstant.whiteA700,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, top: 8, right: 8),
+                    child: _buildImage('logo-opdxpert.png', 280),
+                  ),
                 ),
               ),
             ),
@@ -87,48 +95,390 @@ class OnBoardingPageState extends State<OnBoardingPage> {
             ),
             pages: [
               PageViewModel(
-                title: "",
-                bodyWidget: const Text(
-                  "Dr. Manoj Duraira is working in cardiovascular and thoracic surgery since 1996",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                //title: "Dr. Manuel Durairaj",
+                titleWidget: const Text(
+                  'Dr. Manuel Durairaj',
+                  style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
                 ),
-                image: _buildImage('img_7xm5.png'),
+                useScrollView: true,
+                bodyWidget: const SizedBox(
+                  //height: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Cardiologist',
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "Founding Member, Fellow and Former President of the Indian College of Cardiology. Former Professor and Chairman of the Academic Department of Cardiology at Grant Medical Foundation in Pune",
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                ),
+                image: _buildImage('manuel_duriaraj.png'),
                 reverse: true,
                 decoration: pageDecoration.copyWith(
                   bodyFlex: 2,
-                  imageFlex: 4,
+                  imageFlex: 2,
+                  bodyAlignment: Alignment.bottomCenter,
+                  imageAlignment: Alignment.topCenter,
+                ),
+              ),
+              PageViewModel(
+                //title: "Dr. Manoj Durairaj",
+                titleWidget: const Text(
+                  'Dr. Manoj Durairaj',
+                  style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+                bodyWidget: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Cardiac Surgeon | Pediatric and Adult Cardiac Surgery',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      "First Heart Transplant Performed in Pune on 05-March-2017. First LVAD in Pune | 15,000+ Cardiac Surgeries",
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                ),
+                image: _buildImage('dr-manoj-image.png'),
+                reverse: true,
+                decoration: pageDecoration.copyWith(
+                  bodyFlex: 2,
+                  imageFlex: 2,
                   bodyAlignment: Alignment.bottomCenter,
                   imageAlignment: Alignment.topCenter,
                 ),
               ),
               PageViewModel(
                 title: "",
-                bodyWidget: const Text(
-                  "He has worked with senior surgeons from Pune and Mumbai and gained enough experience..",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                bodyWidget: GridView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: Responsive.isMobile(context) ? 2 : 3,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5
+                      //childAspectRatio: 2,
+                      ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1st',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "FIRST HEART TRANSPLANT IN PUNE MAHARASHTRA*",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1st',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorConstant.blue60001),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text(
+                                "FIRST SURGEON TO START 3 HEART TRANSPLANT CENTRES IN MAHARASHTRA",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1st',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "FIRST SUCCESSFUL LVAD IN PUNE / AND REST OF MAHARASHTRA*",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1st',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorConstant.blue60001),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text(
+                                "FIRST CARDIAC SURGEON IN PUNE TO BE ELECTED AS FELLOW OF THE AMERICAN COLLEGE OF CARDIOLOGY",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1st',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "FIRST INDIAN SURGEON, TO HAVE PERFORMED PAEDIATRIC CARDIAC SURGERY IN NIGERIA",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '1st',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "FIRST OFF PUMP CORONARY SURGERY IN AL THAWARA HOSPITAL, YEMEN",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '30',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorConstant.blue60001),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              const Text(
+                                "HEART TRANSPLANTS",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '15000+',
+                                style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "MORE THAN 15000 SUCCESSFUL HEART SURGERIES",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '600+',
+                                  style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorConstant.blue60001),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text(
+                                  "LIVES SAVED THROUGH SAVING LITTLE HEARTS PROJECT BY MARIAN",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
-                image: _buildImage('img_7xm5.png'),
-                reverse: true,
-                decoration: pageDecoration.copyWith(
-                  bodyFlex: 2,
-                  imageFlex: 4,
-                  bodyAlignment: Alignment.bottomCenter,
-                  imageAlignment: Alignment.topCenter,
-                ),
-              ),
-              PageViewModel(
-                title: "",
-                bodyWidget: const Text(
-                  "Let's get started to know more about the app click done.",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                ),
-                image: _buildImage('img_7xm5.png'),
-                decoration: pageDecoration.copyWith(
-                  bodyFlex: 2,
-                  imageFlex: 4,
-                  bodyAlignment: Alignment.bottomCenter,
-                  imageAlignment: Alignment.topCenter,
-                ),
+                // image: _buildImage('img_7xm5.png'),
+                // decoration: pageDecoration.copyWith(
+                //   bodyFlex: 2,
+                //   imageFlex: 4,
+                //   bodyAlignment: Alignment.bottomCenter,
+                //   imageAlignment: Alignment.topCenter,
+                // ),
                 reverse: true,
               ),
             ],
@@ -168,7 +518,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
               //color: Color(0xFFBDBDBD),
               color: ColorConstant.whiteA700,
               activeColor: Colors.red,
-              activeSize: const Size(22.0, 10.0),
+              activeSize: const Size(12.0, 10.0),
               activeShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
