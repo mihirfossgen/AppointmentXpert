@@ -1877,8 +1877,13 @@ class DashboardScreen extends GetView<DashboardController> {
               child: ResponsiveBuilder.isMobile(Get.context!) ||
                       ResponsiveBuilder.isTablet(Get.context!)
                   ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                  children: [
+
                           Row(
                             children: [
                               Container(
@@ -1955,7 +1960,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                             Responsive.isDesktop(Get.context!)
                                                 ? 30
                                                 : 18,
-                                        color: Colors.blue.shade900,
+                                        color: Colors.red.shade900,
                                         fontWeight: FontWeight.bold,
                                       )),
                                   const SizedBox(
@@ -2019,7 +2024,8 @@ class DashboardScreen extends GetView<DashboardController> {
                               ),
                             ],
                           )
-                        ])
+
+                       ])
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -2089,7 +2095,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: 4,
+                                      end: controller.getEmergencyPatientsList.length.toDouble(),
                                       duration: const Duration(seconds: 2),
                                       separator: ',',
                                       style: TextStyle(
@@ -2097,7 +2103,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                             Responsive.isDesktop(Get.context!)
                                                 ? 30
                                                 : 18,
-                                        color: Colors.blue.shade900,
+                                        color: Colors.red.shade900,
                                         fontWeight: FontWeight.bold,
                                       )),
                                   const SizedBox(
