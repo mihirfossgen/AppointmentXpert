@@ -1711,7 +1711,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         ),
                         Text(
                           (SharedPrefUtils.readPrefStr('role') == "PATIENT")
-                              ? 'Your Number - 1'
+                              ? ''
                               : "",
                           style: TextStyle(
                               fontSize: 20,
@@ -1898,7 +1898,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: list.length.toDouble(),
+                                      end: controller.staffTodaysTotalData.length.toDouble(),
                                       duration: const Duration(seconds: 3),
                                       separator: ',',
                                       style: TextStyle(
@@ -1913,7 +1913,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "Today's Appointment",
+                                    "Today's Total Appointments",
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.normal,
@@ -1983,7 +1983,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                   borderRadius: BorderRadius.circular(20),
                                   color: ColorConstant.blue60001,
                                 ),
-                                child: const Icon(Icons.cut_outlined,
+                                child: const Icon(Icons.access_time_filled_outlined,
                                     size: 40, color: Colors.white),
                               ),
                               const SizedBox(
@@ -1994,7 +1994,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: 1,
+                                      end: double.parse(controller.staffTodaysCompletedData.length.toString()),
                                       duration: const Duration(seconds: 3),
                                       separator: ',',
                                       style: TextStyle(
@@ -2009,7 +2009,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "Opertions",
+                                    "Completed Appointments",
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.normal,
@@ -2041,7 +2041,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: list.length.toDouble(),
+                                      end: controller.staffTodaysTotalData.length.toDouble(),
                                       duration: const Duration(seconds: 2),
                                       separator: ',',
                                       style: TextStyle(
@@ -2056,7 +2056,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "Today's Appointment",
+                                    "Today's Total Appointments",
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.normal,
@@ -2104,7 +2104,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "Online Consultation",
+                                    "Emergency Request",
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.normal,
@@ -2127,7 +2127,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: const Color(0xff013f88)),
-                                  child: const Icon(Icons.cut_outlined,
+                                  child: const Icon(Icons.access_time_filled_outlined,
                                       size: 60, color: Colors.white),
                                 ),
                                 const SizedBox(
@@ -2138,7 +2138,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                   children: [
                                     Countup(
                                         begin: 0,
-                                        end: 1,
+                                        end: double.parse(controller.staffTodaysCompletedData.length.toString()),
                                         duration: const Duration(seconds: 2),
                                         separator: ',',
                                         style: TextStyle(
@@ -2153,7 +2153,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                       height: 10,
                                     ),
                                     Text(
-                                      "Opertions",
+                                      "Completed Appointments",
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.normal,

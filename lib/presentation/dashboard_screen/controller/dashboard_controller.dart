@@ -83,6 +83,8 @@ class DashboardController extends GetxController {
   Rx<StaffData> staffData = StaffData().obs;
   Rx<PatientData> patientData = PatientData().obs;
   RxList<AppointmentContent> staffTodaysData = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> staffTodaysCompletedData = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> staffTodaysTotalData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
 
@@ -261,6 +263,16 @@ class DashboardController extends GetxController {
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       staffTodaysData.value = appointments;
+
+      List<AppointmentContent> totalTodayList = list.where((i) =>
+          dateFormat(i.date!) == dateFormat(DateTime.now().toString())).toList();
+      staffTodaysTotalData.value = totalTodayList;
+
+      List<AppointmentContent> completedList = list.where((i) => i.status?.toLowerCase()=='completed'&&
+          dateFormat(i.date!) == dateFormat(DateTime.now().toString())).toList();
+      staffTodaysCompletedData.value = completedList;
+
+
     } on Map {
       //postLoginResp = e;
       rethrow;
