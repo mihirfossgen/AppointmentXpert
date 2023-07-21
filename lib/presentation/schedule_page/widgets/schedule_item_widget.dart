@@ -604,6 +604,16 @@ class ScheduleItemWidget extends StatelessWidget {
                 ],
               );
   }
+
+  void refreshPage() {
+    controller.isloading.value = true;
+    controller.callGetAllAppointments(0, 20);
+    Future.sync(() => tab.toLowerCase() == 'today'
+        ? controller.todayPagingController.refresh()
+        : tab.toLowerCase() == 'upcoming'
+            ? controller.upcomingPagingController.refresh()
+            : controller.completedPagingController.refresh());
+  }
 }
 
 class AppointmentDetailsArguments {

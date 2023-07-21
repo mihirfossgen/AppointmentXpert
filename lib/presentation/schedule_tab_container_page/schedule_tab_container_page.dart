@@ -45,11 +45,11 @@ class ScheduleTabContainerPage extends StatelessWidget {
             onRefresh: () async {
               // scheduleController.onClose();
               // scheduleController.onReady();
-              scheduleController.todayPagingController =
+              scheduleController.todayPagingController.value =
                   PagingController(firstPageKey: 0);
-              scheduleController.upcomingPagingController =
+              scheduleController.upcomingPagingController.value =
                   PagingController(firstPageKey: 0);
-              scheduleController.completedPagingController =
+              scheduleController.completedPagingController.value =
                   PagingController(firstPageKey: 0);
 
               scheduleController.isloading.value = true;

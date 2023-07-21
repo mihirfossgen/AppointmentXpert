@@ -94,12 +94,18 @@ class ScheduleController extends GetxController {
   }
 
   static const _pageSize = 20;
-  PagingController<int, AppointmentContent> todayPagingController =
-      PagingController(firstPageKey: 0);
-  PagingController<int, AppointmentContent> upcomingPagingController =
-      PagingController(firstPageKey: 0);
-  PagingController<int, AppointmentContent> completedPagingController =
-      PagingController(firstPageKey: 0);
+  // PagingController<int, AppointmentContent> todayPagingController =
+  //     PagingController(firstPageKey: 0);
+  // PagingController<int, AppointmentContent> upcomingPagingController =
+  //     PagingController(firstPageKey: 0);
+  // PagingController<int, AppointmentContent> completedPagingController =
+  //     PagingController(firstPageKey: 0);
+  Rx<PagingController<int, AppointmentContent>> todayPagingController =
+      PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
+  Rx<PagingController<int, AppointmentContent>> upcomingPagingController =
+      PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
+  Rx<PagingController<int, AppointmentContent>> completedPagingController =
+      PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
 
   getformattedDate(String date) {
     final DateFormat formatter = DateFormat.yMMMEd();
@@ -165,9 +171,9 @@ class ScheduleController extends GetxController {
       model = (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
       final isLastPage = model.totalElements! < _pageSize;
       if (isLastPage) {
-        todayPagingController.itemList = [];
-        upcomingPagingController.itemList = [];
-        completedPagingController.itemList = [];
+        todayPagingController.value.itemList = [];
+        upcomingPagingController.value.itemList = [];
+        completedPagingController.value.itemList = [];
         List<AppointmentContent> list = model.content ?? [];
         var now = DateTime.now();
         final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
@@ -189,9 +195,9 @@ class ScheduleController extends GetxController {
                 i.active == true &&
                 i.status?.toLowerCase() != "completed")
             .toList();
-        todayPagingController.appendLastPage(appointmentsToday);
-        upcomingPagingController.appendLastPage(appointmentsUpcoming);
-        completedPagingController.appendLastPage(appointmentsCompleted);
+        todayPagingController.value.appendLastPage(appointmentsToday);
+        upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+        completedPagingController.value.appendLastPage(appointmentsCompleted);
       } else {
         List<AppointmentContent> list = model.content ?? [];
         var now = DateTime.now();
@@ -215,15 +221,19 @@ class ScheduleController extends GetxController {
                 i.status?.toLowerCase() != "completed")
             .toList();
         final nextPageKey = pageNo + appointmentsToday.length;
-        todayPagingController.appendPage(appointmentsToday, nextPageKey);
-        upcomingPagingController.appendPage(appointmentsUpcoming, nextPageKey);
-        completedPagingController.appendPage(
-            appointmentsCompleted, nextPageKey);
+        todayPagingController.value.appendPage(appointmentsToday, nextPageKey);
+        upcomingPagingController.value
+            .appendPage(appointmentsUpcoming, nextPageKey);
+        completedPagingController.value
+            .appendPage(appointmentsCompleted, nextPageKey);
       }
       update();
+      // todayPagingController.refresh();
+      // upcomingPagingController.refresh();
+      // completedPagingController.refresh();
     } on Map {
       //postLoginResp = e;
-      todayPagingController.error = 'No data found.';
+      todayPagingController.value.error = 'No data found.';
       rethrow;
     } finally {
       isloading.value = false;
@@ -248,6 +258,15 @@ class ScheduleController extends GetxController {
       value = (await Get.find<AppointmentApi>().updateAppointment(data));
       // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       if (value) {
+        isloading.value = true;
+        //pagingController.addPageRequestListener((pageKey) {
+        if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+          //SharedPrefUtils.readPrefINt('employee_Id')
+          callGetAllAppointments(0, 20);
+        } else {
+          callAppointmentsByPatientId(
+              SharedPrefUtils.readPrefINt('patient_Id'));
+        }
         Get.back();
       }
       //   callGetAllAppointments(0, 1);
@@ -513,9 +532,9 @@ class ScheduleController extends GetxController {
 
   @override
   void onClose() {
-    todayPagingController.dispose();
-    upcomingPagingController.dispose();
-    completedPagingController.dispose();
+    todayPagingController.value.dispose();
+    upcomingPagingController.value.dispose();
+    completedPagingController.value.dispose();
     super.onClose();
     today.clear();
     upcoming.clear();

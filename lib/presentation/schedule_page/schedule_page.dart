@@ -65,14 +65,15 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                   child: PagedListView<int,
                                       AppointmentContent>.separated(
                                     shrinkWrap: true,
-                                    pagingController:
-                                        tab.toLowerCase() == 'today'
-                                            ? controller.todayPagingController
-                                            : tab.toLowerCase() == 'upcoming'
-                                                ? controller
-                                                    .upcomingPagingController
-                                                : controller
-                                                    .completedPagingController,
+                                    pagingController: tab.toLowerCase() ==
+                                            'today'
+                                        ? controller.todayPagingController.value
+                                        : tab.toLowerCase() == 'upcoming'
+                                            ? controller
+                                                .upcomingPagingController.value
+                                            : controller
+                                                .completedPagingController
+                                                .value,
                                     builderDelegate: PagedChildBuilderDelegate<
                                         AppointmentContent>(
                                       animateTransitions: true,
@@ -138,11 +139,12 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     AppointmentContent>.separated(
                                   shrinkWrap: true,
                                   pagingController: tab.toLowerCase() == 'today'
-                                      ? controller.todayPagingController
+                                      ? controller.todayPagingController.value
                                       : tab.toLowerCase() == 'upcoming'
-                                          ? controller.upcomingPagingController
+                                          ? controller
+                                              .upcomingPagingController.value
                                           : controller
-                                              .completedPagingController,
+                                              .completedPagingController.value,
                                   builderDelegate: PagedChildBuilderDelegate<
                                       AppointmentContent>(
                                     animateTransitions: true,
@@ -434,7 +436,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                           return CustomImageView(
                                             imagePath: !Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' '/images/default_profile.png'
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
                                                 : '/images/default_profile.png',
                                           );
                                         },
@@ -445,7 +448,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                         fit: BoxFit.contain,
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' '/images/default_profile.png'
+                                            ? 'assets'
+                                                '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       ),
                                 const SizedBox(
@@ -653,7 +657,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                       return CustomImageView(
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' '/images/default_profile.png'
+                                            ? 'assets'
+                                                '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       );
                                     },
@@ -664,7 +669,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     fit: BoxFit.contain,
                                     imagePath:
                                         !Responsive.isDesktop(Get.context!)
-                                            ? 'assets' '/images/default_profile.png'
+                                            ? 'assets'
+                                                '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                   ),
                             const SizedBox(
