@@ -101,7 +101,7 @@ class ResetPasswordEmailTabContainerScreen
                             overflow: TextOverflow.ellipsis))
                   ])),
           SizedBox(
-              height: getVerticalSize(525),
+              height: 280,// getVerticalSize(525),
               child: TabBarView(
                   controller: controller.tabController,
                   children: [

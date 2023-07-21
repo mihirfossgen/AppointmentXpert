@@ -142,15 +142,14 @@ class DoctorDetailController extends GetxController {
   }
 
   String? fromValidator(String value, String startTime, String endTime) {
-    print(startTime);
-    print(timeFormat(value).isBefore(timeFormat(startTime)));
     if (value.isEmpty) {
       return 'Please select time';
-    } else if (timeFormat(value).isAfter(timeFormat(startTime)) &&
+    } else if (timeFormat(value).isAfter(timeFormat(startTime)) ||
         timeFormat(value).isBefore(timeFormat(endTime))) {
+      return null;
+    } else {
       return "Please select time between 12 to 6 PM";
     }
-    return null;
   }
 
   String? toValidator(String value) {
@@ -246,7 +245,6 @@ class DoctorDetailController extends GetxController {
       rethrow;
     }
   }
-
 
   @override
   void onClose() {
