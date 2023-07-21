@@ -14,6 +14,7 @@ import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/responsive.dart';
 import '../../appointment_booking_screen/appointment_booking.dart';
+import '../../patient_details_page/patient_details_page.dart';
 import '../views/screens/dashboard_screen.dart';
 
 class ListRecentPatientData {
@@ -159,7 +160,9 @@ class ListRecentPatients extends StatelessWidget {
           Get.to(() => AppointmentBookingScreen(
               patientDetailsArguments: PatientDetailsArguments([], data)));
         },
-        onFirstButtonTap: () {},
+        onFirstButtonTap: () {
+          Get.to(() => (PatientDetailsPage(data)));
+        },
         //focusColor: ,
         focusNode: FocusNode(),
         //hoverColor: Colors.blue,

@@ -161,7 +161,11 @@ class DashboardController extends GetxController {
       var response =
           (await Get.find<AppointmentApi>().getEmergencyPatientsList());
       //print(response.content);
-      getEmergencyPatientsList.value = response;
+      List<EmergencyContent> requests = response
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
+      getEmergencyPatientsList.value = requests;
       //getUpcomingAppointments(0, true);
       //getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
       // _handleCreateLoginSuccess(loginModelObj);
