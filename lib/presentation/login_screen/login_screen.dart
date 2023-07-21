@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -270,7 +272,7 @@ class LoginScreen extends GetWidget<LoginController> {
                                   child: CustomImageView(
                                       svgPath: ImageConstant.imgGoogle,
                                       height: getVerticalSize(20),
-                                      width: getHorizontalSize(19),
+                                      width: getHorizontalSize(220),
                                       margin: getMargin(top: 1, bottom: 1))),
                               // Container(
                               //     margin: getMargin(top: 20, left: 5),
@@ -288,45 +290,48 @@ class LoginScreen extends GetWidget<LoginController> {
                               //         onTap: () {
                               //           onTapImgCamera();
                               //         })),
-                              Container(
-                                  margin: getMargin(top: 20, left: 5),
-                                  padding: getPadding(
-                                      left: 16, top: 16, right: 16, bottom: 16),
-                                  decoration: AppDecoration.outlineGray200
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.roundedBorder8),
-                                  child: CustomImageView(
-                                      svgPath: ImageConstant.imgFacebook,
-                                      height: getVerticalSize(20),
-                                      color: Colors.blue,
-                                      width: getHorizontalSize(16),
-                                      margin: getMargin(top: 1, bottom: 1),
-                                      onTap: () {
-                                        //onTapImgCamera();
-                                      })),
+                              // Container(
+                              //     margin: getMargin(top: 20, left: 5),
+                              //     padding: getPadding(
+                              //         left: 16, top: 16, right: 16, bottom: 16),
+                              //     decoration: AppDecoration.outlineGray200
+                              //         .copyWith(
+                              //             borderRadius:
+                              //                 BorderRadiusStyle.roundedBorder8),
+                              //     child: CustomImageView(
+                              //         svgPath: ImageConstant.imgFacebook,
+                              //         height: getVerticalSize(20),
+                              //         color: Colors.blue,
+                              //         width: getHorizontalSize(16),
+                              //         margin: getMargin(top: 1, bottom: 1),
+                              //         onTap: () {
+                              //           //onTapImgCamera();
+                              //           onTapRowfacebook();
+                              //         })),
                             ]),
                       )),
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: SizedBox(
-                      width: 300,
-                      height: 50,
-                      child: SignInWithAppleButton(
-                        onPressed: () async {
-                          final credential =
-                              await SignInWithApple.getAppleIDCredential(
-                            scopes: [
-                              AppleIDAuthorizationScopes.email,
-                              AppleIDAuthorizationScopes.fullName,
-                            ],
-                          );
-                          // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                          // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-                        },
-                      ),
-                    ),
-                  ),
+                  Platform.isIOS
+                      ? Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: SizedBox(
+                            width: 300,
+                            height: 50,
+                            child: SignInWithAppleButton(
+                              onPressed: () async {
+                                final credential =
+                                    await SignInWithApple.getAppleIDCredential(
+                                  scopes: [
+                                    AppleIDAuthorizationScopes.email,
+                                    AppleIDAuthorizationScopes.fullName,
+                                  ],
+                                );
+                                // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                                // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                              },
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
             ),

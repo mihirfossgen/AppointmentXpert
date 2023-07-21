@@ -469,23 +469,23 @@ class ProfilePage extends GetWidget<ProfileController> {
                       ),
                     ),
                   ),
-                  sectionTitle(Get.context!, "Office Gallery"),
+                  sectionTitle(Get.context!, "Awards & Recognition"),
                   SizedBox(
                     height: 150,
                     child: ListView(
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.horizontal,
                       children: <Widget>[
-                        officePhotos(
-                            Get.context!, "https://i.imgur.com/gKdDh8p.jpg"),
-                        officePhotos(
-                            Get.context!, "https://i.imgur.com/bJ6gU02.jpg"),
-                        officePhotos(
-                            Get.context!, "https://i.imgur.com/ZJZIrIB.jpg"),
-                        officePhotos(
-                            Get.context!, "https://i.imgur.com/pTAuS44.jpg"),
-                        officePhotos(
-                            Get.context!, "https://i.imgur.com/eY1lW0A.jpg"),
+                        officePhotos(Get.context!,
+                            "https://marianheart.org/wp-content/uploads/2020/05/IMG_0203-2-rotated.jpg"),
+                        officePhotos(Get.context!,
+                            "https://marianheart.org/wp-content/uploads/2020/05/IMG_0205-2-rotated.jpg"),
+                        officePhotos(Get.context!,
+                            "https://marianheart.org/wp-content/uploads/2020/05/IMG_2932-1-scaled.jpg"),
+                        officePhotos(Get.context!,
+                            "https://marianheart.org/wp-content/uploads/2020/05/IMG_2934-scaled.jpg"),
+                        // officePhotos(
+                        //     Get.context!, "https://i.imgur.com/eY1lW0A.jpg"),
                       ],
                     ),
                   ),

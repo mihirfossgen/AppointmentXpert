@@ -100,7 +100,11 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                       // newPageProgressIndicatorBuilder: (_) =>
                                       //     NewPageProgressIndicator(),
                                       noItemsFoundIndicatorBuilder: (_) =>
-                                          const Text('No appointments found.'),
+                                          loadEmptyWidget(),
+                                      //     const Text(
+                                      //   'No appointments found.',
+                                      //   textAlign: TextAlign.center,
+                                      // ),
                                       noMoreItemsIndicatorBuilder: (_) =>
                                           const Text(
                                         'No more appointments.',

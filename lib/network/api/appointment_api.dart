@@ -239,8 +239,8 @@ class AppointmentApi {
       int value) async {
     try {
       debugPrint('ssssss');
-      var response = await _apiService
-          .get('${Endpoints.getAllAppointments}/$value');
+      var response =
+          await _apiService.get('${Endpoints.getAllAppointments}/$value');
       GetAllAppointments appointmentContent =
           GetAllAppointments.fromJson(response.data);
       List<AppointmentContent>? list = appointmentContent.content;
