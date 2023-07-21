@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/constants.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
@@ -49,6 +51,8 @@ class SignUpScreen extends GetWidget<SignUpController> {
         return "";
     }
   }
+
+  RxBool selectConditions = false.obs;
 
   // Widget _title(String value) {
   //   return Padding(
@@ -164,6 +168,18 @@ class SignUpScreen extends GetWidget<SignUpController> {
     );
   }
 
+  Future<void> _launchUrl(String type) async {
+    Uri _url;
+    if (type == "termsandcondition") {
+      _url = Uri.parse('https://fossgentechnologies.com/terms-conditions/');
+    } else {
+      _url = Uri.parse('https://fossgentechnologies.com/privacy-policy/');
+    }
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   /// Main Body
   Widget _buildMainBody(
       Size size, SignUpController signUpController, ThemeData theme) {
@@ -212,7 +228,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
             height: size.height * 0.03,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20),
+            padding: const EdgeInsets.only(left: 15.0, right: 15.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -290,25 +306,88 @@ class SignUpScreen extends GetWidget<SignUpController> {
                       suffixConstraints:
                           BoxConstraints(maxHeight: getVerticalSize(56)),
                       isObscureText: controller.isShowPassword.value)),
-                  Obx(() => SizedBox(
-                        height: 80,
-                        child: CustomCheckbox(
-                            text: "msg_i_agree_to_the2".tr,
-                            iconSize: getHorizontalSize(52),
-                            width: width,
-                            value: controller.isCheckbox.value,
-                            margin: getMargin(
-                              top: 16,
-                            ),
-                            fontStyle: CheckboxFontStyle
-                                .SFProDisplayRegular14Bluegray800,
-                            onChange: (value) {
-                              controller.isCheckbox.value = value;
-                            }),
-                      )),
                   SizedBox(
                     height: size.height * 0.03,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(() => CustomCheckbox(
+                          // text: "msg_i_agree_to_the2".tr,
+                          iconSize: getHorizontalSize(20),
+                          value: controller.isCheckbox.value,
+                          // margin: getMargin(
+                          //   top: 16,
+                          // ),
+                          alignment: Alignment.centerLeft,
+                          fontStyle: CheckboxFontStyle
+                              .SFProDisplayRegular14Bluegray800,
+                          onChange: (value) {
+                            controller.isCheckbox.value = value;
+                          })),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: 'I agree to the OPDXpert ',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Terms of Service',
+                                  style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _launchUrl('termsandcondition');
+                                    }),
+                              const TextSpan(
+                                  text: ' and ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  )),
+                              TextSpan(
+                                text: '\n Privacy Policy',
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    _launchUrl('termsandcondition');
+                                  },
+                                style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline),
+                              )
+                            ]),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      )
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  Obx(() => selectConditions.value
+                      ? Column(
+                          children: [
+                            Text(
+                              'Please agree to the terms and condition and privacy policy',
+                              style: TextStyle(color: Colors.red.shade600),
+                            ),
+                            SizedBox(
+                              height: size.height * 0.03,
+                            ),
+                          ],
+                        )
+                      : const SizedBox()),
 
                   /// SignUp Button
                   signUpButton(theme),
@@ -368,6 +447,11 @@ class SignUpScreen extends GetWidget<SignUpController> {
         ),
         onPressed: () async {
           // Validate returns true if the form is valid, or false otherwise.
+          if (controller.isCheckbox.value == false) {
+            selectConditions.value = true;
+          } else {
+            selectConditions.value = false;
+          }
           if (_formKey.currentState!.validate()) {
             // ... Navigate To your Home Page
 
@@ -388,6 +472,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
       "mobile": controller.enternumberController.text,
       "password": "qwerty",
       "role": "PATIENT",
+      "termsAndConditionFlag": controller.isCheckbox.value,
       "username": controller.enternumberController.text
     };
     print(jsonEncode(requestData));

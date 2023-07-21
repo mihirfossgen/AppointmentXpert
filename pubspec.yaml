@@ -103,6 +103,10 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.1
   badges: ^2.0.2
   qr_flutter: ^4.1.0
+  url_launcher: ^6.1.12
+  flutter_advanced_calendar: ^1.4.1
+  calendar_timeline: ^1.1.2
+  
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 class Endpoints {
   Endpoints._();
 
-  static const String baseURL = 'http://192.168.1.43:7070/';
+  static const String baseURL = 'http://192.168.0.106:7070/';
 
   static const int receiveTimeout = 5000;
 
@@ -58,4 +58,6 @@ class Endpoints {
       baseURL + 'emergencyAppointment/create';
   static const String emergencyPatientList =
       baseURL + 'emergencyAppointment/today';
+  static const String getappointmentDates =
+      'appointment/getAppointmentDetailsForDate?rescheduleDate=';
 }

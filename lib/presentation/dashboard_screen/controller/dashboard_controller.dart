@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -87,10 +88,15 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> staffTodaysTotalData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
+  final calendarControllerToday = AdvancedCalendarController.today();
+  // AdvancedCalendarController calendarControllerCustom =
+  //     AdvancedCalendarController(DateTime(2022, 10, 23));
+  final events = <DateTime>[];
 
   static const _pageSize = 20;
   PagingController<int, Content> patientPagingController =
       PagingController(firstPageKey: 0);
+  Contents? staffDataa;
 
   var isloadingPatientData = false.obs;
   var isloadingPatientTodaysAppointments = false.obs;
@@ -101,6 +107,9 @@ class DashboardController extends GetxController {
   var isloadingStaffList = false.obs;
   var isloadingRecentPatients = false.obs;
   var isloadingEmergancyPatients = false.obs;
+
+  RxList<AppointmentContent> getAppointmentDetailsByDate =
+      <AppointmentContent>[].obs;
 
   getformattedDate(String date) {
     final DateFormat formatter = DateFormat('dd/MM/yyyy');
@@ -128,6 +137,11 @@ class DashboardController extends GetxController {
       callStaffList(0);
       callRecentPatientList(0);
       callEmergencyPatientList();
+      times = getTimes(startTime, endTime, step)
+          .map((tod) => tod.format(Get.context!))
+          .toList();
+      final DateFormat formatter = DateFormat('dd-MM-yyyy');
+      callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     }
   }
 
@@ -192,6 +206,25 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
+      String date) async {
+    try {
+      isloadingStaffData.value = true;
+      var response =
+          (await Get.find<AppointmentApi>().getAppointmentDetailsViaDate(date));
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      getAppointmentDetailsByDate.value = list;
+      return list;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isloadingStaffData.value = false;
+    }
+  }
+
   Future<void> callStaffList(int pageNumber) async {
     try {
       isloadingStaffList.value = true;
@@ -199,6 +232,7 @@ class DashboardController extends GetxController {
       print(response);
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
         if (response.content?[i].profession == "DOCTOR") {
+          staffDataa = response.content![i];
           SharedPrefUtils.saveStr(
               'doctor_details', jsonEncode(response.content![i]));
         }
@@ -210,6 +244,28 @@ class DashboardController extends GetxController {
       isloadingStaffList.value = false;
     }
   }
+
+  Iterable<TimeOfDay> getTimes(
+      TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
+    var hour = startTime.hour;
+    var minute = startTime.minute;
+
+    do {
+      yield TimeOfDay(hour: hour, minute: minute);
+      minute += step.inMinutes;
+      while (minute >= 60) {
+        minute -= 60;
+        hour++;
+      }
+    } while (hour < endTime.hour ||
+        (hour == endTime.hour && minute <= endTime.minute));
+  }
+
+  final startTime = const TimeOfDay(hour: 12, minute: 0);
+  final endTime = const TimeOfDay(hour: 18, minute: 0);
+  final step = const Duration(minutes: 15);
+  List<String>? times;
+  String? finalTime;
 
   // Future<void> callAppointmentsByStaffId(int staffId, bool active) async {
   //   try {
@@ -301,7 +357,8 @@ class DashboardController extends GetxController {
                 !formatter
                     .parse(i.date!)
                     .isBefore(formatter.parse(now.toString())) &&
-                i.status?.toLowerCase() != "completed",
+                i.status?.toLowerCase() != "completed" &&
+                formatter.parse(i.date!) != formatter.parse(now.toString()),
           )
           .toList();
       upComingAppointments.value = appointmentsUpcoming;

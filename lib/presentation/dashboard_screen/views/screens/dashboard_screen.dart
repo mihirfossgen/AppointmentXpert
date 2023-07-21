@@ -4,12 +4,14 @@ import 'dart:convert';
 
 import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedule_tab_container_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:countup/countup.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -43,6 +45,7 @@ import '../../shared_components/simple_user_profile.dart';
 import '../components/dashboard_header.dart';
 import '../components/emergency_list.dart';
 import '../components/patients_list.dart';
+import '../components/upcoming_appointments.dart';
 
 part '../components/appointment_in_progress.dart';
 // model
@@ -225,6 +228,9 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.callStaffList(0);
             controller.callRecentPatientList(0);
             controller.callEmergencyPatientList();
+            final DateFormat formatter = DateFormat('dd-MM-yyyy');
+            controller.callGetAppointmentDetailsForDate(
+                formatter.format(DateTime.now()));
           }
         },
         child: SizedBox(
@@ -846,6 +852,174 @@ class DashboardScreen extends GetView<DashboardController> {
                                   ],
                                 ),
                               ),
+                            ),
+                            const SizedBox(height: 10),
+                            Card(
+                              elevation: 4,
+                              color: Colors.white,
+                              shadowColor: ColorConstant.gray400,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: HeaderText(
+                                          //DateTime.now().formatdMMMMY(),
+                                          "Upcoming Appointments"),
+                                    ),
+                                    const SizedBox(height: kSpacing),
+                                    Obx(() => controller
+                                            .isloadingStaffUpcomingAppointments
+                                            .value
+                                        ? const Center(
+                                            child: CircularProgressIndicator())
+                                        : (SharedPrefUtils.readPrefStr(
+                                                    "role") ==
+                                                'PATIENT')
+                                            ? controller.upComingAppointments
+                                                    .isNotEmpty
+                                                ? UpcomingAppointments(
+                                                    data: controller
+                                                        .upComingAppointments)
+                                                : Container(
+                                                    color: Colors.white,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    child: const Center(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            'No upcomming appointments found.',
+                                                            style: TextStyle(
+                                                              fontSize: 18,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                            : controller.upComingAppointments
+                                                    .isNotEmpty
+                                                ? UpcomingAppointments(
+                                                    data: controller
+                                                        .upComingAppointments)
+                                                : Container(
+                                                    color: Colors.white,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20),
+                                                    child: const Center(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            'No upcoming appointments found.',
+                                                            style: TextStyle(
+                                                              fontSize: 18,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Column(
+                              children: [
+                                CalendarTimeline(
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now()
+                                      .add(const Duration(days: 360)),
+                                  onDateSelected: (date) {
+                                    final DateFormat formatter =
+                                        DateFormat('dd-MM-yyyy');
+                                    controller.callGetAppointmentDetailsForDate(
+                                        formatter.format(date));
+                                  },
+                                  leftMargin: 20,
+                                  monthColor: Colors.blueGrey,
+                                  dayColor: Colors.black,
+                                  activeDayColor: Colors.white,
+                                  activeBackgroundDayColor:
+                                      ColorConstant.blue60001,
+                                  dotsColor: Colors.white,
+                                  locale: 'en_ISO',
+                                ),
+                                const SizedBox(height: 10),
+                                Obx(() => controller.getAppointmentDetailsByDate
+                                            .value ==
+                                        []
+                                    ? const SizedBox()
+                                    : Align(
+                                        alignment: Alignment.center,
+                                        child: Wrap(
+                                            runSpacing: getVerticalSize(5),
+                                            spacing: getHorizontalSize(5),
+                                            children: List.generate(
+                                                controller.times?.length ?? 0,
+                                                (index) {
+                                              return Container(
+                                                  height: 40,
+                                                  width: 100,
+                                                  margin:
+                                                      const EdgeInsets.all(5),
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          controller.getAppointmentDetailsByDate.any((element) => element.startTime.toString().contains(controller.times?[index].toString() ?? ""))
+                                                              ? Colors.blue
+                                                              : Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
+                                                      border: Border.all(
+                                                          color: controller
+                                                                  .getAppointmentDetailsByDate
+                                                                  .any((element) => element
+                                                                      .startTime
+                                                                      .toString()
+                                                                      .contains(controller.times?[index].toString() ?? ""))
+                                                              ? Colors.transparent
+                                                              : Colors.black)),
+                                                  child: Text(
+                                                    controller.times?[index] ??
+                                                        "",
+                                                    style: TextStyle(
+                                                        color: controller
+                                                                .getAppointmentDetailsByDate
+                                                                .any((element) => element
+                                                                    .startTime
+                                                                    .toString()
+                                                                    .contains(controller
+                                                                            .times?[index]
+                                                                            .toString() ??
+                                                                        ""))
+                                                            ? Colors.white
+                                                            : Colors.black),
+                                                  ));
+                                            })),
+                                      )),
+                              ],
                             ),
                             const SizedBox(height: 10),
                             (SharedPrefUtils.readPrefStr("role") ==

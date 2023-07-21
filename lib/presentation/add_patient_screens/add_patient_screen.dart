@@ -288,20 +288,6 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                         height: size.height * 0.03,
                       ),
                       CustomTextFormField(
-                          controller: controller.city,
-                          labelText: "City",
-                          isRequired: true,
-                          padding: TextFormFieldPadding.PaddingT14,
-                          validator: (value) {
-                            return controller.cityValidator(value ?? "");
-                          },
-                          textInputType: TextInputType.emailAddress,
-                          prefixConstraints:
-                              BoxConstraints(maxHeight: getVerticalSize(56))),
-                      SizedBox(
-                        height: size.height * 0.03,
-                      ),
-                      CustomTextFormField(
                           controller: controller.country,
                           labelText: "Country",
                           isRequired: true,
@@ -312,34 +298,34 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           textInputType: TextInputType.emailAddress,
                           prefixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56))),
-                      SizedBox(
-                        height: size.height * 0.03,
-                      ),
-                      CustomTextFormField(
-                          controller: controller.stateOrProvince,
-                          labelText: "State/Province",
-                          isRequired: true,
-                          padding: TextFormFieldPadding.PaddingT14,
-                          validator: (value) {
-                            return controller.stateValidator(value ?? "");
-                          },
-                          textInputType: TextInputType.emailAddress,
-                          prefixConstraints:
-                              BoxConstraints(maxHeight: getVerticalSize(56))),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      CustomTextFormField(
-                          controller: controller.postalCode,
-                          labelText: "Postal Code",
-                          isRequired: true,
-                          padding: TextFormFieldPadding.PaddingT14,
-                          validator: (value) {
-                            return controller.postalCodeValidator(value ?? "");
-                          },
-                          textInputType: TextInputType.emailAddress,
-                          prefixConstraints:
-                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                      // SizedBox(
+                      //   height: size.height * 0.03,
+                      // ),
+                      // CustomTextFormField(
+                      //     controller: controller.stateOrProvince,
+                      //     labelText: "State/Province",
+                      //     isRequired: true,
+                      //     padding: TextFormFieldPadding.PaddingT14,
+                      //     validator: (value) {
+                      //       return controller.stateValidator(value ?? "");
+                      //     },
+                      //     textInputType: TextInputType.emailAddress,
+                      //     prefixConstraints:
+                      //         BoxConstraints(maxHeight: getVerticalSize(56))),
+                      // SizedBox(
+                      //   height: size.height * 0.02,
+                      // ),
+                      // CustomTextFormField(
+                      //     controller: controller.postalCode,
+                      //     labelText: "Postal Code",
+                      //     isRequired: true,
+                      //     padding: TextFormFieldPadding.PaddingT14,
+                      //     validator: (value) {
+                      //       return controller.postalCodeValidator(value ?? "");
+                      //     },
+                      //     textInputType: TextInputType.emailAddress,
+                      //     prefixConstraints:
+                      //         BoxConstraints(maxHeight: getVerticalSize(56))),
                       SizedBox(
                         height: size.height * 0.03,
                       ),
