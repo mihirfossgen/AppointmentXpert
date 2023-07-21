@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../core/utils/size_utils.dart';
 import '../../models/patient_model.dart';
@@ -18,6 +19,7 @@ import '../../widgets/responsive.dart';
 import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
 import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
 import 'controller/profile_controller.dart';
+import 'generate_qr_code.dart';
 
 class ProfilePage extends GetWidget<ProfileController> {
   final StaffData? staffData;
@@ -527,6 +529,23 @@ class ProfilePage extends GetWidget<ProfileController> {
                   //   ),
                   // ),
                   const SizedBox(height: 50),
+
+                  Card(
+                    elevation: 10,
+                    child:
+                    QrImageView(
+                      semanticsLabel: 'AppointmentXpert',
+                      data: 'https://marianheart.org/',
+                      version: QrVersions.auto,
+                      size: 220,
+                      gapless: false,
+                      padding: const EdgeInsets.all(20.0),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+
                   ElevatedButton.icon(
                       onPressed: () {
                         onTapLogout();
@@ -535,8 +554,10 @@ class ProfilePage extends GetWidget<ProfileController> {
                       label: const Text('Log Out')),
                   const SizedBox(
                     height: 20,
-                  )
+                  ),
+
                 ],
+
               )),
         ],
       ),
@@ -835,6 +856,23 @@ class ProfilePage extends GetWidget<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 50),
+
+                Card(
+                  elevation: 10,
+                  child:
+                  QrImageView(
+                    semanticsLabel: 'AppointmentXpert',
+                    data: 'https://marianheart.org/',
+                    version: QrVersions.auto,
+                    size: 220,
+                    gapless: false,
+                    padding: const EdgeInsets.all(20.0),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
                 ElevatedButton.icon(
                     onPressed: () {
                       onTapLogout();

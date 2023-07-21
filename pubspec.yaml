@@ -102,6 +102,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   liquid_pull_to_refresh: ^3.0.1
   badges: ^2.0.2
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
