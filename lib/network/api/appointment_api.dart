@@ -199,6 +199,7 @@ class AppointmentApi {
 
   Future<dynamic> createAppointment(var data, var headers) async {
     try {
+      ProgressDialogUtils.showProgressDialog();
       final Response response = await _apiService.post(
         Endpoints.createAppointment,
         data: jsonEncode(data),
@@ -213,6 +214,8 @@ class AppointmentApi {
     } catch (e) {
       print("e ----- $e");
       throw Exception(e);
+    } finally {
+      ProgressDialogUtils.hideProgressDialog();
     }
   }
 

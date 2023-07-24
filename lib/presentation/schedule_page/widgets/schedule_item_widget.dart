@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:appointmentxpert/core/utils/time_calculation_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -128,10 +129,7 @@ class ScheduleItemWidget extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    controller.getformattedDate(appointment.date.toString()) +
-                        ' ' +
-                        controller.getformattedtime(
-                            appointment.date ?? "", Get.context!),
+                    " ${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
                     style: AppStyle.txtInterRegular14Gray700,
                   ),
                   const SizedBox(

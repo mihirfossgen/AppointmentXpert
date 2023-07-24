@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:empty_widget/empty_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
@@ -84,7 +86,8 @@ class DashboardController extends GetxController {
   Rx<StaffData> staffData = StaffData().obs;
   Rx<PatientData> patientData = PatientData().obs;
   RxList<AppointmentContent> staffTodaysData = <AppointmentContent>[].obs;
-  RxList<AppointmentContent> staffTodaysCompletedData = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> staffTodaysCompletedData =
+      <AppointmentContent>[].obs;
   RxList<AppointmentContent> staffTodaysTotalData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
@@ -107,6 +110,7 @@ class DashboardController extends GetxController {
   var isloadingStaffList = false.obs;
   var isloadingRecentPatients = false.obs;
   var isloadingEmergancyPatients = false.obs;
+  RxBool isLoadingAppointmentsByDate = false.obs;
 
   RxList<AppointmentContent> getAppointmentDetailsByDate =
       <AppointmentContent>[].obs;
@@ -143,6 +147,25 @@ class DashboardController extends GetxController {
       final DateFormat formatter = DateFormat('dd-MM-yyyy');
       callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     }
+
+    // _register();
+    // getMessage();
+  }
+
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  _register() {
+    firebaseMessaging
+        .getToken()
+        .then((token) => print('fcm token ---- $token'));
+  }
+
+  void getMessage() {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((value) => print(value?.data.toString()));
   }
 
   Future<void> callRecentPatientList(int pageNo) async {
@@ -320,15 +343,18 @@ class DashboardController extends GetxController {
           .toList();
       staffTodaysData.value = appointments;
 
-      List<AppointmentContent> totalTodayList = list.where((i) =>
-          dateFormat(i.date!) == dateFormat(DateTime.now().toString())).toList();
+      List<AppointmentContent> totalTodayList = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
       staffTodaysTotalData.value = totalTodayList;
 
-      List<AppointmentContent> completedList = list.where((i) => i.status?.toLowerCase()=='completed'&&
-          dateFormat(i.date!) == dateFormat(DateTime.now().toString())).toList();
+      List<AppointmentContent> completedList = list
+          .where((i) =>
+              i.status?.toLowerCase() == 'completed' &&
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
       staffTodaysCompletedData.value = completedList;
-
-
     } on Map {
       //postLoginResp = e;
       rethrow;
