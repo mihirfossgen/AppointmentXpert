@@ -14,12 +14,12 @@ import '../../models/patient_model.dart';
 import '../../models/staff_model.dart';
 import '../../network/endpoints.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../theme/app_style.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
 import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
 import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
 import 'controller/profile_controller.dart';
-import 'generate_qr_code.dart';
 
 class ProfilePage extends GetWidget<ProfileController> {
   final StaffData? staffData;
@@ -532,8 +532,7 @@ class ProfilePage extends GetWidget<ProfileController> {
 
                   Card(
                     elevation: 10,
-                    child:
-                    QrImageView(
+                    child: QrImageView(
                       semanticsLabel: 'AppointmentXpert',
                       data: 'https://marianheart.org/',
                       version: QrVersions.auto,
@@ -555,9 +554,28 @@ class ProfilePage extends GetWidget<ProfileController> {
                   const SizedBox(
                     height: 20,
                   ),
-
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Powered By',
+                          style: AppStyle.txtInterRegular16,
+                        ),
+                        const SizedBox(
+                          height: 75,
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Image(
+                              image: AssetImage('assets/images/logof.png'),
+                              fit: BoxFit.contain, // use this
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-
               )),
         ],
       ),
@@ -856,11 +874,9 @@ class ProfilePage extends GetWidget<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 50),
-
                 Card(
                   elevation: 10,
-                  child:
-                  QrImageView(
+                  child: QrImageView(
                     semanticsLabel: 'AppointmentXpert',
                     data: 'https://marianheart.org/',
                     version: QrVersions.auto,
@@ -872,7 +888,6 @@ class ProfilePage extends GetWidget<ProfileController> {
                 const SizedBox(
                   height: 20,
                 ),
-
                 ElevatedButton.icon(
                     onPressed: () {
                       onTapLogout();
