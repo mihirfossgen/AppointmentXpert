@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../core/constants/constants.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
@@ -30,8 +32,12 @@ class SignUpScreen extends GetWidget<SignUpController> {
     {"id": 9, "name": "Examiner"},
     {"id": 10, "name": "Nurse"}
   ];
+  String? name;
+  String? email;
 
-  SignUpScreen({super.key});
+  SignUpScreen({super.key, this.name, this.email});
+
+  SignUpController controller = Get.put(SignUpController());
 
   getStringValue(String text) {
     switch (text.toLowerCase()) {
@@ -78,7 +84,10 @@ class SignUpScreen extends GetWidget<SignUpController> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var theme = Theme.of(context);
-
+    if (name != null && email != null) {
+      controller.enternameController.text = name.toString();
+      controller.enteremailController.text = email.toString();
+    }
     return SafeArea(
         top: false,
         bottom: false,
@@ -339,7 +348,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                   text: 'Terms of Service',
                                   style: const TextStyle(
                                       color: Colors.blue,
-                                      fontSize: 17,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.underline),
                                   recognizer: TapGestureRecognizer()
@@ -350,7 +359,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                   text: ' and ',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 16,
+                                    fontSize: 15,
                                   )),
                               TextSpan(
                                 text: '\n Privacy Policy',
@@ -360,7 +369,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                   },
                                 style: const TextStyle(
                                     color: Colors.blue,
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline),
                               )
@@ -371,9 +380,8 @@ class SignUpScreen extends GetWidget<SignUpController> {
                       )
                     ],
                   ),
-
                   SizedBox(
-                    height: size.height * 0.03,
+                    height: size.height * 0.05,
                   ),
                   Obx(() => selectConditions.value
                       ? Column(
@@ -393,6 +401,27 @@ class SignUpScreen extends GetWidget<SignUpController> {
                   signUpButton(theme),
                   SizedBox(
                     height: size.height * 0.03,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Powered By',
+                          style: AppStyle.txtInterRegular16,
+                        ),
+                        const SizedBox(
+                          height: 75,
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Image(
+                              image: AssetImage('assets/images/logof.png'),
+                              fit: BoxFit.contain, // use this
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
                   /// Navigate To Login Screen

@@ -11,7 +11,6 @@ import 'package:empty_widget/empty_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -956,7 +955,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     controller.callGetAppointmentDetailsForDate(
                                         formatter.format(date));
                                   },
-                                  leftMargin: 20,
+                                  //leftMargin: 20,
                                   monthColor: Colors.blueGrey,
                                   dayColor: Colors.black,
                                   activeDayColor: Colors.white,
@@ -2051,13 +2050,10 @@ class DashboardScreen extends GetView<DashboardController> {
               child: ResponsiveBuilder.isMobile(Get.context!) ||
                       ResponsiveBuilder.isTablet(Get.context!)
                   ? Column(
-
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                  children: [
-
+                      children: [
                           Row(
                             children: [
                               Container(
@@ -2077,7 +2073,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: controller.staffTodaysTotalData.length.toDouble(),
+                                      end: controller
+                                          .staffTodaysTotalData.length
+                                          .toDouble(),
                                       duration: const Duration(seconds: 3),
                                       separator: ',',
                                       style: TextStyle(
@@ -2162,8 +2160,10 @@ class DashboardScreen extends GetView<DashboardController> {
                                   borderRadius: BorderRadius.circular(20),
                                   color: ColorConstant.blue60001,
                                 ),
-                                child: const Icon(Icons.access_time_filled_outlined,
-                                    size: 40, color: Colors.white),
+                                child: const Icon(
+                                    Icons.access_time_filled_outlined,
+                                    size: 40,
+                                    color: Colors.white),
                               ),
                               const SizedBox(
                                 width: 10,
@@ -2173,7 +2173,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: double.parse(controller.staffTodaysCompletedData.length.toString()),
+                                      end: double.parse(controller
+                                          .staffTodaysCompletedData.length
+                                          .toString()),
                                       duration: const Duration(seconds: 3),
                                       separator: ',',
                                       style: TextStyle(
@@ -2198,8 +2200,7 @@ class DashboardScreen extends GetView<DashboardController> {
                               ),
                             ],
                           )
-
-                       ])
+                        ])
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -2221,7 +2222,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: controller.staffTodaysTotalData.length.toDouble(),
+                                      end: controller
+                                          .staffTodaysTotalData.length
+                                          .toDouble(),
                                       duration: const Duration(seconds: 2),
                                       separator: ',',
                                       style: TextStyle(
@@ -2269,7 +2272,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                 children: [
                                   Countup(
                                       begin: 0,
-                                      end: controller.getEmergencyPatientsList.length.toDouble(),
+                                      end: controller
+                                          .getEmergencyPatientsList.length
+                                          .toDouble(),
                                       duration: const Duration(seconds: 2),
                                       separator: ',',
                                       style: TextStyle(
@@ -2307,8 +2312,10 @@ class DashboardScreen extends GetView<DashboardController> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: const Color(0xff013f88)),
-                                  child: const Icon(Icons.access_time_filled_outlined,
-                                      size: 60, color: Colors.white),
+                                  child: const Icon(
+                                      Icons.access_time_filled_outlined,
+                                      size: 60,
+                                      color: Colors.white),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -2318,7 +2325,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                   children: [
                                     Countup(
                                         begin: 0,
-                                        end: double.parse(controller.staffTodaysCompletedData.length.toString()),
+                                        end: double.parse(controller
+                                            .staffTodaysCompletedData.length
+                                            .toString()),
                                         duration: const Duration(seconds: 2),
                                         separator: ',',
                                         style: TextStyle(

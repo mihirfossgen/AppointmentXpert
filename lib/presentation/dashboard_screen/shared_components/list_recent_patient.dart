@@ -116,7 +116,7 @@ class ListRecentPatients extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            Row(children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text(
                 'Address: ',
                 style: TextStyle(
@@ -128,6 +128,7 @@ class ListRecentPatients extends StatelessWidget {
                 '${data.address}',
                 style: const TextStyle(fontSize: 13, color: Colors.black),
                 softWrap: true,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ]),

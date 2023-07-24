@@ -22,6 +22,7 @@ import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
 import '../login_success_dialog/controller/login_success_controller.dart';
 import '../login_success_dialog/login_success_dialog.dart';
+import '../sign_up_screen/sign_up_screen.dart';
 import '../verify_number/controller/verify_number_controller.dart';
 import '../verify_number/verify_number_screen.dart';
 import 'controller/login_controller.dart';
@@ -325,6 +326,9 @@ class LoginScreen extends GetWidget<LoginController> {
                                     AppleIDAuthorizationScopes.fullName,
                                   ],
                                 );
+                                Get.to(SignUpScreen(
+                                    name: credential.givenName,
+                                    email: credential.email));
                                 // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
                                 // after they have been validated with Apple (see `Integration` section for more information on how to do this)
                               },
@@ -332,6 +336,27 @@ class LoginScreen extends GetWidget<LoginController> {
                           ),
                         )
                       : const SizedBox(),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Powered By',
+                          style: AppStyle.txtInterRegular16,
+                        ),
+                        const SizedBox(
+                          height: 75,
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Image(
+                              image: AssetImage('assets/images/logof.png'),
+                              fit: BoxFit.contain, // use this
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -344,7 +369,7 @@ class LoginScreen extends GetWidget<LoginController> {
   // Login Button
   Widget loginButton() {
     return CustomButton(
-        height: getVerticalSize(65),
+        height: getVerticalSize(55),
         text: "lbl_login".tr,
         margin: getMargin(top: 12, bottom: 10),
         onTap: () async {
@@ -458,6 +483,8 @@ onTapRowgoogle() async {
   await GoogleAuthHelper().googleSignInProcess().then((googleUser) {
     if (googleUser != null) {
       //TODO Actions to be performed after signin
+      Get.to(
+          SignUpScreen(name: googleUser.displayName, email: googleUser.email));
     } else {
       Get.snackbar('Error', 'user data is empty');
     }
