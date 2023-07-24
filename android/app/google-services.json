@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "231282522270",
-    "project_id": "healthcare-cpas",
-    "storage_bucket": "healthcare-cpas.appspot.com"
+    "project_number": "536695916934",
+    "project_id": "appointxpert",
+    "storage_bucket": "appointxpert.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:231282522270:android:a6896aa6d7a46034b1638f",
+        "mobilesdk_app_id": "1:536695916934:android:2d93a7a66ff21bce220407",
         "android_client_info": {
-          "package_name": "com.fossgen.opdxpert"
+          "package_name": "com.example.appointmentxpert"
         }
       },
       "oauth_client": [
         {
-          "client_id": "231282522270-f8rg7775kqj0dvfhvqud87bkqo82hkoe.apps.googleusercontent.com",
+          "client_id": "536695916934-m2q7hf7c6loer1g3padf7ntb32jselnn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCX7puGlnu_F7DeMBA86rNj4tiotpFAtAE"
+          "current_key": "AIzaSyA7qSrSgDLUYHQxJLFp-g5fLPv-jhk4hyY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "231282522270-f8rg7775kqj0dvfhvqud87bkqo82hkoe.apps.googleusercontent.com",
+              "client_id": "536695916934-m2q7hf7c6loer1g3padf7ntb32jselnn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

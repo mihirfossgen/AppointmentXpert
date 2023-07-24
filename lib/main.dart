@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:appointmentxpert/presentation/splash_screen/splash_screen.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,7 @@ import 'shared_prefrences_page/shared_prefrence_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefUtils.init();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) {

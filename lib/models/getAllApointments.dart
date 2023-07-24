@@ -120,6 +120,7 @@ class AppointmentContent {
   Visit? visit;
   dynamic labOrder;
   bool? selected;
+  int? updateTimeInMin;
 
   AppointmentContent({
     this.id,
@@ -140,6 +141,7 @@ class AppointmentContent {
     this.startTime,
     this.endTime,
     this.selected,
+    this.updateTimeInMin,
   });
 
   AppointmentContent copyWith({
@@ -154,6 +156,7 @@ class AppointmentContent {
     String? date,
     String? startTime,
     String? endTime,
+    int? updateTimeInMin,
     bool? active,
     String? purpose,
     Examination? examination,
@@ -175,6 +178,7 @@ class AppointmentContent {
         active: active ?? this.active,
         purpose: purpose ?? this.purpose,
         examination: examination ?? this.examination,
+        updateTimeInMin: updateTimeInMin ?? this.updateTimeInMin,
         treatment: treatment ?? this.treatment,
         visit: visit ?? this.visit,
         labOrder: labOrder ?? this.labOrder,
@@ -204,6 +208,7 @@ class AppointmentContent {
         selected: json['selected'],
         active: json["active"],
         purpose: json["purpose"],
+        updateTimeInMin: json["updateTimeInMin"],
         examination: json["examination"] == null
             ? null
             : Examination.fromJson(json["examination"]),
@@ -224,6 +229,7 @@ class AppointmentContent {
         "note": note,
         "status": status,
         "date": date,
+        "updateTimeInMin": updateTimeInMin,
         "active": active,
         "purpose": purpose,
         "examination": examination?.toJson(),

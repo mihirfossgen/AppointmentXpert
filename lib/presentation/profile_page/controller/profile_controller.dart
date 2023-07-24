@@ -41,24 +41,13 @@ class ProfileController extends GetxController {
   Future<void> staffUpdate(Map<String, dynamic> req) async {
     try {
       bool a = await Get.find<StaffApi>().staffUpdate(req);
-      WidgetsBinding.instance
-          .addPostFrameCallback((timeStamp) => Get.dialog(AlertDialog(
-                title: const Text('Data Updated Successfully!!'),
-                actions: [
-                  CustomButton(
-                    text: 'Close',
-                    fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
-                    onTap: () {
-                      Get.back();
-                      Get.back();
-                    },
-                  )
-                ],
-              )));
+      Get.back();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Get.snackbar(
+          "Data Updated Successfully!!", '',
+          snackPosition: SnackPosition.BOTTOM));
     } on Map catch (e) {
       print(e);
       rethrow;
     }
   }
-
 }

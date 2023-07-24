@@ -40,48 +40,55 @@ class _AppointmentInProgress extends StatelessWidget {
         //width: 400,
         height: 250,
         child: Card(
-          child: DataTable2(
-              columnSpacing: 12,
-              horizontalMargin: 12,
-              minWidth: MediaQuery.of(Get.context!).size.width,
-              showBottomBorder: true,
-              columns: [
-                DataColumn(
-                  label: Text(
-                    'Name',
-                    style: AppStyle.txtInterSemiBold14,
+          child: AbsorbPointer(
+            child: DataTable2(
+                columnSpacing: 12,
+                horizontalMargin: 12,
+                minWidth: MediaQuery.of(Get.context!).size.width,
+                showBottomBorder: true,
+                columns: [
+                  DataColumn(
+                    label: Text(
+                      'Name',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
                   ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Time',
-                    style: AppStyle.txtInterSemiBold14,
+                  DataColumn(
+                    label: Text(
+                      'Time',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
                   ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Status',
-                    style: AppStyle.txtInterSemiBold14,
+                  DataColumn(
+                    label: Text(
+                      'Status',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
                   ),
-                ),
-              ],
-              rows: List<DataRow>.generate(
-                  data.length,
-                  (index) => DataRow(cells: [
-                        DataCell(
-                            Text(
-                              '${data[index].patient?.prefix}'
-                              '${data[index].patient?.firstName} '
-                              '${data[index].patient?.lastName}',
-                              overflow: TextOverflow.clip,
-                            ),
-                            onTap: () {}),
-                        DataCell(
-                            Text(
-                                '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}'),
-                            onTap: () {}),
-                        DataCell(Text('${data[index].status}')),
-                      ]))),
+                ],
+                rows: List<DataRow>.generate(
+                    data.length,
+                    (index) => DataRow(cells: [
+                          DataCell(
+                              Text(
+                                '${data[index].patient?.prefix}'
+                                '${data[index].patient?.firstName} '
+                                '${data[index].patient?.lastName}',
+                                overflow: TextOverflow.clip,
+                              ),
+                              onTap: () {}),
+                          DataCell(
+                              data[index].updateTimeInMin == 0
+                                  ? Text(
+                                      '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}')
+                                  : Text(TimeCalculationUtils().timeCalCulated(
+                                      data[index].startTime,
+                                      data[index].endTime,
+                                      data[index].updateTimeInMin)),
+                              onTap: () {}),
+                          DataCell(Text('${data[index].status}')),
+                        ]))),
+          ),
         ));
   }
 
@@ -92,160 +99,170 @@ class _AppointmentInProgress extends StatelessWidget {
       //width: 400,
       height: 250,
       child: Card(
-        child: DataTable2(
-            columnSpacing: 12,
-            horizontalMargin: 12,
-            minWidth: 600,
-            showBottomBorder: true,
-            columns: [
-              // DataColumn2(
-              //   label: Text(
-              //     'Profile',
-              //     style: AppStyle.txtInterSemiBold14,
-              //   ),
-              //   //size: ColumnSize.L,
-              // ),
-              DataColumn2(
-                label: Text(
-                  'Name',
-                  style: AppStyle.txtInterSemiBold14,
+        child: AbsorbPointer(
+          child: DataTable2(
+              columnSpacing: 12,
+              horizontalMargin: 12,
+              minWidth: 600,
+              showBottomBorder: true,
+              columns: [
+                // DataColumn2(
+                //   label: Text(
+                //     'Profile',
+                //     style: AppStyle.txtInterSemiBold14,
+                //   ),
+                //   //size: ColumnSize.L,
+                // ),
+                DataColumn2(
+                  label: Text(
+                    'Name',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
+                  size: ColumnSize.L,
                 ),
-                size: ColumnSize.L,
-              ),
-              DataColumn(
-                label: Text(
-                  'Mobile',
-                  style: AppStyle.txtInterSemiBold14,
+                DataColumn(
+                  label: Text(
+                    'Mobile',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
                 ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Status',
-                  style: AppStyle.txtInterSemiBold14,
+                DataColumn(
+                  label: Text(
+                    'Status',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
                 ),
-              ),
-              // DataColumn(
-              //   label: Text(
-              //     'Note',
-              //     style: AppStyle.txtInterSemiBold14,
-              //   ),
-              // ),
-              DataColumn(
-                label: Text(
-                  'Date ',
-                  style: AppStyle.txtInterSemiBold14,
+                // DataColumn(
+                //   label: Text(
+                //     'Note',
+                //     style: AppStyle.txtInterSemiBold14,
+                //   ),
+                // ),
+                DataColumn(
+                  label: Text(
+                    'Date ',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
                 ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Time',
-                  style: AppStyle.txtInterSemiBold14,
+                DataColumn(
+                  label: Text(
+                    'Time',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
                 ),
-              ),
 
-              DataColumn(
-                label: Text(
-                  'Actions',
-                  style: AppStyle.txtInterSemiBold14,
+                DataColumn(
+                  label: Text(
+                    'Actions',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
+                  numeric: true,
                 ),
-                numeric: true,
-              ),
-            ],
-            rows: List<DataRow>.generate(
-                data.length,
-                (index) => DataRow(cells: [
-                      DataCell(
-                          Row(
-                            children: [
-                              data[index].patient?.profilePicture != null
-                                  ? CachedNetworkImage(
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit.contain,
-                                      imageUrl: Uri.encodeFull(
-                                        Endpoints.baseURL +
-                                            Endpoints.downLoadPatientPhoto +
-                                            data[index]
-                                                .patient!
-                                                .profilePicture
-                                                .toString(),
+              ],
+              rows: List<DataRow>.generate(
+                  data.length,
+                  (index) => DataRow(cells: [
+                        DataCell(
+                            Row(
+                              children: [
+                                data[index].patient?.profilePicture != null
+                                    ? CachedNetworkImage(
+                                        width: 40,
+                                        height: 40,
+                                        fit: BoxFit.contain,
+                                        imageUrl: Uri.encodeFull(
+                                          Endpoints.baseURL +
+                                              Endpoints.downLoadPatientPhoto +
+                                              data[index]
+                                                  .patient!
+                                                  .profilePicture
+                                                  .toString(),
+                                        ),
+                                        httpHeaders: {
+                                          "Authorization":
+                                              "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                                        },
+                                        progressIndicatorBuilder: (context, url,
+                                                downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                        errorWidget: (context, url, error) {
+                                          return CustomImageView(
+                                            imagePath: !Responsive.isDesktop(
+                                                    Get.context!)
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
+                                                : '/images/default_profile.png',
+                                          );
+                                        },
+                                      )
+                                    : CustomImageView(
+                                        width: 40,
+                                        height: 40,
+                                        fit: BoxFit.contain,
+                                        imagePath: !Responsive.isDesktop(
+                                                Get.context!)
+                                            ? 'assets'
+                                                '/images/default_profile.png'
+                                            : '/images/default_profile.png',
                                       ),
-                                      httpHeaders: {
-                                        "Authorization":
-                                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                                      },
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) {
-                                        return CustomImageView(
-                                          imagePath: !Responsive.isDesktop(
-                                                  Get.context!)
-                                              ? 'assets' '/images/default_profile.png'
-                                              : '/images/default_profile.png',
-                                        );
-                                      },
-                                    )
-                                  : CustomImageView(
-                                      width: 40,
-                                      height: 40,
-                                      fit: BoxFit.contain,
-                                      imagePath:
-                                          !Responsive.isDesktop(Get.context!)
-                                              ? 'assets' '/images/default_profile.png'
-                                              : '/images/default_profile.png',
-                                    ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '${data[index].patient?.prefix}'
-                                '${data[index].patient?.firstName} '
-                                '${data[index].patient?.lastName}',
-                                overflow: TextOverflow.clip,
-                              )
-                            ],
-                          ),
-                          onTap: () {}),
-                      DataCell(Text("${data[index].patient?.mobile}"),
-                          onTap: () {}),
-                      DataCell(Text('${data[index].status}')),
-                      DataCell(
-                          Text(formatter
-                              .format(DateTime.parse(data[index].date ?? ""))),
-                          onTap: () {}),
-                      DataCell(
-                          Text(
-                              '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}'),
-                          onTap: () {}),
-                      DataCell(Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              // Navigator.push(
-                              //     Get.context!,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             AppointmentDetailsPage(
-                              //               appointment: data[index],
-                              //               appointmentid: data[index].id!,
-                              //             )));
-                            },
-                            child: const Icon(
-                              Icons.remove_red_eye,
-                              color: Colors.green,
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '${data[index].patient?.prefix}'
+                                  '${data[index].patient?.firstName} '
+                                  '${data[index].patient?.lastName}',
+                                  overflow: TextOverflow.clip,
+                                )
+                              ],
                             ),
-                          ),
-                          // SizedBox(
-                          //   width: 10,
-                          // ),
-                          // Icon(Icons.close)
-                        ],
-                      )),
-                    ]))),
+                            onTap: () {}),
+                        DataCell(Text("${data[index].patient?.mobile}"),
+                            onTap: () {}),
+                        DataCell(Text('${data[index].status}')),
+                        DataCell(
+                            Text(formatter.format(
+                                DateTime.parse(data[index].date ?? ""))),
+                            onTap: () {}),
+                        DataCell(
+                            data[index].updateTimeInMin == 0
+                                ? Text(
+                                    '${data[index].startTime?.replaceAll(' AM', '').replaceAll(' PM', '')}-${data[index].endTime}')
+                                : Text(TimeCalculationUtils().timeCalCulated(
+                                    data[index].startTime,
+                                    data[index].endTime,
+                                    data[index].updateTimeInMin)),
+                            onTap: () {}),
+                        DataCell(Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     Get.context!,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             AppointmentDetailsPage(
+                                //               appointment: data[index],
+                                //               appointmentid: data[index].id!,
+                                //             )));
+                              },
+                              child: const Icon(
+                                Icons.remove_red_eye,
+                                color: Colors.green,
+                              ),
+                            ),
+                            // SizedBox(
+                            //   width: 10,
+                            // ),
+                            // Icon(Icons.close)
+                          ],
+                        )),
+                      ]))),
+        ),
       ),
     );
   }
