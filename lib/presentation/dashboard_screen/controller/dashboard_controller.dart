@@ -327,7 +327,13 @@ class DashboardController extends GetxController {
           .toList();
       patientTodaysData.value = appointments;
 
-      int number = list.indexOf(appointments.first);
+      List<AppointmentContent> timeList = list
+          .where((i) =>
+      i.status?.toLowerCase() == 'completed' &&
+          now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
+          .toList();
+
+      int number = timeList.length;
 
       patientNumber = number;
 
