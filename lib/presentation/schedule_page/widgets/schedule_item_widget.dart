@@ -36,6 +36,7 @@ class ScheduleItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.a = jsonDecode(SharedPrefUtils.readPrefStr("doctor_details"));
     return InkWell(
       onTap: () {
         Get.toNamed(AppRoutes.appointmentDetailsPage,
@@ -422,6 +423,11 @@ class ScheduleItemWidget extends StatelessWidget {
                                                     controller: controller.dob,
                                                     labelText: "Date",
                                                     size: size,
+                                                    validator: (value) {
+                                                      return controller
+                                                          .dobValidator(
+                                                              value ?? "");
+                                                    },
                                                     padding:
                                                         TextFormFieldPadding
                                                             .PaddingT14,
@@ -457,6 +463,16 @@ class ScheduleItemWidget extends StatelessWidget {
                                                       .PaddingT14,
                                                   textInputType: TextInputType
                                                       .emailAddress,
+                                                  validator: (value) {
+                                                    return controller.fromValidator(
+                                                        value ?? "",
+                                                        controller.a?[
+                                                                'startTime'] ??
+                                                            "12:00 PM",
+                                                        controller.a?[
+                                                                'endTime'] ??
+                                                            "06:00 PM");
+                                                  },
                                                   suffix: Container(
                                                     margin:
                                                         const EdgeInsets.only(

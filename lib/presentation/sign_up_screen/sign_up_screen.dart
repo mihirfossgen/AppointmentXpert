@@ -336,6 +336,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                             controller.isCheckbox.value = value;
                           })),
                       RichText(
+                        softWrap: true,
                         textAlign: TextAlign.center,
                         text: TextSpan(
                             text: 'I agree to the OPDXpert ',
@@ -475,6 +476,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
           ),
         ),
         onPressed: () async {
+          FocusScope.of(Get.context!).unfocus();
           // Validate returns true if the form is valid, or false otherwise.
           if (controller.isCheckbox.value == false) {
             selectConditions.value = true;

@@ -6,7 +6,8 @@ import '../../core/utils/size_utils.dart';
 // ignore: must_be_immutable
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar(
-      {super.key, required this.height,
+      {super.key,
+      required this.height,
       this.styleType,
       this.leadingWidth,
       this.leading,
@@ -40,9 +41,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       toolbarHeight: height,
       automaticallyImplyLeading: true,
-      backgroundColor: backgroundColor == null
-          ? Colors.transparent
-          : ColorConstant.whiteA70087,
+      // backgroundColor: backgroundColor == null
+      //     ? Colors.transparent
+      //     : ColorConstant.whiteA70087,
+      backgroundColor: backgroundColor,
       flexibleSpace: _getStyle(),
       leadingWidth: leadingWidth ?? 0,
       leading: leading,

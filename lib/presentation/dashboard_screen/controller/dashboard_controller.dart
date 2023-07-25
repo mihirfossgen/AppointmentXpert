@@ -111,6 +111,7 @@ class DashboardController extends GetxController {
   var isloadingRecentPatients = false.obs;
   var isloadingEmergancyPatients = false.obs;
   RxBool isLoadingAppointmentsByDate = false.obs;
+  List<Contents> doctorsList = [];
 
   RxList<AppointmentContent> getAppointmentDetailsByDate =
       <AppointmentContent>[].obs;
@@ -255,7 +256,11 @@ class DashboardController extends GetxController {
       print(response);
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
         if (response.content?[i].profession == "DOCTOR") {
+          print(response.content?[i].profession);
           staffDataa = response.content![i];
+          doctorsList.add(response.content![i]);
+          print({"doctors list length ----- ${doctorsList.length}"});
+
           SharedPrefUtils.saveStr(
               'doctor_details', jsonEncode(response.content![i]));
         }

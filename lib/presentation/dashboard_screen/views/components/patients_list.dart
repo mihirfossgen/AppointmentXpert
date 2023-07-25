@@ -1,3 +1,4 @@
+import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
 import 'package:appointmentxpert/presentation/patient_details_page/patient_details_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,10 +21,10 @@ import '../screens/dashboard_screen.dart';
 
 class PatientsList extends GetView<DashboardController> {
   List<Content>? data;
-
+  List<Contents>? doctorsList;
   DashboardController dashboardController = Get.put(DashboardController());
 
-  PatientsList({super.key, this.data});
+  PatientsList({super.key, this.data, this.doctorsList});
 
   @override
   Widget build(BuildContext context) {
@@ -244,6 +245,7 @@ class PatientsList extends GetView<DashboardController> {
                                             fontWeight: FontWeight.bold),
                                         onSecondButtonTap: () {
                                           Get.to(() => AppointmentBookingScreen(
+                                              doctorsList: doctorsList,
                                               patientDetailsArguments:
                                                   PatientDetailsArguments(
                                                       [], item)));

@@ -13,6 +13,11 @@ class SignUpController extends GetxController {
   TextEditingController enterpasswordController = TextEditingController();
   TextEditingController selectedDropDownvalue = TextEditingController();
   SelectionPopupModel? selectedDropDownValue;
+  final formKey = GlobalKey<FormState>();
+  String userEmail = '';
+  String userName = '';
+  String userPassword = '';
+  String userNumber = '';
 
   OtpModel? getOtp;
 
@@ -56,19 +61,12 @@ class SignUpController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    formKey.currentState?.dispose();
     enternameController.clear();
     enteremailController.clear();
     enterpasswordController.clear();
     enternumberController.clear();
     selectedDropDownvalue.clear();
   }
-
-  final formKey = GlobalKey<FormState>();
-  String userEmail = '';
-  String userName = '';
-  String userPassword = '';
-  String userNumber = '';
 
   String? emailValidator(String value) {
     if (value.isEmpty || !value.contains('@')) {

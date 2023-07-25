@@ -1,10 +1,9 @@
 class Endpoints {
   Endpoints._();
 
-  static const String baseURL = 'http://192.168.1.43:7070/';
-  /*====================Server URL================================*/
-  //static const String baseURL = 'http://185.182.187.146:7070/appointmentxpert/';
-  /*===============================================================*/
+  //static const String baseURL = 'http://192.168.0.106:7070/';
+  static const String baseURL = 'http://185.182.187.146:7070/appointmentxpert/';
+
   static const int receiveTimeout = 5000;
 
   static const int connectionTimeout = 3000;
