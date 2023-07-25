@@ -51,7 +51,6 @@ class VerifyNumberController extends GetxController {
   ) async {
     try {
       getOtp = await Get.find<VerifyOtpApi>().verifyOtp(number, otp);
-
       _handleCreateLoginSuccess(getOtp!);
     } on Map catch (e) {
       print(e);
@@ -90,8 +89,10 @@ class VerifyNumberController extends GetxController {
         SharedPrefUtils.saveInt(
             'employee_Id', model.response?.body?.staff?.id ?? 0);
         // AppointmentDetails.staffId = _model.staff!.id ?? 0;
+        Get.back();
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
+        Get.back();
         Get.toNamed(AppRoutes.createProfileScreen,
             arguments: ScreenArguments(
                 model.response?.body?.roles?[0].name ?? "",

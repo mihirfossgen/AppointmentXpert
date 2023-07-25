@@ -1,6 +1,7 @@
 library dashboard;
 
 import 'dart:convert';
+
 import 'package:appointmentxpert/core/utils/time_calculation_utils.dart';
 import 'package:appointmentxpert/presentation/schedule_tab_container_page/schedule_tab_container_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -177,7 +178,7 @@ class DashboardScreen extends GetView<DashboardController> {
             const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: _MainMenu(onSelected: controller.onSelectedMainMenu),
+              child: MainMenu(onSelected: controller.onSelectedMainMenu),
             ),
             const Divider(
               indent: 20,

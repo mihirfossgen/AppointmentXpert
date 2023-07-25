@@ -1,6 +1,7 @@
 import 'package:appointmentxpert/presentation/verify_number/widgets/pin_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/size_utils.dart';
 import '../../widgets/custom_button.dart';
@@ -75,8 +76,6 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
                 try {
                   await controller.verifyOtp(
                       controller.enteredOtpp.value, phoneNumber ?? "");
-
-                  // Get.back(result: true);
                 } on Map {
                   //  _onOnTapSignInError();
                 } on NoInternetException catch (e) {

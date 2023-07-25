@@ -1,7 +1,7 @@
 part of dashboard;
 
-class _MainMenu extends StatelessWidget {
-  const _MainMenu({
+class MainMenu extends StatelessWidget {
+  const MainMenu({
     required this.onSelected,
     Key? key,
   }) : super(key: key);
