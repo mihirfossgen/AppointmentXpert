@@ -28,6 +28,8 @@ class CreateProfileController extends GetxController {
   TextEditingController pincode = TextEditingController();
   TextEditingController countryOfBirth = TextEditingController();
   TextEditingController country = TextEditingController();
+  TextEditingController prefixController = TextEditingController();
+
   SelectionPopupModel? selectedjobtype;
   SelectionPopupModel? selectedprefix;
   SelectionPopupModel? selectedgender;
@@ -94,6 +96,13 @@ class CreateProfileController extends GetxController {
       return 'Please enter a valid email address.';
     }
 
+    return null;
+  }
+
+  String? prefixControllerValidator(String value) {
+    if (value.isEmpty || value.length <= 1) {
+      return 'Prefix must be at least 2 characters long.';
+    }
     return null;
   }
 

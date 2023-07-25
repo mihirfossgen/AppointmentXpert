@@ -30,10 +30,18 @@ class AddPatientController extends GetxController {
   TextEditingController country = TextEditingController();
   TextEditingController stateOrProvince = TextEditingController();
   TextEditingController postalCode = TextEditingController();
+  TextEditingController prefixController = TextEditingController();
   RxBool isShowPassword = true.obs;
   CreatepatientModel createpatientModel = CreatepatientModel();
   isObscureActive() {
     isShowPassword.value = !isShowPassword.value;
+  }
+
+  String? prefixControllerValidator(String value) {
+    if (value.isEmpty || value.length <= 1) {
+      return 'Prefix must be at least 2 characters long.';
+    }
+    return null;
   }
 
   String? firstNameValidator(String value) {

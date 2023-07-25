@@ -109,6 +109,21 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                         height: size.height * 0.03,
                       ),
                       CustomTextFormField(
+                          controller: controller.prefixController,
+                          labelText: "Prefix",
+                          hintText: "Mr./Mrs./Ms.",
+                          isRequired: true,
+                          padding: TextFormFieldPadding.PaddingT14,
+                          validator: (value) {
+                            return controller.prefixControllerValidator(value ?? "");
+                          },
+                          textInputType: TextInputType.name,
+                          prefixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                      SizedBox(
+                        height: size.height * 0.03,
+                      ),
+                      CustomTextFormField(
                           controller: controller.firstName,
                           labelText: "First name",
                           isRequired: true,

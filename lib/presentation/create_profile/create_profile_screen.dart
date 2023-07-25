@@ -406,10 +406,33 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       width: size.width,
                                       child: Row(
                                         // mainAxisAlignment:
-                                        //     MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+
                                         children: [
 
                                           Flexible(
+                                          fit: FlexFit.tight,
+                                          child: CustomTextFormField(
+                                              margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                              controller: controller.prefixController,
+                                              labelText: "Prefix",
+                                              hintText: "Mr./Mrs./Ms.",
+                                              isRequired: true,
+                                              padding: TextFormFieldPadding.PaddingT14,
+                                              validator: (value) {
+                                                return controller.prefixControllerValidator(value ?? "");
+                                              },
+                                              textInputType: TextInputType.name,
+                                              prefixConstraints:
+                                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                                          ),
+                                          SizedBox(
+                                            height: size.width*0.02,
+                                          ),
+
+                                          Flexible(
+
                                             fit: FlexFit.tight,
                                             child: CustomTextFormField(
                                                 controller: controller
