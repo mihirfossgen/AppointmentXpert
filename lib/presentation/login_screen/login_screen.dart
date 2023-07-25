@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -28,8 +29,6 @@ import '../verify_number/verify_number_screen.dart';
 import 'controller/login_controller.dart';
 
 class LoginScreen extends GetWidget<LoginController> {
-  final _formKey = GlobalKey<FormState>();
-
   LoginScreen({super.key});
 
   @override
@@ -198,25 +197,36 @@ class LoginScreen extends GetWidget<LoginController> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                            padding: getPadding(bottom: 1),
-                            child: Text("msg_don_t_have_an_a2".tr,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtRalewayRomanRegular15
-                                    .copyWith(
-                                        letterSpacing:
-                                            getHorizontalSize(0.5)))),
                         GestureDetector(
                             onTap: () {
                               onTapTxtSignUp();
                             },
                             child: Padding(
-                                padding: getPadding(left: 4, top: 1),
-                                child: Text("lbl_sign_up".tr,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.left,
-                                    style: AppStyle.txtInterRegular14Gray700)))
+                              padding: getPadding(left: 4, top: 1),
+                              child: RichText(
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    text: "Don't have an account? ",
+                                    style: AppStyle.txtRalewayRomanRegular15
+                                        .copyWith(
+                                            letterSpacing:
+                                                getHorizontalSize(0.5)),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: 'Sign Up',
+                                          style: const TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              onTapTxtSignUp();
+                                            }),
+                                    ]),
+                              ),
+                            ))
                       ]),
                   SizedBox(
                     height: size.height * 0.01,

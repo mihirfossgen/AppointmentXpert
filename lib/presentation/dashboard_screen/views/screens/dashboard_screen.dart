@@ -956,7 +956,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
-                                            20, 10, 20, 0),
+                                            10, 10, 10, 0),
                                         child: CalendarTimeline(
                                           initialDate: DateTime.now(),
                                           firstDate: DateTime.now(),
@@ -1019,32 +1019,56 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                     .all(5),
                                                             alignment: Alignment
                                                                 .center,
-                                                            decoration: BoxDecoration(
-                                                                color: controller.getAppointmentDetailsByDate.any((element) => element.startTime.toString().contains(controller.times?[index].toString() ?? ""))
-                                                                    ? Colors
-                                                                        .blue
-                                                                    : Colors
-                                                                        .grey
-                                                                        .shade100,
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        6),
-                                                                border: Border.all(
+                                                            decoration:
+                                                                BoxDecoration(
                                                                     color: controller
                                                                             .getAppointmentDetailsByDate
-                                                                            .any((element) => element.startTime.toString().contains(controller.times?[index].toString() ?? ""))
-                                                                        ? Colors.transparent
-                                                                        : Colors.black)),
+                                                                            .any(
+                                                                                (element) {
+                                                                      return TimeCalculationUtils()
+                                                                          .startTimeCalCulation(
+                                                                              element.startTime,
+                                                                              element.updateTimeInMin)
+                                                                          .contains(controller.times?[index].toString() ?? "");
+                                                                    })
+                                                                        ? Colors
+                                                                            .blue
+                                                                        : Colors
+                                                                            .grey
+                                                                            .shade100,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(6),
+                                                                    border: Border.all(
+                                                                        color: controller.getAppointmentDetailsByDate.any((element) {
+                                                                      return TimeCalculationUtils()
+                                                                          .startTimeCalCulation(
+                                                                              element.startTime,
+                                                                              element.updateTimeInMin)
+                                                                          .contains(controller.times?[index].toString() ?? "");
+                                                                    })
+                                                                            ? Colors.transparent
+                                                                            : Colors.black)),
                                                             child: Text(
                                                               controller.times?[
                                                                       index] ??
                                                                   "",
                                                               style: TextStyle(
-                                                                  color: controller.getAppointmentDetailsByDate.any((element) => element
-                                                                          .startTime
-                                                                          .toString()
-                                                                          .contains(controller.times?[index].toString() ??
-                                                                              ""))
+                                                                  color: controller
+                                                                          .getAppointmentDetailsByDate
+                                                                          .any(
+                                                                              (element) {
+                                                                return TimeCalculationUtils()
+                                                                    .startTimeCalCulation(
+                                                                        element
+                                                                            .startTime,
+                                                                        element
+                                                                            .updateTimeInMin)
+                                                                    .contains(controller
+                                                                            .times?[index]
+                                                                            .toString() ??
+                                                                        "");
+                                                              })
                                                                       ? Colors
                                                                           .white
                                                                       : Colors
@@ -1712,6 +1736,7 @@ class DashboardScreen extends GetView<DashboardController> {
           //color: Colors.red,
           child: PatientsList(
             data: controller.getAllPatientsList,
+            doctorsList: controller.doctorsList,
           )),
       // SharedPrefUtils.readPrefStr('role') == 'RECEPTIONIST'
       //     ? AddPatientScreen()

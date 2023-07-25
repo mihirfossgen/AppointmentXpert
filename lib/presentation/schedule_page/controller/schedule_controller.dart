@@ -43,24 +43,29 @@ class ScheduleController extends GetxController {
   TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
   final TextEditingController _timeController = TextEditingController();
   String? _hour, _minute, _time;
+  Map<String, dynamic>? a;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
     );
-    if (picked != null) selectedTime = picked;
+    if (picked != null) {
+      print(picked);
+      selectedTime = picked;
+    }
+    print(a!['timeSlotForBookingInMin'].runtimeType);
+    int intervalTime = a?['timeSlotForBookingInMin'] != 0 ? 15 : 15;
     _hour = selectedTime.hour.toString();
     _minute = selectedTime.minute.toString();
-    _time = '${_hour!} : ${_minute!}';
-    _timeController.text = _time!;
+    _time = '$_hour : $_minute';
+
     from.value.text = formatDate(
-        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+            selectedTime.hour, selectedTime.minute),
         [hh, ':', nn, " ", am]).toString();
     to.text = formatDate(
-        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute + 30),
-        [hh, ':', nn, " ", am]).toString();
-    _timeController.text = formatDate(
-        DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+            selectedTime.hour, selectedTime.minute + intervalTime),
         [hh, ':', nn, " ", am]).toString();
   }
 
@@ -94,6 +99,7 @@ class ScheduleController extends GetxController {
   }
 
   static const _pageSize = 20;
+  final formKey = GlobalKey<FormState>();
   // PagingController<int, AppointmentContent> todayPagingController =
   //     PagingController(firstPageKey: 0);
   // PagingController<int, AppointmentContent> upcomingPagingController =
@@ -163,6 +169,48 @@ class ScheduleController extends GetxController {
     //   }
     // });
     super.onReady();
+  }
+
+  DateTime timeFormat(String value) {
+    final now = DateTime.now();
+    final dt = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        int.parse(value.split(':')[0]),
+        int.parse(
+            value.split(':')[1].replaceAll(" AM", "").replaceAll(" PM", "")));
+    return dt;
+  }
+
+  String? fromValidator(String value, String startTime, String endTime) {
+    if (value.isEmpty) {
+      return 'Please select time';
+    } else if (timeFormat(value).isAfter(timeFormat(startTime)) ||
+        timeFormat(value).isBefore(timeFormat(endTime))) {
+      return null;
+    } else {
+      return "Please select time between 12 to 6 PM";
+    }
+  }
+
+  String? dobValidator(String value) {
+    if (value.isEmpty) {
+      return 'Please select date of birth';
+    }
+    return null;
+  }
+
+  bool trySubmit() {
+    final isValid = formKey.currentState?.validate();
+    Get.focusScope!.unfocus();
+
+    if (isValid == true) {
+      formKey.currentState!.save();
+
+      return true;
+    }
+    return false;
   }
 
   Future<void> callGetAllAppointments(int pageNo, int count) async {

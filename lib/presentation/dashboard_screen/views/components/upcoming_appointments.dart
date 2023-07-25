@@ -47,6 +47,14 @@ class UpcomingAppointments extends StatelessWidget {
                 minWidth: MediaQuery.of(Get.context!).size.width,
                 showBottomBorder: true,
                 columns: [
+                  DataColumn2(
+                    fixedWidth: 30,
+                    label: Text(
+                      'No',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
+                    //size: ColumnSize.L,
+                  ),
                   DataColumn(
                     label: Text(
                       'Name',
@@ -69,6 +77,14 @@ class UpcomingAppointments extends StatelessWidget {
                 rows: List<DataRow>.generate(
                     data.length,
                     (index) => DataRow(cells: [
+                          DataCell(
+                              Text(
+                                "${index + 1}",
+                                overflow: TextOverflow.clip,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {}),
                           DataCell(
                               Text(
                                 '${data[index].patient?.prefix}'

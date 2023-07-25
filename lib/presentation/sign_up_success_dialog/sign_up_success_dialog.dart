@@ -75,6 +75,7 @@ class SignUpSuccessDialog extends StatelessWidget {
   }
 
   onTapGotohome() {
-    Get.offNamed(AppRoutes.loginScreen);
+    Get.back();
+    Get.back();
   }
 }

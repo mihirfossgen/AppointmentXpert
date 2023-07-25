@@ -47,6 +47,13 @@ class _AppointmentInProgress extends StatelessWidget {
                 minWidth: MediaQuery.of(Get.context!).size.width,
                 showBottomBorder: true,
                 columns: [
+                  DataColumn2(
+                    fixedWidth: 30,
+                    label: Text(
+                      'No',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
+                  ),
                   DataColumn(
                     label: Text(
                       'Name',
@@ -69,6 +76,14 @@ class _AppointmentInProgress extends StatelessWidget {
                 rows: List<DataRow>.generate(
                     data.length,
                     (index) => DataRow(cells: [
+                          DataCell(
+                              Text(
+                                "${index + 1}",
+                                overflow: TextOverflow.clip,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {}),
                           DataCell(
                               Text(
                                 '${data[index].patient?.prefix}'
@@ -106,13 +121,14 @@ class _AppointmentInProgress extends StatelessWidget {
               minWidth: 600,
               showBottomBorder: true,
               columns: [
-                // DataColumn2(
-                //   label: Text(
-                //     'Profile',
-                //     style: AppStyle.txtInterSemiBold14,
-                //   ),
-                //   //size: ColumnSize.L,
-                // ),
+                DataColumn2(
+                  fixedWidth: 30,
+                  label: Text(
+                    'No',
+                    style: AppStyle.txtInterSemiBold14,
+                  ),
+                  //size: ColumnSize.L,
+                ),
                 DataColumn2(
                   label: Text(
                     'Name',
@@ -162,6 +178,14 @@ class _AppointmentInProgress extends StatelessWidget {
               rows: List<DataRow>.generate(
                   data.length,
                   (index) => DataRow(cells: [
+                        DataCell(
+                            Text(
+                              "${index + 1}",
+                              overflow: TextOverflow.clip,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            onTap: () {}),
                         DataCell(
                             Row(
                               children: [
