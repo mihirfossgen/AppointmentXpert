@@ -91,6 +91,7 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> staffTodaysTotalData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
+  var patientNumber;
   final calendarControllerToday = AdvancedCalendarController.today();
   // AdvancedCalendarController calendarControllerCustom =
   //     AdvancedCalendarController(DateTime(2022, 10, 23));
@@ -325,6 +326,11 @@ class DashboardController extends GetxController {
               now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
           .toList();
       patientTodaysData.value = appointments;
+
+      int number = list.indexOf(appointments.first);
+
+      patientNumber = number;
+
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;

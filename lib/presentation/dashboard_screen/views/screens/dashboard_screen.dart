@@ -1258,6 +1258,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                           .value
                                                           .length
                                                           .toString()
+
                                                       : controller
                                                           .staffTodaysData
                                                           .value
@@ -1998,7 +1999,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         ),
                         Text(
                           (SharedPrefUtils.readPrefStr('role') == "PATIENT")
-                              ? ''
+                              ? ''//controller.patientNumber.toString()
                               : "",
                           style: TextStyle(
                               fontSize: 20,
