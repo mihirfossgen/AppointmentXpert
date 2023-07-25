@@ -1159,7 +1159,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           "motherName": controller.motherName.text,
           "nationality": controller.nationality.text,
           // "placeOfBirth": controller.placeOfBirth.text,
-          "prefix": controller.prefix,
+          "prefix": controller.prefixController.text,
           // "regions": controller.regions.text,
           "sex": controller.gender,
           "userId": args.roleId,

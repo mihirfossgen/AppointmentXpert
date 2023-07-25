@@ -361,7 +361,8 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                                   "mobile": controller.mobile.text,
                                   "password": controller.confirmPassword.text,
                                   "role": "PATIENT",
-                                  "username": controller.mobile.text
+                                  "username": controller.mobile.text,
+                                  "prefix": controller.prefixController.text
                                 };
                                 controller.callRegister(requestData);
                               }

@@ -245,7 +245,7 @@ class AddPatientController extends GetxController {
       "firstName": firstName.text,
       "lastName": lastName.text,
       "mobile": mobile.text,
-      "prefix": "",
+      "prefix": prefixController.text,
       "sex": gender.text,
       "userId": roleID,
       "visits": []
