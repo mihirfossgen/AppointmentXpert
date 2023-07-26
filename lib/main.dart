@@ -22,7 +22,7 @@ void main() async {
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-  ]).then((value) {
+  ]).then((value) async {
     Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
     AdaptiveLayout.setBreakpoints(
       mediumScreenMinWidth: 600,
@@ -32,6 +32,15 @@ void main() async {
     //   enabled: !kReleaseMode,
     //   builder: (context) => MyApp(), // Wrap your app
     // ));
+    /*await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCX7puGlnu_F7DeMBA86rNj4tiotpFAtAE",
+            //authDomain: "xxxx",
+            projectId: "healthcare-cpas",
+            storageBucket: "healthcare-cpas.appspot.com",
+            messagingSenderId: "231282522270",
+            appId: "1:231282522270:ios:3f6178dc8bbca810b1638f"));*/
+
     runApp(const MyApp());
     // DevicePreview(
     //   enabled: !kReleaseMode,
