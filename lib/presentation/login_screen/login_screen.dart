@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/responsive_builder.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -58,15 +59,25 @@ class LoginScreen extends GetWidget<LoginController> {
               //         }),
               //     centerTitle: true,
               //     title: AppbarSubtitle2(text: '')),
-              body: LayoutBuilder(
-                builder: (context, constraints) {
-                  if (Responsive.isDesktop(context)) {
-                    return _buildLargeScreen(size, controller);
-                  } else {
-                    return _buildSmallScreen(size, controller);
-                  }
-                },
-              )),
+              body: ResponsiveBuilder(
+                mobileBuilder: (context, constraints) =>
+                    _buildSmallScreen(size, controller),
+                tabletBuilder: (context, constraints) =>
+                    _buildSmallScreen(size, controller),
+                desktopBuilder: (context, constraints) =>
+                    _buildLargeScreen(size, controller),
+              )
+
+              // LayoutBuilder(
+              //   builder: (context, constraints) {
+              //     if (Responsive.isDesktop(context)) {
+              //       return _buildLargeScreen(size, controller);
+              //     } else {
+              //       return _buildSmallScreen(size, controller);
+              //     }
+              //   },
+              // )
+              ),
         ));
   }
 

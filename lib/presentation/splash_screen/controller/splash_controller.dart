@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import '../../../routes/app_routes.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../models/splash_model.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SplashController extends GetxController {
   Rx<SplashModel> splashModelObj = SplashModel().obs;
@@ -11,6 +13,15 @@ class SplashController extends GetxController {
   void onReady() {
     super.onReady();
     routeBasedOnUserProperties();
+    _register();
+  }
+
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
+  _register() {
+    firebaseMessaging
+        .getToken()
+        .then((token) => print('fcm token ---- $token'));
   }
 
   void routeBasedOnUserProperties() {
@@ -39,5 +50,4 @@ class SplashController extends GetxController {
       });
     }
   }
-
 }

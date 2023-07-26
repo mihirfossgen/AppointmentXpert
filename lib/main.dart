@@ -1,25 +1,56 @@
 import 'dart:ui';
 
 import 'package:adaptive_layout/adaptive_layout.dart';
+import 'package:appointmentxpert/core/utils/notifications.dart';
 import 'package:appointmentxpert/presentation/splash_screen/splash_screen.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
+import 'package:appointmentxpert/widgets/responsive.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:responsive_framework/breakpoint.dart';
 import 'package:responsive_framework/responsive_breakpoints.dart';
-
-import 'core/app_export.dart';
 import 'core/utils/initial_bindings.dart';
 import 'core/utils/logger.dart';
 import 'localization/app_localization.dart';
 import 'shared_prefrences_page/shared_prefrence_page.dart';
 
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+  RemoteNotification? notification = message.notification;
+  print('message -- ${message.notification?.title}');
+  print('message -- ${message.notification?.body}');
+  print('message -- ${message.data}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefUtils.init();
-  await Firebase.initializeApp();
+
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    } else {
+      print(value);
+    }
+  });
+
+  await initFcm();
+  // await Firebase.initializeApp(
+  //     options: const FirebaseOptions(
+  //         apiKey: "AIzaSyCX7puGlnu_F7DeMBA86rNj4tiotpFAtAE",
+  //         //authDomain: "xxxx",
+  //         projectId: "healthcare-cpas",
+  //         storageBucket: "healthcare-cpas.appspot.com",
+  //         messagingSenderId: "231282522270",
+  //         appId: "1:231282522270:ios:3f6178dc8bbca810b1638f"));
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) {
@@ -39,6 +70,14 @@ void main() async {
     // );
   });
 }
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+AndroidNotificationChannel channel = const AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  importance: Importance.high,
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

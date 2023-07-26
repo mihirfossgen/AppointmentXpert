@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:appointmentxpert/models/staff_list_model.dart';
 import 'package:empty_widget/empty_widget.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -127,8 +126,16 @@ class DashboardController extends GetxController {
     return formatter.format(DateTime.parse(date));
   }
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  AndroidNotificationChannel channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    importance: Importance.high,
+  );
+
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
     if (role == "PATIENT") {
       getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
@@ -149,25 +156,6 @@ class DashboardController extends GetxController {
       final DateFormat formatter = DateFormat('dd-MM-yyyy');
       callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     }
-
-    // _register();
-    // getMessage();
-  }
-
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  _register() {
-    firebaseMessaging
-        .getToken()
-        .then((token) => print('fcm token ---- $token'));
-  }
-
-  void getMessage() {
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((value) => print(value?.data.toString()));
   }
 
   Future<void> callRecentPatientList(int pageNo) async {
