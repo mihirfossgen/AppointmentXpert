@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/utils/color_constant.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/verify_otp.dart';
 import '../../../routes/app_routes.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../../theme/app_style.dart';
 import '../../create_profile/controller/create_profile_controller.dart';
 
 class VerifyNumberController extends GetxController {
@@ -93,11 +95,31 @@ class VerifyNumberController extends GetxController {
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
         Get.back();
-        Get.toNamed(AppRoutes.createProfileScreen,
-            arguments: ScreenArguments(
-                model.response?.body?.roles?[0].name ?? "",
-                model.response?.body?.userId ?? 0,
-                model.response?.body?.userName ?? ""));
+        Get.dialog(AlertDialog(
+          title: const Text(
+              'Please contact the administartion to add the staff details'),
+          actions: [
+            InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                height: 50,
+                width: 150,
+                decoration: BoxDecoration(
+                    color: ColorConstant.blue700,
+                    borderRadius: BorderRadius.circular(10)),
+                alignment: Alignment.center,
+                child: Text(
+                  'Close',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppStyle.txtRalewayRomanRegular14WhiteA700,
+                ),
+              ),
+            ),
+          ],
+        ));
       }
     } else {
       if (model.response?.body?.patient != null) {

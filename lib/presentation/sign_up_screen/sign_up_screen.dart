@@ -259,12 +259,12 @@ class SignUpScreen extends GetWidget<SignUpController> {
                   CustomTextFormField(
                       labelText: "Enter your Email",
                       controller: controller.enteremailController,
-                      isRequired: false,
+                      isRequired: true,
                       //padding: TextFormFieldPadding.PaddingT16_2,
                       padding: TextFormFieldPadding.PaddingT14,
-                      // validator: (value) {
-                      //   return controller.emailValidator(value ?? "");
-                      // },
+                      validator: (value) {
+                        return controller.emailValidator(value ?? "");
+                      },
                       textInputType: TextInputType.emailAddress,
                       prefixConstraints:
                           BoxConstraints(maxHeight: getVerticalSize(56))),
@@ -275,46 +275,47 @@ class SignUpScreen extends GetWidget<SignUpController> {
                       labelText: "Enter your number",
                       controller: controller.enternumberController,
                       isRequired: true,
+                      maxLength: 10,
                       validator: (value) {
                         return controller.numberValidator(value ?? "");
                       },
                       //padding: TextFormFieldPadding.PaddingT16_2,
                       padding: TextFormFieldPadding.PaddingT14,
-                      textInputType: TextInputType.number,
+                      textInputType: TextInputType.phone,
                       prefixConstraints:
                           BoxConstraints(maxHeight: getVerticalSize(56))),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
-                  Obx(() => CustomTextFormField(
-                      labelText: "msg_enter_your_pass".tr,
-                      alignment: Alignment.centerLeft,
-                      controller: controller.enterpasswordController,
-                      isRequired: false,
-                      textInputAction: TextInputAction.done,
-                      padding: TextFormFieldPadding.PaddingT14,
-                      textInputType: TextInputType.visiblePassword,
-                      // validator: (value) {
-                      //   return controller.passwordValidator(value ?? "");
-                      // },
-                      prefixConstraints:
-                          BoxConstraints(maxHeight: getVerticalSize(56)),
-                      suffix: InkWell(
-                          onTap: () {
-                            controller.isShowPassword.value =
-                                !controller.isShowPassword.value;
-                          },
-                          child: Container(
-                              width: 30,
-                              margin: getMargin(
-                                  left: 15, top: 16, right: 12, bottom: 16),
-                              child: CustomImageView(
-                                  svgPath: controller.isShowPassword.value
-                                      ? ImageConstant.imgCheckmark24x24
-                                      : ImageConstant.imgCheckmark24x24))),
-                      suffixConstraints:
-                          BoxConstraints(maxHeight: getVerticalSize(56)),
-                      isObscureText: controller.isShowPassword.value)),
+                  // SizedBox(
+                  //   height: size.height * 0.03,
+                  // ),
+                  // Obx(() => CustomTextFormField(
+                  //     labelText: "msg_enter_your_pass".tr,
+                  //     alignment: Alignment.centerLeft,
+                  //     controller: controller.enterpasswordController,
+                  //     isRequired: false,
+                  //     textInputAction: TextInputAction.done,
+                  //     padding: TextFormFieldPadding.PaddingT14,
+                  //     textInputType: TextInputType.visiblePassword,
+                  //     // validator: (value) {
+                  //     //   return controller.passwordValidator(value ?? "");
+                  //     // },
+                  //     prefixConstraints:
+                  //         BoxConstraints(maxHeight: getVerticalSize(56)),
+                  //     suffix: InkWell(
+                  //         onTap: () {
+                  //           controller.isShowPassword.value =
+                  //               !controller.isShowPassword.value;
+                  //         },
+                  //         child: Container(
+                  //             width: 30,
+                  //             margin: getMargin(
+                  //                 left: 15, top: 16, right: 12, bottom: 16),
+                  //             child: CustomImageView(
+                  //                 svgPath: controller.isShowPassword.value
+                  //                     ? ImageConstant.imgCheckmark24x24
+                  //                     : ImageConstant.imgCheckmark24x24))),
+                  //     suffixConstraints:
+                  //         BoxConstraints(maxHeight: getVerticalSize(56)),
+                  //     isObscureText: controller.isShowPassword.value)),
                   SizedBox(
                     height: size.height * 0.03,
                   ),
@@ -501,7 +502,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
     Map<String, dynamic> requestData = {
       "email": controller.enteremailController.text,
       "mobile": controller.enternumberController.text,
-      "password": "qwerty",
+      "password": "",
       "role": "PATIENT",
       "termsAndConditionFlag": controller.isCheckbox.value,
       "username": controller.enternumberController.text

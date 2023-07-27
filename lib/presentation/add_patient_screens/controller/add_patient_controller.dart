@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -250,71 +252,73 @@ class AddPatientController extends GetxController {
       "userId": roleID,
       "visits": []
     };
-    try {
-      createpatientModel = (await Get.find<UserApi>().callCreatePatient(
-        headers: {
-          'Content-type': 'application/json',
-        },
-        data: data,
-      ));
-      print("create api called for patient");
-      Get.dialog(Padding(
-          padding: const EdgeInsets.all(20),
-          child: AlertDialog(
-            backgroundColor: Colors.transparent,
-            contentPadding: EdgeInsets.zero,
-            insetPadding: const EdgeInsets.only(left: 0),
-            content: Container(
-                //width: getHorizontalSize(327),
-                padding: getPadding(left: 24, top: 36, right: 24, bottom: 36),
-                decoration: AppDecoration.white
-                    .copyWith(borderRadius: BorderRadiusStyle.roundedBorder24),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Card(
-                          clipBehavior: Clip.antiAlias,
-                          elevation: 0,
-                          margin: getMargin(top: 26),
-                          color: ColorConstant.gray50,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusStyle.circleBorder51),
-                          child: Container(
-                              height: getSize(102),
-                              width: getSize(102),
-                              padding: getPadding(
-                                  left: 29, top: 34, right: 29, bottom: 34),
-                              decoration: AppDecoration.fillGray50.copyWith(
-                                  borderRadius:
-                                      BorderRadiusStyle.circleBorder51),
-                              child: Stack(children: [
-                                CustomImageView(
-                                    svgPath: ImageConstant.imgCheckmark31x41,
-                                    height: getVerticalSize(31),
-                                    width: getHorizontalSize(41),
-                                    radius: BorderRadius.circular(
-                                        getHorizontalSize(3)),
-                                    alignment: Alignment.center)
-                              ]))),
-                      Padding(
-                          padding: getPadding(top: 42),
-                          child: Text("Patient Added Successfully!!",
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.left,
-                              style: AppStyle.txtRalewayRomanBold20)),
-                      CustomButton(
-                          height: getVerticalSize(56),
-                          text: "lbl_go_to_home".tr,
-                          margin: getMargin(top: 22),
-                          onTap: () {
-                            Get.offAllNamed(AppRoutes.dashboardScreen);
-                          })
-                    ])),
-          )));
-    } on Map {
-      //postLoginResp = e;
-      rethrow;
-    }
+
+    print(jsonEncode(data));
+    // try {
+    //   createpatientModel = (await Get.find<UserApi>().callCreatePatient(
+    //     headers: {
+    //       'Content-type': 'application/json',
+    //     },
+    //     data: data,
+    //   ));
+    //   print("create api called for patient");
+    //   Get.dialog(Padding(
+    //       padding: const EdgeInsets.all(20),
+    //       child: AlertDialog(
+    //         backgroundColor: Colors.transparent,
+    //         contentPadding: EdgeInsets.zero,
+    //         insetPadding: const EdgeInsets.only(left: 0),
+    //         content: Container(
+    //             //width: getHorizontalSize(327),
+    //             padding: getPadding(left: 24, top: 36, right: 24, bottom: 36),
+    //             decoration: AppDecoration.white
+    //                 .copyWith(borderRadius: BorderRadiusStyle.roundedBorder24),
+    //             child: Column(
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 mainAxisAlignment: MainAxisAlignment.end,
+    //                 children: [
+    //                   Card(
+    //                       clipBehavior: Clip.antiAlias,
+    //                       elevation: 0,
+    //                       margin: getMargin(top: 26),
+    //                       color: ColorConstant.gray50,
+    //                       shape: RoundedRectangleBorder(
+    //                           borderRadius: BorderRadiusStyle.circleBorder51),
+    //                       child: Container(
+    //                           height: getSize(102),
+    //                           width: getSize(102),
+    //                           padding: getPadding(
+    //                               left: 29, top: 34, right: 29, bottom: 34),
+    //                           decoration: AppDecoration.fillGray50.copyWith(
+    //                               borderRadius:
+    //                                   BorderRadiusStyle.circleBorder51),
+    //                           child: Stack(children: [
+    //                             CustomImageView(
+    //                                 svgPath: ImageConstant.imgCheckmark31x41,
+    //                                 height: getVerticalSize(31),
+    //                                 width: getHorizontalSize(41),
+    //                                 radius: BorderRadius.circular(
+    //                                     getHorizontalSize(3)),
+    //                                 alignment: Alignment.center)
+    //                           ]))),
+    //                   Padding(
+    //                       padding: getPadding(top: 42),
+    //                       child: Text("Patient Added Successfully!!",
+    //                           overflow: TextOverflow.ellipsis,
+    //                           textAlign: TextAlign.left,
+    //                           style: AppStyle.txtRalewayRomanBold20)),
+    //                   CustomButton(
+    //                       height: getVerticalSize(56),
+    //                       text: "lbl_go_to_home".tr,
+    //                       margin: getMargin(top: 22),
+    //                       onTap: () {
+    //                         Get.offAllNamed(AppRoutes.dashboardScreen);
+    //                       })
+    //                 ])),
+    //       )));
+    // } on Map {
+    //   //postLoginResp = e;
+    //   rethrow;
+    // }
   }
 }

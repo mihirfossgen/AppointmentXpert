@@ -196,6 +196,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
         CustomTextFormField(
             controller: controller.mobile,
             hintText: "Phone Number",
+            maxLength: 10,
             padding: TextFormFieldPadding.PaddingT14,
             textInputType: TextInputType.emailAddress,
             prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
@@ -278,7 +279,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   Widget patientUI(Size size, BuildContext context) {
     return Form(
         key: controller.formKey,
-        child: Responsive.isMobile(context) || Responsive.isTablet(context)
+        child: Responsive.isMobile(context) && Responsive.isTablet(context)
             ? SizedBox(
                 width: size.width,
                 child: Column(
@@ -406,33 +407,40 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       width: size.width,
                                       child: Row(
                                         // mainAxisAlignment:
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
 
                                         children: [
-
                                           Flexible(
-                                          fit: FlexFit.tight,
-                                          child: CustomTextFormField(
-                                              margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                              controller: controller.prefixController,
-                                              labelText: "Prefix",
-                                              hintText: "Mr./Mrs./Ms.",
-                                              isRequired: true,
-                                              padding: TextFormFieldPadding.PaddingT14,
-                                              validator: (value) {
-                                                return controller.prefixControllerValidator(value ?? "");
-                                              },
-                                              textInputType: TextInputType.name,
-                                              prefixConstraints:
-                                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                                            fit: FlexFit.tight,
+                                            child: CustomTextFormField(
+                                                margin:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 0, 10, 0),
+                                                controller:
+                                                    controller.prefixController,
+                                                labelText: "Prefix",
+                                                hintText: "Mr./Mrs./Ms.",
+                                                isRequired: true,
+                                                padding: TextFormFieldPadding
+                                                    .PaddingT14,
+                                                validator: (value) {
+                                                  return controller
+                                                      .prefixControllerValidator(
+                                                          value ?? "");
+                                                },
+                                                textInputType:
+                                                    TextInputType.name,
+                                                prefixConstraints: BoxConstraints(
+                                                    maxHeight:
+                                                        getVerticalSize(56))),
                                           ),
                                           SizedBox(
-                                            height: size.width*0.02,
+                                            height: size.width * 0.02,
                                           ),
-
                                           Flexible(
-
                                             fit: FlexFit.tight,
                                             child: CustomTextFormField(
                                                 controller: controller
@@ -678,6 +686,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       child: CustomTextFormField(
                                           labelText: "Phone Number",
                                           controller: controller.mobile,
+                                          maxLength: 10,
                                           padding:
                                               TextFormFieldPadding.PaddingT14,
                                           textInputType: TextInputType.phone,
@@ -1003,6 +1012,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                           child: CustomTextFormField(
                               labelText: "Phone Number",
                               controller: controller.mobile,
+                              maxLength: 10,
                               isRequired: true,
                               padding: TextFormFieldPadding.PaddingT14,
                               textInputType: TextInputType.phone,

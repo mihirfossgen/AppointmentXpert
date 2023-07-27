@@ -5,7 +5,8 @@ import '../core/utils/size_utils.dart';
 
 class CustomTextFormField extends StatefulWidget {
   CustomTextFormField(
-      {super.key, this.shape,
+      {super.key,
+      this.shape,
       this.padding,
       this.variant,
       this.fontStyle,
@@ -28,7 +29,8 @@ class CustomTextFormField extends StatefulWidget {
       this.labelText,
       this.readonly,
       this.initalValue,
-      this.isRequired});
+      this.isRequired,
+      this.maxLength});
 
   TextFormFieldShape? shape;
 
@@ -58,6 +60,7 @@ class CustomTextFormField extends StatefulWidget {
   TextInputType? textInputType;
 
   int? maxLines;
+  int? maxLength;
   String? hintText;
   String? labelText;
 
@@ -109,6 +112,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         textInputAction: widget.textInputAction,
         keyboardType: widget.textInputType,
         maxLines: widget.maxLines ?? 1,
+        maxLength: widget.maxLength ?? null,
         decoration: _buildDecoration(),
         validator: widget.validator,
       ),
@@ -117,6 +121,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   _buildDecoration() {
     return InputDecoration(
+      counterText: '',
       hintText: widget.hintText ?? "",
       hintStyle: _setFontStyle(),
       border: _setBorderStyle(),
