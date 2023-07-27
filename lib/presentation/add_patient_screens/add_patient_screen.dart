@@ -115,8 +115,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           isRequired: true,
                           padding: TextFormFieldPadding.PaddingT14,
                           validator: (value) {
-                            return controller
-                                .prefixControllerValidator(value ?? "");
+                            return controller.prefixControllerValidator(value ?? "");
                           },
                           textInputType: TextInputType.name,
                           prefixConstraints:
@@ -194,6 +193,50 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       SizedBox(
                         height: size.height * 0.03,
                       ),
+                      /*CustomTextFormField(
+                          controller: controller.password,
+                          isRequired: true,
+                          labelText: "Password",
+                          validator: (value) {
+                            return controller.validatePassword(value ?? "");
+                          },
+                          padding: TextFormFieldPadding.PaddingT14,
+                          textInputType: TextInputType.emailAddress,
+                          prefixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                      SizedBox(
+                        height: size.height * 0.03,
+                      ),
+                      CustomTextFormField(
+                          controller: controller.confirmPassword,
+                          isRequired: true,
+                          labelText: "Confirm password",
+                          validator: (value) {
+                            return controller
+                                .validateConfirmPassword(value ?? "");
+                          },
+                          padding: TextFormFieldPadding.PaddingT14,
+                          textInputType: TextInputType.emailAddress,
+                          suffix: InkWell(
+                              onTap: () {
+                                controller.isShowPassword.value =
+                                    !controller.isShowPassword.value;
+                              },
+                              child: Container(
+                                  margin: getMargin(
+                                      left: 12, top: 16, right: 8, bottom: 16),
+                                  child: CustomImageView(
+                                      svgPath: controller.isShowPassword.value
+                                          ? ImageConstant.imgCheckmark24x24
+                                          : ImageConstant.imgCheckmark24x24))),
+                          suffixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56)),
+                          isObscureText: controller.isShowPassword.value,
+                          prefixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                      SizedBox(
+                        height: size.height * 0.03,
+                      ),*/
                       SizedBox(
                         child: InkWell(
                           onTap: () async {
@@ -207,7 +250,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           child: AbsorbPointer(
                             child: CustomTextFormField(
                                 controller: controller.dob,
-                                labelText: "Date",
+                                labelText: "Date of birth",
                                 isRequired: true,
                                 size: size,
                                 validator: (value) {
@@ -233,6 +276,9 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                             return controller
                                 .genderValidator(value?.title ?? "");
                           },
+                          variant: DropDownVariant.OutlineBluegray400,
+                          fontStyle: DropDownFontStyle
+                              .ManropeMedium14Bluegray500,
                           icon: const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Icon(Icons.arrow_drop_down),
@@ -316,10 +362,10 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                                 Map<String, dynamic> requestData = {
                                   "email": controller.email.text,
                                   "mobile": controller.mobile.text,
-                                  "password": controller.confirmPassword.text,
+                                  //"password": controller.confirmPassword.text,
                                   "role": "PATIENT",
                                   "username": controller.mobile.text,
-                                  "prefix": controller.prefixController.text
+                                  "prefix": controller.prefixController.text,
                                 };
                                 controller.callRegister(requestData);
                               }
@@ -417,12 +463,11 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           controller: controller.mobile,
                           isRequired: true,
                           labelText: "Mobile",
-                          maxLength: 10,
                           validator: (value) {
                             return controller.numberValidator(value ?? "");
                           },
                           padding: TextFormFieldPadding.PaddingT14,
-                          textInputType: TextInputType.phone,
+                          textInputType: TextInputType.emailAddress,
                           prefixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56))),
                     ),
@@ -440,6 +485,60 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           },
                           padding: TextFormFieldPadding.PaddingT14,
                           textInputType: TextInputType.emailAddress,
+                          prefixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: CustomTextFormField(
+                          controller: controller.password,
+                          isRequired: true,
+                          labelText: "Password",
+                          validator: (value) {
+                            return controller.validatePassword(value ?? "");
+                          },
+                          padding: TextFormFieldPadding.PaddingT14,
+                          textInputType: TextInputType.emailAddress,
+                          prefixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.02,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: CustomTextFormField(
+                          controller: controller.confirmPassword,
+                          isRequired: true,
+                          labelText: "Confirm password",
+                          validator: (value) {
+                            return controller
+                                .validateConfirmPassword(value ?? "");
+                          },
+                          padding: TextFormFieldPadding.PaddingT14,
+                          textInputType: TextInputType.emailAddress,
+                          suffix: InkWell(
+                              onTap: () {
+                                controller.isShowPassword.value =
+                                    !controller.isShowPassword.value;
+                              },
+                              child: Container(
+                                  margin: getMargin(
+                                      left: 12, top: 16, right: 8, bottom: 16),
+                                  child: CustomImageView(
+                                      svgPath: controller.isShowPassword.value
+                                          ? ImageConstant.imgCheckmark24x24
+                                          : ImageConstant.imgCheckmark24x24))),
+                          suffixConstraints:
+                              BoxConstraints(maxHeight: getVerticalSize(56)),
+                          isObscureText: controller.isShowPassword.value,
                           prefixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56))),
                     ),
