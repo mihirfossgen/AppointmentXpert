@@ -947,8 +947,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
             .replaceAll(' AM', '')
             .replaceAll(' PM', '')));
     print(_startTime);
-    DateTime a = DateTime(DateTime.now().year, DateTime.now().month,
-        DateTime.now().day, _startTime.hour, _startTime.minute);
+
+    DateTime userdate =DateTime.parse(controller.dob.text);
+    DateTime a = DateTime(userdate.year, userdate.month,
+        userdate.day, _startTime.hour, _startTime.minute);
     TimeOfDay b = TimeOfDay.now();
     String c = DateFormat.jm().format(DateTime.now());
     TimeOfDay _currentTime = TimeOfDay(
@@ -959,6 +961,13 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         DateTime.now().day, _currentTime.hour, _currentTime.minute);
     print(a);
     print(now);
+    final DateFormat formatter =
+
+    DateFormat('yyyy-MM-dd');
+    formatter.format(now);
+    print(formatter.format(now));
+    print(controller.dob.text);
+
     if (a.isAfter(now)) {
       print('yes');
       var requestData = {
