@@ -69,11 +69,10 @@ class SignUpController extends GetxController {
   }
 
   String? emailValidator(String value) {
-    if (value.isEmpty || !value.contains('@')) {
-      return 'Please enter a valid email address.';
-    } else {
-      userEmail = value;
-    }
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = RegExp(pattern.toString());
+    if (!(regex.hasMatch(value))) return "Invalid Email";
 
     return null;
   }
@@ -97,7 +96,7 @@ class SignUpController extends GetxController {
   }
 
   String? numberValidator(String value) {
-    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    String pattern = r'(^(?:[+0]9)?[0-9]{10}$)';
     RegExp regExp = RegExp(pattern);
     if (value.isEmpty) {
       return 'Please enter mobile number';

@@ -227,7 +227,9 @@ class PatientsList extends GetView<DashboardController> {
                                               height: 5,
                                             ),
                                             Text(
-                                              'Age: ${item.age}',
+                                              item.age == 0
+                                                  ? ''
+                                                  : 'Age: ${item.age}',
                                               style: const TextStyle(
                                                   fontSize: 13,
                                                   color: Colors.black),

@@ -5,6 +5,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart';
 
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
@@ -13,6 +14,7 @@ import '../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../models/getallEmplyesList.dart';
 import '../../models/staff_list_model.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
@@ -42,12 +44,11 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
   Widget build(BuildContext context) {
     // final args =
     //     ModalRoute.of(context)!.settings.arguments as DoctorDetailsArguments;
-    a = jsonDecode(SharedPrefUtils.readPrefStr("doctor_details"));
 
     TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 30);
     TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 30);
     Duration step = const Duration(minutes: 30);
-    TimeOfDay selectedTime = const TimeOfDay(hour: 12, minute: 00);
+    TimeOfDay selectedTime = TimeOfDay.now();
     TextEditingController timeController = TextEditingController();
     String hour, minute, time;
     controller.times = controller
@@ -325,86 +326,6 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
-                              SizedBox(
-                                child: InkWell(
-                                  onTap: () async {
-                                    FocusScope.of(context).unfocus();
-                                    DateTime a = await getDate();
-
-                                    final DateFormat formatter =
-                                        DateFormat('yyyy-MM-dd');
-                                    controller.dob.text = formatter.format(a);
-                                  },
-                                  child: AbsorbPointer(
-                                    child: CustomTextFormField(
-                                        controller: controller.dob,
-                                        labelText: "Date",
-                                        padding:
-                                            TextFormFieldPadding.PaddingT14,
-                                        textInputType:
-                                            TextInputType.emailAddress,
-                                        suffix: Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 10),
-                                            child: const Icon(
-                                                Icons.calendar_month)),
-                                        suffixConstraints: BoxConstraints(
-                                            maxHeight: getVerticalSize(56))),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  _selectTime(context);
-                                },
-                                child: AbsorbPointer(
-                                  child: CustomTextFormField(
-                                      controller: controller.from.value,
-                                      labelText: "From",
-                                      padding: TextFormFieldPadding.PaddingT14,
-                                      validator: (value) {
-                                        return controller.fromValidator(
-                                            value ?? "",
-                                            content?.startTime ?? "12:00 PM",
-                                            content?.endTime ?? "06:00 PM");
-                                      },
-                                      textInputType: TextInputType.emailAddress,
-                                      suffix: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 10),
-                                        child: const Icon(Icons.alarm),
-                                      ),
-                                      suffixConstraints: BoxConstraints(
-                                          maxHeight: getVerticalSize(56))),
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
-                              AbsorbPointer(
-                                child: CustomTextFormField(
-                                    controller: controller.to,
-                                    labelText: "To",
-                                    padding: TextFormFieldPadding.PaddingT14,
-                                    // validator: (value) {
-                                    //   return controller
-                                    //       .lastNameValidator(
-                                    //           value ?? "");
-                                    // },
-                                    textInputType: TextInputType.emailAddress,
-                                    suffix: Container(
-                                      margin: const EdgeInsets.only(right: 10),
-                                      child: const Icon(Icons.alarm),
-                                    ),
-                                    suffixConstraints: BoxConstraints(
-                                        maxHeight: getVerticalSize(56))),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
                               Obx(() => CustomDropDown(
                                   labelText: "Consulting Doctor ",
                                   variant: DropDownVariant.OutlineBluegray400,
@@ -420,12 +341,129 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                   ),
                                   items: controller.counsultingDoctor.value,
                                   onChanged: (value) {
-                                    controller.consultingDoctor.text =
+                                    controller.consultingDoctor.value.text =
                                         value.title;
+                                    if (controller
+                                            .consultingDoctor.value.text !=
+                                        '') {
+                                      controller.showDateAndTime.value = true;
+                                    }
                                     controller.onConsultingDoctorSelect(value);
                                   })),
                               SizedBox(
                                 height: size.height * 0.02,
+                              ),
+                              Obx(
+                                () => controller.showDateAndTime.value == false
+                                    ? const SizedBox()
+                                    : Column(
+                                        children: [
+                                          SizedBox(
+                                            child: InkWell(
+                                              onTap: () async {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                DateTime a = await getDate();
+
+                                                final DateFormat formatter =
+                                                    DateFormat('yyyy-MM-dd');
+                                                controller.dob.text =
+                                                    formatter.format(a);
+                                              },
+                                              child: AbsorbPointer(
+                                                child: CustomTextFormField(
+                                                    controller: controller.dob,
+                                                    labelText: "Date",
+                                                    padding:
+                                                        TextFormFieldPadding
+                                                            .PaddingT14,
+                                                    textInputType: TextInputType
+                                                        .emailAddress,
+                                                    suffix: Container(
+                                                        margin: const EdgeInsets
+                                                            .only(right: 10),
+                                                        child: const Icon(Icons
+                                                            .calendar_month)),
+                                                    suffixConstraints:
+                                                        BoxConstraints(
+                                                            maxHeight:
+                                                                getVerticalSize(
+                                                                    56))),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              _selectTime(context);
+                                            },
+                                            child: AbsorbPointer(
+                                              child: CustomTextFormField(
+                                                  controller: controller
+                                                      .from.value,
+                                                  labelText: "From",
+                                                  padding: TextFormFieldPadding
+                                                      .PaddingT14,
+                                                  validator: (value) {
+                                                    return controller
+                                                        .fromValidator(
+                                                            value ?? "",
+                                                            content?.startTime ??
+                                                                "12:00 PM",
+                                                            content?.endTime ??
+                                                                "06:00 PM");
+                                                  },
+                                                  textInputType: TextInputType
+                                                      .emailAddress,
+                                                  suffix: Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    child:
+                                                        const Icon(Icons.alarm),
+                                                  ),
+                                                  suffixConstraints:
+                                                      BoxConstraints(
+                                                          maxHeight:
+                                                              getVerticalSize(
+                                                                  56))),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          AbsorbPointer(
+                                            child: CustomTextFormField(
+                                                controller: controller.to,
+                                                labelText: "To",
+                                                padding: TextFormFieldPadding
+                                                    .PaddingT14,
+                                                // validator: (value) {
+                                                //   return controller
+                                                //       .lastNameValidator(
+                                                //           value ?? "");
+                                                // },
+                                                textInputType: TextInputType
+                                                    .emailAddress,
+                                                suffix: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 10),
+                                                  child:
+                                                      const Icon(Icons.alarm),
+                                                ),
+                                                suffixConstraints:
+                                                    BoxConstraints(
+                                                        maxHeight:
+                                                            getVerticalSize(
+                                                                56))),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                        ],
+                                      ),
                               ),
                               CustomTextFormField(
                                   controller: controller.treatment,
@@ -452,6 +490,22 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                   textInputType: TextInputType.emailAddress,
                                   prefixConstraints: BoxConstraints(
                                       maxHeight: getVerticalSize(56))),
+                              Obx(() =>
+                                  controller.pleasefillAllFields.value == false
+                                      ? const SizedBox()
+                                      : Column(
+                                          children: [
+                                            SizedBox(
+                                              height: size.height * 0.04,
+                                            ),
+                                            Text(
+                                              'Please fill all Fields',
+                                              style: TextStyle(
+                                                  color: Colors.red.shade600,
+                                                  fontSize: 16),
+                                            )
+                                          ],
+                                        )),
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
@@ -471,6 +525,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                 onTap: () async {
                                                   bool a =
                                                       controller.trySubmit();
+
                                                   if (a) {
                                                     onTapBookapointmentOne(
                                                       controller.examinerId ??
@@ -735,7 +790,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                       Flexible(
                         fit: FlexFit.tight,
                         child: CustomTextFormField(
-                            controller: controller.consultingDoctor,
+                            controller: controller.consultingDoctor.value,
                             labelText: "Consulting Doctor",
                             isRequired: true,
                             readonly: true,
@@ -885,34 +940,82 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
   }
 
   onTapBookapointmentOne(int id) async {
-    var requestData = {
-      "active": true,
-      "date": DateTime.parse(
-              "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
-          .toIso8601String(),
-      // "departmentId": controller.getdeptId(id),
-      "startTime": controller.from.value.text,
-      "endTime": controller.to.value.text,
-      "examinerId": id,
-      "note": controller.treatment.text,
-      "patientId": patientDetailsArguments?.details?.id,
-      "purpose": "OTHER",
-      //"referenceId": 0,
-      "status": "Booked",
-      "updateTimeInMin": 0
-    };
+    TimeOfDay _startTime = TimeOfDay(
+        hour: int.parse(controller.from.value.text!.split(":")[0]),
+        minute: int.parse(controller.from.value.text
+            .split(":")[1]
+            .replaceAll(' AM', '')
+            .replaceAll(' PM', '')));
+    print(_startTime);
+    DateTime a = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, _startTime.hour, _startTime.minute);
+    TimeOfDay b = TimeOfDay.now();
+    String c = DateFormat.jm().format(DateTime.now());
+    TimeOfDay _currentTime = TimeOfDay(
+        hour: int.parse(c.split(":")[0]),
+        minute: int.parse(
+            c.split(":")[1].replaceAll(' AM', '').replaceAll(' PM', '')));
+    DateTime now = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, _currentTime.hour, _currentTime.minute);
+    print(a);
+    print(now);
+    if (a.isAfter(now)) {
+      print('yes');
+      var requestData = {
+        "active": true,
+        "date": DateTime.parse(
+                "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
+            .toIso8601String(),
+        // "departmentId": controller.getdeptId(id),
+        "startTime": controller.from.value.text,
+        "endTime": controller.to.value.text,
+        "examinerId": id,
+        "note": controller.treatment.text,
+        "patientId": patientDetailsArguments?.details?.id,
+        "purpose": "OTHER",
+        //"referenceId": 0,
+        "status": "Booked",
+        "updateTimeInMin": 0
+      };
 
-    print(jsonEncode(requestData));
+      print(jsonEncode(requestData));
 
-    try {
-      await controller.callCreateLogin(requestData);
-      onTapBooknow();
-    } on Map {
-      //  _onOnTapSignInError();
-    } on NoInternetException catch (e) {
-      Get.rawSnackbar(message: e.toString());
-    } catch (e) {
-      Get.rawSnackbar(message: e.toString());
+      try {
+        await controller.callCreateLogin(requestData);
+        onTapBooknow();
+      } on Map {
+        //  _onOnTapSignInError();
+      } on NoInternetException catch (e) {
+        Get.rawSnackbar(message: e.toString());
+      } catch (e) {
+        Get.rawSnackbar(message: e.toString());
+      }
+    } else {
+      print('no');
+      Get.dialog(AlertDialog(
+        title: const Text('Appointment for the selected time is passed.'),
+        actions: [
+          InkWell(
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              height: 50,
+              width: 150,
+              decoration: BoxDecoration(
+                  color: ColorConstant.blue700,
+                  borderRadius: BorderRadius.circular(10)),
+              alignment: Alignment.center,
+              child: Text(
+                'Close',
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: AppStyle.txtRalewayRomanRegular14WhiteA700,
+              ),
+            ),
+          ),
+        ],
+      ));
     }
   }
 }

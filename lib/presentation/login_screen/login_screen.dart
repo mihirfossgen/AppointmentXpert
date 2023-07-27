@@ -160,7 +160,8 @@ class LoginScreen extends GetWidget<LoginController> {
                     controller: controller.emailController,
                     textInputAction: TextInputAction.done,
                     isRequired: true,
-                    textInputType: TextInputType.number,
+                    maxLength: 10,
+                    textInputType: TextInputType.phone,
                     validator: (value) {
                       return controller.numberValidator(value ?? "");
                     },
@@ -171,32 +172,17 @@ class LoginScreen extends GetWidget<LoginController> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  Obx(() => CustomCheckbox(
-                        text: "Remember me",
-                        fontStyle:
-                            CheckboxFontStyle.SFProDisplayRegular14Bluegray800,
-                        value: controller.isRememberMe.value,
-                        onChange: (p0) {
-                          controller.isRememberMe.value = p0;
-                        },
-                      )),
+                  // Obx(() => CustomCheckbox(
+                  //       text: "Remember me",
+                  //       fontStyle:
+                  //           CheckboxFontStyle.SFProDisplayRegular14Bluegray800,
+                  //       value: controller.isRememberMe.value,
+                  //       onChange: (p0) {
+                  //         controller.isRememberMe.value = p0;
+                  //       },
+                  //     )),
                   SizedBox(
                     height: size.height * 0.01,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: GestureDetector(
-                          onTap: () {
-                            onTapTxtForgotPassword();
-                          },
-                          child: Padding(
-                              padding: getPadding(top: 10),
-                              child: Text("msg_forgot_password".tr,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.left,
-                                  style: AppStyle.txtRalewayRomanMedium14)))),
-                  SizedBox(
-                    height: size.height * 0.02,
                   ),
 
                   /// Login Button
@@ -357,6 +343,7 @@ class LoginScreen extends GetWidget<LoginController> {
                           ),
                         )
                       : const SizedBox(),
+
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Column(
@@ -418,10 +405,7 @@ class LoginScreen extends GetWidget<LoginController> {
                               phoneNumber: controller.emailController.text),
                         );
                       },
-                    ).then((value) {
-                      print(value);
-                      if (value) onTapSignin(controller);
-                    })
+                    )
                   : WidgetsBinding.instance.addPostFrameCallback((_) {
                       showDialog(
                           context: Get.context!,

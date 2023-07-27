@@ -22,13 +22,15 @@ class DoctorDetailController extends GetxController {
   TextEditingController gender = TextEditingController();
   Rx<TextEditingController> from = TextEditingController().obs;
   TextEditingController to = TextEditingController();
-  TextEditingController consultingDoctor = TextEditingController();
+  Rx<TextEditingController> consultingDoctor = TextEditingController().obs;
   int? examinerId;
+  RxBool showDateAndTime = false.obs;
   TextEditingController treatment = TextEditingController();
   TextEditingController notes = TextEditingController();
   TextEditingController address = TextEditingController();
   final formKey = GlobalKey<FormState>();
   Rx<DateTime> dateTime = DateTime.now().obs;
+  RxBool pleasefillAllFields = false.obs;
   List<DoctorList>? list;
   int? deptId;
   Iterable<TimeOfDay> getTimes(
@@ -67,9 +69,10 @@ class DoctorDetailController extends GetxController {
 
     if (isValid) {
       formKey.currentState!.save();
-
+      pleasefillAllFields.value = false;
       return true;
     }
+    pleasefillAllFields.value = true;
     return false;
   }
 
@@ -256,7 +259,7 @@ class DoctorDetailController extends GetxController {
     gender.clear();
     from.value.clear();
     to.clear();
-    consultingDoctor.clear();
+    consultingDoctor.value.clear();
     treatment.clear();
     notes.clear();
   }
