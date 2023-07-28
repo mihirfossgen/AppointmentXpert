@@ -49,6 +49,11 @@ class ListRecentPatients extends StatelessWidget {
   // final Function()? onPressedAssign;
   // final Function()? onPressedMember;
 
+  getformattedDate(String date) {
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(DateTime.parse(date));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -137,14 +142,14 @@ class ListRecentPatients extends StatelessWidget {
             ),
             Row(children: [
               const Text(
-                'Age: ',
+                'Date of birth: ',
                 style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                '${data.age}',
+                '${getformattedDate('${data.dob}')}',
                 style: const TextStyle(fontSize: 13, color: Colors.black),
               ),
             ]),

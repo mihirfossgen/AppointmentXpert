@@ -6,6 +6,7 @@ import 'package:appointmentxpert/presentation/splash_screen/splash_screen.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
 import 'package:appointmentxpert/widgets/responsive.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,20 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('message -- ${message.data}');
 }
 
+const _kTestingCrashlytics = true;
+
+Future<void> _initializeFlutterFire() async {
+  if (_kTestingCrashlytics) {
+    // Force enable crashlytics collection enabled if we're testing it.
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  } else {
+    // Else only enable it in non-debug builds.
+    // You could additionally extend this to allow users to opt-in.
+    await FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(!kDebugMode);
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefUtils.init();
@@ -42,6 +57,30 @@ void main() async {
   });
 
   await initFcm();
+  await _initializeFlutterFire();
+  const fatalError = true;
+  FlutterError.onError = (errorDetails) {
+    if (fatalError) {
+      // If you want to record a "fatal" exception
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      // ignore: dead_code
+    } else {
+      // If you want to record a "non-fatal" exception
+      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    }
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    if (fatalError) {
+      // If you want to record a "fatal" exception
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      // ignore: dead_code
+    } else {
+      // If you want to record a "non-fatal" exception
+      FirebaseCrashlytics.instance.recordError(error, stack);
+    }
+    return true;
+  };
+
   // await Firebase.initializeApp(
   //     options: const FirebaseOptions(
   //         apiKey: "AIzaSyCX7puGlnu_F7DeMBA86rNj4tiotpFAtAE",

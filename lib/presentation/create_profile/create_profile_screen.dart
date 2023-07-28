@@ -29,6 +29,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   final CreateStaff _staffModel = CreateStaff();
   final CreatepatientModel _model = CreatepatientModel();
 
+  CreateProfileController controller = Get.put(CreateProfileController());
   List<String>? deptname;
   late ImageSource sourcee;
   //late GetAllClinic _getAllClinic;
@@ -810,91 +811,77 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-
                                   Flexible(
-                                          fit: FlexFit.loose,
-                                          flex: 1,
-                                          child: CustomTextFormField(
-                                              margin:
-                                              const EdgeInsets.fromLTRB(
-                                                  0, 0, 10, 0),
-                                              controller:
-                                              controller.prefixController,
-                                              labelText: "Prefix",
-                                              hintText: "Mr./Mrs./Ms.",
-                                              isRequired: true,
-                                              padding: TextFormFieldPadding
-                                                  .PaddingT14,
-                                              validator: (value) {
-                                                return controller
-                                                    .prefixControllerValidator(
-                                                    value ?? "");
-                                              },
-                                              textInputType:
-                                              TextInputType.name,
-                                              prefixConstraints: BoxConstraints(
-                                                  maxHeight:
-                                                  getVerticalSize(56))),
-                                        ),
-
+                                    fit: FlexFit.loose,
+                                    flex: 1,
+                                    child: CustomTextFormField(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            0, 0, 10, 0),
+                                        controller: controller.prefixController,
+                                        labelText: "Prefix",
+                                        hintText: "Mr./Mrs./Ms.",
+                                        isRequired: true,
+                                        padding:
+                                            TextFormFieldPadding.PaddingT14,
+                                        validator: (value) {
+                                          return controller
+                                              .prefixControllerValidator(
+                                                  value ?? "");
+                                        },
+                                        textInputType: TextInputType.name,
+                                        prefixConstraints: BoxConstraints(
+                                            maxHeight: getVerticalSize(56))),
+                                  ),
                                   const SizedBox(
                                     width: 5,
                                   ),
                                   Flexible(
                                     fit: FlexFit.loose,
                                     flex: 2,
-                                    child:
-                                        CustomTextFormField(
-                                            labelText: "First name",
-                                            controller: controller.firstname,
-                                            isRequired: true,
-                                            padding: TextFormFieldPadding.PaddingT14,
-                                            validator: (value) {
-                                              return controller
-                                                  .firstNameValidator(
-                                                  value ?? "");
-                                            },
-                                            textInputType:
+                                    child: CustomTextFormField(
+                                        labelText: "First name",
+                                        controller: controller.firstname,
+                                        isRequired: true,
+                                        padding:
+                                            TextFormFieldPadding.PaddingT14,
+                                        validator: (value) {
+                                          return controller
+                                              .firstNameValidator(value ?? "");
+                                        },
+                                        textInputType:
                                             TextInputType.emailAddress,
-                                            prefixConstraints: BoxConstraints(
-                                                maxHeight:
-                                                getVerticalSize(56))),
-
+                                        prefixConstraints: BoxConstraints(
+                                            maxHeight: getVerticalSize(56))),
                                   ),
                                 ],
                               ),
                             ),
-
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:[
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: CustomTextFormField(
-                                    controller: controller.lastname,
-                                    labelText: "Last name",
-                                    isRequired: true,
-                                    padding:
-                                    TextFormFieldPadding.PaddingT14,
-                                    validator: (value) {
-                                      return controller
-                                          .lastNameValidator(
-                                          value ?? "");
-                                    },
-                                    textInputType:
-                                    TextInputType.emailAddress,
-                                    prefixConstraints: BoxConstraints(
-                                        maxHeight:
-                                        getVerticalSize(56))
-                                ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: CustomTextFormField(
+                                        controller: controller.lastname,
+                                        labelText: "Last name",
+                                        isRequired: true,
+                                        padding:
+                                            TextFormFieldPadding.PaddingT14,
+                                        validator: (value) {
+                                          return controller
+                                              .lastNameValidator(value ?? "");
+                                        },
+                                        textInputType:
+                                            TextInputType.emailAddress,
+                                        prefixConstraints: BoxConstraints(
+                                            maxHeight: getVerticalSize(56))),
+                                  ),
+                                ],
                               ),
-                             ],
                             ),
-                          ),
-
                             SizedBox(
                               height: size.height * 0.02,
                             ),
@@ -1062,6 +1049,21 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         ),
                         SizedBox(
                           height: size.height * 0.02,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: CustomTextFormField(
+                              labelText: "Email",
+                              controller: controller.email,
+                              maxLength: 10,
+                              isRequired: true,
+                              padding: TextFormFieldPadding.PaddingT14,
+                              textInputType: TextInputType.phone,
+                              validator: (value) {
+                                return controller.emailValidator(value ?? "");
+                              },
+                              prefixConstraints: BoxConstraints(
+                                  maxHeight: getVerticalSize(56))),
                         ),
                       ],
                     ),

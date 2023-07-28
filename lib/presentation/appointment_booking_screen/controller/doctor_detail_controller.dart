@@ -84,18 +84,29 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
+  final RegExp nameRegExp = RegExp('[a-zA-Z]');
   String? firstNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'First name must be at least 4 characters long.';
+    if (value.isEmpty) {
+      return 'Please enter first name';
+    } else {
+      if (!nameRegExp.hasMatch(value)) {
+        return 'Enter valid name';
+      } else {
+        return null;
+      }
     }
-    return null;
   }
 
   String? lastNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'Last name must be at least 4 characters long.';
+    if (value.isEmpty) {
+      return 'Please enter last name';
+    } else {
+      if (!nameRegExp.hasMatch(value)) {
+        return 'Enter valid name';
+      } else {
+        return null;
+      }
     }
-    return null;
   }
 
   String? userNameValidator(String value) {
@@ -164,7 +175,7 @@ class DoctorDetailController extends GetxController {
 
   String? consultingDoctorValidator(String value) {
     if (value.isEmpty || value.length < 4) {
-      return 'First name must be at least 4 characters long.';
+      return 'Please select doctor';
     }
     return null;
   }

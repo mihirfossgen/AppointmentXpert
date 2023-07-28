@@ -948,9 +948,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
             .replaceAll(' PM', '')));
     print(_startTime);
 
-    DateTime userdate =DateTime.parse(controller.dob.text);
-    DateTime a = DateTime(userdate.year, userdate.month,
-        userdate.day, _startTime.hour, _startTime.minute);
+    DateTime userdate = DateTime.parse(controller.dob.text);
+    DateTime a = DateTime(userdate.year, userdate.month, userdate.day,
+        _startTime.hour, _startTime.minute);
     TimeOfDay b = TimeOfDay.now();
     String c = DateFormat.jm().format(DateTime.now());
     TimeOfDay _currentTime = TimeOfDay(
@@ -961,15 +961,12 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         DateTime.now().day, _currentTime.hour, _currentTime.minute);
     print(a);
     print(now);
-    final DateFormat formatter =
-
-    DateFormat('yyyy-MM-dd');
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
     formatter.format(now);
     print(formatter.format(now));
     print(controller.dob.text);
 
     if (a.isAfter(now)) {
-      print('yes');
       var requestData = {
         "active": true,
         "date": DateTime.parse(
@@ -1000,29 +997,18 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         Get.rawSnackbar(message: e.toString());
       }
     } else {
-      print('no');
       Get.dialog(AlertDialog(
-        title: const Text('Appointment for the selected time is passed.'),
+        title: const Text('Appointment for the selected time has passed.'),
         actions: [
-          InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              height: 50,
-              width: 150,
-              decoration: BoxDecoration(
-                  color: ColorConstant.blue700,
-                  borderRadius: BorderRadius.circular(10)),
-              alignment: Alignment.center,
-              child: Text(
-                'Close',
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: AppStyle.txtRalewayRomanRegular14WhiteA700,
-              ),
-            ),
-          ),
+          CustomButton(
+              height: getVerticalSize(60),
+              width: getHorizontalSize(80),
+              text: 'Close',
+              margin: getMargin(left: 0, right: 10),
+              fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+              onTap: () async {
+                Get.back();
+              })
         ],
       ));
     }

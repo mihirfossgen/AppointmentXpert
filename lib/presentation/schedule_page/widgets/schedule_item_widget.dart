@@ -193,56 +193,36 @@ class ScheduleItemWidget extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  var data = {
-                                    "active": false,
-                                    "id": appointment.id,
-                                    "date": appointment.date,
-                                    "examinerId": appointment.examiner!.id,
-                                    "note": appointment.note,
-                                    "patientId": patientId,
-                                    "purpose": appointment.purpose,
-                                    "status": "Completed"
-                                  };
-                                  controller.updateAppointment(data);
-                                },
-                                child: Container(
-                                  height: 50,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                      color: ColorConstant.blue700,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Yes',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: AppStyle
-                                        .txtRalewayRomanRegular14WhiteA700,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Get.back();
-                                },
-                                child: Container(
-                                  height: 50,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                      color: ColorConstant.blue700,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'No',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: AppStyle
-                                        .txtRalewayRomanRegular14WhiteA700,
-                                  ),
-                                ),
-                              )
+                              CustomButton(
+                                  height: getVerticalSize(60),
+                                  width: getHorizontalSize(80),
+                                  text: 'Yes',
+                                  margin: getMargin(left: 10, right: 00),
+                                  fontStyle: ButtonFontStyle
+                                      .RalewayRomanSemiBold14WhiteA700,
+                                  onTap: () async {
+                                    var data = {
+                                      "active": false,
+                                      "id": appointment.id,
+                                      "date": appointment.date,
+                                      "examinerId": appointment.examiner!.id,
+                                      "note": appointment.note,
+                                      "patientId": patientId,
+                                      "purpose": appointment.purpose,
+                                      "status": "Completed"
+                                    };
+                                    controller.updateAppointment(data);
+                                  }),
+                              CustomButton(
+                                  height: getVerticalSize(60),
+                                  width: getHorizontalSize(80),
+                                  text: 'No',
+                                  margin: getMargin(left: 0, right: 10),
+                                  fontStyle: ButtonFontStyle
+                                      .RalewayRomanSemiBold14WhiteA700,
+                                  onTap: () async {
+                                    Get.back();
+                                  })
                             ],
                           )
                         ],
@@ -269,17 +249,51 @@ class ScheduleItemWidget extends StatelessWidget {
               InkWell(
                 onTap: () {
                   // Call cancel appointment
-                  var data = {
-                    "active": false,
-                    "id": appointment.id,
-                    "date": appointment.date,
-                    "examinerId": appointment.examiner!.id,
-                    "note": appointment.note,
-                    "patientId": patientId,
-                    "purpose": appointment.purpose,
-                    "status": "Canceled"
-                  };
-                  controller.updateAppointment(data);
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    showDialog(
+                      context: Get.context!,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Do you want to cancel appointment?'),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomButton(
+                                  height: getVerticalSize(60),
+                                  width: getHorizontalSize(80),
+                                  text: 'Yes',
+                                  margin: getMargin(left: 10, right: 00),
+                                  fontStyle: ButtonFontStyle
+                                      .RalewayRomanSemiBold14WhiteA700,
+                                  onTap: () async {
+                                    var data = {
+                                      "active": false,
+                                      "id": appointment.id,
+                                      "date": appointment.date,
+                                      "examinerId": appointment.examiner!.id,
+                                      "note": appointment.note,
+                                      "patientId": patientId,
+                                      "purpose": appointment.purpose,
+                                      "status": "Canceled"
+                                    };
+                                    controller.updateAppointment(data);
+                                  }),
+                              CustomButton(
+                                  height: getVerticalSize(60),
+                                  width: getHorizontalSize(80),
+                                  text: 'No',
+                                  margin: getMargin(left: 0, right: 10),
+                                  fontStyle: ButtonFontStyle
+                                      .RalewayRomanSemiBold14WhiteA700,
+                                  onTap: () async {
+                                    Get.back();
+                                  })
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  });
                 },
                 child: Container(
                   padding: const EdgeInsets.all(15),
@@ -307,65 +321,43 @@ class ScheduleItemWidget extends StatelessWidget {
                           context: Get.context!,
                           builder: (context) => AlertDialog(
                             title: const Text(
-                                'Are you sure to cancel appointment?'),
+                                'Do you want to cancel appointment?'),
                             actions: [
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  InkWell(
-                                    onTap: () {
-                                      // call cancel appointment
-                                      var data = {
-                                        "active": false,
-                                        "id": appointment.id,
-                                        "date": appointment.date,
-                                        "examinerId": appointment.examiner!.id,
-                                        "note": appointment.note,
-                                        "patientId": patientId,
-                                        "purpose": appointment.purpose,
-                                        "status": "Canceled"
-                                      };
-                                      controller.updateAppointment(data);
-                                    },
-                                    child: Container(
-                                      height: 50,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                          color: ColorConstant.blue700,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'Yes',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: AppStyle
-                                            .txtRalewayRomanRegular14WhiteA700,
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    child: Container(
-                                      height: 50,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                          color: ColorConstant.blue700,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        'No',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: AppStyle
-                                            .txtRalewayRomanRegular14WhiteA700,
-                                      ),
-                                    ),
-                                  )
+                                  CustomButton(
+                                      height: getVerticalSize(60),
+                                      width: getHorizontalSize(80),
+                                      text: 'Yes',
+                                      margin: getMargin(left: 10, right: 00),
+                                      fontStyle: ButtonFontStyle
+                                          .RalewayRomanSemiBold14WhiteA700,
+                                      onTap: () async {
+                                        var data = {
+                                          "active": false,
+                                          "id": appointment.id,
+                                          "date": appointment.date,
+                                          "examinerId":
+                                              appointment.examiner!.id,
+                                          "note": appointment.note,
+                                          "patientId": patientId,
+                                          "purpose": appointment.purpose,
+                                          "status": "Canceled"
+                                        };
+                                        controller.updateAppointment(data);
+                                      }),
+                                  CustomButton(
+                                      height: getVerticalSize(60),
+                                      width: getHorizontalSize(80),
+                                      text: 'No',
+                                      margin: getMargin(left: 0, right: 10),
+                                      fontStyle: ButtonFontStyle
+                                          .RalewayRomanSemiBold14WhiteA700,
+                                      onTap: () async {
+                                        Get.back();
+                                      })
                                 ],
                               )
                             ],
@@ -451,8 +443,11 @@ class ScheduleItemWidget extends StatelessWidget {
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              controller
-                                                  .selectTime(Get.context!);
+                                              controller.selectTime(
+                                                  Get.context!,
+                                                  appointment.examiner
+                                                          ?.timeSlotForBookingInMin ??
+                                                      0);
                                             },
                                             child: AbsorbPointer(
                                               child: CustomTextFormField(
@@ -517,33 +512,87 @@ class ScheduleItemWidget extends StatelessWidget {
                                     child: CustomButton(
                                         height: getVerticalSize(56),
                                         width: getHorizontalSize(110),
-                                        text: "Rechsdule Appointment",
+                                        text: "Reschdule Appointment",
                                         shape: ButtonShape.RoundedBorder8,
                                         padding: ButtonPadding.PaddingAll16,
                                         fontStyle: ButtonFontStyle
                                             .RalewayRomanSemiBold14WhiteA700,
                                         onTap: () async {
-                                          var requestData = {
-                                            "active": true,
-                                            "date": DateTime.parse(
-                                                    "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
-                                                .toIso8601String(),
-                                            "startTime":
-                                                controller.from.value.text,
-                                            "endTime": controller.to.value.text,
-                                            "examinerId":
-                                                appointment.examiner!.id,
-                                            "note": appointment.note,
-                                            "id": appointment.id,
-                                            "patientId":
-                                                appointment.patient?.id,
-                                            "purpose": "CHECKUP",
-                                            "status": "Reschduled",
-                                            "update_time_in_min": 0
-                                          };
-                                          print(jsonEncode(requestData));
-                                          controller
-                                              .updateAppointment(requestData);
+                                          TimeOfDay _startTime = TimeOfDay(
+                                              hour: int.parse(controller
+                                                  .from.value.text!
+                                                  .split(":")[0]),
+                                              minute: int.parse(controller
+                                                  .from.value.text
+                                                  .split(":")[1]
+                                                  .replaceAll(' AM', '')
+                                                  .replaceAll(' PM', '')));
+                                          print(_startTime);
+
+                                          DateTime userdate = DateTime.parse(
+                                              controller.dob.text);
+                                          DateTime a = DateTime(
+                                              userdate.year,
+                                              userdate.month,
+                                              userdate.day,
+                                              _startTime.hour,
+                                              _startTime.minute);
+                                          TimeOfDay b = TimeOfDay.now();
+                                          String c = DateFormat.jm()
+                                              .format(DateTime.now());
+                                          TimeOfDay _currentTime = TimeOfDay(
+                                              hour: int.parse(c.split(":")[0]),
+                                              minute: int.parse(c
+                                                  .split(":")[1]
+                                                  .replaceAll(' AM', '')
+                                                  .replaceAll(' PM', '')));
+                                          DateTime now = DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day,
+                                              _currentTime.hour,
+                                              _currentTime.minute);
+                                          print(a);
+                                          print(now);
+                                          final DateFormat formatter =
+                                              DateFormat('yyyy-MM-dd');
+                                          formatter.format(now);
+                                          print(formatter.format(now));
+                                          print(controller.dob.text);
+                                          if (a.isAfter(now)) {
+                                            var requestData = {
+                                              "active": true,
+                                              "date": DateTime.parse(
+                                                      "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
+                                                  .toIso8601String(),
+                                              "startTime":
+                                                  controller.from.value.text,
+                                              "endTime":
+                                                  controller.to.value.text,
+                                              "examinerId":
+                                                  appointment.examiner!.id,
+                                              "note": appointment.note,
+                                              "id": appointment.id,
+                                              "patientId":
+                                                  appointment.patient?.id,
+                                              "purpose": "CHECKUP",
+                                              "status": "Reschduled",
+                                              "update_time_in_min": 0
+                                            };
+                                            print(jsonEncode(requestData));
+                                            controller
+                                                .updateAppointment(requestData);
+                                          } else {
+                                            Get.back();
+                                            WidgetsBinding.instance
+                                                .addPostFrameCallback(
+                                                    (timeStamp) => Get.snackbar(
+                                                        "Appointment for the selected time has passed.",
+                                                        '',
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM));
+                                          }
                                         }),
                                   )
                                 ],

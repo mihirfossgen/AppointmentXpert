@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
@@ -131,7 +132,7 @@ class PatientsList extends GetView<DashboardController> {
                     ),
 
                     SizedBox(
-                        height: 700,
+                        height: MediaQuery.of(context).size.height,
                         child: Responsive.isMobile(context)
                             ? RefreshIndicator(
                                 onRefresh: () async {
@@ -144,6 +145,7 @@ class PatientsList extends GetView<DashboardController> {
                                 },
                                 child: PagedListView<int, Content>.separated(
                                   shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
                                   pagingController: dashboardController
                                       .patientPagingController,
                                   builderDelegate:
@@ -227,9 +229,7 @@ class PatientsList extends GetView<DashboardController> {
                                               height: 5,
                                             ),
                                             Text(
-                                              item.age == 0
-                                                  ? ''
-                                                  : 'Age: ${item.age}',
+                                              'Date of Birth: ${controller.getformattedDate(item.dob ?? "")}',
                                               style: const TextStyle(
                                                   fontSize: 13,
                                                   color: Colors.black),
@@ -274,7 +274,7 @@ class PatientsList extends GetView<DashboardController> {
                                         //shadow: BoxShadow,
                                         //subTitleText: 'Address: ${data.address}',
                                         title: Text(
-                                          '${item.prefix}'
+                                          '${item.prefix} '
                                           '${item.firstName} '
                                           '${item.lastName}',
                                           style: const TextStyle(
@@ -288,7 +288,7 @@ class PatientsList extends GetView<DashboardController> {
                                     ),
                                   ),
                                   separatorBuilder: (context, index) =>
-                                      const Divider(),
+                                      const SizedBox(),
                                 ),
                               )
                             //loadList()

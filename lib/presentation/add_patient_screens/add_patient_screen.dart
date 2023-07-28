@@ -115,7 +115,8 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           isRequired: true,
                           padding: TextFormFieldPadding.PaddingT14,
                           validator: (value) {
-                            return controller.prefixControllerValidator(value ?? "");
+                            return controller
+                                .prefixControllerValidator(value ?? "");
                           },
                           textInputType: TextInputType.name,
                           prefixConstraints:
@@ -144,20 +145,6 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           padding: TextFormFieldPadding.PaddingT14,
                           validator: (value) {
                             return controller.lastNameValidator(value ?? "");
-                          },
-                          textInputType: TextInputType.emailAddress,
-                          prefixConstraints:
-                              BoxConstraints(maxHeight: getVerticalSize(56))),
-                      SizedBox(
-                        height: size.height * 0.03,
-                      ),
-                      CustomTextFormField(
-                          controller: controller.userName,
-                          labelText: "Username",
-                          isRequired: true,
-                          padding: TextFormFieldPadding.PaddingT14,
-                          validator: (value) {
-                            return controller.userNameValidator(value ?? "");
                           },
                           textInputType: TextInputType.emailAddress,
                           prefixConstraints:
@@ -277,8 +264,8 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                                 .genderValidator(value?.title ?? "");
                           },
                           variant: DropDownVariant.OutlineBluegray400,
-                          fontStyle: DropDownFontStyle
-                              .ManropeMedium14Bluegray500,
+                          fontStyle:
+                              DropDownFontStyle.ManropeMedium14Bluegray500,
                           icon: const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Icon(Icons.arrow_drop_down),
@@ -436,20 +423,6 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       ),
                       SizedBox(
                         width: size.width * 0.02,
-                      ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: CustomTextFormField(
-                            controller: controller.userName,
-                            labelText: "Username",
-                            isRequired: true,
-                            padding: TextFormFieldPadding.PaddingT14,
-                            validator: (value) {
-                              return controller.userNameValidator(value ?? "");
-                            },
-                            textInputType: TextInputType.emailAddress,
-                            prefixConstraints:
-                                BoxConstraints(maxHeight: getVerticalSize(56))),
                       ),
                     ],
                   )),

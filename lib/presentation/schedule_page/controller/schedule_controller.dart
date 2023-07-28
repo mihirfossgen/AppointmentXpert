@@ -40,11 +40,11 @@ class ScheduleController extends GetxController {
   Rx<TextEditingController> from = TextEditingController().obs;
   TextEditingController to = TextEditingController();
 
-  TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime = TimeOfDay.now();
   final TextEditingController _timeController = TextEditingController();
   String? _hour, _minute, _time;
   Map<String, dynamic>? a;
-  Future<void> selectTime(BuildContext context) async {
+  Future<void> selectTime(BuildContext context, int diffInBookingInMin) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
@@ -53,8 +53,8 @@ class ScheduleController extends GetxController {
       print(picked);
       selectedTime = picked;
     }
-    print(a!['timeSlotForBookingInMin'].runtimeType);
-    int intervalTime = a?['timeSlotForBookingInMin'] != 0 ? 15 : 15;
+
+    int intervalTime = diffInBookingInMin != 0 ? 15 : 15;
     _hour = selectedTime.hour.toString();
     _minute = selectedTime.minute.toString();
     _time = '$_hour : $_minute';
@@ -826,15 +826,15 @@ class ScheduleController extends GetxController {
     switch (tab) {
       case "today":
         return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].examiner?.profilePicture
+            ? today[index].examiner?.uploadedProfilePath
             : today1[index].patient?.profilePicture;
       case "upcoming":
         return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].examiner?.profilePicture
+            ? upcoming[index].examiner?.uploadedProfilePath
             : upcoming1[index].patient?.profilePicture;
       case "completed":
         return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].examiner?.profilePicture
+            ? completed[index].examiner?.uploadedProfilePath
             : completed1[index].patient?.profilePicture;
       default:
         return null;

@@ -280,21 +280,22 @@ class ContentExaminer {
   String? fatherName;
   String? lastName;
   String? sex;
+  dynamic uploadedProfilePath;
   String? dob;
-  String? clinicName;
-  int? clinicId;
-  String? departmentName;
-  int? departmentId;
   String? email;
   String? mobile;
   String? address;
   String? profession;
-  String? employment;
+  dynamic employment;
   String? qualification;
   String? status;
   String? joinedDate;
   String? terminatedDate;
-  String? profilePicture;
+  int? timeSlotForBookingInMin;
+  dynamic startTime;
+  dynamic endTime;
+  dynamic rescheduleDate;
+  int? rescheduleTimeInMin;
 
   ContentExaminer({
     this.id,
@@ -305,11 +306,8 @@ class ContentExaminer {
     this.fatherName,
     this.lastName,
     this.sex,
+    this.uploadedProfilePath,
     this.dob,
-    this.clinicName,
-    this.clinicId,
-    this.departmentName,
-    this.departmentId,
     this.email,
     this.mobile,
     this.address,
@@ -319,83 +317,94 @@ class ContentExaminer {
     this.status,
     this.joinedDate,
     this.terminatedDate,
-    this.profilePicture,
+    this.timeSlotForBookingInMin,
+    this.startTime,
+    this.endTime,
+    this.rescheduleDate,
+    this.rescheduleTimeInMin,
   });
 
-  ContentExaminer copyWith(
-          {int? id,
-          String? prefix,
-          String? staffId,
-          String? firstName,
-          int? userId,
-          String? fatherName,
-          String? lastName,
-          String? sex,
-          String? dob,
-          String? clinicName,
-          int? clinicId,
-          String? departmentName,
-          int? departmentId,
-          String? email,
-          String? mobile,
-          String? address,
-          String? profession,
-          String? employment,
-          String? qualification,
-          String? status,
-          String? joinedDate,
-          String? terminatedDate,
-          String? profilePicture}) =>
+  ContentExaminer copyWith({
+    int? id,
+    dynamic prefix,
+    String? staffId,
+    String? firstName,
+    int? userId,
+    String? fatherName,
+    String? lastName,
+    String? sex,
+    dynamic uploadedProfilePath,
+    String? dob,
+    String? email,
+    String? mobile,
+    String? address,
+    String? profession,
+    dynamic employment,
+    String? qualification,
+    String? status,
+    String? joinedDate,
+    String? terminatedDate,
+    int? timeSlotForBookingInMin,
+    String? startTime,
+    String? endTime,
+    String? rescheduleDate,
+    int? rescheduleTimeInMin,
+  }) =>
       ContentExaminer(
-          id: id ?? this.id,
-          prefix: prefix ?? this.prefix,
-          staffId: staffId ?? this.staffId,
-          firstName: firstName ?? this.firstName,
-          userId: userId ?? this.userId,
-          fatherName: fatherName ?? this.fatherName,
-          lastName: lastName ?? this.lastName,
-          sex: sex ?? this.sex,
-          dob: dob ?? this.dob,
-          clinicName: clinicName ?? this.clinicName,
-          clinicId: clinicId ?? this.clinicId,
-          departmentName: departmentName ?? this.departmentName,
-          departmentId: departmentId ?? this.departmentId,
-          email: email ?? this.email,
-          mobile: mobile ?? this.mobile,
-          address: address ?? this.address,
-          profession: profession ?? this.profession,
-          employment: employment ?? this.employment,
-          qualification: qualification ?? this.qualification,
-          status: status ?? this.status,
-          joinedDate: joinedDate ?? this.joinedDate,
-          terminatedDate: terminatedDate ?? this.terminatedDate,
-          profilePicture: profilePicture ?? this.profilePicture);
+        id: id ?? this.id,
+        prefix: prefix ?? this.prefix,
+        staffId: staffId ?? this.staffId,
+        firstName: firstName ?? this.firstName,
+        userId: userId ?? this.userId,
+        fatherName: fatherName ?? this.fatherName,
+        lastName: lastName ?? this.lastName,
+        sex: sex ?? this.sex,
+        uploadedProfilePath: uploadedProfilePath ?? this.uploadedProfilePath,
+        dob: dob ?? this.dob,
+        email: email ?? this.email,
+        mobile: mobile ?? this.mobile,
+        address: address ?? this.address,
+        profession: profession ?? this.profession,
+        employment: employment ?? this.employment,
+        qualification: qualification ?? this.qualification,
+        status: status ?? this.status,
+        joinedDate: joinedDate ?? this.joinedDate,
+        terminatedDate: terminatedDate ?? this.terminatedDate,
+        timeSlotForBookingInMin:
+            timeSlotForBookingInMin ?? this.timeSlotForBookingInMin,
+        startTime: startTime ?? this.startTime,
+        endTime: endTime ?? this.endTime,
+        rescheduleDate: rescheduleDate ?? this.rescheduleDate,
+        rescheduleTimeInMin: rescheduleTimeInMin ?? this.rescheduleTimeInMin,
+      );
 
   factory ContentExaminer.fromJson(Map<String, dynamic> json) =>
       ContentExaminer(
-          id: json["id"],
-          prefix: json["prefix"],
-          staffId: json["staffId"],
-          firstName: json["firstName"],
-          userId: json["userId"],
-          fatherName: json["fatherName"],
-          lastName: json["lastName"],
-          sex: json["sex"],
-          dob: json["dob"],
-          clinicName: json["clinicName"],
-          clinicId: json["clinicId"],
-          departmentName: json["departmentName"],
-          departmentId: json["departmentId"],
-          email: json["email"],
-          mobile: json["mobile"],
-          address: json["address"],
-          profession: json["profession"],
-          employment: json["employment"],
-          qualification: json["qualification"],
-          status: json["status"],
-          joinedDate: json["joinedDate"],
-          terminatedDate: json["terminatedDate"],
-          profilePicture: json["uploadedProfilePath"]);
+        id: json["id"],
+        prefix: json["prefix"],
+        staffId: json["staffId"],
+        firstName: json["firstName"],
+        userId: json["userId"],
+        fatherName: json["fatherName"],
+        lastName: json["lastName"],
+        sex: json["sex"],
+        uploadedProfilePath: json["uploadedProfilePath"],
+        dob: json["dob"],
+        email: json["email"],
+        mobile: json["mobile"],
+        address: json["address"],
+        profession: json["profession"],
+        employment: json["employment"],
+        qualification: json["qualification"],
+        status: json["status"],
+        joinedDate: json["joinedDate"],
+        terminatedDate: json["terminatedDate"],
+        timeSlotForBookingInMin: json["timeSlotForBookingInMin"],
+        startTime: json["startTime"],
+        endTime: json["endTime"],
+        rescheduleDate: json["rescheduleDate"],
+        rescheduleTimeInMin: json["rescheduleTimeInMin"],
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -406,11 +415,8 @@ class ContentExaminer {
         "fatherName": fatherName,
         "lastName": lastName,
         "sex": sex,
+        "uploadedProfilePath": uploadedProfilePath,
         "dob": dob,
-        "clinicName": clinicName,
-        "clinicId": clinicId,
-        "departmentName": departmentName,
-        "departmentId": departmentId,
         "email": email,
         "mobile": mobile,
         "address": address,
@@ -420,7 +426,11 @@ class ContentExaminer {
         "status": status,
         "joinedDate": joinedDate,
         "terminatedDate": terminatedDate,
-        "uploadedProfilePath": profilePicture
+        "timeSlotForBookingInMin": timeSlotForBookingInMin,
+        "startTime": startTime,
+        "endTime": endTime,
+        "rescheduleDate": rescheduleDate,
+        "rescheduleTimeInMin": rescheduleTimeInMin,
       };
 }
 

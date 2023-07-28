@@ -108,6 +108,7 @@ dependencies:
   calendar_timeline: ^1.1.2
   firebase_messaging: ^14.6.5
   flutter_local_notifications: ^15.1.0+1
+  firebase_crashlytics: ^3.3.4
  
   
 

@@ -92,9 +92,10 @@ class CreateProfileController extends GetxController {
   }
 
   String? emailValidator(String value) {
-    if (value.isEmpty || !value.contains('@')) {
-      return 'Please enter a valid email address.';
-    }
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = RegExp(pattern.toString());
+    if (!(regex.hasMatch(value))) return "Invalid Email";
 
     return null;
   }
@@ -106,18 +107,29 @@ class CreateProfileController extends GetxController {
     return null;
   }
 
+  final RegExp nameRegExp = RegExp('[a-zA-Z]');
   String? firstNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'First name must be at least 4 characters long.';
+    if (value.isEmpty) {
+      return 'Please enter first name';
+    } else {
+      if (!nameRegExp.hasMatch(value)) {
+        return 'Enter valid name';
+      } else {
+        return null;
+      }
     }
-    return null;
   }
 
   String? lastNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'Last name must be at least 4 characters long.';
+    if (value.isEmpty) {
+      return 'Please enter last name';
+    } else {
+      if (!nameRegExp.hasMatch(value)) {
+        return 'Enter valid name';
+      } else {
+        return null;
+      }
     }
-    return null;
   }
 
   String? fatherNamrValidator(String value) {

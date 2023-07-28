@@ -317,8 +317,8 @@ class DashboardController extends GetxController {
 
       List<AppointmentContent> timeList = list
           .where((i) =>
-      i.status?.toLowerCase() == 'completed' &&
-          now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
+              i.status?.toLowerCase() == 'completed' &&
+              now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
           .toList();
 
       int number = timeList.length;
