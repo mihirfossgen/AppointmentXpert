@@ -1,7 +1,6 @@
 import 'package:appointmentxpert/core/utils/time_calculation_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -13,8 +12,8 @@ import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
-import '../../../patient_dashboard_screen/shared_components/card_appointment.dart';
-import '../../../patient_dashboard_screen/shared_components/responsive_builder.dart';
+import '../../shared_components/card_appointment.dart';
+import '../../shared_components/responsive_builder.dart';
 
 class UpcomingAppointments extends StatelessWidget {
   const UpcomingAppointments({
@@ -87,7 +86,7 @@ class UpcomingAppointments extends StatelessWidget {
                               onTap: () {}),
                           DataCell(
                               Text(
-                                '${data[index].patient?.prefix}'
+                                '${data[index].patient?.prefix.toString()}'
                                 '${data[index].patient?.firstName} '
                                 '${data[index].patient?.lastName}',
                                 overflow: TextOverflow.clip,
@@ -227,7 +226,7 @@ class UpcomingAppointments extends StatelessWidget {
                                   width: 10,
                                 ),
                                 Text(
-                                  '${data[index].patient?.prefix}'
+                                  '${data[index].patient?.prefix.toString()}'
                                   '${data[index].patient?.firstName} '
                                   '${data[index].patient?.lastName}',
                                   overflow: TextOverflow.clip,

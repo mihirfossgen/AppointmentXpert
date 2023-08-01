@@ -1,4 +1,3 @@
-import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -42,11 +41,13 @@ class ResetPasswordVerifyCodeScreen
               //title: AppbarSubtitle2(text: 'Forgot password')
             ),
             backgroundColor: ColorConstant.whiteA700,
-            body: AdaptiveLayout(
-              smallLayout: getBody(width, context),
-              mediumLayout: getBody(width, context),
-              largeLayout: getBody(width, context),
-            )));
+            body: getBody(width, context)
+            // AdaptiveLayout(
+            //   smallLayout: getBody(width, context),
+            //   mediumLayout: getBody(width, context),
+            //   largeLayout: getBody(width, context),
+            // )
+            ));
   }
 
   Widget getBody(double width, BuildContext context) {

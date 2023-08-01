@@ -236,7 +236,9 @@ class ListRecentPatients extends StatelessWidget {
             ),
       //_buildIcon(),
       title: Text(
-        '${data.prefix}' '${data.firstName} ' '${data.lastName}',
+        '${data.prefix.toString()}'
+        '${data.firstName} '
+        '${data.lastName}',
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -335,7 +337,7 @@ class ListRecentPatients extends StatelessWidget {
 
   Widget _buildTitle() {
     return Text(
-      '${data.prefix}' '${data.firstName} ' '${data.lastName}',
+      '${data.prefix.toString()}' '${data.firstName} ' '${data.lastName}',
       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

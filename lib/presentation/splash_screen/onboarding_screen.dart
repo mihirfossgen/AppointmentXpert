@@ -106,23 +106,25 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                 useScrollView: true,
                 bodyWidget: const SizedBox(
                   //height: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Cardiologist',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        "Founding Member, Fellow and Former President of the Indian College of Cardiology. Former Professor and Chairman of the Academic Department of Cardiology at Grant Medical Foundation in Pune",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.normal),
-                      ),
-                    ],
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cardiologist',
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          "Founding Member, Fellow and Former President of the Indian College of Cardiology. Former Professor and Chairman of the Academic Department of Cardiology at Grant Medical Foundation in Pune",
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 image: _buildImage('manuel_duriaraj.png'),
@@ -176,7 +178,11 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: Responsive.isMobile(context) ? 2 : 3,
+                      crossAxisCount: Responsive.isMobile(context)
+                          ? 2
+                          : Responsive.isTablet(context)
+                              ? 3
+                              : 6,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5
                       //childAspectRatio: 2,
@@ -492,40 +498,40 @@ class OnBoardingPageState extends State<OnBoardingPage> {
             //rtl: true, // Display as right-to-left
             back: Icon(
               Icons.arrow_back,
-              color: ColorConstant.whiteA700,
+              color: ColorConstant.black900,
             ),
             skip: Text('Skip',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: ColorConstant.whiteA700,
+                  color: ColorConstant.black900,
                 )),
             next: Icon(
               Icons.arrow_forward,
-              color: ColorConstant.whiteA700,
+              color: ColorConstant.black900,
             ),
             done: Text('Done',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: ColorConstant.whiteA700,
+                  color: ColorConstant.black900,
                 )),
             curve: Curves.fastLinearToSlowEaseIn,
             controlsMargin: const EdgeInsets.all(16),
             controlsPadding: kIsWeb
-                ? const EdgeInsets.all(12.0)
+                ? const EdgeInsets.all(8.0)
                 : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
             dotsDecorator: DotsDecorator(
               size: const Size(10.0, 10.0),
               //color: Color(0xFFBDBDBD),
-              color: ColorConstant.whiteA700,
+              color: ColorConstant.black900,
               activeColor: Colors.red,
               activeSize: const Size(12.0, 10.0),
               activeShape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
             ),
-            dotsContainerDecorator: const ShapeDecoration(
-              color: Colors.grey,
-              shape: RoundedRectangleBorder(
+            dotsContainerDecorator: ShapeDecoration(
+              color: Colors.grey.shade300,
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
             ),

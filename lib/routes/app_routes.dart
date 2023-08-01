@@ -45,6 +45,8 @@ class AppRoutes {
 
   static const String dashboardScreen = '/dashboard_screen';
 
+  static const String patientDashboardScreen = '/patient_dashboard_screen';
+
   static const String topDoctorScreen = '/top_doctor_screen';
 
   static const String findDoctorsScreen = '/find_doctors_screen';
@@ -142,9 +144,10 @@ class AppRoutes {
         CreateNewPasswordBinding(),
       ],
     ),
+
     GetPage(
       name: dashboardScreen,
-      page: () => const DashboardScreen(),
+      page: () => DashboardScreen(),
       bindings: [
         DasboardMainBinding(),
       ],

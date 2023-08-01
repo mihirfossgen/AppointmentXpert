@@ -1,5 +1,6 @@
 import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/emergency_patient_list.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +34,7 @@ class EmergencyList extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                        top: 8.0, left: 15.0, right: 12.0),
+                        top: 12.0, left: 15.0, right: 12.0),
                     child: textView(),
                   ),
 
@@ -41,20 +42,23 @@ class EmergencyList extends StatelessWidget {
                 ],
               ),
             if (!Responsive.isMobile(context))
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(flex: 3, child: textView()),
-                  //Expanded(flex: 5, child: SearchField())
-                ],
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(flex: 3, child: textView()),
+                    //Expanded(flex: 5, child: SearchField())
+                  ],
+                ),
               ),
-            const SizedBox(
-              height: 10.0,
-            ),
+            // const SizedBox(
+            //   height: 10.0,
+            // ),
             SizedBox(
-              height: 700,
+              height: 600,
               child:
-                  Responsive.isMobile(context) ? loadList() : loadDataTable(),
+                  !Responsive.isDesktop(context) ? loadList() : loadDataTable(),
             ),
 
             // Container(
@@ -116,19 +120,30 @@ class EmergencyList extends StatelessWidget {
           horizontalMargin: 10,
           minWidth: 600,
           showBottomBorder: true,
+          headingRowColor:
+              MaterialStateColor.resolveWith((states) => Colors.grey[200]!),
+          border: TableBorder(
+              top: const BorderSide(color: Colors.black),
+              bottom: BorderSide(color: Colors.grey[300]!),
+              left: BorderSide(color: Colors.grey[300]!),
+              right: BorderSide(color: Colors.grey[300]!),
+              verticalInside: BorderSide(color: Colors.grey[300]!),
+              horizontalInside: const BorderSide(color: Colors.grey, width: 1)),
           //dataRowHeight: 70,
-          empty: const Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'No patient\'s found.',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ],
+          empty: EmptyWidget(
+            image: null,
+            hideBackgroundAnimation: true,
+            packageImage: PackageImage.Image_3,
+            title: 'No data',
+            subTitle: 'No emergency requests found.',
+            titleTextStyle: const TextStyle(
+              fontSize: 22,
+              color: Colors.grey,
+              fontWeight: FontWeight.w600,
+            ),
+            subtitleTextStyle: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
             ),
           ),
           columns: [
@@ -140,36 +155,51 @@ class EmergencyList extends StatelessWidget {
             //   //size: ColumnSize.L,
             // ),
             DataColumn2(
-              label: Text(
-                'patientName',
-                style: AppStyle.txtInterSemiBold14,
+              label: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Patient Name',
+                  style: AppStyle.txtInterSemiBold14,
+                ),
               ),
               size: ColumnSize.L,
             ),
             DataColumn(
-              label: Text(
-                'mobileNumber.',
-                style: AppStyle.txtInterSemiBold14,
+              label: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Mobile Number',
+                  style: AppStyle.txtInterSemiBold14,
+                ),
               ),
             ),
             DataColumn(
-              label: Text(
-                'emailId',
-                style: AppStyle.txtInterSemiBold14,
+              label: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Email',
+                  style: AppStyle.txtInterSemiBold14,
+                ),
               ),
             ),
             DataColumn(
-              label: Text(
-                'date',
-                style: AppStyle.txtInterSemiBold14,
+              label: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Date',
+                  style: AppStyle.txtInterSemiBold14,
+                ),
               ),
             ),
             DataColumn(
-              label: Text(
-                'patientType',
-                style: AppStyle.txtInterSemiBold14,
+              label: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Patient Type',
+                  style: AppStyle.txtInterSemiBold14,
+                ),
               ),
-              numeric: true,
+              numeric: false,
             ),
           ],
           rows: List<DataRow>.generate(
@@ -193,51 +223,88 @@ class EmergencyList extends StatelessWidget {
                           ],
                         ),
                         onTap: () {}),
-                    DataCell(Text('${data[index].mobileNumber}'), onTap: () {}),
                     DataCell(
-                        Text(formatter
-                            .format(DateTime.parse('${data[index].date}'))),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${data[index].mobileNumber}'),
+                        ),
                         onTap: () {}),
-                    DataCell(Text('${data[index].emailId}'), onTap: () {}),
+                    DataCell(
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(formatter
+                              .format(DateTime.parse('${data[index].date}'))),
+                        ),
+                        onTap: () {}),
+                    DataCell(
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${data[index].emailId}'),
+                          ),
+                        ),
+                        onTap: () {}),
                     DataCell(Text('${data[index].patientType}'), onTap: () {}),
                     //DataCell(Text(
                     //    formatter.format(DateTime.parse('${data[index].date}')))),
-                    const DataCell(Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Icon(Icons.remove_red_eye),
-                        // SizedBox(
-                        //   width: 10,
-                        // ),
-                        // Icon(Icons.close)
-                      ],
-                    )),
+                    // const DataCell(Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.end,
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     Icon(Icons.remove_red_eye),
+                    //     // SizedBox(
+                    //     //   width: 10,
+                    //     // ),
+                    //     // Icon(Icons.close)
+                    //   ],
+                    // )),
                   ]))),
     );
   }
 
   Widget loadList() {
-    return ResponsiveGridList(
-        horizontalGridMargin: 0,
-        maxItemsPerRow: 2,
-        minItemsPerRow: 1,
-        shrinkWrap: true,
-        verticalGridMargin: 10,
-        minItemWidth: 380,
-        children: data
-            .asMap()
-            .entries
-            .map(
-              (e) => ListEmergencyPatients(
-                data: e.value,
-                onPressed: () => onPressed(e.key, e.value),
-                // onPressedAssign: () => onPressedAssign(e.key, e.value),
-                // onPressedMember: () => onPressedMember(e.key, e.value),
-              ),
-            )
-            .toList());
+    return data.isEmpty
+        ? loadEmptyWidget()
+        : ResponsiveGridList(
+            horizontalGridMargin: 0,
+            maxItemsPerRow: 2,
+            minItemsPerRow: 1,
+            shrinkWrap: true,
+            verticalGridMargin: 10,
+            minItemWidth: 380,
+            children: data
+                .asMap()
+                .entries
+                .map(
+                  (e) => ListEmergencyPatients(
+                    data: e.value,
+                    onPressed: () => onPressed(e.key, e.value),
+                    // onPressedAssign: () => onPressedAssign(e.key, e.value),
+                    // onPressedMember: () => onPressedMember(e.key, e.value),
+                  ),
+                )
+                .toList());
   }
+}
+
+Widget loadEmptyWidget() {
+  return EmptyWidget(
+    image: null,
+    hideBackgroundAnimation: true,
+    packageImage: PackageImage.Image_3,
+    title: 'No data',
+    subTitle: 'No emergency requests today.',
+    titleTextStyle: const TextStyle(
+      fontSize: 22,
+      color: Colors.grey,
+      fontWeight: FontWeight.w600,
+    ),
+    subtitleTextStyle: const TextStyle(
+      fontSize: 14,
+      color: Colors.black,
+    ),
+  );
 }
 
 DataRow patientDataRow(

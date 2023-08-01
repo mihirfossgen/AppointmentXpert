@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -5,34 +8,41 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/app_export.dart';
+import '../../../core/utils/color_constant.dart';
+import '../../../core/utils/size_utils.dart';
 import '../../../models/getAllApointments.dart';
 //import '../../../models/getallAppointbypoatientidModel.dart';
 import '../../../network/api/appointment_api.dart';
+import '../../../network/endpoints.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
-import '../widgets/pdf_viewer.dart';
+import '../../../theme/app_style.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_image_view.dart';
+import '../../../widgets/custom_text_form_field.dart';
+import '../../../widgets/responsive.dart';
 
 class ScheduleController extends GetxController {
   bool response = false;
 
   GetAllAppointments model = GetAllAppointments();
-  RxList<AppointmentContent> listModel = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> patientAppointmentlist =
+      <AppointmentContent>[].obs;
   String precriptionFileName = "";
   String invoiceFileName = "";
   RxBool isloading = false.obs;
   bool value = false;
 
-  RxList<AppointmentContent> today = <AppointmentContent>[].obs;
-  RxList<AppointmentContent> upcoming = <AppointmentContent>[].obs;
-  RxList<AppointmentContent> completed = <AppointmentContent>[].obs;
-  RxList<AppointmentContent> today1 = <AppointmentContent>[].obs;
-  RxList<AppointmentContent> upcoming1 = <AppointmentContent>[].obs;
-  RxList<AppointmentContent> completed1 = <AppointmentContent>[].obs;
+  // RxList<AppointmentContent> today = <AppointmentContent>[].obs;
+  // RxList<AppointmentContent> upcoming = <AppointmentContent>[].obs;
+  // RxList<AppointmentContent> completed = <AppointmentContent>[].obs;
+  // RxList<AppointmentContent> today1 = <AppointmentContent>[].obs;
+  // RxList<AppointmentContent> upcoming1 = <AppointmentContent>[].obs;
+  // RxList<AppointmentContent> completed1 = <AppointmentContent>[].obs;
 
   int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   RxBool sortAscending = true.obs;
   RxInt sortColumnIndex = 0.obs;
-  //DessertDataSourceAsync? _dessertsDataSource;
-  //DessertDataSourceAsync? dessertsDataSource;
+//DessertDataSourceAsync? dessertsDataSource;
 
   RxBool dataSourceLoading = false.obs;
   RxInt initialRow = 0.obs;
@@ -80,7 +90,7 @@ class ScheduleController extends GetxController {
             width: 100,
             child: CalendarDatePicker2(
               config: CalendarDatePicker2Config(),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
               onValueChanged: (value) {
                 print(value);
                 date = value[0];
@@ -151,7 +161,7 @@ class ScheduleController extends GetxController {
       //SharedPrefUtils.readPrefINt('employee_Id')
       callGetAllAppointments(0, 0);
     } else {
-      callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+      callGetAllAppointmentsForPatient(0);
     }
     //});
     super.onInit;
@@ -288,16 +298,67 @@ class ScheduleController extends GetxController {
     }
   }
 
-  Future<void> callAppointmentsByPatientId(int patientId) async {
+  Future<void> callTodayAppointmentsByPatient() async {
     try {
-      // listModel = (await Get.find<AppointmentApi>()
-      //     .getAllAppointmentBYPatientId(patientId, 0));
-
-      isloading.value = false;
-      _handleAllAppointmentPatientId(listModel);
+      isloading.value = true;
+      var response = (await Get.find<AppointmentApi>().getTodaysAppointments(
+          SharedPrefUtils.readPrefINt('patient_Id'), true));
+      List<AppointmentContent> list = response;
+      var now = DateTime.now();
+      List<AppointmentContent> appointments = list
+          .where((i) =>
+              i.status?.toLowerCase() != 'completed' &&
+              now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
+          .toList();
+      patientAppointmentlist.value = appointments;
+      // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> callGetAllAppointmentsForPatient(int pageIndex) async {
+    try {
+      isloading.value = true;
+      var patientId = SharedPrefUtils.readPrefINt('patient_Id');
+      var response = (await Get.find<AppointmentApi>()
+          .getAllAppointmentBYPatientId(patientId, pageIndex));
+      List<AppointmentContent> list = response;
+      var now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      todayPagingController.value.itemList = [];
+      upcomingPagingController.value.itemList = [];
+      completedPagingController.value.itemList = [];
+      List<AppointmentContent> appointmentsCompleted =
+          list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      List<AppointmentContent> appointmentsUpcoming = list
+          .where(
+            (i) =>
+                i.active == true &&
+                !formatter
+                    .parse(i.date!)
+                    .isBefore(formatter.parse(now.toString())) &&
+                i.status?.toLowerCase() != "completed",
+          )
+          .toList();
+      List<AppointmentContent> appointmentsToday = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+              i.active == true &&
+              i.status?.toLowerCase() != "completed")
+          .toList();
+      todayPagingController.value.appendLastPage(appointmentsToday);
+      upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      completedPagingController.value.appendLastPage(appointmentsCompleted);
+      //patientAppointmentlist.value = appointmentsUpcoming;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isloading.value = false;
     }
   }
 
@@ -312,8 +373,7 @@ class ScheduleController extends GetxController {
           //SharedPrefUtils.readPrefINt('employee_Id')
           callGetAllAppointments(0, 20);
         } else {
-          callAppointmentsByPatientId(
-              SharedPrefUtils.readPrefINt('patient_Id'));
+          callGetAllAppointmentsForPatient(0);
         }
         Get.back();
       }
@@ -321,40 +381,6 @@ class ScheduleController extends GetxController {
       // } else {
       //   callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
       // }
-    } on Map {
-      //postLoginResp = e;
-      rethrow;
-    }
-  }
-
-  Future<void> callGeneratePrecription(
-      int patientId, int appointmentId, int examinationId) async {
-    try {
-      precriptionFileName = (await Get.find<AppointmentApi>()
-          .callGeneratePrecription(patientId, appointmentId, examinationId));
-      if (precriptionFileName != "") {
-        Navigator.push(
-            Get.context!,
-            MaterialPageRoute(
-                builder: (context) => PDFScreen(path: precriptionFileName)));
-      }
-    } on Map {
-      //postLoginResp = e;
-      rethrow;
-    }
-  }
-
-  Future<void> callGenerateInvoice(int patientId, int appointmentId,
-      int paymentReferenceId, int staffId) async {
-    try {
-      invoiceFileName = (await Get.find<AppointmentApi>().callGenerateInvoice(
-          patientId, appointmentId, paymentReferenceId, staffId));
-      if (invoiceFileName != "") {
-        Navigator.push(
-            Get.context!,
-            MaterialPageRoute(
-                builder: (context) => PDFScreen(path: invoiceFileName)));
-      }
     } on Map {
       //postLoginResp = e;
       rethrow;
@@ -371,499 +397,541 @@ class ScheduleController extends GetxController {
     return formatter.format(DateTime.parse(a));
   }
 
-  _handleGetAllAppointment(List<AppointmentContent> userList) {
-    for (var i = 0; i < userList.length; i++) {
-      if (userList[i].status == "Completed" &&
-          userList[i].treatment != null &&
-          userList[i].active == true) {
-        if (completed.isEmpty) {
-          completed.add(AppointmentContent(
-              active: userList[i].active,
-              date: userList[i].date,
-              startTime: userList[i].startTime,
-              endTime: userList[i].endTime,
-              dateCreated: userList[i].dateCreated,
-              department: userList[i].department,
-              examination: userList[i].examination,
-              examiner: userList[i].examiner,
-              id: userList[i].id,
-              labOrder: userList[i].labOrder,
-              note: userList[i].note,
-              patient: userList[i].patient,
-              purpose: userList[i].purpose,
-              referenceId: userList[i].referenceId,
-              status: userList[i].status,
-              treatment: userList[i].treatment,
-              visit: userList[i].visit));
-        } else {
-          completed.clear();
-          completed.add(AppointmentContent(
-              active: userList[i].active,
-              date: userList[i].date,
-              startTime: userList[i].startTime,
-              endTime: userList[i].endTime,
-              dateCreated: userList[i].dateCreated,
-              department: userList[i].department,
-              examination: userList[i].examination,
-              examiner: userList[i].examiner,
-              id: userList[i].id,
-              labOrder: userList[i].labOrder,
-              note: userList[i].note,
-              patient: userList[i].patient,
-              purpose: userList[i].purpose,
-              referenceId: userList[i].referenceId,
-              status: userList[i].status,
-              treatment: userList[i].treatment,
-              visit: userList[i].visit));
-        }
-        update;
-      } else if (dateFormat(userList[i].date ?? "") ==
-              dateFormat(DateTime.now().toString()) &&
-          userList[i].active == true) {
-        if (today.isEmpty) {
-          today.add(AppointmentContent(
-              active: userList[i].active,
-              date: userList[i].date,
-              startTime: userList[i].startTime,
-              endTime: userList[i].endTime,
-              dateCreated: userList[i].dateCreated,
-              department: userList[i].department,
-              examination: userList[i].examination,
-              examiner: userList[i].examiner,
-              id: userList[i].id,
-              labOrder: userList[i].labOrder,
-              note: userList[i].note,
-              patient: userList[i].patient,
-              purpose: userList[i].purpose,
-              referenceId: userList[i].referenceId,
-              status: userList[i].status,
-              treatment: userList[i].treatment,
-              visit: userList[i].visit));
-        } else {
-          today.clear();
-          today.add(AppointmentContent(
-              active: userList[i].active,
-              date: userList[i].date,
-              startTime: userList[i].startTime,
-              endTime: userList[i].endTime,
-              dateCreated: userList[i].dateCreated,
-              department: userList[i].department,
-              examination: userList[i].examination,
-              examiner: userList[i].examiner,
-              id: userList[i].id,
-              labOrder: userList[i].labOrder,
-              note: userList[i].note,
-              patient: userList[i].patient,
-              purpose: userList[i].purpose,
-              referenceId: userList[i].referenceId,
-              status: userList[i].status,
-              treatment: userList[i].treatment,
-              visit: userList[i].visit));
-        }
-        update();
-      } else if (userList[i].active == true) {
-        if (upcoming.isEmpty) {
-          upcoming.add(AppointmentContent(
-              active: userList[i].active,
-              date: userList[i].date,
-              startTime: userList[i].startTime,
-              endTime: userList[i].endTime,
-              dateCreated: userList[i].dateCreated,
-              department: userList[i].department,
-              examination: userList[i].examination,
-              examiner: userList[i].examiner,
-              id: userList[i].id,
-              labOrder: userList[i].labOrder,
-              note: userList[i].note,
-              patient: userList[i].patient,
-              purpose: userList[i].purpose,
-              referenceId: userList[i].referenceId,
-              status: userList[i].status,
-              treatment: userList[i].treatment,
-              visit: userList[i].visit));
-        } else {
-          upcoming.clear();
-          upcoming.add(AppointmentContent(
-              active: userList[i].active,
-              date: userList[i].date,
-              startTime: userList[i].startTime,
-              endTime: userList[i].endTime,
-              dateCreated: userList[i].dateCreated,
-              department: userList[i].department,
-              examination: userList[i].examination,
-              examiner: userList[i].examiner,
-              id: userList[i].id,
-              labOrder: userList[i].labOrder,
-              note: userList[i].note,
-              patient: userList[i].patient,
-              purpose: userList[i].purpose,
-              referenceId: userList[i].referenceId,
-              status: userList[i].status,
-              treatment: userList[i].treatment,
-              visit: userList[i].visit));
-        }
-        update();
-      }
-    }
-  }
-
-  _handleAllAppointmentPatientId(List<AppointmentContent> userList1) {
-    //List<Datum> userList1 = model.data!.map((e) => e).toList();
-    for (var i = 0; i < userList1.length; i++) {
-      if (userList1[i].status == "Completed" &&
-          userList1[i].treatment != null &&
-          userList1[i].active == true) {
-        completed1.add(AppointmentContent(
-            active: userList1[i].active,
-            date: userList1[i].date,
-            startTime: userList1[i].startTime,
-            endTime: userList1[i].endTime,
-            dateCreated: userList1[i].dateCreated,
-            department: userList1[i].department,
-            examination: userList1[i].examination,
-            examiner: userList1[i].examiner,
-            id: userList1[i].id,
-            labOrder: userList1[i].labOrder,
-            note: userList1[i].note,
-            patient: userList1[i].patient,
-            purpose: userList1[i].purpose,
-            referenceId: userList1[i].referenceId,
-            status: userList1[i].status,
-            treatment: userList1[i].treatment,
-            visit: userList1[i].visit));
-        update();
-      } else if (dateFormat(userList1[i].date ?? "") ==
-              dateFormat(DateTime.now().toString()) &&
-          userList1[i].active == true) {
-        today1.add(AppointmentContent(
-            active: userList1[i].active,
-            date: userList1[i].date,
-            startTime: userList1[i].startTime,
-            endTime: userList1[i].endTime,
-            dateCreated: userList1[i].dateCreated,
-            department: userList1[i].department,
-            examination: userList1[i].examination,
-            examiner: userList1[i].examiner,
-            id: userList1[i].id,
-            labOrder: userList1[i].labOrder,
-            note: userList1[i].note,
-            patient: userList1[i].patient,
-            purpose: userList1[i].purpose,
-            referenceId: userList1[i].referenceId,
-            status: userList1[i].status,
-            treatment: userList1[i].treatment,
-            visit: userList1[i].visit));
-        update();
-      } else if (userList1[i].active == true) {
-        upcoming1.add(AppointmentContent(
-            active: userList1[i].active,
-            date: userList1[i].date,
-            startTime: userList1[i].startTime,
-            endTime: userList1[i].endTime,
-            dateCreated: userList1[i].dateCreated,
-            department: userList1[i].department,
-            examination: userList1[i].examination,
-            examiner: userList1[i].examiner,
-            id: userList1[i].id,
-            labOrder: userList1[i].labOrder,
-            note: userList1[i].note,
-            patient: userList1[i].patient,
-            purpose: userList1[i].purpose,
-            referenceId: userList1[i].referenceId,
-            status: userList1[i].status,
-            treatment: userList1[i].treatment,
-            visit: userList1[i].visit));
-        update();
-      }
-    }
-  }
-
   @override
   void onClose() {
     todayPagingController.value.dispose();
     upcomingPagingController.value.dispose();
     completedPagingController.value.dispose();
     super.onClose();
-    today.clear();
-    upcoming.clear();
-    completed.clear();
-    today1.clear();
-    upcoming1.clear();
-    completed1.clear();
     update();
   }
+}
 
-  List getList(String tab) {
-    String role = SharedPrefUtils.readPrefStr("role");
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today.value
-            : today1;
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming
-            : upcoming1;
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed
-            : completed1;
-      default:
-        return [];
-    }
+class MyData extends DataTableSource {
+  final ScheduleController scheduleController = Get.put(ScheduleController());
+
+  List<AppointmentContent> data = [];
+  bool _type = false;
+
+  MyData(List<AppointmentContent> appointments, bool type) {
+    data = appointments;
+    _type = type;
+  }
+  final DateFormat formatter = DateFormat('dd-MMM-yyyy');
+
+  @override
+  DataRow getRow(int index) {
+    AppointmentContent? appointment = data[index];
+    return _type == true
+        ? loadPatientDataRow(appointment)
+        : loadStaffDataRow(appointment);
   }
 
-  getDeptName(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].department?.name ?? ""
-            : today1[index].department?.name ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].department?.name ?? ""
-            : upcoming1[index].department?.name ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].department?.name ?? ""
-            : completed1[index].department?.name ?? "";
-      default:
-        return 0;
-    }
+  loadPatientDataRow(AppointmentContent appointment) {
+    return DataRow(cells: [
+      DataCell(
+          Row(
+            children: [
+              appointment.examiner?.profilePicture != null
+                  ? CachedNetworkImage(
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                      imageUrl: Uri.encodeFull(Endpoints.baseURL +
+                          Endpoints.downLoadEmployePhoto +
+                          appointment.examiner!.profilePicture.toString()),
+                      httpHeaders: {
+                        "Authorization":
+                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      errorWidget: (context, url, error) {
+                        print(error);
+                        return CustomImageView(
+                          imagePath: !Responsive.isDesktop(Get.context!)
+                              ? 'assets'
+                                  '/images/default_profile.png'
+                              : '/images/default_profile.png',
+                        );
+                      },
+                    )
+                  : CustomImageView(
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                      imagePath: !Responsive.isDesktop(Get.context!)
+                          ? 'assets'
+                              '/images/default_profile.png'
+                          : '/images/default_profile.png',
+                    ),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                  child: Text(
+                '${appointment.examiner?.firstName.toString()} ${appointment.examiner?.lastName.toString()}',
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+              ))
+            ],
+          ),
+          onTap: () {}),
+      DataCell(Flexible(
+          child: Text(
+        '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+      ))),
+      DataCell(Text(appointment.examiner?.mobile.toString() ?? ''),
+          onTap: () {}),
+      DataCell(Text(appointment.note.toString()), onTap: () {}),
+      //DataCell(Text('${data[index].visit}')),
+      DataCell(
+          Text(formatter.format(DateTime.parse(appointment.date.toString()))),
+          onTap: () {}),
+      DataCell(
+          Text('${appointment.startTime.toString()} - '
+              '${appointment.endTime.toString()}'),
+          onTap: () {}),
+      //DataCell(Text(appointment.endTime.toString()), onTap: () {}),
+      // const DataCell(Row(
+      //   crossAxisAlignment: CrossAxisAlignment.end,
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     //loadActionButtons(),
+      //   ],
+      // )),
+      DataCell(Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            color: Colors.indigo,
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            color: Colors.redAccent,
+            onPressed: () {},
+          ),
+        ],
+      )),
+    ]);
   }
 
-  getStatus(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].status ?? ""
-            : today1[index].status ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].status ?? ""
-            : upcoming1[index].status ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].status ?? ""
-            : completed1[index].status ?? "";
-      default:
-        return 0;
-    }
+  loadStaffDataRow(AppointmentContent appointment) {
+    return DataRow(cells: [
+      DataCell(
+          Row(
+            children: [
+              appointment.patient?.profilePicture != null
+                  ? CachedNetworkImage(
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                      imageUrl: Uri.encodeFull(Endpoints.baseURL +
+                          Endpoints.downLoadPatientPhoto +
+                          appointment.patient!.profilePicture.toString()),
+                      httpHeaders: {
+                        "Authorization":
+                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      errorWidget: (context, url, error) {
+                        print(error);
+                        return CustomImageView(
+                          imagePath: !Responsive.isDesktop(Get.context!)
+                              ? 'assets'
+                                  '/images/default_profile.png'
+                              : '/images/default_profile.png',
+                        );
+                      },
+                    )
+                  : CustomImageView(
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.contain,
+                      imagePath: !Responsive.isDesktop(Get.context!)
+                          ? 'assets'
+                              '/images/default_profile.png'
+                          : '/images/default_profile.png',
+                    ),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                  child: Text(
+                '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+              ))
+            ],
+          ),
+          onTap: () {}),
+      DataCell(Flexible(
+          child: Text(
+        '${appointment.examiner?.firstName.toString()} ${appointment.examiner?.lastName.toString()}',
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+      ))),
+      DataCell(Text(appointment.patient?.mobile.toString() ?? ''),
+          onTap: () {}),
+      DataCell(Text(appointment.note.toString()), onTap: () {}),
+      //DataCell(Text('${data[index].visit}')),
+      DataCell(
+          Text(formatter.format(DateTime.parse(appointment.date.toString()))),
+          onTap: () {}),
+      DataCell(
+          Text('${appointment.startTime.toString()} - '
+              '${appointment.endTime.toString()}'),
+          onTap: () {}),
+      // const DataCell(Row(
+      //   crossAxisAlignment: CrossAxisAlignment.end,
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     //loadActionButtons(),
+      //   ],
+      // )),
+      appointment.status?.toLowerCase() != 'completed'
+          ? DataCell(Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.calendar_month),
+                  color: Colors.indigo,
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      showDialog(
+                        context: Get.context!,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Reschdule Appointment'),
+                          actions: [
+                            Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15, 0, 15, 15),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              DateTime a =
+                                                  await scheduleController
+                                                      .getRescheduleDate();
+
+                                              final DateFormat formatter =
+                                                  DateFormat('yyyy-MM-dd');
+                                              scheduleController.dob.text =
+                                                  formatter.format(a);
+                                            },
+                                            child: AbsorbPointer(
+                                              child: CustomTextFormField(
+                                                  controller: scheduleController
+                                                      .dob,
+                                                  labelText: "Date",
+                                                  size: size,
+                                                  validator: (value) {
+                                                    return scheduleController
+                                                        .dobValidator(
+                                                            value ?? "");
+                                                  },
+                                                  padding: TextFormFieldPadding
+                                                      .PaddingT14,
+                                                  textInputType: TextInputType
+                                                      .emailAddress,
+                                                  suffix: Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              right: 10),
+                                                      child: const Icon(Icons
+                                                          .calendar_month)),
+                                                  suffixConstraints:
+                                                      BoxConstraints(
+                                                          maxHeight:
+                                                              getVerticalSize(
+                                                                  56))),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: size.height * 0.02,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            scheduleController
+                                                .selectTime(Get.context!);
+                                          },
+                                          child: AbsorbPointer(
+                                            child: CustomTextFormField(
+                                                labelText: "From",
+                                                controller: scheduleController
+                                                    .from.value,
+                                                padding: TextFormFieldPadding
+                                                    .PaddingT14,
+                                                textInputType: TextInputType
+                                                    .emailAddress,
+                                                validator: (value) {
+                                                  return scheduleController
+                                                      .fromValidator(
+                                                          value ?? "",
+                                                          scheduleController.a?[
+                                                                  'startTime'] ??
+                                                              "12:00 PM",
+                                                          scheduleController.a?[
+                                                                  'endTime'] ??
+                                                              "06:00 PM");
+                                                },
+                                                suffix: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 10),
+                                                  child:
+                                                      const Icon(Icons.alarm),
+                                                ),
+                                                suffixConstraints:
+                                                    BoxConstraints(
+                                                        maxHeight:
+                                                            getVerticalSize(
+                                                                56))),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: size.height * 0.02,
+                                        ),
+                                        AbsorbPointer(
+                                          child: CustomTextFormField(
+                                              controller: scheduleController.to,
+                                              labelText: "To",
+                                              padding: TextFormFieldPadding
+                                                  .PaddingT14,
+                                              textInputType:
+                                                  TextInputType.datetime,
+                                              suffix: Container(
+                                                margin: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: const Icon(Icons.alarm),
+                                              ),
+                                              suffixConstraints: BoxConstraints(
+                                                  maxHeight:
+                                                      getVerticalSize(56))),
+                                        ),
+                                      ],
+                                    )),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: CustomButton(
+                                      height: getVerticalSize(56),
+                                      width: getHorizontalSize(110),
+                                      text: "Rechsdule Appointment",
+                                      shape: ButtonShape.RoundedBorder8,
+                                      padding: ButtonPadding.PaddingAll16,
+                                      fontStyle: ButtonFontStyle
+                                          .RalewayRomanSemiBold14WhiteA700,
+                                      onTap: () async {
+                                        var requestData = {
+                                          "active": true,
+                                          "date": DateTime.parse(
+                                                  "${scheduleController.dob.text} ${scheduleController.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
+                                              .toIso8601String(),
+                                          "startTime": scheduleController
+                                              .from.value.text,
+                                          "endTime":
+                                              scheduleController.to.value.text,
+                                          "examinerId":
+                                              appointment.examiner!.id,
+                                          "note": appointment.note,
+                                          "id": appointment.id,
+                                          "patientId": appointment.patient?.id,
+                                          "purpose": "CHECKUP",
+                                          "status": "Reschduled",
+                                          "update_time_in_min": 0
+                                        };
+                                        print(jsonEncode(requestData));
+                                        scheduleController
+                                            .updateAppointment(requestData);
+                                      }),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+                  },
+                ),
+                IconButton(
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      showDialog(
+                        context: Get.context!,
+                        builder: (context) => AlertDialog(
+                          title: const Text(
+                              'Are you sure appointment is completed?'),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    var data = {
+                                      "active": false,
+                                      "id": appointment.id,
+                                      "date": appointment.date,
+                                      "examinerId": appointment.examiner!.id,
+                                      "note": appointment.note,
+                                      "patientId": appointment.patient?.id,
+                                      "purpose": appointment.purpose,
+                                      "status": "Completed"
+                                    };
+                                    scheduleController.updateAppointment(data);
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstant.blue700,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Yes',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: AppStyle
+                                          .txtRalewayRomanRegular14WhiteA700,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstant.blue700,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'No',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: AppStyle
+                                          .txtRalewayRomanRegular14WhiteA700,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                  },
+                  icon: const Icon(Icons.check),
+                  color: Colors.green,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.cancel),
+                  color: Colors.redAccent,
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      showDialog(
+                        context: Get.context!,
+                        builder: (context) => AlertDialog(
+                          title:
+                              const Text('Are you sure to cancel appointment?'),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    // call cancel appointment
+                                    var data = {
+                                      "active": false,
+                                      "id": appointment.id,
+                                      "date": appointment.date,
+                                      "examinerId": appointment.examiner!.id,
+                                      "note": appointment.note,
+                                      "patientId": appointment.patient?.id,
+                                      "purpose": appointment.purpose,
+                                      "status": "Canceled"
+                                    };
+                                    scheduleController.updateAppointment(data);
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstant.blue700,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Yes',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: AppStyle
+                                          .txtRalewayRomanRegular14WhiteA700,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstant.blue700,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'No',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                      style: AppStyle
+                                          .txtRalewayRomanRegular14WhiteA700,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                  },
+                ),
+              ],
+            ))
+          : DataCell(Row(
+              children: [
+                // IconButton(
+                //     onPressed: () {}, icon: const Icon(Icons.remove_red_eye),)
+                TextButton(onPressed: () {}, child: const Text('View'))
+              ],
+            )),
+    ]);
   }
 
-  getName(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? "${today[index].patient?.firstName} ${today[index].patient?.lastName}"
-            : "${today1[index].examiner?.firstName} ${today1[index].examiner?.lastName}";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? "${upcoming[index].patient?.firstName} ${upcoming[index].patient?.lastName}"
-            : "${upcoming1[index].examiner?.firstName} ${upcoming1[index].examiner?.lastName}";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? "${completed[index].patient?.firstName} ${completed[index].patient?.lastName}"
-            : "${completed1[index].examiner?.firstName} ${completed1[index].examiner?.lastName}";
-      default:
-        return 0;
-    }
-  }
+  @override
+  bool get isRowCountApproximate => false;
 
-  getDate(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].date ?? ""
-            : today1[index].date ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].date ?? ""
-            : upcoming1[index].date ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].date ?? ""
-            : completed1[index].date ?? "";
-      default:
-        return 0;
-    }
-  }
+  @override
+  int get rowCount => data.length;
 
-  getStartTime(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].startTime ?? ""
-            : today1[index].startTime ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].startTime ?? ""
-            : upcoming1[index].startTime ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].startTime ?? ""
-            : completed1[index].startTime ?? "";
-      default:
-        return 0;
-    }
-  }
-
-  getEndTime(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].endTime ?? ""
-            : today1[index].endTime ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].endTime ?? ""
-            : upcoming1[index].endTime ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].endTime ?? ""
-            : completed1[index].endTime ?? "";
-      default:
-        return 0;
-    }
-  }
-
-  getAppointmentID(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].id ?? ""
-            : today1[index].id ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].id ?? ""
-            : upcoming1[index].id ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].id ?? ""
-            : completed1[index].id ?? "";
-      default:
-        return 0;
-    }
-  }
-
-  getPurpose(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].purpose ?? ""
-            : today1[index].purpose ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].purpose ?? ""
-            : upcoming1[index].purpose ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].purpose ?? ""
-            : completed1[index].purpose ?? "";
-      default:
-        return "";
-    }
-  }
-
-  getNote(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].note ?? ""
-            : today1[index].note ?? "";
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].note ?? ""
-            : upcoming1[index].note ?? "";
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].note ?? ""
-            : completed1[index].note ?? "";
-      default:
-        return "";
-    }
-  }
-
-  getExaminerId(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].examiner?.id ?? 0
-            : today1[index].examiner?.id ?? 0;
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].examiner?.id ?? 0
-            : upcoming1[index].examiner?.id ?? 0;
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].examiner?.id ?? 0
-            : completed1[index].examiner?.id ?? 0;
-      default:
-        return 0;
-    }
-  }
-
-  getPatientId(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].patient?.id ?? 0
-            : today1[index].patient?.id ?? 0;
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].patient?.id ?? 0
-            : upcoming1[index].patient?.id ?? 0;
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].patient?.id ?? 0
-            : completed1[index].patient?.id ?? 0;
-      default:
-        return 0;
-    }
-  }
-
-  String? getProfilePicture(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? today[index].examiner?.profilePicture
-            : today1[index].patient?.profilePicture;
-      case "upcoming":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? upcoming[index].examiner?.profilePicture
-            : upcoming1[index].patient?.profilePicture;
-      case "completed":
-        return SharedPrefUtils.readPrefStr('role') != "PATIENT"
-            ? completed[index].examiner?.profilePicture
-            : completed1[index].patient?.profilePicture;
-      default:
-        return null;
-    }
-  }
-
-  getData(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return today[index];
-      case "upcoming":
-        return upcoming[index];
-      case "completed":
-        return completed[index];
-      default:
-        return null;
-    }
-  }
-
-  getData1(String tab, int index) {
-    switch (tab) {
-      case "today":
-        return today1[index];
-      case "upcoming":
-        return upcoming1[index];
-      case "completed":
-        return completed1[index];
-      default:
-        return null;
-    }
-  }
+  @override
+  int get selectedRowCount => 0;
 }

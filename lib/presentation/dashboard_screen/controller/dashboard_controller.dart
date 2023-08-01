@@ -91,6 +91,10 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> staffTodaysTotalData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
+
+  Rx<AppointmentContent> currentStaffAppointmentData = AppointmentContent().obs;
+  Rx<AppointmentContent> currentPatientAppointmentData =
+      AppointmentContent().obs;
   final calendarControllerToday = AdvancedCalendarController.today();
   // AdvancedCalendarController calendarControllerCustom =
   //     AdvancedCalendarController(DateTime(2022, 10, 23));
@@ -98,6 +102,8 @@ class DashboardController extends GetxController {
 
   static const _pageSize = 20;
   PagingController<int, Content> patientPagingController =
+      PagingController(firstPageKey: 0);
+  PagingController<int, Contents> staffPagingController =
       PagingController(firstPageKey: 0);
   Contents? staffDataa;
 
@@ -254,13 +260,14 @@ class DashboardController extends GetxController {
       isloadingStaffList.value = true;
       StaffList response = (await Get.find<StaffApi>().staffList(pageNumber));
       print(response);
+      staffPagingController.itemList = [];
+      staffPagingController.appendLastPage(response.content ?? []);
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
         if (response.content?[i].profession == "DOCTOR") {
           print(response.content?[i].profession);
           staffDataa = response.content![i];
           doctorsList.add(response.content![i]);
           print({"doctors list length ----- ${doctorsList.length}"});
-
           SharedPrefUtils.saveStr(
               'doctor_details', jsonEncode(response.content![i]));
         }
@@ -324,6 +331,9 @@ class DashboardController extends GetxController {
               i.status?.toLowerCase() != 'completed' &&
               now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
           .toList();
+      if (appointments.isNotEmpty) {
+        currentPatientAppointmentData.value = appointments[0];
+      }
       patientTodaysData.value = appointments;
       // _handleCreateLoginSuccess(loginModelObj);
     } on Map {
@@ -347,7 +357,9 @@ class DashboardController extends GetxController {
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       staffTodaysData.value = appointments;
-
+      if (appointments.isNotEmpty) {
+        currentStaffAppointmentData.value = appointments[0];
+      }
       List<AppointmentContent> totalTodayList = list
           .where((i) =>
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
@@ -512,7 +524,7 @@ class DashboardController extends GetxController {
     return EmptyWidget(
       image: null,
       hideBackgroundAnimation: true,
-      packageImage: PackageImage.Image_1,
+      packageImage: PackageImage.Image_3,
       title: 'No data',
       subTitle: 'No emergency requests today.',
       titleTextStyle: const TextStyle(

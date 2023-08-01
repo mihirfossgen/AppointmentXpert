@@ -32,7 +32,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
             width: 100,
             child: CalendarDatePicker2(
               config: CalendarDatePicker2Config(),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
               onValueChanged: (value) {
                 date = value[0];
               },

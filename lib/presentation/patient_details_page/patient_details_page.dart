@@ -1,36 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/app_export.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../models/patient_list_model.dart';
-import '../../models/patient_model.dart';
-import '../../models/staff_model.dart';
 import '../../network/endpoints.dart';
-import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/responsive.dart';
 import '../dashboard_screen/shared_components/responsive_builder.dart';
-import '../dashboard_screen/views/screens/dashboard_screen.dart';
-import '../log_out_pop_up_dialog/controller/log_out_pop_up_controller.dart';
-import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
 
 class PatientDetailsPage extends StatefulWidget {
-
   Content patientData;
   //int? id;
 
   PatientDetailsPage(this.patientData);
 
   @override
-  _PatientDetailsPageState createState() => _PatientDetailsPageState(patientData);
+  _PatientDetailsPageState createState() =>
+      _PatientDetailsPageState(patientData);
 }
 
 class _PatientDetailsPageState extends State<PatientDetailsPage> {
-
   Content patientData;
   //int? id;
   _PatientDetailsPageState(this.patientData);
@@ -38,7 +30,6 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   Widget patientDetails() {
@@ -49,15 +40,15 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return patientDetailsCard(
-                firstName: patientData?.firstName,
-                lastName: patientData?.lastName,
-                prefix: patientData?.prefix ?? '',
-                imagePath: patientData?.profilePicture,
-                address: patientData?.address,
-                age: patientData?.age.toString(),
-                email: patientData?.email,
-                mobile: patientData?.mobile,
-                profile: patientData?.profilePicture);
+                firstName: patientData.firstName,
+                lastName: patientData.lastName,
+                prefix: patientData.prefix ?? '',
+                imagePath: patientData.profilePicture,
+                address: patientData.address,
+                age: patientData.age.toString(),
+                email: patientData.email,
+                mobile: patientData.mobile,
+                profile: patientData.profilePicture);
           }),
     );
   }
@@ -122,60 +113,61 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                               ],
                             ),
                             transform:
-                            Matrix4.translationValues(0.0, -15.0, 0.0),
+                                Matrix4.translationValues(0.0, -15.0, 0.0),
                             child: Align(
                               alignment: Alignment.center,
                               child: CircleAvatar(
                                 radius: 70,
                                 child: ClipOval(
                                     child:
-                                    // imagePath != null
-                                    //     ?
-                                    profile != null
-                                        ? CachedNetworkImage(
-                                      imageUrl: Uri.encodeFull(
-                                        Endpoints.baseURL +
-                                            Endpoints
-                                                .downLoadPatientPhoto + patientData.profilePicture
+                                        // imagePath != null
+                                        //     ?
+                                        profile != null
+                                            ? CachedNetworkImage(
+                                                imageUrl: Uri.encodeFull(
+                                                  Endpoints.baseURL +
+                                                      Endpoints
+                                                          .downLoadPatientPhoto +
+                                                      patientData.profilePicture
 /*                                            SharedPrefUtils
                                                 .readPrefINt(
                                                 'patient_Id')*/
-                                                .toString(),
-                                      ),
-                                      imageBuilder:
-                                          (context, imageProvider) =>
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                      placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                      errorWidget: (context, url,
-                                          error) =>
-                                          Image.asset(!Responsive
-                                              .isDesktop(
-                                              Get.context!)
-                                              ? 'assets' +
-                                              '/images/default_profile.png'
-                                              : '/images/default_profile.png'),
-                                    )
-                                        : Image.asset(!Responsive.isDesktop(
-                                        Get.context!)
-                                        ? 'assets' +
-                                        '/images/default_profile.png'
-                                        : '/images/default_profile.png')
-                                  // : CustomImageView(
-                                  //     imagePath: !Responsive.isDesktop(
-                                  //             Get.context!)
-                                  //         ? 'assets' +
-                                  //             '/images/default_profile.png'
-                                  //         : '/images/default_profile.png',
-                                  //   ),
-                                ),
+                                                          .toString(),
+                                                ),
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    const CircularProgressIndicator(),
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    Image.asset(!Responsive
+                                                            .isDesktop(
+                                                                Get.context!)
+                                                        ? 'assets' +
+                                                            '/images/default_profile.png'
+                                                        : '/images/default_profile.png'),
+                                              )
+                                            : Image.asset(!Responsive.isDesktop(
+                                                    Get.context!)
+                                                ? 'assets' +
+                                                    '/images/default_profile.png'
+                                                : '/images/default_profile.png')
+                                    // : CustomImageView(
+                                    //     imagePath: !Responsive.isDesktop(
+                                    //             Get.context!)
+                                    //         ? 'assets' +
+                                    //             '/images/default_profile.png'
+                                    //         : '/images/default_profile.png',
+                                    //   ),
+                                    ),
                               ),
                             ),
                           ),
@@ -259,8 +251,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      patientData?.age.toString() ??
-                                          '',
+                                      patientData?.age.toString() ?? '',
                                       style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
@@ -285,8 +276,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                       ),
                                     ),
                                     Text(
-                                      patientData?.sex.toString() ??
-                                          '',
+                                      patientData?.sex.toString() ?? '',
                                       style: const TextStyle(
                                         color: Color(0xFF9f9f9f),
                                       ),
@@ -310,7 +300,7 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                     ),
                                   ),
                                   Text(
-                                    dateFormatter(patientData.dob.toString())??
+                                    dateFormatter(patientData.dob.toString()) ??
                                         '',
                                     style: const TextStyle(
                                       color: Color(0xFF9f9f9f),
@@ -321,7 +311,6 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                             ],
                           ),
                         ),
-
                         Expanded(
                           flex: 5,
                           child: Column(
@@ -374,30 +363,29 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
                                   ],
                                 ),
                               ),
-
                               const SizedBox(
                                 height: 20,
                               ),
-                                  Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Country',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Color(0xFF6f6f6f),
-                                      ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Country',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                      color: Color(0xFF6f6f6f),
                                     ),
-                                    Text(
-                                      patientData?.country ?? '',
-                                      style: const TextStyle(
-                                        color: Color(0xFF9f9f9f),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  Text(
+                                    patientData?.country ?? '',
+                                    style: const TextStyle(
+                                      color: Color(0xFF9f9f9f),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -420,20 +408,20 @@ class _PatientDetailsPageState extends State<PatientDetailsPage> {
       appBar: ResponsiveBuilder.isDesktop(context)
           ? null
           : AppbarImage(
-        backgroundColor: ColorConstant.whiteA70001,
-        height: 70,
-        width: width,
-        leading: IconButton(
-            onPressed: () {
-              //controller.onClose();
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            )),
-        imagePath: 'assets/images/login-logo.png',
-      ),
+              backgroundColor: ColorConstant.whiteA70001,
+              height: 70,
+              width: width,
+              leading: IconButton(
+                  onPressed: () {
+                    //controller.onClose();
+                    Get.back();
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  )),
+              imagePath: 'assets/images/login-logo.png',
+            ),
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width * 1.0,

@@ -18,11 +18,12 @@ class ScheduleTabContainerPage extends StatelessWidget {
 
   AppointmentApi api = Get.put(AppointmentApi());
   ScheduleController scheduleController = Get.put(ScheduleController());
+  DashboardController dashboardController = Get.put(DashboardController());
 
   ScheduleTabContainerPage({super.key});
   @override
   Widget build(BuildContext context) {
-    DashboardController dashboardController = Get.find();
+    //DashboardController dashboardController = Get.find();
     return SafeArea(
       top: false,
       bottom: false,
@@ -58,8 +59,7 @@ class ScheduleTabContainerPage extends StatelessWidget {
                 //SharedPrefUtils.readPrefINt('employee_Id')
                 scheduleController.callGetAllAppointments(0, 0);
               } else {
-                scheduleController.callAppointmentsByPatientId(
-                    SharedPrefUtils.readPrefINt('patient_Id'));
+                scheduleController.callGetAllAppointmentsForPatient(0);
               }
             },
             child: ListView(shrinkWrap: true, children: [

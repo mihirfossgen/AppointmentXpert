@@ -43,6 +43,7 @@ class CreateProfileController extends GetxController {
   List<XFile>? imageFileList = [];
   var selectedImage = ''.obs;
   final formKey = GlobalKey<FormState>();
+
   void _setImageFileListFromFile(XFile? value) {
     imageFileList = value == null ? null : <XFile>[value];
     selectedImage.value = imageFileList![0].path;

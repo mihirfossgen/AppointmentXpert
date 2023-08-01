@@ -1121,7 +1121,16 @@ Widget officePhotos(context, String officePhotoUrl) {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: CachedNetworkImageProvider(officePhotoUrl),
+            image: Responsive.isDesktop(context)
+                ? Image.network(
+                    officePhotoUrl,
+                    loadingBuilder: (context, url, progress) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ).image
+                : CachedNetworkImageProvider(
+                    officePhotoUrl,
+                  ),
           ),
         ),
         child: InkWell(

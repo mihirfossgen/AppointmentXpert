@@ -1,6 +1,6 @@
-import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../theme/app_style.dart';
@@ -36,11 +36,13 @@ class ResetPasswordEmailTabContainerScreen
                       ),
                     ),
                   ),
-            body: AdaptiveLayout(
-              smallLayout: getBody(width),
-              mediumLayout: getBody(width),
-              largeLayout: Center(child: getBody(width / 2)),
-            )));
+            body: Center(child: getBody(width / 2))
+            // AdaptiveLayout(
+            //   smallLayout: getBody(width),
+            //   mediumLayout: getBody(width),
+            //   largeLayout: Center(child: getBody(width / 2)),
+            // ))
+            ));
   }
 
   Widget getBody(double width) {
@@ -101,7 +103,7 @@ class ResetPasswordEmailTabContainerScreen
                             overflow: TextOverflow.ellipsis))
                   ])),
           SizedBox(
-              height: 280,// getVerticalSize(525),
+              height: 280, // getVerticalSize(525),
               child: TabBarView(
                   controller: controller.tabController,
                   children: [

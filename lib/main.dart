@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:appointmentxpert/presentation/splash_screen/splash_screen.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,19 +18,27 @@ import 'shared_prefrences_page/shared_prefrence_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefUtils.init();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCX7puGlnu_F7DeMBA86rNj4tiotpFAtAE",
+            authDomain: "healthcare-cpas.firebaseapp.com",
+            projectId: "healthcare-cpas",
+            storageBucket: "healthcare-cpas.appspot.com",
+            messagingSenderId: "231282522270",
+            iosClientId:
+                "231282522270-qd59ru008i35ht6rnl5o9876p70l4gcq.apps.googleusercontent.com",
+            androidClientId:
+                "231282522270-odsjhmha7nq1tvjq7mdvogr08posu0b7.apps.googleusercontent.com",
+            appId: "1:231282522270:ios:3f6178dc8bbca810b1638f"));
+  } else {
+    await Firebase.initializeApp();
+  }
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) {
     Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
-    AdaptiveLayout.setBreakpoints(
-      mediumScreenMinWidth: 600,
-      largeScreenMinWidth: 1200,
-    );
-    // runApp(   DevicePreview(
-    //   enabled: !kReleaseMode,
-    //   builder: (context) => MyApp(), // Wrap your app
-    // ));
     runApp(const MyApp());
     // DevicePreview(
     //   enabled: !kReleaseMode,

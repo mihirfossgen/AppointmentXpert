@@ -60,13 +60,13 @@ class MainMenu extends StatelessWidget {
         SelectionButtonData(
           activeIcon: EvaIcons.person,
           icon: EvaIcons.bellOutline,
-          label: "Profile",
+          label: "Appointments",
           //totalNotif: 100,
         ),
         // SelectionButtonData(
         //   activeIcon: EvaIcons.phoneCall,
         //   icon: EvaIcons.phoneCall,
-        //   label: "Chat",
+        //   label: "Emergency",
         //   //totalNotif: 20,
         // ),
         SelectionButtonData(
@@ -99,12 +99,18 @@ class MainMenu extends StatelessWidget {
           label: "Patients",
           //totalNotif: 20,
         ),
-        // SelectionButtonData(
-        //   activeIcon: EvaIcons.phoneCall,
-        //   icon: EvaIcons.phoneCall,
-        //   label: "Chat",
-        //   //totalNotif: 20,
-        // ),
+        SelectionButtonData(
+          activeIcon: EvaIcons.people,
+          icon: EvaIcons.people,
+          label: "Staff",
+          //totalNotif: 20,
+        ),
+        SelectionButtonData(
+          activeIcon: EvaIcons.phoneCall,
+          icon: EvaIcons.phoneCall,
+          label: "Emergency",
+          //totalNotif: 20,
+        ),
         SelectionButtonData(
           activeIcon: EvaIcons.settings,
           icon: EvaIcons.settingsOutline,

@@ -69,7 +69,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             width: 100,
             child: CalendarDatePicker2(
               config: CalendarDatePicker2Config(),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
               onValueChanged: (value) {
                 print(value);
                 date = value[0];
@@ -278,7 +278,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   Widget patientUI(Size size, BuildContext context) {
     return Form(
         key: controller.formKey,
-        child: Responsive.isMobile(context)
+        child: Responsive.isDesktop(context)
             ? SizedBox(
                 width: size.width,
                 child: Column(
@@ -294,16 +294,16 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: Text("Basic Informations",
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500)),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
-                            Column(
+                            Row(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -315,52 +315,40 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                         InkWell(
                                           onTap: () async {
                                             FocusScope.of(context).unfocus();
-                                            Responsive.isDesktop(context)
-                                                ? controller.pickImage(
-                                                    ImageSource.gallery)
-                                                : showModalBottomSheet<dynamic>(
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    builder: (BuildContext bc) {
-                                                      return Bottomsheet(
-                                                        onchanged: ((value) {
-                                                          print(value);
-                                                          if (value ==
-                                                              "Gallery") {
-                                                            controller.pickImage(
-                                                                ImageSource
-                                                                    .gallery);
-                                                          } else {
-                                                            controller.pickImage(
-                                                                ImageSource
-                                                                    .camera);
-                                                          }
-                                                        }),
-                                                        values: const [],
-                                                      );
-                                                    });
+                                            showModalBottomSheet<dynamic>(
+                                                isScrollControlled: true,
+                                                context: context,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                builder: (BuildContext bc) {
+                                                  return Bottomsheet(
+                                                    onchanged: ((value) {
+                                                      print(value);
+                                                      if (value == "Gallery") {
+                                                        controller.pickImage(
+                                                            ImageSource
+                                                                .gallery);
+                                                      } else {
+                                                        controller.pickImage(
+                                                            ImageSource.camera);
+                                                      }
+                                                    }),
+                                                    values: [],
+                                                  );
+                                                });
                                           },
                                           child: AbsorbPointer(
                                             child: Column(
                                               children: [
                                                 Container(
-                                                  height: 120,
-                                                  width: 120,
-                                                  //color: Colors.grey,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          color: Colors.grey),
+                                                  height: 100,
+                                                  width: 100,
+                                                  color: Colors.grey,
                                                   child: Obx(
-                                                    // ignore: unrelated_type_equality_checks
                                                     () => controller
                                                                 .selectedImage ==
                                                             ""
-                                                        ? const Icon(
-                                                            Icons.person)
+                                                        ? Icon(Icons.person)
                                                         : Responsive.isDesktop(
                                                                 context)
                                                             ? Image.network(
@@ -392,15 +380,11 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                 height: 40,
                                                 width: 60,
                                                 decoration: BoxDecoration(
-                                                    // border: Border.all(),
-                                                    // borderRadius:
-                                                    //     BorderRadius.circular(
-                                                    //         10),
-                                                    color: Colors.grey.shade100,
+                                                    color: Colors.grey.shade200,
                                                     shape: BoxShape.circle),
                                                 child: const Icon(
                                                   Icons.camera_alt_outlined,
-                                                  color: Colors.grey,
+                                                  color: Colors.white,
                                                 )))
                                       ],
                                     ),
@@ -408,151 +392,140 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 ),
                                 SizedBox(
                                   height: size.width * 0.04,
-                                  width: 10,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 14.0),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: size.width,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: CustomTextFormField(
-                                                  controller: controller
-                                                      .firstname,
-                                                  labelText: "First name",
-                                                  padding: TextFormFieldPadding
-                                                      .PaddingT14,
-                                                  validator: (value) {
-                                                    return controller
-                                                        .lastNameValidator(
-                                                            value ?? "");
-                                                  },
-                                                  textInputType: TextInputType
-                                                      .emailAddress,
-                                                  prefixConstraints:
-                                                      BoxConstraints(
-                                                          maxHeight:
-                                                              getVerticalSize(
-                                                                  56))),
-                                            ),
-                                            SizedBox(
-                                              width: size.width * 0.03,
-                                            ),
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: CustomTextFormField(
-                                                  controller: controller
-                                                      .lastname,
-                                                  labelText: "Last name",
-                                                  padding: TextFormFieldPadding
-                                                      .PaddingT14,
-                                                  validator: (value) {
-                                                    return controller
-                                                        .lastNameValidator(
-                                                            value ?? "");
-                                                  },
-                                                  textInputType: TextInputType
-                                                      .emailAddress,
-                                                  prefixConstraints:
-                                                      BoxConstraints(
-                                                          maxHeight:
-                                                              getVerticalSize(
-                                                                  56))),
-                                            ),
-                                          ],
-                                        ),
+                                Column(
+                                  children: [
+                                    Container(
+                                      width: size.width * 0.40,
+                                      child: Row(
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: CustomTextFormField(
+                                                controller: controller
+                                                    .firstname,
+                                                labelText: "First name",
+                                                padding: TextFormFieldPadding
+                                                    .PaddingT14,
+                                                validator: (value) {
+                                                  return controller
+                                                      .lastNameValidator(
+                                                          value ?? "");
+                                                },
+                                                textInputType: TextInputType
+                                                    .emailAddress,
+                                                prefixConstraints:
+                                                    BoxConstraints(
+                                                        maxHeight:
+                                                            getVerticalSize(
+                                                                56))),
+                                          ),
+                                          SizedBox(
+                                            width: size.width * 0.02,
+                                          ),
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: CustomTextFormField(
+                                                controller: controller.lastname,
+                                                labelText: "Last name",
+                                                padding: TextFormFieldPadding
+                                                    .PaddingT14,
+                                                validator: (value) {
+                                                  return controller
+                                                      .lastNameValidator(
+                                                          value ?? "");
+                                                },
+                                                textInputType: TextInputType
+                                                    .emailAddress,
+                                                prefixConstraints:
+                                                    BoxConstraints(
+                                                        maxHeight:
+                                                            getVerticalSize(
+                                                                56))),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(
-                                        height: size.height * 0.03,
-                                      ),
-                                      SizedBox(
-                                        width: size.width,
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              fit: FlexFit.tight,
-                                              child: SizedBox(
-                                                child: InkWell(
-                                                  onTap: () async {
-                                                    DateTime a =
-                                                        await getDate();
-                                                    finalDob =
-                                                        a.toIso8601String();
+                                    ),
+                                    SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
+                                    Container(
+                                      width: size.width * 0.40,
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: SizedBox(
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  DateTime a = await getDate();
+                                                  finalDob =
+                                                      a.toIso8601String();
 
-                                                    final DateFormat formatter =
-                                                        DateFormat(
-                                                            'yyyy-MM-dd');
-                                                    controller.dob.text =
-                                                        formatter.format(a);
-                                                  },
-                                                  child: AbsorbPointer(
-                                                    child: CustomTextFormField(
-                                                        labelText:
-                                                            "Date of Birth",
-                                                        controller:
-                                                            controller.dob,
-                                                        validator: (value) {
-                                                          return controller
-                                                              .dobValidator(
-                                                                  value ?? "");
-                                                        },
-                                                        padding:
-                                                            TextFormFieldPadding
-                                                                .PaddingT14,
-                                                        textInputType:
-                                                            TextInputType
-                                                                .emailAddress,
-                                                        suffix: const Icon(Icons
-                                                            .calendar_month),
-                                                        prefixConstraints:
-                                                            BoxConstraints(
-                                                                maxHeight:
-                                                                    getVerticalSize(
-                                                                        56))),
-                                                  ),
+                                                  final DateFormat formatter =
+                                                      DateFormat('yyyy-MM-dd');
+                                                  controller.dob.text =
+                                                      formatter.format(a);
+                                                },
+                                                child: AbsorbPointer(
+                                                  child: CustomTextFormField(
+                                                      labelText:
+                                                          "Date of Birth",
+                                                      controller:
+                                                          controller.dob,
+                                                      validator: (value) {
+                                                        return controller
+                                                            .dobValidator(
+                                                                value ?? "");
+                                                      },
+                                                      padding:
+                                                          TextFormFieldPadding
+                                                              .PaddingT14,
+                                                      textInputType:
+                                                          TextInputType
+                                                              .emailAddress,
+                                                      suffix: Icon(
+                                                          Icons.calendar_month),
+                                                      prefixConstraints:
+                                                          BoxConstraints(
+                                                              maxHeight:
+                                                                  getVerticalSize(
+                                                                      56))),
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: size.width * 0.03,
-                                            ),
-                                            Flexible(
-                                                fit: FlexFit.tight,
-                                                child: CustomDropDown(
-                                                    labelText: "Gender",
-                                                    validator: (value) {
-                                                      return controller
-                                                          .genderValidator(
-                                                              value?.title ??
-                                                                  "");
-                                                    },
-                                                    icon: Container(
-                                                        margin: getMargin(
-                                                            left: 15, right: 5),
-                                                        child: const Icon(Icons
-                                                            .arrow_drop_down)),
-                                                    items: controller
-                                                        .genderList.value,
-                                                    onChanged: (value) {
-                                                      controller.gender =
-                                                          value.title;
-                                                      controller
-                                                          .onSelectedGender(
-                                                              value);
-                                                    })),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                          ),
+                                          SizedBox(
+                                            width: size.width * 0.02,
+                                          ),
+                                          Flexible(
+                                              fit: FlexFit.tight,
+                                              child: CustomDropDown(
+                                                  labelText: "Gender",
+                                                  validator: (value) {
+                                                    return controller
+                                                        .genderValidator(
+                                                            value?.title ?? "");
+                                                  },
+                                                  icon: Container(
+                                                      margin: getMargin(
+                                                          left: 30, right: 5),
+                                                      child: Icon(Icons
+                                                          .arrow_drop_down)),
+                                                  items: controller
+                                                      .genderList.value,
+                                                  onChanged: (value) {
+                                                    controller.gender =
+                                                        value.title;
+                                                    controller.onSelectedGender(
+                                                        value);
+                                                  })),
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 )
                               ],
                             ),
@@ -561,7 +534,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                       ),
                     ),
                     SizedBox(
-                      height: size.height * 0.03,
+                      height: size.height * 0.02,
                     ),
                     Card(
                       elevation: 4,
@@ -573,15 +546,15 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                               child: Text("Contact Informations",
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500)),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                             CustomTextFormField(
                                 labelText: "Address",
@@ -595,12 +568,12 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 prefixConstraints: BoxConstraints(
                                     maxHeight: getVerticalSize(56))),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                             Align(
                               alignment: Alignment.center,
-                              child: SizedBox(
-                                width: size.width,
+                              child: Container(
+                                width: size.width * 0.72,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -620,7 +593,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                               maxHeight: getVerticalSize(56))),
                                     ),
                                     SizedBox(
-                                      width: size.width * 0.03,
+                                      width: size.width * 0.02,
                                     ),
                                     Flexible(
                                       fit: FlexFit.tight,
@@ -642,12 +615,12 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                             Align(
                               alignment: Alignment.center,
-                              child: SizedBox(
-                                width: size.width,
+                              child: Container(
+                                width: size.width * 0.72,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -667,7 +640,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                               maxHeight: getVerticalSize(56))),
                                     ),
                                     SizedBox(
-                                      width: size.width * 0.03,
+                                      width: size.width * 0.02,
                                     ),
                                     Flexible(
                                       fit: FlexFit.tight,
@@ -689,7 +662,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                           ],
                         ),
@@ -701,7 +674,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             : Column(
                 children: [
                   SizedBox(
-                    width: size.width,
+                    //width: size.width,
                     child: Card(
                       elevation: 4,
                       shadowColor: ColorConstant.gray400,
@@ -719,7 +692,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       fontWeight: FontWeight.w500)),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                             Align(
                               alignment: Alignment.center,
@@ -745,7 +718,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                       ImageSource.camera);
                                                 }
                                               }),
-                                              values: const [],
+                                              values: [],
                                             );
                                           });
                                     },
@@ -759,7 +732,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                             child: Obx(
                                               () =>
                                                   controller.selectedImage == ""
-                                                      ? const Icon(Icons.person)
+                                                      ? Icon(Icons.person)
                                                       : Image.file(
                                                           File(controller
                                                               .imageFileList![0]
@@ -792,11 +765,14 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               height: size.height * 0.04,
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
+                              padding: const EdgeInsets.only(
+                                  top: 10.0,
+                                  bottom: 10.0,
+                                  right: 10.0,
+                                  left: 10),
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: Column(
@@ -804,7 +780,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                         CustomTextFormField(
                                             labelText: "First name",
                                             controller: controller.firstname,
-                                            isRequired: true,
                                             padding:
                                                 TextFormFieldPadding.PaddingT14,
                                             validator: (value) {
@@ -825,15 +800,10 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   ),
                                   Expanded(
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
                                         CustomTextFormField(
                                             controller: controller.lastname,
                                             labelText: "Last name",
-                                            isRequired: true,
                                             padding:
                                                 TextFormFieldPadding.PaddingT14,
                                             validator: (value) {
@@ -853,7 +823,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -871,7 +841,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                     child: CustomTextFormField(
                                         labelText: "Date of Birth",
                                         controller: controller.dob,
-                                        isRequired: true,
                                         validator: (value) {
                                           return controller
                                               .dobValidator(value ?? "");
@@ -887,7 +856,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(10),
@@ -899,7 +868,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   },
                                   icon: Container(
                                       margin: getMargin(left: 30, right: 16),
-                                      child: const Icon(Icons.arrow_drop_down)),
+                                      child: Icon(Icons.arrow_drop_down)),
                                   items: controller.genderList.value,
                                   onChanged: (value) {
                                     controller.gender = value.title;
@@ -907,7 +876,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   }),
                             ),
                             SizedBox(
-                              height: size.height * 0.03,
+                              height: size.height * 0.02,
                             ),
                           ],
                         ),
@@ -922,14 +891,14 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(20, 20, 0, 20),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
                           child: Text("Contact Informations",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w500)),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: size.height * 0.02,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -937,7 +906,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               labelText: "Address",
                               controller: controller.address,
                               padding: TextFormFieldPadding.PaddingT14,
-                              isRequired: true,
                               validator: (value) {
                                 return controller.addressValidator(value ?? "");
                               },
@@ -946,14 +914,13 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   maxHeight: getVerticalSize(56))),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: size.height * 0.02,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: CustomTextFormField(
                               labelText: "State",
                               controller: controller.state,
-                              isRequired: true,
                               validator: (value) {
                                 return controller.stateValidator(value ?? "");
                               },
@@ -963,14 +930,13 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   maxHeight: getVerticalSize(56))),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: size.height * 0.02,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: CustomTextFormField(
                               labelText: "Country",
                               controller: controller.country,
-                              isRequired: true,
                               validator: (value) {
                                 return controller.countryValidator(value ?? "");
                               },
@@ -980,14 +946,13 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   maxHeight: getVerticalSize(56))),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: size.height * 0.02,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: CustomTextFormField(
                               labelText: "Pin Code",
                               controller: controller.pincode,
-                              isRequired: true,
                               padding: TextFormFieldPadding.PaddingT14,
                               validator: (value) {
                                 return controller.pincodeValidator(value ?? "");
@@ -997,14 +962,13 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   maxHeight: getVerticalSize(56))),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: size.height * 0.02,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: CustomTextFormField(
                               labelText: "Phone Number",
                               controller: controller.mobile,
-                              isRequired: true,
                               padding: TextFormFieldPadding.PaddingT14,
                               textInputType: TextInputType.phone,
                               validator: (value) {
@@ -1014,7 +978,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   maxHeight: getVerticalSize(56))),
                         ),
                         SizedBox(
-                          height: size.height * 0.03,
+                          height: size.height * 0.02,
                         ),
                       ],
                     ),
@@ -1080,7 +1044,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
     return Row(
       children: [
         Expanded(
-          flex: 5,
+          flex: 6,
           child: RotatedBox(
             quarterTurns: 0,
             child: Image.asset(
@@ -1093,10 +1057,10 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             ),
           ),
         ),
-        SizedBox(width: size.width * 0.04),
+        SizedBox(width: size.width * 0.02),
         Expanded(
           flex: 7,
-          child: getBody(size, loginController, context, args),
+          child: Center(child: getBody(size, loginController, context, args)),
         ),
       ],
     );
@@ -1113,23 +1077,21 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   Widget getBody(Size size, CreateProfileController simpleUIController,
       BuildContext context, ScreenArguments? args) {
     return SingleChildScrollView(
-      child: Container(
-        width: size.width,
-        padding: getPadding(left: 15, top: 20, right: 15, bottom: 40),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            patientUI(size, context),
-            CustomButton(
-                height: getVerticalSize(56),
-                text: "Confirm and Save",
-                margin: getMargin(top: 12),
-                onTap: () {
-                  bool a = controller.trySubmit();
-                  if (a) OnTapConfirmAndSave(args);
-                }),
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          patientUI(size, context),
+          CustomButton(
+              height: getVerticalSize(56),
+              text: "Confirm and Save",
+              margin: getMargin(top: 12),
+              onTap: () {
+                bool a = controller.trySubmit();
+                if (a) OnTapConfirmAndSave(args);
+              }),
+        ],
       ),
     );
   }

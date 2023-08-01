@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 
 import '../../../models/verify_otp_model.dart';
@@ -88,6 +89,8 @@ class VerifyNumberController extends GetxController {
       if (model.response?.body?.staff != null) {
         SharedPrefUtils.saveInt(
             'employee_Id', model.response?.body?.staff?.id ?? 0);
+        await SessionManager()
+            .set("employee_Id", model.response?.body?.staff?.id ?? 0);
         // AppointmentDetails.staffId = _model.staff!.id ?? 0;
         Get.back();
         Get.offAllNamed(AppRoutes.dashboardScreen);
@@ -103,6 +106,8 @@ class VerifyNumberController extends GetxController {
       if (model.response?.body?.patient != null) {
         SharedPrefUtils.saveInt(
             'patient_Id', model.response?.body?.patient!.id ?? 0);
+        await SessionManager()
+            .set("patient_Id", model.response?.body?.patient?.id ?? 0);
         //Get.offNamed(AppRoutes.homeContainerScreen);
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
@@ -116,10 +121,13 @@ class VerifyNumberController extends GetxController {
     }
   }
 
-  void storingAuthKey(String key, int id, String role) {
+  void storingAuthKey(String key, int id, String role) async {
     SharedPrefUtils.saveStr('auth_token', key);
     SharedPrefUtils.saveInt("user_Id", id);
     SharedPrefUtils.saveStr("role", role);
+    await SessionManager().set("auth_token", key);
+    await SessionManager().set("user_Id", id);
+    await SessionManager().set("role", role);
   }
 
   @override

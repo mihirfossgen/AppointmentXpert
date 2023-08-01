@@ -199,6 +199,9 @@ class SignUpScreen extends GetWidget<SignUpController> {
             ? MainAxisAlignment.center
             : MainAxisAlignment.start,
         children: [
+          SizedBox(
+            height: size.height * 0.02,
+          ),
           size.width < 600
               ? Container()
               : Center(
@@ -207,10 +210,8 @@ class SignUpScreen extends GetWidget<SignUpController> {
                         ? 'assets' '/images/logo-opdxpert.png'
                         : '/images/logo-opdxpert.png',
                     fit: BoxFit.contain,
-                    width: 300,
-                    height: 160,
-                    // height: size.height * 0.2,
-                    // width: size.width * 0.8,
+                    height: size.height * 0.145,
+                    width: size.width * 0.8,
                   ),
                 ),
           SizedBox(
@@ -391,9 +392,9 @@ class SignUpScreen extends GetWidget<SignUpController> {
                               'Please agree to the terms and condition and privacy policy',
                               style: TextStyle(color: Colors.red.shade600),
                             ),
-                            SizedBox(
-                              height: size.height * 0.03,
-                            ),
+                            // SizedBox(
+                            //   height: size.height * 0.03,
+                            // ),
                           ],
                         )
                       : const SizedBox()),
