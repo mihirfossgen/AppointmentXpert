@@ -30,6 +30,7 @@ import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../widgets/app_bar/appbar_image.dart';
+import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../../profile_page/profile_page.dart';
@@ -293,7 +294,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                 '';
                                         controller.addressController.text =
                                             controller.patientData.value.patient
-                                                    ?.address
+                                                    ?.email
                                                     .toString() ??
                                                 '';
                                         Get.defaultDialog(
@@ -345,7 +346,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                 .patientData
                                                                 .value
                                                                 .patient
-                                                                ?.address
+                                                                ?.email
                                                                 .toString() ??
                                                             '';
                                                         controller
@@ -612,7 +613,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                               .patientData
                                                               .value
                                                               .patient
-                                                              ?.address
+                                                              ?.email
                                                               .toString() ??
                                                           '';
                                                       Get.defaultDialog(
@@ -674,7 +675,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                               .patientData
                                                                               .value
                                                                               .patient
-                                                                              ?.address
+                                                                              ?.email
                                                                               .toString() ??
                                                                           '';
                                                                       controller
@@ -1258,7 +1259,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                                           .value
                                                           .length
                                                           .toString()
-
                                                       : controller
                                                           .staffTodaysData
                                                           .value
@@ -1999,7 +1999,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         ),
                         Text(
                           (SharedPrefUtils.readPrefStr('role') == "PATIENT")
-                              ? ''//controller.patientNumber.toString()
+                              ? '' //controller.patientNumber.toString()
                               : "",
                           style: TextStyle(
                               fontSize: 20,

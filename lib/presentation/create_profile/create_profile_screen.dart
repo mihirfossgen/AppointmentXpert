@@ -1,8 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:appointmentxpert/core/utils/country_list.dart';
+import 'package:appointmentxpert/core/utils/state_list.dart';
+import 'package:appointmentxpert/presentation/create_profile/listing_page.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +23,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../../widgets/loader.dart';
 import '../../widgets/responsive.dart';
 import '../create_profile_success_dialog/controller/create_profile_success_controller.dart';
 import '../create_profile_success_dialog/create_profile_success_dialog.dart';
@@ -114,167 +119,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
       }
     }
     return age;
-  }
-
-  Widget staffUi() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 12),
-          child: CustomDropDown(
-              labelText: "Prefix",
-              icon: Container(
-                  margin: getMargin(left: 30, right: 16),
-                  child: const Icon(Icons.arrow_drop_down)),
-              margin: getMargin(top: 12),
-              variant: DropDownVariant.GreyOutline,
-              fontStyle: DropDownFontStyle.ManropeMedium14Bluegray500,
-              items: controller.prefixesList.value,
-              onChanged: (value) {
-                controller.prefix = value.title;
-                controller.onSelectedPrefix(value);
-              }),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: CustomTextFormField(
-                  controller: controller.firstname,
-                  labelText: "First name",
-                  padding: TextFormFieldPadding.PaddingT14,
-                  textInputType: TextInputType.emailAddress,
-                  prefix: Container(
-                      margin:
-                          getMargin(left: 10, top: 16, right: 10, bottom: 16),
-                      child:
-                          CustomImageView(svgPath: ImageConstant.imgCheckmark)),
-                  prefixConstraints:
-                      BoxConstraints(maxHeight: getVerticalSize(56))),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: CustomTextFormField(
-                  width: 100,
-                  controller: controller.lastname,
-                  hintText: "Last name",
-                  padding: TextFormFieldPadding.PaddingT14,
-                  textInputType: TextInputType.emailAddress,
-                  prefix: Container(
-                      margin:
-                          getMargin(left: 10, top: 16, right: 10, bottom: 16),
-                      child:
-                          CustomImageView(svgPath: ImageConstant.imgCheckmark)),
-                  prefixConstraints:
-                      BoxConstraints(maxHeight: getVerticalSize(56))),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-            controller: controller.fathername,
-            hintText: "Father name",
-            padding: TextFormFieldPadding.PaddingT14,
-            textInputType: TextInputType.emailAddress,
-            prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-            controller: controller.userName,
-            hintText: "User name",
-            padding: TextFormFieldPadding.PaddingT14,
-            textInputType: TextInputType.emailAddress,
-            prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-            controller: controller.email,
-            hintText: "Email",
-            padding: TextFormFieldPadding.PaddingT14,
-            textInputType: TextInputType.emailAddress,
-            prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-            controller: controller.mobile,
-            hintText: "Phone Number",
-            maxLength: 10,
-            padding: TextFormFieldPadding.PaddingT14,
-            textInputType: TextInputType.emailAddress,
-            prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
-        const SizedBox(height: 16),
-        SizedBox(
-          child: InkWell(
-            onTap: () async {
-              DateTime a = await getDate();
-              finalDob = a.toIso8601String();
-
-              final DateFormat formatter = DateFormat('yyyy-MM-dd');
-              controller.dob.text = formatter.format(a);
-            },
-            child: AbsorbPointer(
-              child: CustomTextFormField(
-                  controller: controller.dob,
-                  hintText: "Date",
-                  padding: TextFormFieldPadding.PaddingT14,
-                  textInputType: TextInputType.emailAddress,
-                  prefix: Container(
-                      margin:
-                          getMargin(left: 10, top: 16, right: 10, bottom: 16),
-                      child:
-                          CustomImageView(svgPath: ImageConstant.imgCheckmark)),
-                  prefixConstraints:
-                      BoxConstraints(maxHeight: getVerticalSize(56))),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: CustomDropDown(
-              icon: Container(
-                  margin: getMargin(left: 30, right: 16),
-                  child: const Icon(Icons.arrow_drop_down)),
-              hintText: 'Gender',
-              margin: getMargin(top: 12),
-              variant: DropDownVariant.GreyOutline,
-              fontStyle: DropDownFontStyle.ManropeMedium14Bluegray500,
-              items: controller.genderList.value,
-              onChanged: (value) {
-                controller.gender = value.title;
-                controller.onSelectedGender(value);
-              }),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: CustomDropDown(
-              icon: Container(
-                  margin: getMargin(left: 30, right: 16),
-                  child: const Icon(Icons.arrow_drop_down)),
-              hintText: 'Job Type',
-              margin: getMargin(top: 12),
-              variant: DropDownVariant.GreyOutline,
-              fontStyle: DropDownFontStyle.ManropeMedium14Bluegray500,
-              items: controller.jobType.value,
-              onChanged: (value) {
-                controller.jobtype = value.title;
-                controller.onSelectedJobType(value);
-              }),
-        ),
-        CustomTextFormField(
-            controller: controller.staffId,
-            hintText: "Staff Id",
-            padding: TextFormFieldPadding.PaddingT14,
-            textInputType: TextInputType.emailAddress,
-            prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
-        const SizedBox(height: 16),
-        CustomTextFormField(
-            controller: controller.address,
-            hintText: "Address",
-            padding: TextFormFieldPadding.PaddingT14,
-            textInputType: TextInputType.emailAddress,
-            prefixConstraints: BoxConstraints(maxHeight: getVerticalSize(56))),
-        const SizedBox(height: 16),
-      ],
-    );
   }
 
   Widget patientUI(Size size, BuildContext context) {
@@ -455,7 +299,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                           value ?? "");
                                                 },
                                                 textInputType: TextInputType
-                                                    .emailAddress,
+                                                    .name,
                                                 prefixConstraints:
                                                     BoxConstraints(
                                                         maxHeight:
@@ -478,7 +322,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                           value ?? "");
                                                 },
                                                 textInputType: TextInputType
-                                                    .emailAddress,
+                                                    .name,
                                                 prefixConstraints:
                                                     BoxConstraints(
                                                         maxHeight:
@@ -619,37 +463,62 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   children: [
                                     Flexible(
                                       fit: FlexFit.tight,
-                                      child: CustomTextFormField(
-                                          labelText: "State",
-                                          controller: controller.state,
-                                          validator: (value) {
-                                            return controller
-                                                .stateValidator(value ?? "");
-                                          },
-                                          padding:
-                                              TextFormFieldPadding.PaddingT14,
-                                          textInputType: TextInputType.name,
-                                          prefixConstraints: BoxConstraints(
-                                              maxHeight: getVerticalSize(56))),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Get.to(ListingPage(
+                                            listOfCountryOrList: countryList,
+                                          ));
+                                        },
+                                        child: AbsorbPointer(
+                                          child: CustomTextFormField(
+                                              labelText: "State",
+                                              controller: controller.state,
+                                              validator: (value) {
+                                                return controller
+                                                    .stateValidator(
+                                                        value ?? "");
+                                              },
+                                              padding: TextFormFieldPadding
+                                                  .PaddingT14,
+                                              textInputType: TextInputType.name,
+                                              prefixConstraints: BoxConstraints(
+                                                  maxHeight:
+                                                      getVerticalSize(56))),
+                                        ),
+                                      ),
                                     ),
                                     SizedBox(
                                       width: size.width * 0.02,
                                     ),
                                     Flexible(
-                                      fit: FlexFit.tight,
-                                      child: CustomTextFormField(
-                                          labelText: "Country",
-                                          controller: controller.country,
-                                          validator: (value) {
-                                            return controller
-                                                .countryValidator(value ?? "");
-                                          },
-                                          padding:
-                                              TextFormFieldPadding.PaddingT14,
-                                          textInputType: TextInputType.name,
-                                          prefixConstraints: BoxConstraints(
-                                              maxHeight: getVerticalSize(56))),
-                                    ),
+                                        fit: FlexFit.tight,
+                                        child: InkWell(
+                                            onTap: () {
+                                              Get.to(ListingPage(
+                                                listOfCountryOrList:
+                                                    countryList,
+                                              ));
+                                            },
+                                            child: AbsorbPointer(
+                                              child: CustomTextFormField(
+                                                  labelText: "Country",
+                                                  controller: controller
+                                                      .country,
+                                                  validator: (value) {
+                                                    return controller
+                                                        .countryValidator(
+                                                            value ?? "");
+                                                  },
+                                                  padding: TextFormFieldPadding
+                                                      .PaddingT14,
+                                                  textInputType: TextInputType
+                                                      .name,
+                                                  prefixConstraints:
+                                                      BoxConstraints(
+                                                          maxHeight:
+                                                              getVerticalSize(
+                                                                  56))),
+                                            ))),
                                   ],
                                 ),
                               ),
@@ -814,23 +683,26 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                   Flexible(
                                     fit: FlexFit.loose,
                                     flex: 1,
-                                    child: CustomTextFormField(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            0, 0, 10, 0),
-                                        controller: controller.prefixController,
-                                        labelText: "Prefix",
-                                        hintText: "Mr./Mrs./Ms.",
-                                        isRequired: true,
-                                        padding:
-                                            TextFormFieldPadding.PaddingT14,
-                                        validator: (value) {
-                                          return controller
-                                              .prefixControllerValidator(
-                                                  value ?? "");
-                                        },
-                                        textInputType: TextInputType.name,
-                                        prefixConstraints: BoxConstraints(
-                                            maxHeight: getVerticalSize(56))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 12),
+                                      child: CustomDropDown(
+                                          labelText: "Prefix",
+                                          isRequired: true,
+                                          icon: Container(
+                                              margin: getMargin(
+                                                  left: 10, right: 16),
+                                              child: const Icon(
+                                                  Icons.arrow_drop_down)),
+                                          variant: DropDownVariant.GreyOutline,
+                                          fontStyle: DropDownFontStyle
+                                              .ManropeMedium14Bluegray500,
+                                          items: controller.prefixesList.value,
+                                          onChanged: (value) {
+                                            controller.prefix = value.title;
+                                            controller.onSelectedPrefix(value);
+                                          }),
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 5,
@@ -983,34 +855,62 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: CustomTextFormField(
-                              labelText: "State",
-                              controller: controller.state,
-                              isRequired: true,
-                              validator: (value) {
-                                return controller.stateValidator(value ?? "");
-                              },
-                              padding: TextFormFieldPadding.PaddingT14,
-                              textInputType: TextInputType.name,
-                              prefixConstraints: BoxConstraints(
-                                  maxHeight: getVerticalSize(56))),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(() => ListingPage(
+                                    listOfCountryOrList: stateList,
+                                  ))?.then((value) {
+                                if (value != null) {
+                                  controller.state.text =
+                                      value['name'].toString();
+                                }
+                              });
+                            },
+                            child: AbsorbPointer(
+                              child: CustomTextFormField(
+                                  labelText: "State",
+                                  controller: controller.state,
+                                  isRequired: true,
+                                  validator: (value) {
+                                    return controller
+                                        .stateValidator(value ?? "");
+                                  },
+                                  padding: TextFormFieldPadding.PaddingT14,
+                                  textInputType: TextInputType.name,
+                                  prefixConstraints: BoxConstraints(
+                                      maxHeight: getVerticalSize(56))),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: CustomTextFormField(
-                              labelText: "Country",
-                              controller: controller.country,
-                              isRequired: true,
-                              validator: (value) {
-                                return controller.countryValidator(value ?? "");
+                          child: InkWell(
+                              onTap: () {
+                                Get.to(() => ListingPage(
+                                      listOfCountryOrList: countryList,
+                                    ))?.then((value) {
+                                  if (value != null) {
+                                    controller.country.text =
+                                        value['name'].toString();
+                                  }
+                                });
                               },
-                              padding: TextFormFieldPadding.PaddingT14,
-                              textInputType: TextInputType.name,
-                              prefixConstraints: BoxConstraints(
-                                  maxHeight: getVerticalSize(56))),
+                              child: AbsorbPointer(
+                                  child: CustomTextFormField(
+                                      labelText: "Country",
+                                      controller: controller.country,
+                                      isRequired: true,
+                                      validator: (value) {
+                                        return controller
+                                            .countryValidator(value ?? "");
+                                      },
+                                      padding: TextFormFieldPadding.PaddingT14,
+                                      textInputType: TextInputType.name,
+                                      prefixConstraints: BoxConstraints(
+                                          maxHeight: getVerticalSize(56))))),
                         ),
                         SizedBox(
                           height: size.height * 0.02,
@@ -1055,10 +955,9 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                           child: CustomTextFormField(
                               labelText: "Email",
                               controller: controller.email,
-                              maxLength: 10,
                               isRequired: true,
                               padding: TextFormFieldPadding.PaddingT14,
-                              textInputType: TextInputType.phone,
+                              textInputType: TextInputType.emailAddress,
                               validator: (value) {
                                 return controller.emailValidator(value ?? "");
                               },
@@ -1097,7 +996,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             },
                             icon: const Icon(
                               Icons.arrow_back,
-                              color: Colors.black,
+                              color: Colors.white,
                             ))
                         // AppbarImage(
                         //     height: getSize(40),
@@ -1170,14 +1069,16 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             patientUI(size, context),
-            CustomButton(
-                height: getVerticalSize(56),
-                text: "Confirm and Save",
-                margin: getMargin(top: 12),
-                onTap: () {
-                  bool a = controller.trySubmit();
-                  if (a) OnTapConfirmAndSave(args);
-                }),
+            Obx(() => controller.isloading.value
+                ? SizedBox(height: 50, child: ThreeDotLoader())
+                : CustomButton(
+                    height: getVerticalSize(56),
+                    text: "Confirm and Save",
+                    margin: getMargin(top: 12),
+                    onTap: () {
+                      bool a = controller.trySubmit();
+                      if (a) OnTapConfirmAndSave(args);
+                    })),
           ],
         ),
       ),
@@ -1189,6 +1090,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   }
 
   OnTapConfirmAndSave(ScreenArguments? args) async {
+    controller.isloading.value = true;
     Map<String, dynamic> credentials;
     if (args != null) {
       if (args.type == "PATIENT") {
@@ -1209,7 +1111,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           "motherName": controller.motherName.text,
           "nationality": controller.nationality.text,
           // "placeOfBirth": controller.placeOfBirth.text,
-          "prefix": controller.prefixController.text,
+          "prefix": controller.prefix,
           // "regions": controller.regions.text,
           "sex": controller.gender,
           "userId": args.roleId,
@@ -1240,6 +1142,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
         };
         print(jsonEncode(credentials));
       }
+
       try {
         if (args.type == "PATIENT") {
           await controller.callCreatePatient(credentials, args.type);

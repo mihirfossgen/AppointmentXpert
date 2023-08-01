@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/utils/color_constant.dart';
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../../models/create_staff_model.dart';
 import '../../../models/createpatient_model.dart';
@@ -29,7 +30,7 @@ class CreateProfileController extends GetxController {
   TextEditingController countryOfBirth = TextEditingController();
   TextEditingController country = TextEditingController();
   TextEditingController prefixController = TextEditingController();
-
+  RxBool isloading = false.obs;
   SelectionPopupModel? selectedjobtype;
   SelectionPopupModel? selectedprefix;
   SelectionPopupModel? selectedgender;
@@ -45,6 +46,10 @@ class CreateProfileController extends GetxController {
   List<XFile>? imageFileList = [];
   var selectedImage = ''.obs;
   final formKey = GlobalKey<FormState>();
+  RxInt selectedIndex = 0.obs;
+  RxBool isSearched = false.obs;
+
+  get isCheckbox => null;
   void _setImageFileListFromFile(XFile? value) {
     imageFileList = value == null ? null : <XFile>[value];
     selectedImage.value = imageFileList![0].path;
@@ -111,24 +116,24 @@ class CreateProfileController extends GetxController {
   String? firstNameValidator(String value) {
     if (value.isEmpty) {
       return 'Please enter first name';
+    } else if (value == " ") {
+      return 'Enter valid name';
+    } else if (!nameRegExp.hasMatch(value)) {
+      return 'Enter valid name';
     } else {
-      if (!nameRegExp.hasMatch(value)) {
-        return 'Enter valid name';
-      } else {
-        return null;
-      }
+      return null;
     }
   }
 
   String? lastNameValidator(String value) {
     if (value.isEmpty) {
       return 'Please enter last name';
+    } else if (value == " ") {
+      return 'Enter valid name';
+    } else if (!nameRegExp.hasMatch(value)) {
+      return 'Enter valid name';
     } else {
-      if (!nameRegExp.hasMatch(value)) {
-        return 'Enter valid name';
-      } else {
-        return null;
-      }
+      return null;
     }
   }
 
@@ -139,39 +144,32 @@ class CreateProfileController extends GetxController {
     return null;
   }
 
+  final RegExp addressReg = RegExp("^[#.0-9a-zA-Z\s,/-]+");
   String? addressValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
+    if (value.isEmpty) {
       return 'Please enter address';
-    }
-    return null;
-  }
-
-  String? motherNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'Mother name must be at least 4 characters long.';
-    }
-    return null;
-  }
-
-  String? userNameValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
-      return 'Username must be at least 4 characters long.';
+    } else if (value == " ") {
+      return 'Please enter valid address';
+    } else if (!addressReg.hasMatch(value)) {
+      return 'Please enter valid address';
     }
     return null;
   }
 
   String? countryValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
+    if (value.isEmpty) {
       return 'Please enter country';
+    } else {
+      return null;
     }
-    return null;
   }
 
   String? stateValidator(String value) {
-    if (value.isEmpty || value.length < 4) {
+    if (value.isEmpty) {
       return 'Please enter state';
+    } else {
+      return null;
     }
-    return null;
   }
 
   String? genderValidator(String value) {
@@ -325,25 +323,46 @@ class CreateProfileController extends GetxController {
 
   _handleCreateEmployeeSuccess(
       CreateStaff sModel, String role, CreatepatientModel pModel) {
-    storingPatientOrEmployeeID(
-        role,
-        ((role.toLowerCase() == "examiner" ||
-                    role.toLowerCase() == "receptionist" ||
-                    role.toLowerCase() == "admin" ||
-                    role.toLowerCase() == "doctor")
-                ? sModel.t?.id
-                : pModel.t?.id) ??
-            0);
-    if (imageFileList!.isNotEmpty) {
-      if (role.toLowerCase() == "examiner" ||
-          role.toLowerCase() == "receptionist" ||
-          role.toLowerCase() == "admin" ||
-          role.toLowerCase() == "doctor") {
-        UserApi().upLoadEmplyeePhoto(sModel.t?.id.toString() ?? "0",
-            imageFileList![0].path, fileName ?? "");
-      } else {
-        UserApi().upLoadPatientPhoto(pModel.t?.id.toString() ?? "0",
-            imageFileList![0].path, fileName ?? "");
+    if (pModel.result == false) {
+      isloading.value = false;
+      Get.back();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Get.snackbar(
+            "Uh oh!!",
+            pModel.message ?? "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 5),
+            borderRadius: 15,
+            icon: Icon(
+              Icons.error_outline,
+              color: ColorConstant.whiteA700,
+            ),
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.all(40),
+            colorText: ColorConstant.whiteA700,
+            backgroundColor: ColorConstant.blue700,
+          ));
+    } else {
+      isloading.value = false;
+      storingPatientOrEmployeeID(
+          role,
+          ((role.toLowerCase() == "examiner" ||
+                      role.toLowerCase() == "receptionist" ||
+                      role.toLowerCase() == "admin" ||
+                      role.toLowerCase() == "doctor")
+                  ? sModel.t?.id
+                  : pModel.t?.id) ??
+              0);
+      if (imageFileList!.isNotEmpty) {
+        if (role.toLowerCase() == "examiner" ||
+            role.toLowerCase() == "receptionist" ||
+            role.toLowerCase() == "admin" ||
+            role.toLowerCase() == "doctor") {
+          UserApi().upLoadEmplyeePhoto(sModel.t?.id.toString() ?? "0",
+              imageFileList![0].path, fileName ?? "");
+        } else {
+          UserApi().upLoadPatientPhoto(pModel.t?.id.toString() ?? "0",
+              imageFileList![0].path, fileName ?? "");
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:appointmentxpert/widgets/loader.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -988,6 +989,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
 
       try {
         await controller.callCreateLogin(requestData);
+
         onTapBooknow();
       } on Map {
         //  _onOnTapSignInError();

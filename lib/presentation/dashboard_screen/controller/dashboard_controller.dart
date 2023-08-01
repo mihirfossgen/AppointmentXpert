@@ -206,6 +206,19 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<void> updateAppointment(var data) async {
+    try {
+      bool value = (await Get.find<AppointmentApi>().updateAppointment(data));
+      // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+      if (value) {
+        Get.back();
+      }
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    }
+  }
+
   Future<void> callStaffData(int staffId) async {
     try {
       isloadingStaffData.value = true;

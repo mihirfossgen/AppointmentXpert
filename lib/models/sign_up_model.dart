@@ -12,31 +12,32 @@ String signUpModelToJson(SignUpModel data) => json.encode(data.toJson());
 class SignUpModel {
   UserDetail? userDetail;
   String? message;
+  String? result;
 
-  SignUpModel({
-    this.userDetail,
-    this.message,
-  });
+  SignUpModel({this.userDetail, this.message, this.result});
 
   SignUpModel copyWith({
+    String? result,
     UserDetail? userDetail,
     String? message,
   }) =>
       SignUpModel(
-        userDetail: userDetail ?? this.userDetail,
-        message: message ?? this.message,
-      );
+          userDetail: userDetail ?? this.userDetail,
+          message: message ?? this.message,
+          result: result ?? this.result);
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) => SignUpModel(
         userDetail: json["userDetail"] == null
             ? null
             : UserDetail.fromJson(json["userDetail"]),
         message: json["message"],
+        result: json["result"],
       );
 
   Map<String, dynamic> toJson() => {
         "userDetail": userDetail?.toJson(),
         "message": message,
+        "result": result,
       };
 }
 

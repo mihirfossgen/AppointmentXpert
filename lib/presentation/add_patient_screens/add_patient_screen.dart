@@ -1,10 +1,13 @@
 import 'package:appointmentxpert/core/app_export.dart';
 import 'package:appointmentxpert/network/api/user_api.dart';
+import 'package:appointmentxpert/widgets/loader.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/utils/color_constant.dart';
+import '../../core/utils/country_list.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../widgets/app_bar/appbar_image.dart';
@@ -12,6 +15,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../create_profile/listing_page.dart';
 import '../dashboard_screen/shared_components/responsive_builder.dart';
 import 'controller/add_patient_controller.dart';
 
@@ -108,22 +112,28 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       SizedBox(
                         height: size.height * 0.03,
                       ),
-                      CustomTextFormField(
-                          controller: controller.prefixController,
-                          labelText: "Prefix",
-                          hintText: "Mr./Mrs./Ms.",
-                          isRequired: true,
-                          padding: TextFormFieldPadding.PaddingT14,
-                          validator: (value) {
-                            return controller
-                                .prefixControllerValidator(value ?? "");
-                          },
-                          textInputType: TextInputType.name,
-                          prefixConstraints:
-                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 12),
+                        child: CustomDropDown(
+                            labelText: "Prefix",
+                            isRequired: true,
+                            icon: Container(
+                                margin: getMargin(left: 30, right: 16),
+                                child: Icon(Icons.arrow_drop_down)),
+                            margin: getMargin(top: 12),
+                            variant: DropDownVariant.GreyOutline,
+                            fontStyle:
+                                DropDownFontStyle.ManropeMedium14Bluegray500,
+                            items: controller.prefixesList.value,
+                            onChanged: (value) {
+                              controller.prefix = value.title;
+                              controller.onSelectedPrefix(value);
+                            }),
+                      ),
                       SizedBox(
                         height: size.height * 0.03,
                       ),
+
                       CustomTextFormField(
                           controller: controller.firstName,
                           labelText: "First name",
@@ -292,17 +302,31 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       SizedBox(
                         height: size.height * 0.03,
                       ),
-                      CustomTextFormField(
-                          controller: controller.country,
-                          labelText: "Country",
-                          isRequired: true,
-                          padding: TextFormFieldPadding.PaddingT14,
-                          validator: (value) {
-                            return controller.countryValidator(value ?? "");
+                      InkWell(
+                          onTap: () {
+                            Get.to(() => ListingPage(
+                                  listOfCountryOrList: countryList,
+                                ))?.then((value) {
+                              if (value != null) {
+                                controller.country.text =
+                                    value['name'].toString();
+                              }
+                            });
                           },
-                          textInputType: TextInputType.emailAddress,
-                          prefixConstraints:
-                              BoxConstraints(maxHeight: getVerticalSize(56))),
+                          child: AbsorbPointer(
+                              child: CustomTextFormField(
+                                  labelText: "Country",
+                                  controller: controller.country,
+                                  isRequired: true,
+                                  validator: (value) {
+                                    return controller
+                                        .countryValidator(value ?? "");
+                                  },
+                                  padding: TextFormFieldPadding.PaddingT14,
+                                  textInputType: TextInputType.name,
+                                  prefixConstraints: BoxConstraints(
+                                      maxHeight: getVerticalSize(56))))),
+
                       // SizedBox(
                       //   height: size.height * 0.03,
                       // ),
