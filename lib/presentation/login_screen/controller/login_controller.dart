@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/utils/color_constant.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
 import '../../../network/api/verify_otp.dart';
@@ -16,6 +17,7 @@ class LoginController extends GetxController {
   Rx<bool> isShowPassword = true.obs;
 
   Rx<bool> isRememberMe = false.obs;
+  RxBool isloading = false.obs;
 
   final formKey = GlobalKey<FormState>();
   String userNumber = '';
@@ -30,6 +32,7 @@ class LoginController extends GetxController {
   void onClose() {
     super.onClose();
     //formKey.currentState?.close();
+    isloading.value = false;
     emailController.clear();
     passwordController.clear();
   }
@@ -95,11 +98,35 @@ class LoginController extends GetxController {
       getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
         'Content-type': 'application/x-www-form-urlencoded',
       }, number: number, type: type);
-
-      return true;
+      isloading.value = false;
+      if (getOtp?.result == false) {
+        isloading.value = false;
+        Get.back();
+        WidgetsBinding.instance
+            .addPostFrameCallback((timeStamp) => Get.snackbar(
+                  "Uh oh!!",
+                  getOtp?.message ?? "",
+                  snackPosition: SnackPosition.BOTTOM,
+                  duration: const Duration(seconds: 5),
+                  borderRadius: 15,
+                  icon: Icon(
+                    Icons.error_outline,
+                    color: ColorConstant.whiteA700,
+                  ),
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(40),
+                  colorText: ColorConstant.whiteA700,
+                  backgroundColor: ColorConstant.blue700,
+                ));
+        return false;
+      } else {
+        return true;
+      }
     } on Map catch (e) {
       print(e);
       return false;
     }
   }
+
+  _handleCallOtp(OtpModel? otpModel) {}
 }

@@ -18,6 +18,7 @@ class VerifyNumberController extends GetxController {
   RxBool isSendingCode = true.obs;
   OtpModel? getOtp;
   RxBool showResendText = false.obs;
+  RxBool isloading = false.obs;
 
   // scroll to bottom of screen, when pin input field is in focus.
   Future<void> scrollToBottomOnKeyboardOpen() async {
@@ -73,13 +74,33 @@ class VerifyNumberController extends GetxController {
   }
 
   void _handleCreateLoginSuccess(OtpModel otpModel) {
-    print(otpModel.response?.body?.roles?[0].name);
-    storingAuthKey(
-        otpModel.response?.body?.jwt ?? "",
-        otpModel.response?.body?.userId ?? 0,
-        otpModel.response?.body?.roles?[0].name ?? "");
-    getPatientOrEmplyeeId(otpModel.response?.body?.roles?[0].name ?? "",
-        otpModel.response?.body?.userId ?? 0, otpModel);
+    if (otpModel.result == false) {
+      isloading.value = false;
+      Get.back();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Get.snackbar(
+            "Uh oh!!",
+            otpModel.message ?? "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 5),
+            borderRadius: 15,
+            icon: Icon(
+              Icons.error_outline,
+              color: ColorConstant.whiteA700,
+            ),
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.all(40),
+            colorText: ColorConstant.whiteA700,
+            backgroundColor: ColorConstant.blue700,
+          ));
+    } else {
+      isloading.value = false;
+      storingAuthKey(
+          otpModel.response?.body?.jwt ?? "",
+          otpModel.response?.body?.userId ?? 0,
+          otpModel.response?.body?.roles?[0].name ?? "");
+      getPatientOrEmplyeeId(otpModel.response?.body?.roles?[0].name ?? "",
+          otpModel.response?.body?.userId ?? 0, otpModel);
+    }
   }
 
   getPatientOrEmplyeeId(String role, int id, OtpModel model) async {
@@ -95,31 +116,22 @@ class VerifyNumberController extends GetxController {
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
         Get.back();
-        Get.dialog(AlertDialog(
-          title: const Text(
-              'Please contact the administartion to add the staff details'),
-          actions: [
-            InkWell(
-              onTap: () {
-                Get.back();
-              },
-              child: Container(
-                height: 50,
-                width: 150,
-                decoration: BoxDecoration(
-                    color: ColorConstant.blue700,
-                    borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: Text(
-                  'Close',
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: AppStyle.txtRalewayRomanRegular14WhiteA700,
-                ),
-              ),
-            ),
-          ],
-        ));
+        WidgetsBinding.instance
+            .addPostFrameCallback((timeStamp) => Get.snackbar(
+                  "Uh oh!!",
+                  'Please contact the administartion to add the staff details',
+                  snackPosition: SnackPosition.BOTTOM,
+                  duration: const Duration(seconds: 5),
+                  borderRadius: 15,
+                  icon: Icon(
+                    Icons.error_outline,
+                    color: ColorConstant.whiteA700,
+                  ),
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(40),
+                  colorText: ColorConstant.whiteA700,
+                  backgroundColor: ColorConstant.blue700,
+                ));
       }
     } else {
       if (model.response?.body?.patient != null) {

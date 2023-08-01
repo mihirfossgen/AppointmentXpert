@@ -2,9 +2,12 @@ import 'package:appointmentxpert/models/sign_up_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/utils/color_constant.dart';
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
+import '../../sign_up_success_dialog/controller/sign_up_success_controller.dart';
+import '../../sign_up_success_dialog/sign_up_success_dialog.dart';
 
 class SignUpController extends GetxController {
   TextEditingController enternameController = TextEditingController();
@@ -142,14 +145,42 @@ class SignUpController extends GetxController {
         },
         data: req,
       );
-      _handleCreateRegisterSuccess();
+      _handleCreateRegisterSuccess(model);
     } on Map catch (e) {
       postRegisterResp = e;
       rethrow;
     }
   }
 
-  void _handleCreateRegisterSuccess() {
-    //Get.find<PrefUtils>().setId(postRegisterResp.data!.id!.toString());
+  void _handleCreateRegisterSuccess(SignUpModel model) {
+    if (model.result == "false") {
+      Get.back();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Get.snackbar(
+            "Uh oh!!",
+            model.message ?? "",
+            snackPosition: SnackPosition.BOTTOM,
+            duration: const Duration(seconds: 5),
+            borderRadius: 15,
+            icon: Icon(
+              Icons.error_outline,
+              color: ColorConstant.whiteA700,
+            ),
+            padding: const EdgeInsets.all(15),
+            margin: const EdgeInsets.all(40),
+            colorText: ColorConstant.whiteA700,
+            backgroundColor: ColorConstant.blue700,
+          ));
+    } else {
+      Get.dialog(AlertDialog(
+        backgroundColor: Colors.transparent,
+        contentPadding: EdgeInsets.zero,
+        insetPadding: const EdgeInsets.only(left: 0),
+        content: SignUpSuccessDialog(
+          Get.put(
+            SignUpSuccessController(),
+          ),
+        ),
+      ));
+    }
   }
 }

@@ -486,7 +486,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
           }
           if (_formKey.currentState!.validate()) {
             // ... Navigate To your Home Page
-
+            FocusScope.of(Get.context!).unfocus();
             onTapSignup();
           }
         },
@@ -510,7 +510,6 @@ class SignUpScreen extends GetWidget<SignUpController> {
     print(jsonEncode(requestData));
     try {
       await controller.callRegister(requestData);
-      onTapSignupOne();
     } on Map {
       _onOnTapSignInError();
     } on NoInternetException catch (e) {
@@ -524,19 +523,6 @@ class SignUpScreen extends GetWidget<SignUpController> {
     Fluttertoast.showToast(
       msg: "Facing technicl Difficulties",
     );
-  }
-
-  onTapSignupOne() {
-    Get.dialog(AlertDialog(
-      backgroundColor: Colors.transparent,
-      contentPadding: EdgeInsets.zero,
-      insetPadding: const EdgeInsets.only(left: 0),
-      content: SignUpSuccessDialog(
-        Get.put(
-          SignUpSuccessController(),
-        ),
-      ),
-    ));
   }
 
   onTapTxtLogIn() {

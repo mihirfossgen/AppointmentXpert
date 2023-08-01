@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../core/app_export.dart';
@@ -18,9 +19,9 @@ import '../../routes/app_routes.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/custom_button.dart';
-import '../../widgets/custom_checkbox.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../../widgets/loader.dart';
 import '../../widgets/responsive.dart';
 import '../login_success_dialog/controller/login_success_controller.dart';
 import '../login_success_dialog/login_success_dialog.dart';
@@ -186,7 +187,9 @@ class LoginScreen extends GetWidget<LoginController> {
                   ),
 
                   /// Login Button
-                  loginButton(),
+                  Obx(() => controller.isloading.value
+                      ? SizedBox(height: 50, child: ThreeDotLoader())
+                      : loginButton()),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
@@ -382,6 +385,7 @@ class LoginScreen extends GetWidget<LoginController> {
         margin: getMargin(top: 12, bottom: 10),
         onTap: () async {
           if (controller.trySubmit()) {
+            controller.isloading.value = true;
             bool resp = await controller.callOtp(
                 controller.emailController.text, "login");
             if (resp) {
