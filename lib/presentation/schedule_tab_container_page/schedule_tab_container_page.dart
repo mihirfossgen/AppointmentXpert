@@ -37,7 +37,8 @@ class ScheduleTabContainerPage extends StatelessWidget {
         // ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         backgroundColor: ColorConstant.whiteA700,
-        body: SizedBox(
+        body:
+        SizedBox(
           width: double.maxFinite,
           height: MediaQuery.of(context).size.height,
           child: LiquidPullToRefresh(
@@ -56,13 +57,13 @@ class ScheduleTabContainerPage extends StatelessWidget {
               //pagingController.addPageRequestListener((pageKey) {
               if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
                 //SharedPrefUtils.readPrefINt('employee_Id')
-                scheduleController.callGetAllAppointments(0, 0);
+                scheduleController.callGetAllAppointments(0, 20);
               } else {
                 scheduleController.callAppointmentsByPatientId(
                     SharedPrefUtils.readPrefINt('patient_Id'));
               }
             },
-            child: ListView(shrinkWrap: true, children: [
+            child: ListView(shrinkWrap: true,physics: const NeverScrollableScrollPhysics(), children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,

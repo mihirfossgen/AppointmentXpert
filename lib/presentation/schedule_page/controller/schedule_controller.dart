@@ -149,7 +149,7 @@ class ScheduleController extends GetxController {
     //pagingController.addPageRequestListener((pageKey) {
     if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       //SharedPrefUtils.readPrefINt('employee_Id')
-      callGetAllAppointments(0, 0);
+      callGetAllAppointments(0, 20);
     } else {
       callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
     }
@@ -217,7 +217,7 @@ class ScheduleController extends GetxController {
     print("count ----- $count");
     try {
       model = (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
-      final isLastPage = model.totalElements! < _pageSize;
+      final isLastPage = model.numberOfElements! <= _pageSize;
       if (isLastPage) {
         todayPagingController.value.itemList = [];
         upcomingPagingController.value.itemList = [];
@@ -246,6 +246,8 @@ class ScheduleController extends GetxController {
         todayPagingController.value.appendLastPage(appointmentsToday);
         upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
         completedPagingController.value.appendLastPage(appointmentsCompleted);
+        isloading.value = false;
+        update();
       } else {
         List<AppointmentContent> list = model.content ?? [];
         var now = DateTime.now();
@@ -274,8 +276,9 @@ class ScheduleController extends GetxController {
             .appendPage(appointmentsUpcoming, nextPageKey);
         completedPagingController.value
             .appendPage(appointmentsCompleted, nextPageKey);
+        isloading.value = false;
+        update();
       }
-      update();
       // todayPagingController.refresh();
       // upcomingPagingController.refresh();
       // completedPagingController.refresh();
