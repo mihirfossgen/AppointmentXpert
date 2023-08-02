@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/utils/time_calculation_utils.dart';
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
+import '../../../models/getAllApointments.dart';
 import '../../../models/getallEmplyesList.dart';
 import '../../../network/api/appointment_api.dart';
 import '../models/doctor_detail_model.dart';
@@ -18,16 +20,24 @@ class DoctorDetailController extends GetxController {
   TextEditingController lastname = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController mobile = TextEditingController();
+
   TextEditingController dob = TextEditingController();
   TextEditingController gender = TextEditingController();
   Rx<TextEditingController> from = TextEditingController().obs;
-  TextEditingController to = TextEditingController();
+  Rx<TextEditingController> to = TextEditingController().obs;
   Rx<TextEditingController> consultingDoctor = TextEditingController().obs;
   int? examinerId;
+
+  RxString fromTime = ''.obs;
+  RxString toTime = ''.obs;
   RxBool showDateAndTime = false.obs;
   TextEditingController treatment = TextEditingController();
   TextEditingController notes = TextEditingController();
   TextEditingController address = TextEditingController();
+  RxBool isLoading = false.obs;
+  RxList<AppointmentContent> getAppointmentDetailsByDate =
+      <AppointmentContent>[].obs;
+  RxString selectedStartTime = ''.obs;
   final formKey = GlobalKey<FormState>();
   Rx<DateTime> dateTime = DateTime.now().obs;
   RxBool pleasefillAllFields = false.obs;
@@ -208,6 +218,29 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
+  getColor(String time, bool newTime) {
+    if (getAppointmentDetailsByDate.any((element) {
+      return TimeCalculationUtils()
+          .startTimeCalCulation(element.startTime, element.updateTimeInMin)
+          .contains(time);
+    })) {
+      return Colors.blue;
+    } else if (getAppointmentDetailsByDate.any((element) {
+      return TimeCalculationUtils()
+          .startTimeCalCulation(element.startTime, element.updateTimeInMin)
+          .contains(selectedStartTime.value);
+    })) {
+      return Colors.green;
+    } else {
+      return Colors.grey.shade100;
+    }
+
+    // ? Colors.blue
+
+    //     ? Colors.green
+    //     : Colors.grey.shade100
+  }
+
   Rx<List<SelectionPopupModel>> genderList = Rx([
     SelectionPopupModel(
       id: 1,
@@ -260,6 +293,44 @@ class DoctorDetailController extends GetxController {
     }
   }
 
+  Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
+      String date) async {
+    try {
+      isLoading.value = true;
+      var response =
+          (await Get.find<AppointmentApi>().getAppointmentDetailsViaDate(date));
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      getAppointmentDetailsByDate.value = list;
+      return list;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  setFromTime(String text) {
+    from.value.text = text;
+    from.refresh();
+  }
+
+  setToTime(String text) {
+    to.value.text = text;
+    to.refresh();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
+    final DateFormat format = DateFormat('yyyy-MM-dd');
+    dob.text = format.format(DateTime.now());
+  }
+
   @override
   void onClose() {
     super.onClose();
@@ -269,7 +340,7 @@ class DoctorDetailController extends GetxController {
     mobile.clear();
     gender.clear();
     from.value.clear();
-    to.clear();
+    to.value.clear();
     consultingDoctor.value.clear();
     treatment.clear();
     notes.clear();

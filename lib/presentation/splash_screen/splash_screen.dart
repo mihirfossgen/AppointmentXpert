@@ -33,15 +33,15 @@ class SplashScreen extends GetWidget<SplashController> {
                           ),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                            padding: getPadding(top: 15, bottom: 5),
-                            child: Text("lbl_helthio".tr,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: AppStyle.txtRalewayRomanBold50)),
-                      )
+                      // Align(
+                      //   alignment: Alignment.center,
+                      //   child: Padding(
+                      //       padding: getPadding(top: 15, bottom: 5),
+                      //       child: Text("lbl_helthio".tr,
+                      //           overflow: TextOverflow.ellipsis,
+                      //           textAlign: TextAlign.left,
+                      //           style: AppStyle.txtRalewayRomanBold50)),
+                      // )
                     ]))));
   }
 }
