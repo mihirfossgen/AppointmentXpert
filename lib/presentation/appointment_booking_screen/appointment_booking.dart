@@ -453,6 +453,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                               .times?[
                                                                           index] ??
                                                                       "";
+                                                                  controller
+                                                                          .index =
+                                                                      index;
                                                                   int intervalTime =
                                                                       doctorsList?.firstWhere((element) => element.id == controller.counsultingDoctor.value.firstWhere((element) => element.isSelected == true).id).timeSlotForBookingInMin ==
                                                                               0
@@ -542,7 +545,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                             .contains(controller.times?[index].toString() ?? "");
                                                                       })
                                                                           ? Colors.blue
-                                                                          : Colors.grey.shade100,
+                                                                          : controller.times![index] == controller.selectedStartTime.value
+                                                                              ? Colors.green
+                                                                              : Colors.grey.shade100,
                                                                       borderRadius: BorderRadius.circular(6),
                                                                       border: Border.all(
                                                                           color: controller.getAppointmentDetailsByDate.any((element) {
@@ -552,7 +557,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                             .contains(controller.times?[index].toString() ?? "");
                                                                       })
                                                                               ? Colors.transparent
-                                                                              : Colors.black)),
+                                                                              : controller.times![index] == controller.selectedStartTime.value
+                                                                                  ? Colors.green
+                                                                                  : Colors.black)),
                                                                   child: Text(
                                                                     controller.times?[
                                                                             index] ??
@@ -578,16 +585,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                       )
                                     : const SizedBox(),
                               ),
-                              Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Obx(() => Text(controller
-                                                .fromTime.value ==
-                                            ''
-                                        ? ''
-                                        : 'Selected Time - ${controller.fromTime.value} - ${controller.toTime.value}')),
-                                  )),
+
                               // Column(
                               //     children: [
                               //       SizedBox(

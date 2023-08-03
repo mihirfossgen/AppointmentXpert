@@ -38,6 +38,7 @@ class DoctorDetailController extends GetxController {
   RxList<AppointmentContent> getAppointmentDetailsByDate =
       <AppointmentContent>[].obs;
   RxString selectedStartTime = ''.obs;
+  int? index;
   final formKey = GlobalKey<FormState>();
   Rx<DateTime> dateTime = DateTime.now().obs;
   RxBool pleasefillAllFields = false.obs;
