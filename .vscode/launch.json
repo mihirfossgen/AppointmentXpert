@@ -5,7 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "AppointmentXpert",
+            "name": "AppointmentXpert-Mobile",
+            "request": "launch",
+            "type": "dart",
+            //"args": ["-d", "chrome","--web-port", "8000"],
+        },
+        {
+            "name": "AppointmentXpert-Web",
             "request": "launch",
             "type": "dart",
             "args": ["-d", "chrome","--web-port", "8000"],
