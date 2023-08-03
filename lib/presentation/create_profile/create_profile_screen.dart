@@ -13,6 +13,7 @@ import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../models/create_staff_model.dart';
 import '../../models/createpatient_model.dart';
+import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../widgets/app_bar/appbar_subtitle_2.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/custom_button.dart';
@@ -1082,7 +1083,9 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          patientUI(size, context),
+          SharedPrefUtils.readPrefStr("role") == 'PATIENT'
+              ? patientUI(size, context)
+              : staffUi(),
           CustomButton(
               height: getVerticalSize(56),
               text: "Confirm and Save",

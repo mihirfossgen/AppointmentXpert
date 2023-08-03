@@ -479,16 +479,11 @@ class MyData extends DataTableSource {
             ],
           ),
           onTap: () {}),
-      DataCell(Flexible(
-          child: Text(
-        '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
-        overflow: TextOverflow.ellipsis,
-        softWrap: false,
-      ))),
+
       DataCell(Text(appointment.examiner?.mobile.toString() ?? ''),
           onTap: () {}),
-      DataCell(Text(appointment.note.toString()), onTap: () {}),
-      //DataCell(Text('${data[index].visit}')),
+      DataCell(Text(appointment.status.toString()), onTap: () {}),
+      DataCell(Text(appointment.note.toString())),
       DataCell(
           Text(formatter.format(DateTime.parse(appointment.date.toString()))),
           onTap: () {}),
@@ -506,13 +501,13 @@ class MyData extends DataTableSource {
       // )),
       DataCell(Row(
         children: [
+          // IconButton(
+          //   icon: const Icon(Icons.edit),
+          //   color: Colors.indigo,
+          //   onPressed: () {},
+          // ),
           IconButton(
-            icon: const Icon(Icons.edit),
-            color: Colors.indigo,
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.cancel),
             color: Colors.redAccent,
             onPressed: () {},
           ),

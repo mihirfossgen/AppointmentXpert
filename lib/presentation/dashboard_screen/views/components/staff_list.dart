@@ -36,6 +36,7 @@ class StaffList extends GetView<DashboardController> {
           onPressed: () {
             //Get.to(() => AddPatientScreen());
           },
+          tooltip: 'Add New Staff',
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -293,242 +294,100 @@ class StaffList extends GetView<DashboardController> {
   Widget loadDataTable() {
     final DateFormat formatter = DateFormat.yMMMMd('en_US');
     return Card(
-      child: DataTable2(
-          columnSpacing: 10,
-          horizontalMargin: 10,
-          minWidth: 500,
-          showBottomBorder: true,
-          headingRowColor:
-              MaterialStateColor.resolveWith((states) => Colors.grey[200]!),
-          border: TableBorder(
-              top: const BorderSide(color: Colors.black),
-              bottom: BorderSide(color: Colors.grey[300]!),
-              left: BorderSide(color: Colors.grey[300]!),
-              right: BorderSide(color: Colors.grey[300]!),
-              verticalInside: BorderSide(color: Colors.grey[300]!),
-              horizontalInside: const BorderSide(color: Colors.grey, width: 1)),
-          //dataRowHeight: 70,
-          empty: EmptyWidget(
-            image: null,
-            hideBackgroundAnimation: true,
-            packageImage: PackageImage.Image_3,
-            title: 'No data',
-            subTitle: 'No staffs found.',
-            titleTextStyle: const TextStyle(
-              fontSize: 22,
-              color: Colors.grey,
-              fontWeight: FontWeight.w600,
+      child: PaginatedDataTable2(
+        columnSpacing: 10,
+        horizontalMargin: 10,
+        minWidth: 500,
+        //showBottomBorder: true,
+        headingRowColor:
+            MaterialStateColor.resolveWith((states) => Colors.grey[200]!),
+        border: TableBorder(
+            top: const BorderSide(color: Colors.black),
+            bottom: BorderSide(color: Colors.grey[300]!),
+            left: BorderSide(color: Colors.grey[300]!),
+            right: BorderSide(color: Colors.grey[300]!),
+            verticalInside: BorderSide(color: Colors.grey[300]!),
+            horizontalInside: const BorderSide(color: Colors.grey, width: 1)),
+        //dataRowHeight: 70,
+        empty: EmptyWidget(
+          image: null,
+          hideBackgroundAnimation: true,
+          packageImage: PackageImage.Image_3,
+          title: 'No data',
+          subTitle: 'No staffs found.',
+          titleTextStyle: const TextStyle(
+            fontSize: 22,
+            color: Colors.grey,
+            fontWeight: FontWeight.w600,
+          ),
+          subtitleTextStyle: const TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+        ),
+        columns: [
+          DataColumn2(
+            label: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Name',
+                style: AppStyle.txtInterSemiBold14,
+              ),
             ),
-            subtitleTextStyle: const TextStyle(
-              fontSize: 14,
-              color: Colors.black,
+            size: ColumnSize.L,
+          ),
+          DataColumn(
+            label: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Address',
+                style: AppStyle.txtInterSemiBold14,
+              ),
             ),
           ),
-          columns: [
-            DataColumn2(
-              label: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Name',
-                  style: AppStyle.txtInterSemiBold14,
-                ),
-              ),
-              size: ColumnSize.L,
-            ),
-            DataColumn(
-              label: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Address',
-                  style: AppStyle.txtInterSemiBold14,
-                ),
+          DataColumn(
+            label: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Profession',
+                style: AppStyle.txtInterSemiBold14,
               ),
             ),
-            DataColumn(
-              label: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Profession',
-                  style: AppStyle.txtInterSemiBold14,
-                ),
+          ),
+          DataColumn(
+            label: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Email',
+                style: AppStyle.txtInterSemiBold14,
               ),
             ),
-            DataColumn(
-              label: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Email',
-                  style: AppStyle.txtInterSemiBold14,
-                ),
+          ),
+          DataColumn(
+            label: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Mobile',
+                style: AppStyle.txtInterSemiBold14,
               ),
             ),
-            DataColumn(
-              label: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Mobile',
-                  style: AppStyle.txtInterSemiBold14,
-                ),
+          ),
+          DataColumn2(
+            label: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Actions',
+                style: AppStyle.txtInterSemiBold14,
               ),
             ),
-            DataColumn2(
-              label: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Actions',
-                  style: AppStyle.txtInterSemiBold14,
-                ),
-              ),
-              size: ColumnSize.L,
-              numeric: false,
-            ),
-          ],
-          rows: List<DataRow>.generate(
-              dashboardController.staffPagingController.itemList?.length ?? 0,
-              (index) => DataRow(cells: [
-                    DataCell(
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              dashboardController
-                                          .staffPagingController
-                                          .itemList?[index]
-                                          .uploadedProfilePath !=
-                                      null
-                                  ? CachedNetworkImage(
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.cover,
-                                      imageUrl: Uri.encodeFull(
-                                        Endpoints.baseURL +
-                                            Endpoints.downLoadEmployePhoto +
-                                            dashboardController
-                                                .staffPagingController
-                                                .itemList![index]
-                                                .id
-                                                .toString(),
-                                      ),
-                                      httpHeaders: {
-                                        "Authorization":
-                                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                                      },
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) {
-                                        print(error);
-                                        return CustomImageView(
-                                          width: 60,
-                                          height: 60,
-                                          imagePath: !Responsive.isDesktop(
-                                                  Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png',
-                                        );
-                                      },
-                                    )
-                                  : CustomImageView(
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.contain,
-                                      imagePath:
-                                          !Responsive.isDesktop(Get.context!)
-                                              ? 'assets' +
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png',
-                                    ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  '${dashboardController.staffPagingController.itemList?[index].firstName} ' +
-                                      '${dashboardController.staffPagingController.itemList?[index].lastName}',
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        onTap: () {}),
-                    DataCell(
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${dashboardController.staffPagingController.itemList?[index].address}',
-                            maxLines: 2,
-                          ),
-                        ),
-                        onTap: () {}),
-                    DataCell(
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              '${dashboardController.staffPagingController.itemList?[index].profession}'),
-                        ),
-                        onTap: () {}),
-                    DataCell(
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              '${dashboardController.staffPagingController.itemList?[index].email}'),
-                        ),
-                        onTap: () {}),
-                    DataCell(
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              '${dashboardController.staffPagingController.itemList?[index].mobile}'),
-                        ),
-                        onTap: () {}),
-                    //DataCell(Text(
-                    //    formatter.format(DateTime.parse('${data[index].date}')))),
-                    DataCell(Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // TextButton(
-                        //     onPressed: () {
-                        //       // Get.to(() => (PatientDetailsPage(
-                        //       //     dashboardController.staffPagingController
-                        //       //         .itemList![index])));
-                        //     },
-                        //     child: const Icon(
-                        //       Icons.add,
-                        //       color: Colors.black,
-                        //     )),
-                        TextButton(
-                            onPressed: () {
-                              // Get.to(() => (PatientDetailsPage(
-                              //     dashboardController.staffPagingController
-                              //         .itemList![index])));
-                            },
-                            child: const Icon(Icons.edit)),
-                        TextButton(
-                            onPressed: () {
-                              // Get.to(() => AppointmentBookingScreen(
-                              //     doctorsList: doctorsList,
-                              //     patientDetailsArguments:
-                              //         PatientDetailsArguments(
-                              //             [],
-                              //             dashboardController
-                              //                 .patientPagingController
-                              //                 .itemList![index])));
-                            },
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            )),
-                      ],
-                    )),
-                  ]))),
+            size: ColumnSize.L,
+            numeric: false,
+          ),
+        ],
+
+        source: StaffDataSource(
+            dashboardController.staffPagingController.itemList ?? []),
+      ),
     );
   }
 }
@@ -538,3 +397,155 @@ Widget textView() => const Text(
       style: TextStyle(
           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17.0),
     );
+
+class StaffDataSource extends DataTableSource {
+  final DashboardController dashboardController =
+      Get.put(DashboardController());
+
+  List<Contents> data = [];
+
+  StaffDataSource(List<Contents> staffs) {
+    data = staffs;
+  }
+
+  @override
+  DataRow getRow(int index) {
+    return DataRow(cells: [
+      DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                data[index].uploadedProfilePath != null
+                    ? CachedNetworkImage(
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                        imageUrl: Uri.encodeFull(
+                          Endpoints.baseURL +
+                              Endpoints.downLoadEmployePhoto +
+                              data[index].id.toString(),
+                        ),
+                        httpHeaders: {
+                          "Authorization":
+                              "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                        },
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                        errorWidget: (context, url, error) {
+                          print(error);
+                          return CustomImageView(
+                            width: 60,
+                            height: 60,
+                            imagePath: !Responsive.isDesktop(Get.context!)
+                                ? 'assets' + '/images/default_profile.png'
+                                : '/images/default_profile.png',
+                          );
+                        },
+                      )
+                    : CustomImageView(
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.contain,
+                        imagePath: !Responsive.isDesktop(Get.context!)
+                            ? 'assets' + '/images/default_profile.png'
+                            : '/images/default_profile.png',
+                      ),
+                const SizedBox(
+                  width: 5,
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    '${data[index].firstName} ' + '${data[index].lastName}',
+                    maxLines: 2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ),
+          ),
+          onTap: () {}),
+      DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '${data[index].address}',
+              maxLines: 2,
+            ),
+          ),
+          onTap: () {}),
+      DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('${data[index].profession}'),
+          ),
+          onTap: () {}),
+      DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('${data[index].email}'),
+          ),
+          onTap: () {}),
+      DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('${data[index].mobile}'),
+          ),
+          onTap: () {}),
+      //DataCell(Text(
+      //    formatter.format(DateTime.parse('${data[index].date}')))),
+      DataCell(Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // TextButton(
+          //     onPressed: () {
+          //       // Get.to(() => (PatientDetailsPage(
+          //       //     dashboardController.staffPagingController
+          //       //         .itemList![index])));
+          //     },
+          //     child: const Icon(
+          //       Icons.add,
+          //       color: Colors.black,
+          //     )),
+          TextButton(
+              onPressed: () {
+                // Get.to(() => (PatientDetailsPage(
+                //     dashboardController.staffPagingController
+                //         .itemList![index])));
+              },
+              child: const Icon(Icons.edit)),
+          TextButton(
+              onPressed: () {
+                // Get.to(() => AppointmentBookingScreen(
+                //     doctorsList: doctorsList,
+                //     patientDetailsArguments:
+                //         PatientDetailsArguments(
+                //             [],
+                //             dashboardController
+                //                 .patientPagingController
+                //                 .itemList![index])));
+              },
+              child: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              )),
+        ],
+      )),
+    ]);
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => data.length;
+
+  @override
+  int get selectedRowCount => 0;
+}

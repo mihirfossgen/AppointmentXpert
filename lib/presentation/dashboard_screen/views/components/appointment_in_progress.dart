@@ -114,13 +114,13 @@ class _AppointmentInProgress extends StatelessWidget {
     //DateTime a = DateTime.parse(txt);
     final DateFormat formatter = DateFormat.yMMMEd();
     return SizedBox(
-      width: MediaQuery.of(Get.context!).size.width,
+      //width: MediaQuery.of(Get.context!).size.width,
       height: 380,
       child: PaginatedDataTable2(
-          columnSpacing: 12,
-          horizontalMargin: 12,
+          columnSpacing: 6,
+          horizontalMargin: 6,
           rowsPerPage: 5,
-          wrapInCard: true,
+          //wrapInCard: true,
           // onRowsPerPageChanged: (value) {
           //   print(value);
           // },
@@ -136,23 +136,26 @@ class _AppointmentInProgress extends StatelessWidget {
               //size: ColumnSize.L,
             ),
             DataColumn2(
+              fixedWidth: 300,
               label: Text(
                 'Name',
                 style: AppStyle.txtInterSemiBold14,
               ),
               size: ColumnSize.L,
             ),
-            DataColumn(
+            DataColumn2(
               label: Text(
                 'Mobile',
                 style: AppStyle.txtInterSemiBold14,
               ),
+              size: ColumnSize.M,
             ),
-            DataColumn(
+            DataColumn2(
               label: Text(
                 'Status',
                 style: AppStyle.txtInterSemiBold14,
               ),
+              size: ColumnSize.M,
             ),
             // DataColumn(
             //   label: Text(
@@ -166,11 +169,12 @@ class _AppointmentInProgress extends StatelessWidget {
             //     style: AppStyle.txtInterSemiBold14,
             //   ),
             // ),
-            DataColumn(
+            DataColumn2(
               label: Text(
                 'Time',
                 style: AppStyle.txtInterSemiBold14,
               ),
+              size: ColumnSize.M,
             ),
 
             DataColumn(
@@ -243,57 +247,95 @@ class AppointmentsDataSource extends DataTableSource {
       DataCell(
           Row(
             children: [
-              appointment.patient?.profilePicture != null
-                  ? CachedNetworkImage(
-                      width: 40,
-                      height: 40,
-                      fit: BoxFit.contain,
-                      imageUrl: Uri.encodeFull(
-                        Endpoints.baseURL +
-                            Endpoints.downLoadPatientPhoto +
-                            appointment.patient!.profilePicture.toString(),
-                      ),
-                      httpHeaders: {
-                        "Authorization":
-                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                      },
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                      errorWidget: (context, url, error) {
-                        return CustomImageView(
+              SharedPrefUtils.readPrefStr("role") != 'PATIENT'
+                  ? appointment.patient?.profilePicture != null
+                      ? CachedNetworkImage(
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                          imageUrl: Uri.encodeFull(
+                            Endpoints.baseURL +
+                                Endpoints.downLoadPatientPhoto +
+                                appointment.patient!.profilePicture.toString(),
+                          ),
+                          httpHeaders: {
+                            "Authorization":
+                                "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                          },
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          errorWidget: (context, url, error) {
+                            return CustomImageView(
+                              imagePath: !Responsive.isDesktop(Get.context!)
+                                  ? 'assets'
+                                      '/images/default_profile.png'
+                                  : '/images/default_profile.png',
+                            );
+                          },
+                        )
+                      : CustomImageView(
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
                           imagePath: !Responsive.isDesktop(Get.context!)
                               ? 'assets'
                                   '/images/default_profile.png'
                               : '/images/default_profile.png',
-                        );
-                      },
-                    )
-                  : CustomImageView(
-                      width: 40,
-                      height: 40,
-                      fit: BoxFit.contain,
-                      imagePath: !Responsive.isDesktop(Get.context!)
-                          ? 'assets'
-                              '/images/default_profile.png'
-                          : '/images/default_profile.png',
-                    ),
+                        )
+                  : appointment.examiner?.profilePicture != null
+                      ? CachedNetworkImage(
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                          imageUrl: Uri.encodeFull(
+                            Endpoints.baseURL +
+                                Endpoints.downLoadEmployePhoto +
+                                appointment.examiner!.profilePicture.toString(),
+                          ),
+                          httpHeaders: {
+                            "Authorization":
+                                "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                          },
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          errorWidget: (context, url, error) {
+                            return CustomImageView(
+                              imagePath: !Responsive.isDesktop(Get.context!)
+                                  ? 'assets'
+                                      '/images/default_profile.png'
+                                  : '/images/default_profile.png',
+                            );
+                          },
+                        )
+                      : CustomImageView(
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                          imagePath: !Responsive.isDesktop(Get.context!)
+                              ? 'assets'
+                                  '/images/default_profile.png'
+                              : '/images/default_profile.png',
+                        ),
               const SizedBox(
                 width: 10,
               ),
               Text(
-                appointment.patient?.prefix != null
-                    ? appointment.patient?.prefix.toString() ?? ''
-                    : ''
-                        '${appointment.patient?.firstName} '
-                        '${appointment.patient?.lastName}',
-                overflow: TextOverflow.clip,
+                // appointment.patient?.prefix != null
+                //     ? appointment.patient?.prefix.toString() ?? ''
+                //     : ''
+
+                '${appointment.examiner?.firstName} '
+                '${appointment.examiner?.lastName}',
+                overflow: TextOverflow.ellipsis,
               )
             ],
           ),
           onTap: () {}),
-      DataCell(Text("${appointment.patient?.mobile}"), onTap: () {}),
+      DataCell(Text("${appointment.examiner?.mobile}"), onTap: () {}),
       DataCell(Text('${appointment.status}')),
       // DataCell(
       //     Text(formatter.format(

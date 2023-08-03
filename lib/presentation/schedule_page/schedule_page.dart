@@ -225,14 +225,6 @@ class SchedulePage extends GetWidget<ScheduleController> {
                         ),
                         size: ColumnSize.L,
                       ),
-                      DataColumn2(
-                        label: Text(
-                          'Patient Name',
-                          textAlign: TextAlign.center,
-                          style: AppStyle.txtInterSemiBold14,
-                        ),
-                        size: ColumnSize.L,
-                      ),
                       DataColumn(
                         label: Text(
                           'Mobile',
@@ -254,7 +246,19 @@ class SchedulePage extends GetWidget<ScheduleController> {
                       ),
                       DataColumn(
                         label: Text(
+                          'Date',
+                          style: AppStyle.txtInterSemiBold14,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
                           'Time',
+                          style: AppStyle.txtInterSemiBold14,
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Action',
                           style: AppStyle.txtInterSemiBold14,
                         ),
                       ),
