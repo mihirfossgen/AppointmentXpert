@@ -1,5 +1,4 @@
 import 'package:appointmentxpert/network/api/staff_api.dart';
-import 'package:appointmentxpert/widgets/custom_button.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +20,7 @@ class ProfileController extends GetxController {
             width: 100,
             child: CalendarDatePicker2(
               config: CalendarDatePicker2Config(),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
               onValueChanged: (value) {
                 date = value[0];
               },

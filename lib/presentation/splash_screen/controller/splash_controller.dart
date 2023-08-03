@@ -1,3 +1,4 @@
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_routes.dart';
@@ -24,7 +25,10 @@ class SplashController extends GetxController {
         .then((token) => print('fcm token ---- $token'));
   }
 
-  void routeBasedOnUserProperties() {
+  void routeBasedOnUserProperties() async {
+    dynamic user_Id = await SessionManager().get("user_Id");
+    dynamic auth_token = await SessionManager().get("auth_token");
+    dynamic role = await SessionManager().get("role");
     if (SharedPrefUtils.readPrefStr('auth_token').isNotEmpty &&
         SharedPrefUtils.readPrefINt("user_Id") != 0 &&
         SharedPrefUtils.readPrefStr("role").isNotEmpty &&

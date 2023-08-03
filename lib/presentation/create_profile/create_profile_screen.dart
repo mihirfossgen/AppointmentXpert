@@ -2,18 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:appointmentxpert/core/utils/country_list.dart';
-import 'package:appointmentxpert/core/utils/state_list.dart';
 import 'package:appointmentxpert/presentation/create_profile/listing_page.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
-import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../models/create_staff_model.dart';
 import '../../models/createpatient_model.dart';
@@ -21,7 +18,6 @@ import '../../widgets/app_bar/appbar_subtitle_2.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
-import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/loader.dart';
 import '../../widgets/responsive.dart';
@@ -75,7 +71,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             width: 100,
             child: CalendarDatePicker2(
               config: CalendarDatePicker2Config(),
-              initialValue: [DateTime.now()],
+              value: [DateTime.now()],
               onValueChanged: (value) {
                 print(value);
                 date = value[0];
@@ -149,7 +145,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             SizedBox(
                               height: size.height * 0.02,
                             ),
-                            Column(
+                            Row(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -161,32 +157,27 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                         InkWell(
                                           onTap: () async {
                                             FocusScope.of(context).unfocus();
-                                            Responsive.isDesktop(context)
-                                                ? controller.pickImage(
-                                                    ImageSource.gallery)
-                                                : showModalBottomSheet<dynamic>(
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    builder: (BuildContext bc) {
-                                                      return Bottomsheet(
-                                                        onchanged: ((value) {
-                                                          print(value);
-                                                          if (value ==
-                                                              "Gallery") {
-                                                            controller.pickImage(
-                                                                ImageSource
-                                                                    .gallery);
-                                                          } else {
-                                                            controller.pickImage(
-                                                                ImageSource
-                                                                    .camera);
-                                                          }
-                                                        }),
-                                                        values: const [],
-                                                      );
-                                                    });
+                                            showModalBottomSheet<dynamic>(
+                                                isScrollControlled: true,
+                                                context: context,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                builder: (BuildContext bc) {
+                                                  return Bottomsheet(
+                                                    onchanged: ((value) {
+                                                      print(value);
+                                                      if (value == "Gallery") {
+                                                        controller.pickImage(
+                                                            ImageSource
+                                                                .gallery);
+                                                      } else {
+                                                        controller.pickImage(
+                                                            ImageSource.camera);
+                                                      }
+                                                    }),
+                                                    values: [],
+                                                  );
+                                                });
                                           },
                                           child: AbsorbPointer(
                                             child: Column(
@@ -199,8 +190,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                     () => controller
                                                                 .selectedImage ==
                                                             ""
-                                                        ? const Icon(
-                                                            Icons.person)
+                                                        ? Icon(Icons.person)
                                                         : Responsive.isDesktop(
                                                                 context)
                                                             ? Image.network(
@@ -232,11 +222,11 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                 height: 40,
                                                 width: 60,
                                                 decoration: BoxDecoration(
-                                                    color: Colors.grey.shade100,
+                                                    color: Colors.grey.shade200,
                                                     shape: BoxShape.circle),
                                                 child: const Icon(
                                                   Icons.camera_alt_outlined,
-                                                  color: Colors.grey,
+                                                  color: Colors.white,
                                                 )))
                                       ],
                                     ),
@@ -244,47 +234,15 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 ),
                                 SizedBox(
                                   height: size.width * 0.04,
-                                  width: 20,
                                 ),
                                 Column(
                                   children: [
-                                    SizedBox(
-                                      width: size.width,
+                                    Container(
+                                      width: size.width * 0.40,
                                       child: Row(
                                         // mainAxisAlignment:
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-
+                                        //     MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Flexible(
-                                            fit: FlexFit.tight,
-                                            child: CustomTextFormField(
-                                                margin:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 0, 10, 0),
-                                                controller:
-                                                    controller.prefixController,
-                                                labelText: "Prefix",
-                                                hintText: "Mr./Mrs./Ms.",
-                                                isRequired: true,
-                                                padding: TextFormFieldPadding
-                                                    .PaddingT14,
-                                                validator: (value) {
-                                                  return controller
-                                                      .prefixControllerValidator(
-                                                          value ?? "");
-                                                },
-                                                textInputType:
-                                                    TextInputType.name,
-                                                prefixConstraints: BoxConstraints(
-                                                    maxHeight:
-                                                        getVerticalSize(56))),
-                                          ),
-                                          SizedBox(
-                                            height: size.width * 0.02,
-                                          ),
                                           Flexible(
                                             fit: FlexFit.tight,
                                             child: CustomTextFormField(
@@ -335,8 +293,8 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                     SizedBox(
                                       height: size.height * 0.02,
                                     ),
-                                    SizedBox(
-                                      width: size.width,
+                                    Container(
+                                      width: size.width * 0.40,
                                       child: Row(
                                         children: [
                                           Flexible(
@@ -370,7 +328,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                       textInputType:
                                                           TextInputType
                                                               .emailAddress,
-                                                      suffix: const Icon(
+                                                      suffix: Icon(
                                                           Icons.calendar_month),
                                                       prefixConstraints:
                                                           BoxConstraints(
@@ -584,7 +542,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             : Column(
                 children: [
                   SizedBox(
-                    width: size.width,
+                    //width: size.width,
                     child: Card(
                       elevation: 4,
                       shadowColor: ColorConstant.gray400,
@@ -628,7 +586,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                       ImageSource.camera);
                                                 }
                                               }),
-                                              values: const [],
+                                              values: [],
                                             );
                                           });
                                     },
@@ -642,7 +600,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                             child: Obx(
                                               () =>
                                                   controller.selectedImage == ""
-                                                      ? const Icon(Icons.person)
+                                                      ? Icon(Icons.person)
                                                       : Image.file(
                                                           File(controller
                                                               .imageFileList![0]
@@ -680,28 +638,25 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8.0, bottom: 12),
-                                      child: CustomDropDown(
-                                          labelText: "Prefix",
-                                          isRequired: true,
-                                          icon: Container(
-                                              margin: getMargin(
-                                                  left: 10, right: 16),
-                                              child: const Icon(
-                                                  Icons.arrow_drop_down)),
-                                          variant: DropDownVariant.GreyOutline,
-                                          fontStyle: DropDownFontStyle
-                                              .ManropeMedium14Bluegray500,
-                                          items: controller.prefixesList.value,
-                                          onChanged: (value) {
-                                            controller.prefix = value.title;
-                                            controller.onSelectedPrefix(value);
-                                          }),
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        CustomTextFormField(
+                                            labelText: "First name",
+                                            controller: controller.firstname,
+                                            padding:
+                                                TextFormFieldPadding.PaddingT14,
+                                            validator: (value) {
+                                              return controller
+                                                  .firstNameValidator(
+                                                      value ?? "");
+                                            },
+                                            textInputType:
+                                                TextInputType.emailAddress,
+                                            prefixConstraints: BoxConstraints(
+                                                maxHeight:
+                                                    getVerticalSize(56))),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(
@@ -773,7 +728,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                     child: CustomTextFormField(
                                         labelText: "Date of Birth",
                                         controller: controller.dob,
-                                        isRequired: true,
                                         validator: (value) {
                                           return controller
                                               .dobValidator(value ?? "");
@@ -804,7 +758,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       .ManropeMedium14Bluegray500,
                                   icon: Container(
                                       margin: getMargin(left: 30, right: 16),
-                                      child: const Icon(Icons.arrow_drop_down)),
+                                      child: Icon(Icons.arrow_drop_down)),
                                   items: controller.genderList.value,
                                   onChanged: (value) {
                                     controller.gender = value.title;
@@ -842,7 +796,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               labelText: "Address",
                               controller: controller.address,
                               padding: TextFormFieldPadding.PaddingT14,
-                              isRequired: true,
                               validator: (value) {
                                 return controller.addressValidator(value ?? "");
                               },
@@ -855,32 +808,16 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: InkWell(
-                            onTap: () {
-                              Get.to(() => ListingPage(
-                                    listOfCountryOrList: stateList,
-                                  ))?.then((value) {
-                                if (value != null) {
-                                  controller.state.text =
-                                      value['name'].toString();
-                                }
-                              });
-                            },
-                            child: AbsorbPointer(
-                              child: CustomTextFormField(
-                                  labelText: "State",
-                                  controller: controller.state,
-                                  isRequired: true,
-                                  validator: (value) {
-                                    return controller
-                                        .stateValidator(value ?? "");
-                                  },
-                                  padding: TextFormFieldPadding.PaddingT14,
-                                  textInputType: TextInputType.name,
-                                  prefixConstraints: BoxConstraints(
-                                      maxHeight: getVerticalSize(56))),
-                            ),
-                          ),
+                          child: CustomTextFormField(
+                              labelText: "State",
+                              controller: controller.state,
+                              validator: (value) {
+                                return controller.stateValidator(value ?? "");
+                              },
+                              padding: TextFormFieldPadding.PaddingT14,
+                              textInputType: TextInputType.name,
+                              prefixConstraints: BoxConstraints(
+                                  maxHeight: getVerticalSize(56))),
                         ),
                         SizedBox(
                           height: size.height * 0.02,
@@ -920,7 +857,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                           child: CustomTextFormField(
                               labelText: "Pin Code",
                               controller: controller.pincode,
-                              isRequired: true,
                               padding: TextFormFieldPadding.PaddingT14,
                               validator: (value) {
                                 return controller.pincodeValidator(value ?? "");
@@ -1029,7 +965,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
     return Row(
       children: [
         Expanded(
-          flex: 5,
+          flex: 6,
           child: RotatedBox(
             quarterTurns: 0,
             child: Image.asset(
@@ -1042,10 +978,10 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             ),
           ),
         ),
-        SizedBox(width: size.width * 0.04),
+        SizedBox(width: size.width * 0.02),
         Expanded(
           flex: 7,
-          child: getBody(size, loginController, context, args),
+          child: Center(child: getBody(size, loginController, context, args)),
         ),
       ],
     );

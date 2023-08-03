@@ -1,28 +1,30 @@
 import 'dart:io';
 
-import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/responsive_builder.dart';
+import 'package:appointmentxpert/core/scaffolds/desktop_scaffold.dart';
+import 'package:appointmentxpert/core/scaffolds/mobile_scaffold.dart';
+import 'package:appointmentxpert/core/scaffolds/tablet_scaffold.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../core/app_export.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
-import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../domain/facebookauth/facebook_auth_helper.dart';
 import '../../domain/googleauth/google_auth_helper.dart';
 import '../../routes/app_routes.dart';
-import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/custom_button.dart';
-import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/loader.dart';
 import '../../widgets/responsive.dart';
+import '../dashboard_screen/shared_components/responsive_builder.dart';
 import '../login_success_dialog/controller/login_success_controller.dart';
 import '../login_success_dialog/login_success_dialog.dart';
 import '../sign_up_screen/sign_up_screen.dart';
@@ -40,46 +42,24 @@ class LoginScreen extends GetWidget<LoginController> {
         top: false,
         bottom: false,
         child: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              backgroundColor: ColorConstant.whiteA700,
-              // appBar: CustomAppBar(
-              //     //backgroundColor: ColorConstant.blue700,
-              //     height: getVerticalSize(60),
-              //     leadingWidth: 64,
-              //     elevation: 0,
-              //     leading: AppbarImage(
-              //         height: getSize(40),
-              //         width: getSize(40),
-              //         backgroundColor: Colors.transparent,
-              //         svgPath: ImageConstant.imgArrowleft,
-              //         margin: getMargin(left: 24),
-              //         onTap: () {
-              //           onTapArrowleft();
-              //         }),
-              //     centerTitle: true,
-              //     title: AppbarSubtitle2(text: '')),
-              body: ResponsiveBuilder(
-                mobileBuilder: (context, constraints) =>
-                    _buildSmallScreen(size, controller),
-                tabletBuilder: (context, constraints) =>
-                    _buildSmallScreen(size, controller),
-                desktopBuilder: (context, constraints) =>
-                    _buildLargeScreen(size, controller),
-              )
-
-              // LayoutBuilder(
-              //   builder: (context, constraints) {
-              //     if (Responsive.isDesktop(context)) {
-              //       return _buildLargeScreen(size, controller);
-              //     } else {
-              //       return _buildSmallScreen(size, controller);
-              //     }
-              //   },
-              // )
-              ),
-        ));
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: ResponsiveBuilder(
+              mobileBuilder: (context, constraints) {
+                return MobileScaffold(
+                    child: _buildSmallScreen(size, controller));
+              },
+              tabletBuilder: (context, constraints) {
+                return TabletScaffold(
+                    isAppBarVisible: false,
+                    child: _buildLargeScreen(size, controller));
+              },
+              desktopBuilder: (context, constraints) {
+                return DesktopScaffold(
+                  isAppBarVisible: false,
+                  child: _buildLargeScreen(size, controller),
+                );
+              },
+            )));
   }
 
   /// For large screens
@@ -142,7 +122,7 @@ class LoginScreen extends GetWidget<LoginController> {
                   ? 'assets' '/images/logo-opdxpert.png'
                   : '/images/logo-opdxpert.png',
               fit: BoxFit.contain,
-              height: size.height * 0.2,
+              height: size.height * 0.145,
               width: size.width * 0.8,
             ),
           ),
@@ -263,28 +243,34 @@ class LoginScreen extends GetWidget<LoginController> {
                           ])),
                   GestureDetector(
                       onTap: () {
-                        onTapRowgoogle();
+                        //onTapRowgoogle();
                       },
                       child: Center(
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                  margin: getMargin(
-                                    top: 20,
+                              SizedBox(
+                                width: 295,
+                                height: 50,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 18.0, bottom: 0.0),
+                                  child: SignInButton(
+                                    Buttons.google,
+                                    text: "Sign in with Google",
+                                    onPressed: () {
+                                      onTapRowgoogle();
+                                    },
                                   ),
-                                  padding: getPadding(
-                                      left: 16, top: 16, right: 16, bottom: 16),
-                                  decoration: AppDecoration.outlineGray200
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.roundedBorder8),
-                                  child: CustomImageView(
-                                      svgPath: ImageConstant.imgGoogle,
-                                      height: getVerticalSize(20),
-                                      width: getHorizontalSize(220),
-                                      margin: getMargin(top: 1, bottom: 1))),
+                                ),
+                              ),
+
+                              // CustomImageView(
+                              //     svgPath: ImageConstant.imgGoogle,
+                              //     height: getVerticalSize(20),
+                              //     //width: getHorizontalSize(220),
+                              //     margin: getMargin(top: 1, bottom: 1))),
                               // Container(
                               //     margin: getMargin(top: 20, left: 5),
                               //     padding: getPadding(
@@ -321,32 +307,38 @@ class LoginScreen extends GetWidget<LoginController> {
                               //         })),
                             ]),
                       )),
-                  Platform.isIOS
-                      ? Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: SizedBox(
-                            width: 300,
-                            height: 50,
-                            child: SignInWithAppleButton(
-                              onPressed: () async {
-                                final credential =
-                                    await SignInWithApple.getAppleIDCredential(
-                                  scopes: [
-                                    AppleIDAuthorizationScopes.email,
-                                    AppleIDAuthorizationScopes.fullName,
-                                  ],
-                                );
-                                Get.to(SignUpScreen(
-                                    name: credential.givenName,
-                                    email: credential.email));
-                                // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                                // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-                              },
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
 
+                  !kIsWeb
+                      ? Platform.isIOS
+                          ? Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: SizedBox(
+                                width: 300,
+                                height: 40,
+                                child: SignInWithAppleButton(
+                                  onPressed: () async {
+                                    final credential = await SignInWithApple
+                                        .getAppleIDCredential(
+                                      scopes: [
+                                        AppleIDAuthorizationScopes.email,
+                                        AppleIDAuthorizationScopes.fullName,
+                                      ],
+                                    );
+                                    Get.to(SignUpScreen(
+                                        name: credential.givenName,
+                                        email: credential.email));
+                                    // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                                    // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                                  },
+                                ),
+                              ),
+                            )
+                          : const SizedBox(
+                              height: 20,
+                            )
+                      : const SizedBox(
+                          height: 20,
+                        ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Column(
@@ -489,17 +481,49 @@ onTapTxtSignUp() {
 }
 
 onTapRowgoogle() async {
-  await GoogleAuthHelper().googleSignInProcess().then((googleUser) {
-    if (googleUser != null) {
-      //TODO Actions to be performed after signin
-      Get.to(
-          SignUpScreen(name: googleUser.displayName, email: googleUser.email));
-    } else {
-      Get.snackbar('Error', 'user data is empty');
-    }
-  }).catchError((onError) {
-    Get.snackbar('Error', onError.toString());
-  });
+  if (kIsWeb) {
+    GoogleAuthProvider authProvider = GoogleAuthProvider();
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    //final GoogleSignIn googleSignIn = GoogleSignIn();
+    auth.signInWithPopup(authProvider).then((result) {
+      print(result);
+    }).catchError((e) {
+      print(e);
+      var snackbar = const SnackBar(
+          width: 500,
+          padding: EdgeInsets.all(10),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          duration: Duration(seconds: 3),
+          dismissDirection: DismissDirection.horizontal,
+          closeIconColor: Colors.white,
+          backgroundColor: Colors.redAccent,
+          content: Center(
+            child: Text(
+              "Error, please try again later!",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ));
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackbar);
+    });
+  } else {
+    await GoogleAuthHelper().googleSignInProcess().then((googleUser) {
+      if (googleUser != null) {
+        //TODO Actions to be performed after signin
+        Get.to(SignUpScreen(
+            name: googleUser.displayName, email: googleUser.email));
+      } else {
+        Get.snackbar('Error', 'user data is empty');
+      }
+    }).catchError((onError) {
+      Get.snackbar('Error', onError.toString());
+    });
+  }
 }
 
 onTapImgCamera() async {

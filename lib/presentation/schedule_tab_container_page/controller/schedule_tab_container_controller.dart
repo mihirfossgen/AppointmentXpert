@@ -11,5 +11,4 @@ class ScheduleTabContainerController extends GetxController
     // TODO: implement onReady
     super.onReady();
   }
-
 }

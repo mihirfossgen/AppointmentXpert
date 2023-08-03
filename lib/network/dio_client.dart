@@ -13,8 +13,8 @@ import 'interceptors/authorization_interceptor.dart';
 class DioClient {
   static final _options = DIO.BaseOptions(
     baseUrl: Endpoints.baseURL,
-    connectTimeout: Endpoints.connectionTimeout,
-    receiveTimeout: Endpoints.receiveTimeout,
+    connectTimeout: const Duration(seconds: Endpoints.connectionTimeout),
+    receiveTimeout: const Duration(seconds: Endpoints.receiveTimeout),
     responseType: DIO.ResponseType.json,
   );
 
@@ -58,14 +58,14 @@ class DioClient {
         ));
         throw 'Network problem';
       }
-    } on DIO.DioError catch (err) {
+    } on DIO.DioException catch (err) {
       if (err.response?.statusCode == 500) {
         SharedPrefUtils.clearPreferences();
         Get.offAllNamed(AppRoutes.loginScreen);
-        final errorMessage = DioException.fromDioError(err).toString();
+        final errorMessage = DioException.fromDioError(err.type).toString();
         throw errorMessage;
       } else {
-        final errorMessage = DioException.fromDioError(err).toString();
+        final errorMessage = DioException.fromDioError(err.type).toString();
         throw errorMessage;
       }
     } catch (e) {
@@ -105,14 +105,14 @@ class DioClient {
         ));
         throw 'Network problem';
       }
-    } on DIO.DioError catch (err) {
+    } on DIO.DioException catch (err) {
       if (err.response?.statusCode == 500) {
         SharedPrefUtils.clearPreferences();
         Get.offAllNamed(AppRoutes.loginScreen);
-        final errorMessage = DioException.fromDioError(err).toString();
+        final errorMessage = DioException.fromDioError(err.type).toString();
         throw errorMessage;
       } else {
-        final errorMessage = DioException.fromDioError(err).toString();
+        final errorMessage = DioException.fromDioError(err.type).toString();
         throw errorMessage;
       }
     } catch (e) {
@@ -150,8 +150,8 @@ class DioClient {
         ));
         throw 'Network problem';
       }
-    } on DIO.DioError catch (err) {
-      final errorMessage = DioException.fromDioError(err).toString();
+    } on DIO.DioException catch (err) {
+      final errorMessage = DioException.fromDioError(err.type).toString();
       throw errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);
@@ -190,8 +190,8 @@ class DioClient {
         ));
         throw 'Network problem';
       }
-    } on DIO.DioError catch (err) {
-      final errorMessage = DioException.fromDioError(err).toString();
+    } on DIO.DioException catch (err) {
+      final errorMessage = DioException.fromDioError(err.type).toString();
       throw errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);
@@ -228,8 +228,8 @@ class DioClient {
         ));
         throw 'Network problem';
       }
-    } on DIO.DioError catch (err) {
-      final errorMessage = DioException.fromDioError(err).toString();
+    } on DIO.DioException catch (err) {
+      final errorMessage = DioException.fromDioError(err.type).toString();
       throw errorMessage;
     } catch (e) {
       if (kDebugMode) print(e);

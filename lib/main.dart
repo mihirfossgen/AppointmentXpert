@@ -1,11 +1,8 @@
 import 'dart:ui';
 
-import 'package:adaptive_layout/adaptive_layout.dart';
 import 'package:appointmentxpert/core/utils/notifications.dart';
 import 'package:appointmentxpert/presentation/splash_screen/splash_screen.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
-import 'package:appointmentxpert/widgets/responsive.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -14,9 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:responsive_framework/breakpoint.dart';
 import 'package:responsive_framework/responsive_breakpoints.dart';
+
 import 'core/utils/initial_bindings.dart';
 import 'core/utils/logger.dart';
 import 'localization/app_localization.dart';
@@ -90,14 +87,15 @@ void main() async {
   //         messagingSenderId: "231282522270",
   //         appId: "1:231282522270:ios:3f6178dc8bbca810b1638f"));
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((value) async {
     Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
-    AdaptiveLayout.setBreakpoints(
-      mediumScreenMinWidth: 600,
-      largeScreenMinWidth: 1200,
-    );
+    // AdaptiveLayout.setBreakpoints(
+    //   mediumScreenMinWidth: 600,
+    //   largeScreenMinWidth: 1200,
+    // );
     // runApp(   DevicePreview(
     //   enabled: !kReleaseMode,
     //   builder: (context) => MyApp(), // Wrap your app

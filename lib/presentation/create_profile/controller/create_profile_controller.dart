@@ -50,6 +50,7 @@ class CreateProfileController extends GetxController {
   RxBool isSearched = false.obs;
 
   get isCheckbox => null;
+
   void _setImageFileListFromFile(XFile? value) {
     imageFileList = value == null ? null : <XFile>[value];
     selectedImage.value = imageFileList![0].path;

@@ -99,7 +99,7 @@ class CardAppointment extends StatelessWidget {
 
   Widget _buildPatientName() {
     return Text(
-      '${appointment.patient?.prefix}'
+      '${appointment.patient?.prefix.toString() ?? ''}'
       '${appointment.patient?.firstName} '
       '${appointment.patient?.lastName}',
       style: TextStyle(
@@ -115,7 +115,7 @@ class CardAppointment extends StatelessWidget {
 
   Widget _buildDoctorName() {
     return Text(
-      '${appointment.examiner?.prefix}'
+      '${appointment.examiner?.prefix.toString() ?? ''}'
       '${appointment.examiner?.firstName} '
       '${appointment.examiner?.lastName}',
       style: TextStyle(
@@ -169,7 +169,8 @@ class CardAppointment extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
-        foregroundColor: primary, backgroundColor: onPrimary,
+        foregroundColor: primary,
+        backgroundColor: onPrimary,
       ),
       icon: const Icon(EvaIcons.checkmarkCircle2Outline),
       label: const Text("Done"),

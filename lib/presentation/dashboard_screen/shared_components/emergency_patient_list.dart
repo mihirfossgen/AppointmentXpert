@@ -1,5 +1,4 @@
 import 'package:appointmentxpert/models/emergency_patient_list.dart';
-import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
@@ -242,25 +241,6 @@ class ListEmergencyPatients extends StatelessWidget {
         ],
       ),
       //_buildAssign(),
-    );
-  }
-
-  Widget loadEmptyWidget() {
-    return EmptyWidget(
-      image: null,
-      hideBackgroundAnimation: true,
-      packageImage: PackageImage.Image_1,
-      title: 'No data',
-      subTitle: 'No emergency requests today.',
-      titleTextStyle: const TextStyle(
-        fontSize: 22,
-        color: Colors.grey,
-        fontWeight: FontWeight.w600,
-      ),
-      subtitleTextStyle: const TextStyle(
-        fontSize: 14,
-        color: Colors.black,
-      ),
     );
   }
 

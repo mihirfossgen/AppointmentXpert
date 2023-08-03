@@ -128,7 +128,8 @@ class _RecentPatients extends StatelessWidget {
                                           return CustomImageView(
                                             imagePath: !Responsive.isDesktop(
                                                     Get.context!)
-                                                ? 'assets' '/images/default_profile.png'
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
                                                 : '/images/default_profile.png',
                                           );
                                         },
@@ -139,7 +140,8 @@ class _RecentPatients extends StatelessWidget {
                                         fit: BoxFit.contain,
                                         imagePath: !Responsive.isDesktop(
                                                 Get.context!)
-                                            ? 'assets' '/images/default_profile.png'
+                                            ? 'assets'
+                                                '/images/default_profile.png'
                                             : '/images/default_profile.png',
                                       ),
                                 const SizedBox(
@@ -147,10 +149,11 @@ class _RecentPatients extends StatelessWidget {
                                 ),
                                 Flexible(
                                   child: Text(
-                                    '${data[index].prefix}'
+                                    '${data[index].prefix.toString()}'
                                     '${data[index].firstName} '
                                     '${data[index].lastName}',
                                     overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
                                   ),
                                 )
                               ],

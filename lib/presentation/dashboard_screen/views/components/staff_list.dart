@@ -1,6 +1,4 @@
-import 'package:appointmentxpert/models/staff_list_model.dart';
-import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
-import 'package:appointmentxpert/presentation/patient_details_page/patient_details_page.dart';
+import 'package:appointmentxpert/network/api/user_api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:empty_widget/empty_widget.dart';
@@ -12,23 +10,20 @@ import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../../../core/constants/constants.dart';
-import '../../../../models/patient_list_model.dart';
+import '../../../../models/staff_list_model.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
-import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../controller/dashboard_controller.dart';
 import '../../shared_components/search_field.dart';
-import '../screens/dashboard_screen.dart';
 
-class PatientsList extends GetView<DashboardController> {
-  List<Content>? data;
-  List<Contents>? doctorsList;
-  PatientsList({super.key, this.data, this.doctorsList});
+class StaffList extends GetView<DashboardController> {
+  StaffList({super.key});
 
   DashboardController dashboardController = Get.put(DashboardController());
+  UserApi userApi = Get.put(UserApi());
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +34,9 @@ class PatientsList extends GetView<DashboardController> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.to(() => AddPatientScreen());
+            //Get.to(() => AddPatientScreen());
           },
-          tooltip: 'Add New Patient',
+          tooltip: 'Add New Staff',
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -54,10 +49,10 @@ class PatientsList extends GetView<DashboardController> {
             child: LiquidPullToRefresh(
               showChildOpacityTransition: false,
               onRefresh: () async {
-                controller.isloadingRecentPatients.value = true;
-                controller.patientPagingController =
+                controller.isloadingStaffList.value = true;
+                controller.staffPagingController =
                     PagingController(firstPageKey: 0);
-                controller.callRecentPatientList(0);
+                controller.callStaffList(0);
               },
               child: ListView(children: [
                 Column(
@@ -68,57 +63,27 @@ class PatientsList extends GetView<DashboardController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     textView(),
-                          //     InkWell(
-                          //       onTap: () async {
-                          //         controller.onClose();
-                          //         await controller.callRecentPatientList(0);
-                          //         data = controller.getAllPatientsList;
-                          //       },
-                          //       child: Card(
-                          //         color: ColorConstant.blue700,
-                          //         elevation: 4,
-                          //         shadowColor: ColorConstant.gray400,
-                          //         child: Container(
-                          //           alignment: Alignment.center,
-                          //           height: 50,
-                          //           width: 150,
-                          //           child: Text(
-                          //             'Refresh',
-                          //             overflow: TextOverflow.ellipsis,
-                          //             textAlign: TextAlign.center,
-                          //             style: AppStyle
-                          //                 .txtRalewayRomanMedium14WhiteA700,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           SearchField(
                             onSearch: (value) {
-                              if (value.length > 3) {
-                                data?.forEach((element) {
-                                  if (element.firstName!
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase())) {
-                                    print(true);
-                                    List<Content> a = [];
-                                    a.add(element);
-                                    dashboardController
-                                        .patientPagingController.itemList = a;
-                                  }
-                                });
-                              } else {
-                                dashboardController
-                                    .patientPagingController.itemList = data;
-                              }
+                              // if (value.length > 3) {
+                              //   data?.forEach((element) {
+                              //     if (element.firstName!
+                              //         .toLowerCase()
+                              //         .contains(value.toLowerCase())) {
+                              //       print(true);
+                              //       List<Content> a = [];
+                              //       a.add(element);
+                              //       dashboardController
+                              //           .patientPagingController.itemList = a;
+                              //     }
+                              //   });
+                              // } else {
+                              //   dashboardController
+                              //       .patientPagingController.itemList = data;
+                              // }
                             },
                           ),
                         ],
@@ -132,22 +97,22 @@ class PatientsList extends GetView<DashboardController> {
                             flex: 1,
                             child: SearchField(
                               onSearch: (value) {
-                                if (value.length > 3) {
-                                  data?.forEach((element) {
-                                    if (element.firstName!
-                                        .toLowerCase()
-                                        .contains(value.toLowerCase())) {
-                                      print(true);
-                                      List<Content> a = [];
-                                      a.add(element);
-                                      dashboardController
-                                          .patientPagingController.itemList = a;
-                                    }
-                                  });
-                                } else {
-                                  dashboardController
-                                      .patientPagingController.itemList = data;
-                                }
+                                // if (value.length > 3) {
+                                //   data?.forEach((element) {
+                                //     if (element.firstName!
+                                //         .toLowerCase()
+                                //         .contains(value.toLowerCase())) {
+                                //       print(true);
+                                //       List<Content> a = [];
+                                //       a.add(element);
+                                //       dashboardController
+                                //           .patientPagingController.itemList = a;
+                                //     }
+                                //   });
+                                // } else {
+                                //   dashboardController
+                                //       .patientPagingController.itemList = data;
+                                // }
                               },
                             ),
                           )
@@ -162,25 +127,25 @@ class PatientsList extends GetView<DashboardController> {
                           ? RefreshIndicator(
                               onRefresh: () async {
                                 Future.sync(() => dashboardController
-                                    .patientPagingController
+                                    .staffPagingController
                                     .refresh());
-                                dashboardController
-                                    .isloadingRecentPatients.value = true;
-                                dashboardController.callRecentPatientList(0);
+                                dashboardController.isloadingStaffList.value =
+                                    true;
+                                dashboardController.callStaffList(0);
                               },
-                              child: PagedListView<int, Content>.separated(
+                              child: PagedListView<int, Contents>.separated(
                                 shrinkWrap: true,
                                 pagingController:
-                                    dashboardController.patientPagingController,
+                                    dashboardController.staffPagingController,
                                 builderDelegate:
-                                    PagedChildBuilderDelegate<Content>(
+                                    PagedChildBuilderDelegate<Contents>(
                                   animateTransitions: true,
                                   itemBuilder: (context, item, index) =>
                                       Padding(
                                     padding: const EdgeInsets.all(0.0),
                                     child: GFListTile(
                                       icon: const Icon(Icons.arrow_right),
-                                      avatar: item.profilePicture != null
+                                      avatar: item.uploadedProfilePath != null
                                           ? CachedNetworkImage(
                                               width: 80,
                                               height: 80,
@@ -188,8 +153,8 @@ class PatientsList extends GetView<DashboardController> {
                                               imageUrl: Uri.encodeFull(
                                                 Endpoints.baseURL +
                                                     Endpoints
-                                                        .downLoadPatientPhoto +
-                                                    item.profilePicture
+                                                        .downLoadEmployePhoto +
+                                                    item.uploadedProfilePath
                                                         .toString(),
                                               ),
                                               httpHeaders: {
@@ -253,7 +218,7 @@ class PatientsList extends GetView<DashboardController> {
                                             height: 5,
                                           ),
                                           Text(
-                                            'Age: ${item.age}',
+                                            'Profession: ${item.profession}',
                                             style: const TextStyle(
                                                 fontSize: 13,
                                                 color: Colors.black),
@@ -270,15 +235,15 @@ class PatientsList extends GetView<DashboardController> {
                                           color: Colors.red,
                                           fontWeight: FontWeight.bold),
                                       onSecondButtonTap: () {
-                                        Get.to(() => AppointmentBookingScreen(
-                                            doctorsList: doctorsList,
-                                            patientDetailsArguments:
-                                                PatientDetailsArguments(
-                                                    [], item)));
+                                        // Get.to(() => AppointmentBookingScreen(
+                                        //     doctorsList: doctorsList,
+                                        //     patientDetailsArguments:
+                                        //         PatientDetailsArguments(
+                                        //             [], item)));
                                       },
                                       onFirstButtonTap: () {
-                                        Get.to(
-                                            () => (PatientDetailsPage(item)));
+                                        // Get.to(
+                                        //     () => (PatientDetailsPage(item)));
                                       },
                                       //focusColor: ,
                                       focusNode: FocusNode(),
@@ -318,52 +283,6 @@ class PatientsList extends GetView<DashboardController> {
                           //loadList()
                           : loadDataTable(),
                     ),
-
-                    // Container(
-                    //   width: double.infinity,
-                    //   height: 680,
-                    //   child: DataTable2(
-                    //     columnSpacing: defaultPadding,
-                    //     headingRowHeight: defaultPadding * 5,
-                    //     minWidth: 00,
-                    //     //decoration: BoxDecoration(color: Color(0xFF2CABB8)),
-                    //     columns: [
-                    //       DataColumn(
-                    //         label: Text(
-                    //           "Patient Name",
-                    //           style: AppStyle.txtInterSemiBold14,
-                    //         ),
-                    //       ),
-                    //       DataColumn(
-                    //         label: Text(
-                    //           "Age",
-                    //           style: AppStyle.txtInterSemiBold14,
-                    //         ),
-                    //       ),
-                    //       DataColumn(
-                    //         label: Text(
-                    //           "Date of Birth",
-                    //           style: AppStyle.txtInterSemiBold14,
-                    //         ),
-                    //       ),
-                    //       DataColumn(
-                    //         label: Text(
-                    //           "Blood Type",
-                    //           style: AppStyle.txtInterSemiBold14,
-                    //         ),
-                    //       ),
-                    //       DataColumn(
-                    //         label: Text(
-                    //           "Gender",
-                    //           style: AppStyle.txtInterSemiBold14,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //     rows: List.generate(data.length,
-                    //         (index) => patientDataRow(data[index], context, size),
-                    //         growable: true),
-                    //   ),
-                    // ),
                   ],
                 ),
               ]),
@@ -373,6 +292,7 @@ class PatientsList extends GetView<DashboardController> {
   }
 
   Widget loadDataTable() {
+    final DateFormat formatter = DateFormat.yMMMMd('en_US');
     return Card(
       child: PaginatedDataTable2(
         columnSpacing: 10,
@@ -394,7 +314,7 @@ class PatientsList extends GetView<DashboardController> {
           hideBackgroundAnimation: true,
           packageImage: PackageImage.Image_3,
           title: 'No data',
-          subTitle: 'No patients found.',
+          subTitle: 'No staffs found.',
           titleTextStyle: const TextStyle(
             fontSize: 22,
             color: Colors.grey,
@@ -429,7 +349,7 @@ class PatientsList extends GetView<DashboardController> {
             label: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Date of birth',
+                'Profession',
                 style: AppStyle.txtInterSemiBold14,
               ),
             ),
@@ -452,7 +372,7 @@ class PatientsList extends GetView<DashboardController> {
               ),
             ),
           ),
-          DataColumn(
+          DataColumn2(
             label: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -460,65 +380,33 @@ class PatientsList extends GetView<DashboardController> {
                 style: AppStyle.txtInterSemiBold14,
               ),
             ),
+            size: ColumnSize.L,
             numeric: false,
           ),
         ],
-        source: PatientListDataSource(
-            dashboardController.patientPagingController.itemList ?? [],
-            doctorsList ?? []),
+
+        source: StaffDataSource(
+            dashboardController.staffPagingController.itemList ?? []),
       ),
     );
   }
 }
 
-DataRow patientDataRow(Content fileInfo, BuildContext context, Size size) {
-  return DataRow(
-    cells: [
-      DataCell(
-          Row(
-            children: [
-              Image.asset(
-                //fileInfo.icon!,
-                'assets/images/default_profile.png',
-                height: !Responsive.isMobile(context) ? 44 : 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text('${fileInfo.firstName.toString()} ',
-                    semanticsLabel: fileInfo.lastName.toString()),
-              ),
-            ],
-          ), onTap: () {
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (_) => SurveyChart()));
-      }),
-      DataCell(Text(fileInfo.age.toString())),
-      DataCell(Text(fileInfo.dob.toString())),
-      DataCell(Text(fileInfo.bloodType.toString())),
-      DataCell(Text(fileInfo.sex.toString())),
-    ],
-  );
-}
-
 Widget textView() => const Text(
-      "Patients",
+      "Staff List",
       style: TextStyle(
           color: Colors.black, fontWeight: FontWeight.w600, fontSize: 17.0),
     );
 
-class PatientListDataSource extends DataTableSource {
+class StaffDataSource extends DataTableSource {
   final DashboardController dashboardController =
       Get.put(DashboardController());
 
-  List<Content> data = [];
-  List<Contents> doctorsData = [];
+  List<Contents> data = [];
 
-  PatientListDataSource(List<Content> patients, List<Contents> doctors) {
-    data = patients;
-    doctorsData = doctors;
+  StaffDataSource(List<Contents> staffs) {
+    data = staffs;
   }
-
-  final DateFormat formatter = DateFormat.yMMMMd('en_US');
 
   @override
   DataRow getRow(int index) {
@@ -528,14 +416,14 @@ class PatientListDataSource extends DataTableSource {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                data[index].profilePicture != null
+                data[index].uploadedProfilePath != null
                     ? CachedNetworkImage(
                         width: 60,
                         height: 60,
                         fit: BoxFit.cover,
                         imageUrl: Uri.encodeFull(
                           Endpoints.baseURL +
-                              Endpoints.downLoadPatientPhoto +
+                              Endpoints.downLoadEmployePhoto +
                               data[index].id.toString(),
                         ),
                         httpHeaders: {
@@ -594,7 +482,7 @@ class PatientListDataSource extends DataTableSource {
       DataCell(
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(formatter.format(DateTime.parse('${data[index].dob}'))),
+            child: Text('${data[index].profession}'),
           ),
           onTap: () {}),
       DataCell(
@@ -613,24 +501,40 @@ class PatientListDataSource extends DataTableSource {
       //    formatter.format(DateTime.parse('${data[index].date}')))),
       DataCell(Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // TextButton(
+          //     onPressed: () {
+          //       // Get.to(() => (PatientDetailsPage(
+          //       //     dashboardController.staffPagingController
+          //       //         .itemList![index])));
+          //     },
+          //     child: const Icon(
+          //       Icons.add,
+          //       color: Colors.black,
+          //     )),
           TextButton(
               onPressed: () {
-                Get.to(() => (PatientDetailsPage(data[index])));
+                // Get.to(() => (PatientDetailsPage(
+                //     dashboardController.staffPagingController
+                //         .itemList![index])));
               },
-              child: const Icon(Icons.remove_red_eye)),
-          const SizedBox(
-            width: 10,
-          ),
+              child: const Icon(Icons.edit)),
           TextButton(
               onPressed: () {
-                Get.to(() => AppointmentBookingScreen(
-                    doctorsList: doctorsData,
-                    patientDetailsArguments:
-                        PatientDetailsArguments([], data[index])));
+                // Get.to(() => AppointmentBookingScreen(
+                //     doctorsList: doctorsList,
+                //     patientDetailsArguments:
+                //         PatientDetailsArguments(
+                //             [],
+                //             dashboardController
+                //                 .patientPagingController
+                //                 .itemList![index])));
               },
-              child: const Text('Book New')),
+              child: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              )),
         ],
       )),
     ]);
