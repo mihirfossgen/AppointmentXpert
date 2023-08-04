@@ -5,7 +5,8 @@ import '../core/utils/size_utils.dart';
 
 class CustomButton extends StatelessWidget {
   CustomButton(
-      {super.key, this.shape,
+      {super.key,
+      this.shape,
       this.padding,
       this.variant,
       this.fontStyle,
@@ -122,6 +123,8 @@ class CustomButton extends StatelessWidget {
         return ColorConstant.redA200;
       case ButtonVariant.OutlineBlue600_1:
         return null;
+      case ButtonVariant.FillGrey:
+        return ColorConstant.gray600;
       default:
         return ColorConstant.blue600;
     }
@@ -251,6 +254,7 @@ enum ButtonVariant {
   OutlineBlue600_1,
   FillWhiteA700,
   FillRedA200,
+  FillGrey
 }
 
 enum ButtonFontStyle {

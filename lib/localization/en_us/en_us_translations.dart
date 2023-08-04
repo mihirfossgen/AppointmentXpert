@@ -229,7 +229,7 @@ final Map<String, String> enUs = {
   "lbl_payment_detail": "Payment Detail",
   "msg_login_to_enjoy":
       "Login to enjoy the features we’ve provided, and stay healthy!",
-  "lbl_book_apointment": "Book Apointment",
+  "lbl_book_apointment": "Book Appointment",
   "lbl_go_to_home": "Go to home",
   "lbl_lungs": "Lungs",
   "lbl_6_min_read": "6 min read",

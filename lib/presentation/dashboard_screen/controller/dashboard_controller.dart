@@ -164,23 +164,77 @@ class DashboardController extends GetxController {
     }
   }
 
+  String userNumber = '';
+  String? numberValidator(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = RegExp(pattern);
+    if (value.isEmpty) {
+      return 'Please enter mobile number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid mobile number';
+    } else {
+      userNumber = value;
+    }
+    return null;
+  }
+
+  final RegExp nameRegExp = RegExp('[a-zA-Z]');
+  String? firstNameValidator(String value) {
+    if (value.isEmpty) {
+      return 'Please enter first name';
+    } else if (value == " ") {
+      return 'Enter valid name';
+    } else if (!nameRegExp.hasMatch(value)) {
+      return 'Enter valid name';
+    } else {
+      return null;
+    }
+  }
+
+  String? emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = RegExp(pattern.toString());
+    if (!(regex.hasMatch(value))) return "Invalid Email";
+
+    return null;
+  }
+
+  final formKey = GlobalKey<FormState>();
+
+  bool trySubmit() {
+    final isValid = formKey.currentState!.validate();
+    Get.focusScope!.unfocus();
+
+    if (isValid) {
+      formKey.currentState!.save();
+
+      return true;
+    }
+    return false;
+  }
+
   Future<void> callRecentPatientList(int pageNo) async {
     try {
       isloadingRecentPatients.value = true;
       var response = (await Get.find<PatientApi>().getAllPatientsList(pageNo));
       getAllPatientsList.value = response.content ?? [];
       PatientList patientListData = response;
+      isloadingRecentPatients.value = false;
       //patientPagingController.itemList = [];
       final isLastPage = patientListData.totalElements! < _pageSize;
       if (isLastPage) {
+        isloadingRecentPatients.value = false;
         List<Content> list = patientListData.content ?? [];
         patientPagingController.appendLastPage(list);
       } else {
+        isloadingRecentPatients.value = false;
         List<Content> list = patientListData.content ?? [];
         getAllPatientsList.value = response.content ?? [];
         final nextPageKey = pageNo + list.length;
         patientPagingController.appendPage(list, nextPageKey);
       }
+
       update();
     } on Map {
       //postLoginResp = e;
@@ -268,6 +322,7 @@ class DashboardController extends GetxController {
         if (response.content?[i].profession == "DOCTOR") {
           print(response.content?[i].profession);
           staffDataa = response.content![i];
+          doctorsList.clear();
           doctorsList.add(response.content![i]);
           print({"doctors list length ----- ${doctorsList.length}"});
           SharedPrefUtils.saveStr(

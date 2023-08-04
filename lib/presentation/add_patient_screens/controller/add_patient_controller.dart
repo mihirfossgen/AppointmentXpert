@@ -45,7 +45,7 @@ class AddPatientController extends GetxController {
   Rx<List<SelectionPopupModel>> prefixesList = Rx([
     SelectionPopupModel(
       id: 1,
-      title: "MR.",
+      title: "Mr.",
     ),
     SelectionPopupModel(
       id: 2,

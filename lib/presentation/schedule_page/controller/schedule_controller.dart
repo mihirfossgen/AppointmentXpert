@@ -31,6 +31,10 @@ class ScheduleController extends GetxController {
   String invoiceFileName = "";
   RxBool isloading = false.obs;
   bool value = false;
+  RxBool isLoading = false.obs;
+  RxBool isRescheduleLoading = false.obs;
+  RxList<AppointmentContent> getAppointmentDetailsByDate =
+      <AppointmentContent>[].obs;
 
   // RxList<AppointmentContent> today = <AppointmentContent>[].obs;
   // RxList<AppointmentContent> upcoming = <AppointmentContent>[].obs;
@@ -49,6 +53,18 @@ class ScheduleController extends GetxController {
   TextEditingController dob = TextEditingController();
   Rx<TextEditingController> from = TextEditingController().obs;
   TextEditingController to = TextEditingController();
+  TextEditingController reschduleDate = TextEditingController();
+
+  RxString fromTime = ''.obs;
+  RxString toTime = ''.obs;
+
+  List<String>? times;
+  RxString selectedStartTime = ''.obs;
+
+  TimeOfDay startTime = const TimeOfDay(hour: 12, minute: 00);
+  TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 00);
+  Duration step = const Duration(minutes: 15);
+  int? index;
 
   TimeOfDay selectedTime = TimeOfDay.now();
   final TextEditingController _timeController = TextEditingController();
@@ -153,6 +169,22 @@ class ScheduleController extends GetxController {
 
   final GlobalKey _rangeSelectorKey = GlobalKey();
 
+  Iterable<TimeOfDay> getTimes(
+      TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
+    var hour = startTime.hour;
+    var minute = startTime.minute;
+
+    do {
+      yield TimeOfDay(hour: hour, minute: minute);
+      minute += step.inMinutes;
+      while (minute >= 60) {
+        minute -= 60;
+        hour++;
+      }
+    } while (hour < endTime.hour ||
+        (hour == endTime.hour && minute <= endTime.minute));
+  }
+
   @override
   void onInit() {
     isloading.value = true;
@@ -160,6 +192,14 @@ class ScheduleController extends GetxController {
     if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       //SharedPrefUtils.readPrefINt('employee_Id')
       callGetAllAppointments(0, 20);
+      final DateFormat formatter = DateFormat('dd-MM-yyyy');
+      callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
+      final DateFormat format = DateFormat('yyyy-MM-dd');
+      reschduleDate.text = format.format(DateTime.now());
+
+      times = getTimes(startTime, endTime, step)
+          .map((tod) => tod.format(Get.context!))
+          .toList();
     } else {
       callGetAllAppointmentsForPatient(0);
     }
@@ -323,6 +363,25 @@ class ScheduleController extends GetxController {
     }
   }
 
+  Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
+      String date) async {
+    try {
+      isLoading.value = true;
+      var response =
+          (await Get.find<AppointmentApi>().getAppointmentDetailsViaDate(date));
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      getAppointmentDetailsByDate.value = list;
+      return list;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> callGetAllAppointmentsForPatient(int pageIndex) async {
     try {
       isloading.value = true;
@@ -378,6 +437,8 @@ class ScheduleController extends GetxController {
         } else {
           callGetAllAppointmentsForPatient(0);
         }
+        isRescheduleLoading.value = false;
+        selectedStartTime.value = '';
         Get.back();
       }
       //   callGetAllAppointments(0, 1);

@@ -139,11 +139,11 @@ class _BottomNavbarState extends State<_BottomNavbar> {
           icon: Icon(EvaIcons.people),
           label: "Patients",
         ),
-        // BottomNavigationBarItem(
-        //   activeIcon: Icon(EvaIcons.phoneCall),
-        //   icon: Icon(EvaIcons.phoneCall),
-        //   label: "Chat",
-        // ),
+        const BottomNavigationBarItem(
+          activeIcon: Icon(EvaIcons.person),
+          icon: Icon(EvaIcons.person),
+          label: "Staff",
+        ),
         BottomNavigationBarItem(
           activeIcon: Obx(() => controller.getEmergencyPatientsList.isNotEmpty
               ? Badge(

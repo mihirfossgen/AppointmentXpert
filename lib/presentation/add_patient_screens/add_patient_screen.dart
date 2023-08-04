@@ -166,6 +166,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                           controller: controller.mobile,
                           isRequired: true,
                           labelText: "Mobile",
+                          maxLength: 10,
                           validator: (value) {
                             return controller.numberValidator(value ?? "");
                           },

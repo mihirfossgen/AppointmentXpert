@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/size_utils.dart';
+import '../../core/utils/state_list.dart';
 import '../../models/create_staff_model.dart';
 import '../../models/createpatient_model.dart';
 import '../../widgets/app_bar/appbar_subtitle_2.dart';
@@ -120,7 +121,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
   Widget patientUI(Size size, BuildContext context) {
     return Form(
         key: controller.formKey,
-        child: Responsive.isMobile(context) && Responsive.isTablet(context)
+        child: Responsive.isDesktop(context)
             ? SizedBox(
                 width: size.width,
                 child: Column(
@@ -638,26 +639,32 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        CustomTextFormField(
-                                            labelText: "First name",
-                                            controller: controller.firstname,
-                                            padding:
-                                                TextFormFieldPadding.PaddingT14,
-                                            validator: (value) {
-                                              return controller
-                                                  .firstNameValidator(
-                                                      value ?? "");
-                                            },
-                                            textInputType:
-                                                TextInputType.emailAddress,
-                                            prefixConstraints: BoxConstraints(
-                                                maxHeight:
-                                                    getVerticalSize(56))),
-                                      ],
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 12),
+                                      child: CustomDropDown(
+                                          labelText: "Prefix",
+                                          isRequired: true,
+                                          icon: Container(
+                                              margin: getMargin(
+                                                  left: 10, right: 16),
+                                              child: const Icon(
+                                                  Icons.arrow_drop_down)),
+                                          variant: DropDownVariant.GreyOutline,
+                                          fontStyle: DropDownFontStyle
+                                              .ManropeMedium14Bluegray500,
+                                          items: controller.prefixesList.value,
+                                          onChanged: (value) {
+                                            controller.prefix = value.title;
+                                            controller.onSelectedPrefix(value);
+                                          }),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
                                   ),
                                   const SizedBox(
                                     width: 5,
@@ -808,16 +815,26 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: CustomTextFormField(
-                              labelText: "State",
-                              controller: controller.state,
-                              validator: (value) {
-                                return controller.stateValidator(value ?? "");
-                              },
-                              padding: TextFormFieldPadding.PaddingT14,
-                              textInputType: TextInputType.name,
-                              prefixConstraints: BoxConstraints(
-                                  maxHeight: getVerticalSize(56))),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(ListingPage(
+                                listOfCountryOrList: stateList,
+                              ));
+                            },
+                            child: AbsorbPointer(
+                              child: CustomTextFormField(
+                                  labelText: "State",
+                                  controller: controller.state,
+                                  validator: (value) {
+                                    return controller
+                                        .stateValidator(value ?? "");
+                                  },
+                                  padding: TextFormFieldPadding.PaddingT14,
+                                  textInputType: TextInputType.name,
+                                  prefixConstraints: BoxConstraints(
+                                      maxHeight: getVerticalSize(56))),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: size.height * 0.02,

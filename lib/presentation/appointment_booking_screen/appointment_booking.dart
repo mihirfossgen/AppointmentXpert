@@ -52,14 +52,14 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
     TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 00);
     Duration step = const Duration(minutes: 15);
     TimeOfDay selectedTime = TimeOfDay.now();
-    TextEditingController timeController = TextEditingController();
+
     String hour, minute, time;
     controller.times = controller
         .getTimes(startTime, endTime, step)
         .map((tod) => tod.format(context))
         .toList();
 
-    if (doctorsList != []) {
+    if (doctorsList != null && doctorsList!.isNotEmpty) {
       print('list value ------- ${controller.counsultingDoctor.value.length}');
       if (controller.counsultingDoctor.value.isEmpty) {
         controller.counsultingDoctor.value = doctorsList!
@@ -177,11 +177,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       hour = selectedTime.hour.toString();
       minute = selectedTime.minute.toString();
       time = '$hour : $minute';
-      timeController.text = time;
-      controller.from.value.text = formatDate(
-          DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day, selectedTime.hour, selectedTime.minute),
-          [hh, ':', nn, " ", am]).toString();
+
       controller.to.value.text = formatDate(
           DateTime(
               DateTime.now().year,
@@ -189,10 +185,6 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
               DateTime.now().day,
               selectedTime.hour,
               selectedTime.minute + intervalTime),
-          [hh, ':', nn, " ", am]).toString();
-      timeController.text = formatDate(
-          DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day, selectedTime.hour, selectedTime.minute),
           [hh, ':', nn, " ", am]).toString();
     }
 
@@ -446,6 +438,38 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                   controller
                                                                       .selectedStartTime
                                                                       .value = "";
+                                                                  WidgetsBinding
+                                                                      .instance
+                                                                      .addPostFrameCallback(
+                                                                          (timeStamp) {
+                                                                    showDialog(
+                                                                      context: Get
+                                                                          .context!,
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AlertDialog(
+                                                                        title: const Text(
+                                                                            'Appointment for the selected time is already booked. Please select other time.'),
+                                                                        actions: [
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            children: [
+                                                                              CustomButton(
+                                                                                  height: getVerticalSize(60),
+                                                                                  width: getHorizontalSize(80),
+                                                                                  text: 'Close',
+                                                                                  margin: getMargin(left: 0, right: 10),
+                                                                                  fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                                                                                  onTap: () async {
+                                                                                    Get.back();
+                                                                                  })
+                                                                            ],
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  });
                                                                 } else {
                                                                   controller
                                                                       .selectedStartTime
@@ -746,24 +770,39 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Expanded(
-                                            child: CustomButton(
-                                                height: getVerticalSize(52),
-                                                text: "lbl_book_apointment".tr,
-                                                margin: getMargin(left: 11),
-                                                fontStyle: ButtonFontStyle
-                                                    .RalewayRomanSemiBold14WhiteA700,
-                                                onTap: () async {
-                                                  bool a =
-                                                      controller.trySubmit();
+                                        Obx(() => Expanded(
+                                            child: controller.selectedStartTime
+                                                        .value ==
+                                                    ''
+                                                ? CustomButton(
+                                                    height: getVerticalSize(55),
+                                                    text: "lbl_book_apointment"
+                                                        .tr,
+                                                    margin: getMargin(left: 11),
+                                                    variant:
+                                                        ButtonVariant.FillGrey,
+                                                    fontStyle: ButtonFontStyle
+                                                        .RalewayRomanSemiBold14WhiteA700,
+                                                  )
+                                                : CustomButton(
+                                                    height: getVerticalSize(55),
+                                                    text: "lbl_book_apointment"
+                                                        .tr,
+                                                    margin: getMargin(left: 11),
+                                                    fontStyle: ButtonFontStyle
+                                                        .RalewayRomanSemiBold14WhiteA700,
+                                                    onTap: () async {
+                                                      bool a = controller
+                                                          .trySubmit();
 
-                                                  if (a) {
-                                                    onTapBookapointmentOne(
-                                                      controller.examinerId ??
-                                                          0,
-                                                    );
-                                                  }
-                                                }))
+                                                      if (a) {
+                                                        onTapBookapointmentOne(
+                                                          controller
+                                                                  .examinerId ??
+                                                              0,
+                                                        );
+                                                      }
+                                                    })))
                                       ]))
                             ],
                           )),
