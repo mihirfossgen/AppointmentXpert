@@ -953,6 +953,23 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                   controller: controller.dob,
                                                   labelText: "Date",
                                                   isRequired: true,
+                                                  validator: (value) {
+                                                    DateTime a = DateTime(
+                                                        int.parse(value?.split(
+                                                                '-')[2] ??
+                                                            ""),
+                                                        int.parse(value?.split(
+                                                                '-')[1] ??
+                                                            ""),
+                                                        int.parse(value?.split(
+                                                                '-')[0] ??
+                                                            ""));
+
+                                                    if (a.isBefore(
+                                                        DateTime.now())) {
+                                                      return 'Please select proper date to reschedule';
+                                                    }
+                                                  },
                                                   padding: TextFormFieldPadding
                                                       .PaddingT14,
                                                   textInputType: TextInputType
@@ -978,6 +995,14 @@ class ProfilePage extends GetWidget<ProfileController> {
                                             labelText: "Time Interval",
                                             isRequired: true,
                                             controller: controller.timeInterval,
+                                            validator: (value) {
+                                              int a =
+                                                  int.tryParse(value ?? "") ??
+                                                      0;
+                                              if (a < 0) {
+                                                return 'Please enter valid time in minutes';
+                                              }
+                                            },
                                             padding:
                                                 TextFormFieldPadding.PaddingT14,
                                             textInputType: TextInputType.number,

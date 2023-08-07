@@ -117,6 +117,10 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                         child: CustomDropDown(
                             labelText: "Prefix",
                             isRequired: true,
+                            validator: (value) {
+                              return controller.prefixControllerValidator(
+                                  value?.title ?? "");
+                            },
                             icon: Container(
                                 margin: getMargin(left: 30, right: 16),
                                 child: Icon(Icons.arrow_drop_down)),

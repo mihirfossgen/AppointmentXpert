@@ -7,10 +7,11 @@ class SearchField extends StatelessWidget {
   SearchField({
     this.onSearch,
     this.hintText,
+    this.controller,
     Key? key,
   }) : super(key: key);
 
-  final controller = TextEditingController();
+  TextEditingController? controller = TextEditingController();
   final Function(String value)? onSearch;
   final String? hintText;
 
@@ -27,7 +28,7 @@ class SearchField extends StatelessWidget {
       ),
       onEditingComplete: () {
         FocusScope.of(context).unfocus();
-        if (onSearch != null) onSearch!(controller.text);
+        if (onSearch != null) onSearch!(controller?.text ?? "");
       },
       onChanged: (value) {
         onSearch!(value);
