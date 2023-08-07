@@ -32,14 +32,14 @@ class StaffList extends GetView<DashboardController> {
       top: false,
       bottom: false,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
+        /*floatingActionButton: FloatingActionButton(
           onPressed: () {
             //Get.to(() => AddPatientScreen());
           },
           tooltip: 'Add New Staff',
           child: const Icon(Icons.add),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,*/
         body: Container(
             padding: const EdgeInsets.all(defaultPadding),
             decoration: const BoxDecoration(
@@ -226,7 +226,7 @@ class StaffList extends GetView<DashboardController> {
                                         ],
                                       ),
                                       enabled: true,
-                                      firstButtonTextStyle: const TextStyle(
+                                      /*firstButtonTextStyle: const TextStyle(
                                           color: Colors.blue,
                                           fontWeight: FontWeight.bold),
                                       firstButtonTitle: 'View Details',
@@ -244,7 +244,7 @@ class StaffList extends GetView<DashboardController> {
                                       onFirstButtonTap: () {
                                         // Get.to(
                                         //     () => (PatientDetailsPage(item)));
-                                      },
+                                      },*/
                                       //focusColor: ,
                                       focusNode: FocusNode(),
                                       //hoverColor: Colors.blue,
