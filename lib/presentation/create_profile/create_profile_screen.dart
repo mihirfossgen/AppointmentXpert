@@ -648,6 +648,11 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                       child: CustomDropDown(
                                           labelText: "Prefix",
                                           isRequired: true,
+                                          validator: (value) {
+                                            return controller
+                                                .prefixControllerValidator(
+                                                    value?.title ?? "");
+                                          },
                                           icon: Container(
                                               margin: getMargin(
                                                   left: 10, right: 16),
@@ -819,7 +824,12 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                             onTap: () {
                               Get.to(ListingPage(
                                 listOfCountryOrList: stateList,
-                              ));
+                              ))?.then((value) {
+                                if (value != null) {
+                                  controller.state.text =
+                                      value['name'].toString();
+                                }
+                              });
                             },
                             child: AbsorbPointer(
                               child: CustomTextFormField(

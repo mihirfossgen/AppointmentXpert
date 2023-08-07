@@ -32,8 +32,7 @@ class SplashController extends GetxController {
     if (SharedPrefUtils.readPrefStr('auth_token').isNotEmpty &&
         SharedPrefUtils.readPrefINt("user_Id") != 0 &&
         SharedPrefUtils.readPrefStr("role").isNotEmpty &&
-        SharedPrefUtils.readPrefStr("role").isNotEmpty) {
-      //  && SharedPrefUtils.readPrefBool('complete_profile_flag') == true) {
+        SharedPrefUtils.readPrefBool('complete_profile_flag') == true) {
       // if (SharedPrefUtils.readPrefINt("employee_Id") == 0) {
       //   Future.delayed(const Duration(seconds: 3), () {
       //     Get.offAllNamed(AppRoutes.homeContainerScreen);

@@ -101,6 +101,7 @@ class PatientsList extends GetView<DashboardController> {
                           height: 10.0,
                         ),
                         SearchField(
+                          controller: dashboardController.searchedText.value,
                           onSearch: (value) {
                             if (value.length > 3) {
                               data?.forEach((element) {
@@ -130,13 +131,13 @@ class PatientsList extends GetView<DashboardController> {
                         Expanded(
                           flex: 1,
                           child: SearchField(
+                            controller: dashboardController.searchedText.value,
                             onSearch: (value) {
                               if (value.length > 3) {
                                 data?.forEach((element) {
                                   if (element.firstName!
                                       .toLowerCase()
                                       .contains(value.toLowerCase())) {
-                                    print(true);
                                     List<Content> a = [];
                                     a.add(element);
                                     dashboardController

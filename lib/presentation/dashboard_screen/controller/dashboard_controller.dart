@@ -91,6 +91,7 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> patientTodaysData = <AppointmentContent>[].obs;
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
   var patientNumber;
+  Rx<TextEditingController> searchedText = TextEditingController().obs;
 
   Rx<AppointmentContent> currentStaffAppointmentData = AppointmentContent().obs;
   Rx<AppointmentContent> currentPatientAppointmentData =
@@ -611,6 +612,7 @@ class DashboardController extends GetxController {
   void onClose() {
     super.onClose();
     getAllPatientsList.clear();
+    searchedText.value.clear();
   }
 
   void _handleCreateRegisterSuccess() {}

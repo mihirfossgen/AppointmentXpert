@@ -164,11 +164,11 @@ class AddPatientController extends GetxController {
     return null;
   }
 
-  final RegExp addressReg = RegExp("^[#.0-9a-zA-Z\s,/-]+");
+  final RegExp addressReg = RegExp("^[#.0-9a-zA-Z,/-]+");
   String? addressValidator(String value) {
     if (value.isEmpty) {
       return 'Please enter address';
-    } else if (value != ' ') {
+    } else if (value == ' ') {
       return 'Please enter valid address';
     } else if (!addressReg.hasMatch(value)) {
       return 'Please enter valid address';
