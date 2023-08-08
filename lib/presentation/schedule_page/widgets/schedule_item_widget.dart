@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/app_export.dart';
-import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../network/endpoints.dart';
@@ -46,134 +45,134 @@ class ScheduleItemWidget extends StatelessWidget {
             arguments: AppointmentDetailsArguments(appointment));
       },
       child: SizedBox(
-        child: Card(
-          elevation: 4,
-          color: ColorConstant.whiteA700,
-          child: InkWell(
-            child: loadCard(),
-            onTap: () {
-              // Navigator.push(
-              //     Get.context!,
-              //     MaterialPageRoute(
-              //         builder: (context) => AppointmentDetailsPage(
-              //               appointment: appointment,
-              //               appointmentid: appointment.id!,
-              //             )));
-            },
-          ),
+        child: InkWell(
+          child: loadCard(),
+          onTap: () {
+            // Navigator.push(
+            //     Get.context!,
+            //     MaterialPageRoute(
+            //         builder: (context) => AppointmentDetailsPage(
+            //               appointment: appointment,
+            //               appointmentid: appointment.id!,
+            //             )));
+          },
         ),
       ),
     );
   }
 
   Widget loadCard() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 80,
-            width: 80,
-            //decoration: BoxDecoration(
-            //    color: Colors.black, borderRadius: BorderRadius.circular(12)),
-            child: appointment.patient?.profilePicture != null
-                ? CachedNetworkImage(
-                    fit: BoxFit.contain,
-                    imageUrl: Uri.encodeFull(
-                      Endpoints.baseURL +
-                          Endpoints.downLoadPatientPhoto +
-                          appointment.patient!.profilePicture.toString(),
+    return Card(
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 80,
+              width: 80,
+              //decoration: BoxDecoration(
+              //    color: Colors.black, borderRadius: BorderRadius.circular(12)),
+              child: appointment.patient?.profilePicture != null
+                  ? CachedNetworkImage(
+                      fit: BoxFit.contain,
+                      imageUrl: Uri.encodeFull(
+                        Endpoints.baseURL +
+                            Endpoints.downLoadPatientPhoto +
+                            appointment.patient!.profilePicture.toString(),
+                      ),
+                      httpHeaders: {
+                        "Authorization":
+                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      errorWidget: (context, url, error) {
+                        return Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(10)),
+                        );
+                      },
+                    )
+                  : CustomImageView(
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
+                      imagePath: !Responsive.isDesktop(Get.context!)
+                          ? 'assets' '/images/default_profile.png'
+                          : '/images/default_profile.png',
                     ),
-                    httpHeaders: {
-                      "Authorization":
-                          "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                    },
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
-                    errorWidget: (context, url, error) {
-                      return Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10)),
-                      );
-                    },
-                  )
-                : CustomImageView(
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.contain,
-                    imagePath: !Responsive.isDesktop(Get.context!)
-                        ? 'assets' '/images/default_profile.png'
-                        : '/images/default_profile.png',
-                  ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    '${appointment.patient?.prefix.toString()}'
-                    '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
-                    style: AppStyle.txtInterSemiBold14,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
-                    style: AppStyle.txtInterRegular14Gray700,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Status - ${appointment.status}",
-                    style: AppStyle.txtManrope12,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    appointment.department?.name ?? "",
-                    style: AppStyle.txtManrope12,
-                  ),
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
-                  // Text(
-                  //   appointment.purpose ?? 'N/A',
-                  //   style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                  // ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'Note: ${appointment.note}',
-                    style: AppStyle.txtInterRegular14,
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  loadActionButtons(),
-                ],
-              ),
-              // SizedBox(width: 50),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '${appointment.patient?.prefix.toString()}'
+                      '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
+                      style: AppStyle.txtInterRegular14Gray700,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Status - ${appointment.status}",
+                      style: AppStyle.txtManrope12,
+                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Text(
+                    //   appointment.department?.name ?? "",
+                    //   style: AppStyle.txtManrope12,
+                    // ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Text(
+                    //   appointment.purpose ?? 'N/A',
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                    // ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'Note: ${appointment.note}',
+                      style: AppStyle.txtInterRegular14,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    loadActionButtons(),
+                  ],
+                ),
+                // SizedBox(width: 50),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

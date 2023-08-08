@@ -26,9 +26,9 @@ class SchedulePage extends GetWidget<ScheduleController> {
   Widget build(BuildContext context) {
     return SizedBox(
         width: double.maxFinite,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        height: MediaQuery.of(context).size.height + 20,
+        child: ListView(
+          //mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SharedPrefUtils.readPrefStr('role') != "PATIENT"
                 ? Obx(() => Padding(
@@ -91,7 +91,19 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                     .value,
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
-                                          childAspectRatio: 100 / 60,
+                                          childAspectRatio:
+                                              tab.toLowerCase() == 'completed'
+                                                  ? 2.5
+                                                  : 1.90,
+                                          // tab.toLowerCase() == 'completed'
+                                          //     ? ResponsiveBuilder.isMobile(
+                                          //             context)
+                                          //         ? 100 / 45
+                                          //         : 100 / 50
+                                          //     : ResponsiveBuilder.isMobile(
+                                          //             context)
+                                          //         ? 100 / 55
+                                          //         : 100 / 70,
                                           crossAxisSpacing: 10,
                                           mainAxisSpacing: 10,
                                           crossAxisCount:
@@ -190,7 +202,13 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                 .value,
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
-                                      childAspectRatio: 100 / 100,
+                                      childAspectRatio:
+                                          tab.toLowerCase() == 'completed'
+                                              ? 2.5
+                                              : 1.75,
+                                      // tab.toLowerCase() == 'completed'
+                                      //     ? 100 / 50
+                                      //     : 100 / 70,
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 10,
                                       crossAxisCount: ResponsiveBuilder

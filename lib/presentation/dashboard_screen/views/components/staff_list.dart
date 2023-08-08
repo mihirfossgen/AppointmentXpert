@@ -122,7 +122,11 @@ class StaffList extends GetView<DashboardController> {
                       height: 10.0,
                     ),
                     SizedBox(
-                      height: 630,
+                      height: Responsive.isMobile(Get.context!)
+                          ? MediaQuery.of(Get.context!).size.height * 0.62
+                          : Responsive.isTablet(Get.context!)
+                              ? MediaQuery.of(Get.context!).size.height * 0.80
+                              : MediaQuery.of(Get.context!).size.height,
                       child: Responsive.isMobile(context) ||
                               Responsive.isTablet(context)
                           ? RefreshIndicator(
