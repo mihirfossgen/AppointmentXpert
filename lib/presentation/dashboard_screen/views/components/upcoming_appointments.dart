@@ -8,12 +8,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/utils/size_utils.dart';
 import '../../../../models/getAllApointments.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
-import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../controller/dashboard_controller.dart';
@@ -31,7 +29,8 @@ class UpcomingAppointments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder.isMobile(context)
+    return ResponsiveBuilder.isMobile(context) ||
+            ResponsiveBuilder.isTablet(context)
         ? loadDataTableMobile()
         : loadDataTable();
     // ClipRRect(
@@ -52,7 +51,7 @@ class UpcomingAppointments extends StatelessWidget {
               showBottomBorder: true,
               columns: [
                 DataColumn2(
-                  fixedWidth: 30,
+                  fixedWidth: Responsive.isMobile(Get.context!) ? 30 : 50,
                   label: Text(
                     'No',
                     style: AppStyle.txtInterSemiBold14,
@@ -130,17 +129,19 @@ class UpcomingAppointments extends StatelessWidget {
                                       actions: [
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: [
-                                            CustomButton(
-                                                height: getVerticalSize(60),
-                                                width: getHorizontalSize(80),
-                                                text: 'Yes',
-                                                margin: getMargin(
-                                                    left: 10, right: 00),
-                                                fontStyle: ButtonFontStyle
-                                                    .RalewayRomanSemiBold14WhiteA700,
-                                                onTap: () async {
+                                            ElevatedButton(
+                                                // height: getVerticalSize(60),
+                                                // width: getHorizontalSize(80),
+                                                child: const Text('Yes'),
+                                                // margin: getMargin(
+                                                //     left: 10, right: 00),
+                                                // fontStyle: ButtonFontStyle
+                                                //     .RalewayRomanSemiBold14WhiteA700,
+                                                onPressed: () async {
                                                   var req = {
                                                     "active": false,
                                                     "id": data[index].id,
@@ -159,15 +160,18 @@ class UpcomingAppointments extends StatelessWidget {
                                                   controller
                                                       .updateAppointment(req);
                                                 }),
-                                            CustomButton(
-                                                height: getVerticalSize(60),
-                                                width: getHorizontalSize(80),
-                                                text: 'No',
-                                                margin: getMargin(
-                                                    left: 0, right: 10),
-                                                fontStyle: ButtonFontStyle
-                                                    .RalewayRomanSemiBold14WhiteA700,
-                                                onTap: () async {
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            ElevatedButton(
+                                                // height: getVerticalSize(60),
+                                                // width: getHorizontalSize(80),
+                                                child: const Text('No'),
+                                                // margin: getMargin(
+                                                //     left: 0, right: 10),
+                                                // fontStyle: ButtonFontStyle
+                                                //     .RalewayRomanSemiBold14WhiteA700,
+                                                onPressed: () async {
                                                   Get.back();
                                                 })
                                           ],

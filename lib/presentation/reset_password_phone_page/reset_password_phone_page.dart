@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
 import '../verify_number/controller/verify_number_controller.dart';
@@ -48,11 +47,11 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                   prefixConstraints: BoxConstraints(
                                       maxHeight: getVerticalSize(56)),
                                 ),
-                                CustomButton(
-                                    height: getVerticalSize(56),
-                                    text: "lbl_send_otp".tr,
-                                    margin: getMargin(top: 32),
-                                    onTap: () async {
+                                ElevatedButton(
+                                    //height: getVerticalSize(56),
+                                    child: Text("lbl_send_otp".tr),
+                                    //margin: getMargin(top: 32),
+                                    onPressed: () async {
                                       bool resp = await controller.callOtp(
                                           controller.mobileNoController.text,
                                           "login");
@@ -100,8 +99,9 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                                                 onPressed: () {
                                                                   Get.back();
                                                                 },
-                                                                child: const Text(
-                                                                    'Close'))
+                                                                child:
+                                                                    const Text(
+                                                                        'Close'))
                                                           ],
                                                           title: const Text(
                                                               'Verify Phone Number'),

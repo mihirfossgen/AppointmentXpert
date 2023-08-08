@@ -27,7 +27,8 @@ class _AppointmentInProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder.isMobile(context)
+    return ResponsiveBuilder.isMobile(context) ||
+            ResponsiveBuilder.isTablet(context)
         ? loadDataTableMobile()
         : loadDataTable();
     // ClipRRect(
@@ -48,7 +49,7 @@ class _AppointmentInProgress extends StatelessWidget {
               showBottomBorder: true,
               columns: [
                 DataColumn2(
-                  fixedWidth: 30,
+                  fixedWidth: Responsive.isMobile(Get.context!) ? 30 : 50,
                   label: Text(
                     'No',
                     style: AppStyle.txtInterSemiBold14,
@@ -123,18 +124,17 @@ class _AppointmentInProgress extends StatelessWidget {
                                       'Do you want to cancel appointment?'),
                                   actions: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        CustomButton(
-                                            height: getVerticalSize(60),
-                                            width: getHorizontalSize(80),
-                                            text: 'Yes',
-                                            margin:
-                                                getMargin(left: 10, right: 00),
-                                            fontStyle: ButtonFontStyle
-                                                .RalewayRomanSemiBold14WhiteA700,
-                                            onTap: () async {
+                                        ElevatedButton(
+                                            // height: getVerticalSize(60),
+                                            // width: getHorizontalSize(80),
+                                            child: Text('Yes'),
+                                            // margin:
+                                            //     getMargin(left: 10, right: 00),
+                                            // fontStyle: ButtonFontStyle
+                                            //     .RalewayRomanSemiBold14WhiteA700,
+                                            onPressed: () async {
                                               var req = {
                                                 "active": false,
                                                 "id": data[index].id,
@@ -150,15 +150,18 @@ class _AppointmentInProgress extends StatelessWidget {
                                               print(jsonEncode(req));
                                               controller.updateAppointment(req);
                                             }),
-                                        CustomButton(
-                                            height: getVerticalSize(60),
-                                            width: getHorizontalSize(80),
-                                            text: 'No',
-                                            margin:
-                                                getMargin(left: 0, right: 10),
-                                            fontStyle: ButtonFontStyle
-                                                .RalewayRomanSemiBold14WhiteA700,
-                                            onTap: () async {
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        ElevatedButton(
+                                            // height: getVerticalSize(60),
+                                            // width: getHorizontalSize(80),
+                                            child: const Text('No'),
+                                            // margin:
+                                            //     getMargin(left: 0, right: 10),
+                                            // fontStyle: ButtonFontStyle
+                                            //     .RalewayRomanSemiBold14WhiteA700,
+                                            onPressed: () async {
                                               Get.back();
                                             })
                                       ],

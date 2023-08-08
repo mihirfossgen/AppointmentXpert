@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:appointmentxpert/core/utils/color_constant.dart';
-import 'package:appointmentxpert/widgets/custom_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -987,11 +986,11 @@ class ProfilePage extends GetWidget<ProfileController> {
                                         SizedBox(
                                           height: size.height * 0.02,
                                         ),
-                                        CustomButton(
-                                          height: 60,
-                                          shape: ButtonShape.RoundedBorder8,
-                                          text: "Update",
-                                          onTap: () async {
+                                        ElevatedButton(
+                                          // height: 60,
+                                          // shape: ButtonShape.RoundedBorder8,
+                                          child: const Text("Update"),
+                                          onPressed: () async {
                                             Map<String, dynamic> data = {
                                               "rescheduleDate":
                                                   controller.dob.text,

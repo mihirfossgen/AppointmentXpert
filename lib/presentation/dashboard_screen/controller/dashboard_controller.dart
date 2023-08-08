@@ -99,7 +99,7 @@ class DashboardController extends GetxController {
   // AdvancedCalendarController calendarControllerCustom =
   //     AdvancedCalendarController(DateTime(2022, 10, 23));
   final events = <DateTime>[];
-
+  PatientApi patientAPi = Get.put(PatientApi());
   static const _pageSize = 20;
   PagingController<int, Content> patientPagingController =
       PagingController(firstPageKey: 0);

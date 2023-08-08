@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/errors/exceptions.dart';
-import '../../core/utils/size_utils.dart';
-import '../../widgets/custom_button.dart';
 import 'controller/verify_number_controller.dart';
 
 class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
@@ -70,29 +68,29 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
               const SizedBox(height: 10),
               Obx(() => controller.isloading.value
                   ? SizedBox(height: 50, child: ThreeDotLoader())
-                  : CustomButton(
-                      height: getVerticalSize(56),
-                      width: getHorizontalSize(100),
-                      text: "Verify",
-                      shape: ButtonShape.RoundedBorder8,
-                      padding: ButtonPadding.PaddingAll16,
-                      fontStyle:
-                          ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
-                      onTap: () async {
-                        try {
-                          controller.isloading.value = true;
-                          await controller.verifyOtp(
-                              controller.enteredOtpp.value, phoneNumber ?? "");
-                        } on Map {
-                          //  _onOnTapSignInError();
-                        } on NoInternetException catch (e) {
-                          controller.isloading.value = false;
-                          Get.rawSnackbar(message: e.toString());
-                        } catch (e) {
-                          controller.isloading.value = false;
-                          Get.rawSnackbar(message: e.toString());
-                        }
-                      }))
+                  : SizedBox(
+                      height: 60,
+                      child: ElevatedButton(
+                          // fontStyle:
+                          //     ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                          onPressed: () async {
+                            try {
+                              controller.isloading.value = true;
+                              await controller.verifyOtp(
+                                  controller.enteredOtpp.value,
+                                  phoneNumber ?? "");
+                            } on Map {
+                              //  _onOnTapSignInError();
+                            } on NoInternetException catch (e) {
+                              controller.isloading.value = false;
+                              Get.rawSnackbar(message: e.toString());
+                            } catch (e) {
+                              controller.isloading.value = false;
+                              Get.rawSnackbar(message: e.toString());
+                            }
+                          },
+                          child: const Text('Verify')),
+                    ))
             ]));
   }
 }

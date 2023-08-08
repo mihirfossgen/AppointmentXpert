@@ -1,15 +1,13 @@
 import 'package:appointmentxpert/core/app_export.dart';
+import 'package:flutter/material.dart';
 
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
-import '../../routes/app_routes.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_image_view.dart';
 import 'controller/sign_up_success_controller.dart';
-import 'package:flutter/material.dart';
 
 // ignore_for_file: must_be_immutable
 class SignUpSuccessDialog extends StatelessWidget {
@@ -64,11 +62,11 @@ class SignUpSuccessDialog extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppStyle.txtRalewayRomanRegular16
                           .copyWith(letterSpacing: getHorizontalSize(0.5)))),
-              CustomButton(
-                  height: getVerticalSize(56),
-                  text: "Login Page",
-                  margin: getMargin(top: 22),
-                  onTap: () {
+              ElevatedButton(
+                  //height: getVerticalSize(56),
+                  child: const Text("Login Page"),
+                  //margin: getMargin(top: 22),
+                  onPressed: () {
                     onTapGotohome();
                   })
             ]));

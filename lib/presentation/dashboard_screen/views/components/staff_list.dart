@@ -123,7 +123,8 @@ class StaffList extends GetView<DashboardController> {
                     ),
                     SizedBox(
                       height: 630,
-                      child: Responsive.isMobile(context)
+                      child: Responsive.isMobile(context) ||
+                              Responsive.isTablet(context)
                           ? RefreshIndicator(
                               onRefresh: () async {
                                 Future.sync(() => dashboardController
@@ -229,8 +230,8 @@ class StaffList extends GetView<DashboardController> {
                                       firstButtonTextStyle: const TextStyle(
                                           color: Colors.blue,
                                           fontWeight: FontWeight.bold),
-                                      firstButtonTitle: 'View Details',
-                                      secondButtonTitle: 'Book Appointment',
+                                      firstButtonTitle: 'Edit Details',
+                                      secondButtonTitle: 'Remove',
                                       secondButtonTextStyle: const TextStyle(
                                           color: Colors.red,
                                           fontWeight: FontWeight.bold),

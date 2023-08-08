@@ -16,7 +16,6 @@ import '../../../network/api/appointment_api.dart';
 import '../../../network/endpoints.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../theme/app_style.dart';
-import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/custom_text_form_field.dart';
 import '../../../widgets/responsive.dart';
@@ -726,15 +725,16 @@ class MyData extends DataTableSource {
                                     )),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: CustomButton(
-                                      height: getVerticalSize(56),
-                                      width: getHorizontalSize(110),
-                                      text: "Rechsdule Appointment",
-                                      shape: ButtonShape.RoundedBorder8,
-                                      padding: ButtonPadding.PaddingAll16,
-                                      fontStyle: ButtonFontStyle
-                                          .RalewayRomanSemiBold14WhiteA700,
-                                      onTap: () async {
+                                  child: ElevatedButton(
+                                      //height: getVerticalSize(56),
+                                      //width: getHorizontalSize(110),
+                                      child:
+                                          const Text("Rechsdule Appointment"),
+                                      // shape: ButtonShape.RoundedBorder8,
+                                      // padding: ButtonPadding.PaddingAll16,
+                                      // fontStyle: ButtonFontStyle
+                                      //     .RalewayRomanSemiBold14WhiteA700,
+                                      onPressed: () async {
                                         var requestData = {
                                           "active": true,
                                           "date": DateTime.parse(
@@ -852,7 +852,8 @@ class MyData extends DataTableSource {
                               const Text('Are you sure to cancel appointment?'),
                           actions: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 InkWell(
                                   onTap: () {

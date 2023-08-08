@@ -1,8 +1,7 @@
+import 'package:appointmentxpert/core/scaffolds/public_master_layout/public_master_layout.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/app_export.dart';
-import '../../core/utils/size_utils.dart';
-import '../../theme/app_style.dart';
 import '../../widgets/custom_image_view.dart';
 import 'controller/splash_controller.dart';
 
@@ -14,7 +13,7 @@ class SplashScreen extends GetWidget<SplashController> {
     return SafeArea(
         top: false,
         bottom: false,
-        child: Scaffold(
+        child: PublicMasterLayout(
             //backgroundColor: ColorConstant.blue700,
             body: SizedBox(
                 width: double.maxFinite,

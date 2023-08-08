@@ -5,7 +5,8 @@ import '../core/utils/size_utils.dart';
 
 class CustomButton extends StatelessWidget {
   CustomButton(
-      {super.key, this.shape,
+      {super.key,
+      this.shape,
       this.padding,
       this.variant,
       this.fontStyle,

@@ -7,7 +7,6 @@ import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_image_view.dart';
 import 'controller/create_new_password_success_controller.dart';
 
@@ -63,11 +62,11 @@ class CreateNewPasswordSuccessDialog extends StatelessWidget {
                       maxLines: null,
                       textAlign: TextAlign.center,
                       style: AppStyle.txtInterRegular16)),
-              CustomButton(
-                  height: getVerticalSize(56),
-                  text: "lbl_go_to_home".tr,
-                  margin: getMargin(top: 22),
-                  onTap: () {
+              ElevatedButton(
+                  //height: getVerticalSize(56),
+                  child: Text("lbl_go_to_home".tr),
+                  //margin: getMargin(top: 22),
+                  onPressed: () {
                     onTapGotohome();
                   })
             ]));

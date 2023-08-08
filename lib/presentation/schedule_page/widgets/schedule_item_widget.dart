@@ -14,7 +14,6 @@ import '../../../routes/app_routes.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../theme/app_decoration.dart';
 import '../../../theme/app_style.dart';
-import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/custom_text_form_field.dart';
 import '../../../widgets/responsive.dart';
@@ -36,7 +35,11 @@ class ScheduleItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.a = jsonDecode(SharedPrefUtils.readPrefStr("doctor_details"));
+    var details = SharedPrefUtils.readPrefStr("doctor_details");
+    if (details != "") {
+      controller.a = jsonDecode(details);
+    }
+
     return InkWell(
       onTap: () {
         Get.toNamed(AppRoutes.appointmentDetailsPage,
@@ -130,14 +133,14 @@ class ScheduleItemWidget extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    " ${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
+                    "${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
                     style: AppStyle.txtInterRegular14Gray700,
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    "Appointment id - ${appointment.id}",
+                    "Status - ${appointment.status}",
                     style: AppStyle.txtManrope12,
                   ),
                   const SizedBox(
@@ -162,7 +165,7 @@ class ScheduleItemWidget extends StatelessWidget {
                     style: AppStyle.txtInterRegular14,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
                   loadActionButtons(),
                 ],
@@ -193,14 +196,14 @@ class ScheduleItemWidget extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CustomButton(
-                                  height: getVerticalSize(60),
-                                  width: getHorizontalSize(80),
-                                  text: 'Yes',
-                                  margin: getMargin(left: 10, right: 00),
-                                  fontStyle: ButtonFontStyle
-                                      .RalewayRomanSemiBold14WhiteA700,
-                                  onTap: () async {
+                              ElevatedButton(
+                                  // height: getVerticalSize(60),
+                                  // width: getHorizontalSize(80),
+                                  child: const Text('Yes'),
+                                  // margin: getMargin(left: 10, right: 00),
+                                  // fontStyle: ButtonFontStyle
+                                  //     .RalewayRomanSemiBold14WhiteA700,
+                                  onPressed: () async {
                                     var data = {
                                       "active": false,
                                       "id": appointment.id,
@@ -213,14 +216,14 @@ class ScheduleItemWidget extends StatelessWidget {
                                     };
                                     controller.updateAppointment(data);
                                   }),
-                              CustomButton(
-                                  height: getVerticalSize(60),
-                                  width: getHorizontalSize(80),
-                                  text: 'No',
-                                  margin: getMargin(left: 0, right: 10),
-                                  fontStyle: ButtonFontStyle
-                                      .RalewayRomanSemiBold14WhiteA700,
-                                  onTap: () async {
+                              ElevatedButton(
+                                  // height: getVerticalSize(60),
+                                  // width: getHorizontalSize(80),
+                                  child: const Text('No'),
+                                  // margin: getMargin(left: 0, right: 10),
+                                  // fontStyle: ButtonFontStyle
+                                  //     .RalewayRomanSemiBold14WhiteA700,
+                                  onPressed: () async {
                                     Get.back();
                                   })
                             ],
@@ -256,16 +259,17 @@ class ScheduleItemWidget extends StatelessWidget {
                         title: const Text('Do you want to cancel appointment?'),
                         actions: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              CustomButton(
-                                  height: getVerticalSize(60),
-                                  width: getHorizontalSize(80),
-                                  text: 'Yes',
-                                  margin: getMargin(left: 10, right: 00),
-                                  fontStyle: ButtonFontStyle
-                                      .RalewayRomanSemiBold14WhiteA700,
-                                  onTap: () async {
+                              ElevatedButton(
+                                  // height: getVerticalSize(60),
+                                  // width: getHorizontalSize(80),
+                                  child: const Text('Yes'),
+                                  // margin: getMargin(left: 10, right: 00),
+                                  // fontStyle: ButtonFontStyle
+                                  //     .RalewayRomanSemiBold14WhiteA700,
+                                  onPressed: () async {
                                     var data = {
                                       "active": false,
                                       "id": appointment.id,
@@ -278,14 +282,14 @@ class ScheduleItemWidget extends StatelessWidget {
                                     };
                                     controller.updateAppointment(data);
                                   }),
-                              CustomButton(
-                                  height: getVerticalSize(60),
-                                  width: getHorizontalSize(80),
-                                  text: 'No',
-                                  margin: getMargin(left: 0, right: 10),
-                                  fontStyle: ButtonFontStyle
-                                      .RalewayRomanSemiBold14WhiteA700,
-                                  onTap: () async {
+                              ElevatedButton(
+                                  // height: getVerticalSize(60),
+                                  // width: getHorizontalSize(80),
+                                  child: Text('No'),
+                                  // margin: getMargin(left: 0, right: 10),
+                                  // fontStyle: ButtonFontStyle
+                                  //     .RalewayRomanSemiBold14WhiteA700,
+                                  onPressed: () async {
                                     Get.back();
                                   })
                             ],
@@ -327,14 +331,14 @@ class ScheduleItemWidget extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  CustomButton(
-                                      height: getVerticalSize(60),
-                                      width: getHorizontalSize(80),
-                                      text: 'Yes',
-                                      margin: getMargin(left: 10, right: 00),
-                                      fontStyle: ButtonFontStyle
-                                          .RalewayRomanSemiBold14WhiteA700,
-                                      onTap: () async {
+                                  ElevatedButton(
+                                      // height: getVerticalSize(60),
+                                      // width: getHorizontalSize(80),
+                                      child: const Text('Yes'),
+                                      // margin: getMargin(left: 10, right: 00),
+                                      // fontStyle: ButtonFontStyle
+                                      //     .RalewayRomanSemiBold14WhiteA700,
+                                      onPressed: () async {
                                         var data = {
                                           "active": false,
                                           "id": appointment.id,
@@ -348,14 +352,14 @@ class ScheduleItemWidget extends StatelessWidget {
                                         };
                                         controller.updateAppointment(data);
                                       }),
-                                  CustomButton(
-                                      height: getVerticalSize(60),
-                                      width: getHorizontalSize(80),
-                                      text: 'No',
-                                      margin: getMargin(left: 0, right: 10),
-                                      fontStyle: ButtonFontStyle
-                                          .RalewayRomanSemiBold14WhiteA700,
-                                      onTap: () async {
+                                  ElevatedButton(
+                                      // height: getVerticalSize(60),
+                                      // width: getHorizontalSize(80),
+                                      child: const Text('No'),
+                                      // margin: getMargin(left: 0, right: 10),
+                                      // fontStyle: ButtonFontStyle
+                                      //     .RalewayRomanSemiBold14WhiteA700,
+                                      onPressed: () async {
                                         Get.back();
                                       })
                                 ],
@@ -509,15 +513,16 @@ class ScheduleItemWidget extends StatelessWidget {
                                       )),
                                   Align(
                                     alignment: Alignment.center,
-                                    child: CustomButton(
-                                        height: getVerticalSize(56),
-                                        width: getHorizontalSize(110),
-                                        text: "Reschdule Appointment",
-                                        shape: ButtonShape.RoundedBorder8,
-                                        padding: ButtonPadding.PaddingAll16,
-                                        fontStyle: ButtonFontStyle
-                                            .RalewayRomanSemiBold14WhiteA700,
-                                        onTap: () async {
+                                    child: ElevatedButton(
+                                        // height: getVerticalSize(56),
+                                        // width: getHorizontalSize(110),
+                                        child:
+                                            const Text("Reschdule Appointment"),
+                                        // shape: ButtonShape.RoundedBorder8,
+                                        // padding: ButtonPadding.PaddingAll16,
+                                        // fontStyle: ButtonFontStyle
+                                        //     .RalewayRomanSemiBold14WhiteA700,
+                                        onPressed: () async {
                                           TimeOfDay _startTime = TimeOfDay(
                                               hour: int.parse(controller
                                                   .from.value.text!

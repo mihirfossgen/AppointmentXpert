@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../core/constants/constants.dart';
 import '../core/utils/color_constant.dart';
 import '../core/utils/size_utils.dart';
@@ -99,7 +100,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   _buildTextFormFieldWidget() {
     return Container(
       width: widget.width ?? double.maxFinite,
-      //height: 60,
+      //height: Responsive.isMobile(context) ? 50 : 80,
       margin: widget.margin,
       child: TextFormField(
         readOnly: widget.readonly ?? false,
@@ -303,7 +304,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       case TextFormFieldPadding.PaddingT14:
         return getPadding(
           left: 10,
-          top: 16,
+          top: 0,
           bottom: 16,
         );
       default:

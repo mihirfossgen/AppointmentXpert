@@ -6,7 +6,6 @@ import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_image.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
@@ -105,11 +104,11 @@ class CreateNewPasswordScreen extends GetWidget<CreateNewPasswordController> {
                           suffixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56)),
                           isObscureText: controller.isShowPassword.value)),
-                      CustomButton(
-                          height: getVerticalSize(56),
-                          text: "lbl_create_password".tr,
-                          margin: getMargin(top: 24, bottom: 5),
-                          onTap: () async {
+                      ElevatedButton(
+                          //height: getVerticalSize(56),
+                          child: Text("lbl_create_password".tr),
+                          //margin: getMargin(top: 24, bottom: 5),
+                          onPressed: () async {
                             bool value = await controller.callForgotPassword(
                                 controller.inputController.text,
                                 controller.inputOneController.text,

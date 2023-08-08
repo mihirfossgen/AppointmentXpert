@@ -1,11 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/utils/size_utils.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_form_field.dart';
 import 'controller/reset_password_email_controller.dart';
 import 'models/reset_password_email_model.dart';
-import 'package:flutter/material.dart';
 
 class ResetPasswordEmailPage extends StatelessWidget {
   ResetPasswordEmailController controller =
@@ -47,14 +46,15 @@ class ResetPasswordEmailPage extends StatelessWidget {
                         prefixConstraints:
                             BoxConstraints(maxHeight: getVerticalSize(56)),
                       ),
-                      CustomButton(
-                        height: getVerticalSize(
-                          56,
-                        ),
-                        text: "lbl_send_otp".tr,
-                        margin: getMargin(
-                          top: 32,
-                        ),
+                      ElevatedButton(
+                        // height: getVerticalSize(
+                        //   56,
+                        // ),
+                        child: Text("lbl_send_otp".tr),
+                        // margin: getMargin(
+                        //   top: 32,
+                        // ),
+                        onPressed: () {},
                       ),
                     ],
                   ),

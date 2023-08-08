@@ -8,7 +8,6 @@ import '../../routes/app_routes.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_image_view.dart';
 import 'controller/log_out_pop_up_controller.dart';
 
@@ -91,19 +90,19 @@ class LogOutPopUpDialog extends StatelessWidget {
               style: AppStyle.txtInterBold20,
             ),
           ),
-          CustomButton(
-            onTap: () {
+          ElevatedButton(
+            onPressed: () {
               SharedPrefUtils().clearAllData();
               Get.offAllNamed(AppRoutes.loginScreen);
             },
-            height: getVerticalSize(
-              62,
-            ),
-            text: "lbl_log_out".tr,
-            margin: getMargin(
-              top: 27,
-            ),
-            variant: ButtonVariant.FillRedA200,
+            // height: getVerticalSize(
+            //   62,
+            // ),
+            child: Text("lbl_log_out".tr),
+            // margin: getMargin(
+            //   top: 27,
+            // ),
+            // variant: ButtonVariant.FillRedA200,
           ),
           Padding(
             padding: getPadding(
