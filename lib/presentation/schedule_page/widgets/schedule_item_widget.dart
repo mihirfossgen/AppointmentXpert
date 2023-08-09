@@ -4,7 +4,6 @@ import 'package:appointmentxpert/core/utils/time_calculation_utils.dart';
 import 'package:appointmentxpert/presentation/schedule_page/widgets/reschedule_appointment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../core/app_export.dart';
 import '../../../core/utils/color_constant.dart';
@@ -17,7 +16,6 @@ import '../../../theme/app_decoration.dart';
 import '../../../theme/app_style.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_image_view.dart';
-import '../../../widgets/custom_text_form_field.dart';
 import '../../../widgets/responsive.dart';
 import '../controller/schedule_controller.dart';
 

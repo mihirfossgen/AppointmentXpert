@@ -1,5 +1,4 @@
 import 'package:appointmentxpert/models/staff_list_model.dart';
-import 'package:appointmentxpert/presentation/add_patient_screens/add_patient_screen.dart';
 import 'package:appointmentxpert/presentation/patient_details_page/patient_details_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -7,7 +6,6 @@ import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:images_picker/images_picker.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -19,6 +17,7 @@ import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
+import '../../../add_patient_screens/add_patient_screen.dart';
 import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../controller/dashboard_controller.dart';
 import '../../shared_components/search_field.dart';
@@ -35,6 +34,7 @@ class PatientsList extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -44,7 +44,14 @@ class PatientsList extends GetView<DashboardController> {
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
+      body: loadBody(),
+    );
+  }
+
+  Widget loadBody() {
+    return SizedBox(
+      height: MediaQuery.of(Get.context!).size.height + 100,
+      child: Container(
           padding: const EdgeInsets.all(defaultPadding),
           decoration: const BoxDecoration(
             color: secondaryColor,
@@ -58,11 +65,12 @@ class PatientsList extends GetView<DashboardController> {
                   PagingController(firstPageKey: 0);
               controller.callRecentPatientList(0);
             },
-            child: ListView(children: [
-              Column(
+            child: SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (Responsive.isMobile(context))
+                  if (Responsive.isMobile(Get.context!))
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -101,7 +109,6 @@ class PatientsList extends GetView<DashboardController> {
                           height: 10.0,
                         ),
                         SearchField(
-                          controller: dashboardController.searchedText.value,
                           onSearch: (value) {
                             if (value.length > 3) {
                               data?.forEach((element) {
@@ -123,7 +130,7 @@ class PatientsList extends GetView<DashboardController> {
                         ),
                       ],
                     ),
-                  if (!Responsive.isMobile(context))
+                  if (!Responsive.isMobile(Get.context!))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -131,13 +138,13 @@ class PatientsList extends GetView<DashboardController> {
                         Expanded(
                           flex: 1,
                           child: SearchField(
-                            controller: dashboardController.searchedText.value,
                             onSearch: (value) {
                               if (value.length > 3) {
                                 data?.forEach((element) {
                                   if (element.firstName!
                                       .toLowerCase()
                                       .contains(value.toLowerCase())) {
+                                    print(true);
                                     List<Content> a = [];
                                     a.add(element);
                                     dashboardController
@@ -156,153 +163,167 @@ class PatientsList extends GetView<DashboardController> {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  Responsive.isMobile(context)
-                      ? RefreshIndicator(
-                          onRefresh: () async {
-                            Future.sync(() => dashboardController
-                                .patientPagingController
-                                .refresh());
-                            dashboardController.isloadingRecentPatients.value =
-                                true;
-                            dashboardController.callRecentPatientList(0);
-                          },
-                          child: PagedListView<int, Content>.separated(
-                            shrinkWrap: true,
-                            pagingController:
-                                dashboardController.patientPagingController,
-                            physics: const ScrollPhysics(),
-                            builderDelegate: PagedChildBuilderDelegate<Content>(
-                              animateTransitions: true,
-                              itemBuilder: (context, item, index) => Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: GFListTile(
-                                  icon: const Icon(Icons.arrow_right),
-                                  avatar: item.profilePicture != null
-                                      ? CachedNetworkImage(
-                                          width: 80,
-                                          height: 80,
-                                          fit: BoxFit.contain,
-                                          imageUrl: Uri.encodeFull(
-                                            Endpoints.baseURL +
-                                                Endpoints.downLoadPatientPhoto +
-                                                item.profilePicture.toString(),
+                  SizedBox(
+                    height: Responsive.isMobile(Get.context!)
+                        ? MediaQuery.of(Get.context!).size.height * 0.62
+                        : Responsive.isTablet(Get.context!)
+                            ? MediaQuery.of(Get.context!).size.height * 0.80
+                            : MediaQuery.of(Get.context!).size.height,
+                    child: Responsive.isMobile(Get.context!) ||
+                            Responsive.isTablet(Get.context!)
+                        ? RefreshIndicator(
+                            onRefresh: () async {
+                              Future.sync(() => dashboardController
+                                  .patientPagingController
+                                  .refresh());
+                              dashboardController
+                                  .isloadingRecentPatients.value = true;
+                              dashboardController.callRecentPatientList(0);
+                            },
+                            child: PagedListView<int, Content>.separated(
+                              shrinkWrap: true,
+                              pagingController:
+                                  dashboardController.patientPagingController,
+                              builderDelegate:
+                                  PagedChildBuilderDelegate<Content>(
+                                animateTransitions: true,
+                                itemBuilder: (context, item, index) => Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: GFListTile(
+                                    icon: const Icon(Icons.arrow_right),
+                                    avatar: item.profilePicture != null
+                                        ? CachedNetworkImage(
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.contain,
+                                            imageUrl: Uri.encodeFull(
+                                              Endpoints.baseURL +
+                                                  Endpoints
+                                                      .downLoadPatientPhoto +
+                                                  item.profilePicture
+                                                      .toString(),
+                                            ),
+                                            httpHeaders: {
+                                              "Authorization":
+                                                  "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                                            },
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget: (context, url, error) {
+                                              print(error);
+                                              return CustomImageView(
+                                                imagePath: !Responsive
+                                                        .isDesktop(Get.context!)
+                                                    ? 'assets'
+                                                        '/images/default_profile.png'
+                                                    : '/images/default_profile.png',
+                                              );
+                                            },
+                                          )
+                                        : CustomImageView(
+                                            width: 80,
+                                            height: 80,
+                                            imagePath: !Responsive.isDesktop(
+                                                    Get.context!)
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
+                                                : '/images/default_profile.png',
                                           ),
-                                          httpHeaders: {
-                                            "Authorization":
-                                                "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                                          },
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                  value: downloadProgress
-                                                      .progress),
-                                          errorWidget: (context, url, error) {
-                                            print(error);
-                                            return CustomImageView(
-                                              imagePath: !Responsive.isDesktop(
-                                                      Get.context!)
-                                                  ? 'assets'
-                                                      '/images/default_profile.png'
-                                                  : '/images/default_profile.png',
-                                            );
-                                          },
-                                        )
-                                      : CustomImageView(
-                                          width: 80,
-                                          height: 80,
-                                          imagePath: !Responsive.isDesktop(
-                                                  Get.context!)
-                                              ? 'assets'
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png',
+                                    //autofocus: true,
+                                    color: Colors.white,
+                                    description: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 5,
                                         ),
-                                  //autofocus: true,
-                                  color: Colors.white,
-                                  description: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Email: ${item.email.toString()}',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Address: ${item.address}',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Date of birth: ${formatter.format(DateTime.parse(item.dob ?? ""))}',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                  enabled: true,
-                                  firstButtonTextStyle: const TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold),
-                                  firstButtonTitle: 'View Details',
-                                  secondButtonTitle: 'Book Appointment',
-                                  secondButtonTextStyle: const TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                  onSecondButtonTap: () {
-                                    Get.to(() => AppointmentBookingScreen(
-                                        doctorsList: doctorsList,
-                                        patientDetailsArguments:
-                                            PatientDetailsArguments([], item)));
-                                  },
-                                  onFirstButtonTap: () {
-                                    Get.to(() => (PatientDetailsPage(item)));
-                                  },
-                                  //focusColor: ,
-                                  focusNode: FocusNode(),
-                                  //hoverColor: Colors.blue,
-                                  //icon: ,
-                                  listItemTextColor: GFColors.DARK,
-                                  //margin: getMarginOrPadding(all: 8.0),
-                                  //onFirstButtonTap: ,
-                                  //onLongPress: ,
-                                  //onSecondButtonTap: ,
-                                  onTap: () {},
-                                  //padding: ,
-                                  radius: 8,
-                                  //secondButtonTextStyle: ,
-                                  //secondButtonTitle: 'Delete',
-                                  selected: false,
-                                  //shadow: BoxShadow,
-                                  //subTitleText: 'Address: ${data.address}',
-                                  title: Text(
-                                    '${item.prefix.toString()}'
-                                    '${item.firstName} '
-                                    '${item.lastName}',
-                                    style: const TextStyle(
-                                        fontSize: 16,
+                                        Text(
+                                          'Email: ${item.email.toString()}',
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          'Address: ${item.address}',
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          'Age: ${item.age}',
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    enabled: true,
+                                    firstButtonTextStyle: const TextStyle(
+                                        color: Colors.blue,
                                         fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                    firstButtonTitle: 'View Details',
+                                    secondButtonTitle: 'Book Appointment',
+                                    secondButtonTextStyle: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                    onSecondButtonTap: () {
+                                      Get.to(() => AppointmentBookingScreen(
+                                          doctorsList: doctorsList,
+                                          patientDetailsArguments:
+                                              PatientDetailsArguments(
+                                                  [], item)));
+                                    },
+                                    onFirstButtonTap: () {
+                                      Get.to(() => (PatientDetailsPage(item)));
+                                    },
+                                    //focusColor: ,
+                                    focusNode: FocusNode(),
+                                    //hoverColor: Colors.blue,
+                                    //icon: ,
+                                    listItemTextColor: GFColors.DARK,
+                                    //margin: getMarginOrPadding(all: 8.0),
+                                    //onFirstButtonTap: ,
+                                    //onLongPress: ,
+                                    //onSecondButtonTap: ,
+                                    onTap: () {},
+                                    //padding: ,
+                                    radius: 8,
+                                    //secondButtonTextStyle: ,
+                                    //secondButtonTitle: 'Delete',
+                                    selected: false,
+                                    //shadow: BoxShadow,
+                                    //subTitleText: 'Address: ${data.address}',
+                                    title: Text(
+                                      '${item.prefix.toString()}'
+                                      '${item.firstName} '
+                                      '${item.lastName}',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    //titleText: '${data.firstName} ' + '${data.lastName}',
                                   ),
-                                  //titleText: '${data.firstName} ' + '${data.lastName}',
                                 ),
                               ),
+                              separatorBuilder: (context, index) =>
+                                  const Divider(),
                             ),
-                            separatorBuilder: (context, index) =>
-                                const Divider(),
-                          ),
-                        )
-                      //loadList()
-                      : loadDataTable(),
+                          )
+                        //loadList()
+                        : loadDataTable(),
+                  ),
 
                   // Container(
                   //   width: double.infinity,
@@ -351,7 +372,7 @@ class PatientsList extends GetView<DashboardController> {
                   // ),
                 ],
               ),
-            ]),
+            ),
           )),
     );
   }

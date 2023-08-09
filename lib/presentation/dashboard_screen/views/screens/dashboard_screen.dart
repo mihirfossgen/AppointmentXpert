@@ -31,7 +31,6 @@ import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../widgets/app_bar/appbar_image.dart';
-import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/custom_text_form_field.dart';
 import '../../../../widgets/responsive.dart';
@@ -461,8 +460,7 @@ class DashboardScreen extends GetView<DashboardController> {
                     : _dailyNumbers(controller.staffTodaysData),
                 const SizedBox(height: kSpacing),
                 SizedBox(
-                  child: ResponsiveBuilder.isMobile(context) ||
-                          ResponsiveBuilder.isTablet(context)
+                  child: ResponsiveBuilder.isMobile(context)
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -2577,8 +2575,7 @@ class DashboardScreen extends GetView<DashboardController> {
             shadowColor: Colors.grey.shade400,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: ResponsiveBuilder.isMobile(Get.context!) ||
-                      ResponsiveBuilder.isTablet(Get.context!)
+              child: ResponsiveBuilder.isMobile(Get.context!)
                   ? Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -2731,121 +2728,21 @@ class DashboardScreen extends GetView<DashboardController> {
                             ],
                           )
                         ])
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: const Color(0xff013f88)),
-                                child: const Icon(Icons.calendar_month_sharp,
-                                    size: 40, color: Colors.white),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Countup(
-                                      begin: 0,
-                                      end: controller
-                                          .staffTodaysTotalData.length
-                                          .toDouble(),
-                                      duration: const Duration(seconds: 2),
-                                      separator: ',',
-                                      style: TextStyle(
-                                        fontSize:
-                                            Responsive.isDesktop(Get.context!)
-                                                ? 30
-                                                : 18,
-                                        color: Colors.blue.shade900,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Today's Total Appointments",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
-                                        color: ColorConstant.black900),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Divider(
-                            height: 8,
-                            thickness: 1,
-                            color: ColorConstant.gray400,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: const Color(0xff013f88)),
-                                child: const Icon(Icons.person_outline_outlined,
-                                    size: 40, color: Colors.white),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Countup(
-                                      begin: 0,
-                                      end: controller
-                                          .getEmergencyPatientsList.length
-                                          .toDouble(),
-                                      duration: const Duration(seconds: 2),
-                                      separator: ',',
-                                      style: TextStyle(
-                                        fontSize:
-                                            Responsive.isDesktop(Get.context!)
-                                                ? 30
-                                                : 18,
-                                        color: Colors.red.shade900,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Emergency Request",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
-                                        color: ColorConstant.black900),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Divider(
-                            height: 8,
-                            thickness: 1,
-                            color: ColorConstant.gray400,
-                          ),
-                          SizedBox(
-                            child: Row(
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(20),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: const Color(0xff013f88)),
-                                  child: const Icon(
-                                      Icons.access_time_filled_outlined,
-                                      size: 40,
-                                      color: Colors.white),
+                                  child: const Icon(Icons.calendar_month_sharp,
+                                      size: 40, color: Colors.white),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -2855,9 +2752,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                   children: [
                                     Countup(
                                         begin: 0,
-                                        end: double.parse(controller
-                                            .staffTodaysCompletedData.length
-                                            .toString()),
+                                        end: controller
+                                            .staffTodaysTotalData.length
+                                            .toDouble(),
                                         duration: const Duration(seconds: 2),
                                         separator: ',',
                                         style: TextStyle(
@@ -2872,21 +2769,134 @@ class DashboardScreen extends GetView<DashboardController> {
                                       height: 10,
                                     ),
                                     Text(
-                                      "Completed Appointments",
+                                      "Today's Total Appointments",
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.normal,
                                           color: ColorConstant.black900),
                                     ),
                                   ],
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
+                                )
                               ],
                             ),
-                          ),
-                        ]),
+                            Divider(
+                              height: 8,
+                              thickness: 1,
+                              color: ColorConstant.gray400,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: const Color(0xff013f88)),
+                                  child: const Icon(
+                                      Icons.person_outline_outlined,
+                                      size: 40,
+                                      color: Colors.white),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Countup(
+                                        begin: 0,
+                                        end: controller
+                                            .getEmergencyPatientsList.length
+                                            .toDouble(),
+                                        duration: const Duration(seconds: 2),
+                                        separator: ',',
+                                        style: TextStyle(
+                                          fontSize:
+                                              Responsive.isDesktop(Get.context!)
+                                                  ? 30
+                                                  : 18,
+                                          color: Colors.red.shade900,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "Emergency Request",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                          color: ColorConstant.black900),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Divider(
+                              height: 8,
+                              thickness: 1,
+                              color: ColorConstant.gray400,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            SizedBox(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: const Color(0xff013f88)),
+                                    child: const Icon(
+                                        Icons.access_time_filled_outlined,
+                                        size: 40,
+                                        color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Countup(
+                                          begin: 0,
+                                          end: double.parse(controller
+                                              .staffTodaysCompletedData.length
+                                              .toString()),
+                                          duration: const Duration(seconds: 2),
+                                          separator: ',',
+                                          style: TextStyle(
+                                            fontSize: Responsive.isDesktop(
+                                                    Get.context!)
+                                                ? 30
+                                                : 18,
+                                            color: Colors.blue.shade900,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "Completed Appointments",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal,
+                                            color: ColorConstant.black900),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                    ),
             )));
   }
 }

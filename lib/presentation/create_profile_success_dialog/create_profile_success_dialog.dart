@@ -7,7 +7,6 @@ import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_image_view.dart';
 import 'controller/create_profile_success_controller.dart';
 
@@ -58,11 +57,11 @@ class CreateProfileSuccessDialog extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
                         style: AppStyle.txtRalewayRomanBold20)),
-                CustomButton(
-                    height: getVerticalSize(62),
-                    text: "lbl_go_to_home".tr,
-                    margin: getMargin(top: 22),
-                    onTap: () {
+                ElevatedButton(
+                    //height: getVerticalSize(62),
+                    child: Text("lbl_go_to_home".tr),
+                    //margin: getMargin(top: 22),
+                    onPressed: () {
                       onTapGotohome();
                     })
               ]),

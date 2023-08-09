@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:appointmentxpert/widgets/loader.dart';
+import 'package:appointmentxpert/theme/app_style.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:timeago/timeago.dart';
 
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
@@ -16,8 +15,6 @@ import '../../core/utils/time_calculation_utils.dart';
 import '../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../models/getallEmplyesList.dart';
 import '../../models/staff_list_model.dart';
-import '../../shared_prefrences_page/shared_prefrence_page.dart';
-import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
@@ -770,39 +767,26 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Obx(() => Expanded(
-                                            child: controller.selectedStartTime
-                                                        .value ==
-                                                    ''
-                                                ? CustomButton(
-                                                    height: getVerticalSize(55),
-                                                    text: "lbl_book_apointment"
-                                                        .tr,
-                                                    margin: getMargin(left: 11),
-                                                    variant:
-                                                        ButtonVariant.FillGrey,
-                                                    fontStyle: ButtonFontStyle
-                                                        .RalewayRomanSemiBold14WhiteA700,
-                                                  )
-                                                : CustomButton(
-                                                    height: getVerticalSize(55),
-                                                    text: "lbl_book_apointment"
-                                                        .tr,
-                                                    margin: getMargin(left: 11),
-                                                    fontStyle: ButtonFontStyle
-                                                        .RalewayRomanSemiBold14WhiteA700,
-                                                    onTap: () async {
-                                                      bool a = controller
-                                                          .trySubmit();
+                                        Expanded(
+                                            child: ElevatedButton(
+                                                child: Text(
+                                                    "lbl_book_apointment".tr),
+                                                // height: getVerticalSize(52),
+                                                // text: "lbl_book_apointment".tr,
+                                                // margin: getMargin(left: 11),
+                                                // fontStyle: ButtonFontStyle
+                                                //     .RalewayRomanSemiBold14WhiteA700,
+                                                onPressed: () async {
+                                                  bool a =
+                                                      controller.trySubmit();
 
-                                                      if (a) {
-                                                        onTapBookapointmentOne(
-                                                          controller
-                                                                  .examinerId ??
-                                                              0,
-                                                        );
-                                                      }
-                                                    })))
+                                                  if (a) {
+                                                    onTapBookapointmentOne(
+                                                      controller.examinerId ??
+                                                          0,
+                                                    );
+                                                  }
+                                                }))
                                       ]))
                             ],
                           )),
@@ -1112,19 +1096,27 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: CustomButton(
-                      height: getVerticalSize(60),
-                      width: getHorizontalSize(80),
-                      text: "lbl_book_apointment".tr,
-                      margin: getMargin(left: 0, right: 10),
-                      fontStyle:
-                          ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
-                      onTap: () async {
-                        bool a = controller.trySubmit();
-                        if (a) {
-                          onTapBookapointmentOne(controller.examinerId ?? 0);
-                        }
-                      }),
+                  child: SizedBox(
+                    height: 60,
+                    width: 300,
+                    child: ElevatedButton(
+                        child: Text(
+                          "lbl_book_apointment".tr,
+                          style: AppStyle.txtRalewayRomanMedium14WhiteA700,
+                        ),
+                        // height: getVerticalSize(60),
+                        // width: getHorizontalSize(80),
+                        // text: "lbl_book_apointment".tr,
+                        // margin: getMargin(left: 0, right: 10),
+                        // fontStyle:
+                        //     ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                        onPressed: () async {
+                          bool a = controller.trySubmit();
+                          if (a) {
+                            onTapBookapointmentOne(controller.examinerId ?? 0);
+                          }
+                        }),
+                  ),
                 ),
                 SizedBox(
                   height: size.height * 0.02,
@@ -1271,15 +1263,20 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       Get.dialog(AlertDialog(
         title: const Text('Appointment for the selected time has passed.'),
         actions: [
-          CustomButton(
-              height: getVerticalSize(60),
-              width: getHorizontalSize(80),
-              text: 'Close',
-              margin: getMargin(left: 0, right: 10),
-              fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
-              onTap: () async {
+          ElevatedButton(
+              onPressed: () {
                 Get.back();
-              })
+              },
+              child: const Text('Close'))
+          // CustomButton(
+          //     height: getVerticalSize(60),
+          //     width: getHorizontalSize(80),
+          //     text: 'Close',
+          //     margin: getMargin(left: 0, right: 10),
+          //     fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+          //     onTap: () async {
+          //       Get.back();
+          //     })
         ],
       ));
     }

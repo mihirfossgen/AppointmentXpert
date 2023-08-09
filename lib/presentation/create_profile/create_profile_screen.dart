@@ -17,7 +17,6 @@ import '../../models/create_staff_model.dart';
 import '../../models/createpatient_model.dart';
 import '../../widgets/app_bar/appbar_subtitle_2.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/loader.dart';
@@ -1034,14 +1033,20 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
             patientUI(size, context),
             Obx(() => controller.isloading.value
                 ? SizedBox(height: 50, child: ThreeDotLoader())
-                : CustomButton(
-                    height: getVerticalSize(56),
-                    text: "Confirm and Save",
-                    margin: getMargin(top: 12),
-                    onTap: () {
+                : ElevatedButton(
+                    child: const Text('Confirm and Save'),
+                    onPressed: () {
                       bool a = controller.trySubmit();
                       if (a) OnTapConfirmAndSave(args);
-                    })),
+                    }))
+            // CustomButton(
+            //     height: getVerticalSize(56),
+            //     text: "Confirm and Save",
+            //     margin: getMargin(top: 12),
+            //     onTap: () {
+            //       bool a = controller.trySubmit();
+            //       if (a) OnTapConfirmAndSave(args);
+            //     })),
           ],
         ),
       ),

@@ -1,4 +1,6 @@
+import 'package:appointmentxpert/widgets/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../core/utils/color_constant.dart';
 import '../core/utils/size_utils.dart';
@@ -6,7 +8,8 @@ import '../data/models/selectionPopupModel/selection_popup_model.dart';
 
 class CustomDropDown extends StatelessWidget {
   CustomDropDown(
-      {super.key, this.shape,
+      {super.key,
+      this.shape,
       this.padding,
       this.variant,
       this.fontStyle,
@@ -69,6 +72,7 @@ class CustomDropDown extends StatelessWidget {
   _buildDropDownWidget() {
     return Container(
       width: width ?? double.maxFinite,
+      height: Responsive.isMobile(Get.context!) ? 50 : 70,
       margin: margin,
       child: DropdownButtonFormField<SelectionPopupModel>(
         autovalidateMode: AutovalidateMode.onUserInteraction,

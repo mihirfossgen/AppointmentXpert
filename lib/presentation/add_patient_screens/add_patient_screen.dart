@@ -1,9 +1,7 @@
 import 'package:appointmentxpert/core/app_export.dart';
 import 'package:appointmentxpert/network/api/user_api.dart';
-import 'package:appointmentxpert/widgets/loader.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/utils/color_constant.dart';
@@ -11,7 +9,6 @@ import '../../core/utils/country_list.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../widgets/app_bar/appbar_image.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
@@ -365,14 +362,14 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       ),
                       Align(
                         alignment: Alignment.center,
-                        child: CustomButton(
-                            height: getVerticalSize(60),
+                        child: ElevatedButton(
+                            //height: getVerticalSize(60),
                             //width: getHorizontalSize(80),
-                            text: "Add patient",
-                            margin: getMargin(left: 0, right: 0),
-                            fontStyle:
-                                ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
-                            onTap: () async {
+                            child: const Text("Add patient"),
+                            // margin: getMargin(left: 0, right: 0),
+                            // fontStyle:
+                            //     ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                            onPressed: () async {
                               bool a = controller.trySubmit();
                               if (a) {
                                 Map<String, dynamic> requestData = {
@@ -717,13 +714,13 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
               ),
               Align(
                 alignment: Alignment.center,
-                child: CustomButton(
-                    height: getVerticalSize(60),
-                    width: getHorizontalSize(80),
-                    text: 'Add Patient',
-                    margin: getMargin(left: 0, right: 10),
-                    fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
-                    onTap: () async {
+                child: ElevatedButton(
+                    // height: getVerticalSize(60),
+                    // width: getHorizontalSize(80),
+                    child: const Text('Add Patient'),
+                    // margin: getMargin(left: 0, right: 10),
+                    // fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                    onPressed: () async {
                       bool a = await controller.trySubmit();
                       if (a) {
                         Map<String, dynamic> requestData = {

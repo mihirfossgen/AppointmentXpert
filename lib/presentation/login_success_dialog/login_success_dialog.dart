@@ -7,7 +7,6 @@ import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/custom_image_view.dart';
 import 'controller/login_success_controller.dart';
 
@@ -64,11 +63,11 @@ class LoginSuccessDialog extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppStyle.txtRalewayRomanRegular16
                           .copyWith(letterSpacing: getHorizontalSize(0.5)))),
-              CustomButton(
-                  height: getVerticalSize(56),
-                  text: "lbl_go_to_home".tr,
-                  margin: getMargin(top: 22),
-                  onTap: () {
+              ElevatedButton(
+                  //height: getVerticalSize(56),
+                  child: Text("lbl_go_to_home".tr),
+                  //margin: getMargin(top: 22),
+                  onPressed: () {
                     onTapGotohome();
                   })
             ]));

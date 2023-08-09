@@ -1,3 +1,4 @@
+import 'package:appointmentxpert/presentation/dashboard_screen/shared_components/responsive_builder.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +26,17 @@ class SchedulePage extends GetWidget<ScheduleController> {
   Widget build(BuildContext context) {
     return SizedBox(
         width: double.maxFinite,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        height: MediaQuery.of(context).size.height + 20,
+        child: ListView(
+          //mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SharedPrefUtils.readPrefStr('role') != "PATIENT"
                 ? Obx(() => Padding(
                       padding: getPadding(left: 0, top: 12, right: 0),
                       child: SizedBox(
-                        //height: 600,
-                        child: Responsive.isMobile(context)
+                        height: MediaQuery.of(context).size.height,
+                        child: Responsive.isMobile(context) ||
+                                Responsive.isTablet(context)
                             ? controller.isloading.value
                                 ? const Center(
                                     child: CircularProgressIndicator())
@@ -62,16 +64,20 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     );*/
                                     },
                                     child: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.65,
-                                      child: PagedListView<int,
-                                          AppointmentContent>.separated(
+                                      height: Responsive.isMobile(context)
+                                          ? MediaQuery.of(context).size.height *
+                                              0.65
+                                          : MediaQuery.of(context).size.height *
+                                              0.75,
+                                      child: PagedGridView<int,
+                                          AppointmentContent>(
                                         shrinkWrap: true,
-                                        physics:
-                                            const AlwaysScrollableScrollPhysics(),
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 0, 0),
+                                        showNewPageProgressIndicatorAsGridChild:
+                                            false,
+                                        showNewPageErrorIndicatorAsGridChild:
+                                            false,
+                                        showNoMoreItemsIndicatorAsGridChild:
+                                            false,
                                         pagingController: tab.toLowerCase() ==
                                                 'today'
                                             ? controller
@@ -83,6 +89,32 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                 : controller
                                                     .completedPagingController
                                                     .value,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          childAspectRatio:
+                                              tab.toLowerCase() == 'completed'
+                                                  ? 2.5
+                                                  : 1.90,
+                                          // tab.toLowerCase() == 'completed'
+                                          //     ? ResponsiveBuilder.isMobile(
+                                          //             context)
+                                          //         ? 100 / 45
+                                          //         : 100 / 50
+                                          //     : ResponsiveBuilder.isMobile(
+                                          //             context)
+                                          //         ? 100 / 55
+                                          //         : 100 / 70,
+                                          crossAxisSpacing: 10,
+                                          mainAxisSpacing: 10,
+                                          crossAxisCount:
+                                              ResponsiveBuilder.isMobile(
+                                                      context)
+                                                  ? 1
+                                                  : ResponsiveBuilder.isTablet(
+                                                          context)
+                                                      ? 2
+                                                      : 3,
+                                        ),
                                         builderDelegate:
                                             PagedChildBuilderDelegate<
                                                 AppointmentContent>(
@@ -116,13 +148,14 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                           //   textAlign: TextAlign.center,
                                           // ),
                                           noMoreItemsIndicatorBuilder: (_) =>
-                                              const Text(
-                                            'No more appointments.',
-                                            textAlign: TextAlign.center,
+                                              const Padding(
+                                            padding: EdgeInsets.all(28.0),
+                                            child: Text(
+                                              'No more appointments.',
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ),
-                                        separatorBuilder: (context, index) =>
-                                            const Divider(),
                                       ),
                                     ))
                             //loadStaffAppointmentList()
@@ -132,8 +165,9 @@ class SchedulePage extends GetWidget<ScheduleController> {
                 : Obx(() => Padding(
                     padding: getPadding(left: 0, top: 12, right: 0),
                     child: SizedBox(
-                      //height: 600,
-                      child: Responsive.isMobile(context)
+                      height: MediaQuery.of(context).size.height,
+                      child: Responsive.isMobile(context) ||
+                              Responsive.isTablet(context)
                           ? controller.isloading.value
                               ? const Center(
                                   child: CircularProgressIndicator(),
@@ -151,9 +185,12 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                 .completedPagingController
                                                 .refresh(),
                                   ),
-                                  child: PagedListView<int,
-                                      AppointmentContent>.separated(
+                                  child: PagedGridView<int, AppointmentContent>(
                                     shrinkWrap: true,
+                                    showNewPageProgressIndicatorAsGridChild:
+                                        false,
+                                    showNewPageErrorIndicatorAsGridChild: false,
+                                    showNoMoreItemsIndicatorAsGridChild: false,
                                     pagingController: tab.toLowerCase() ==
                                             'today'
                                         ? controller.todayPagingController.value
@@ -163,6 +200,24 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                             : controller
                                                 .completedPagingController
                                                 .value,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio:
+                                          tab.toLowerCase() == 'completed'
+                                              ? 2.5
+                                              : 1.90,
+                                      // tab.toLowerCase() == 'completed'
+                                      //     ? 100 / 50
+                                      //     : 100 / 70,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                      crossAxisCount: ResponsiveBuilder
+                                              .isMobile(context)
+                                          ? 1
+                                          : ResponsiveBuilder.isTablet(context)
+                                              ? 2
+                                              : 3,
+                                    ),
                                     builderDelegate: PagedChildBuilderDelegate<
                                         AppointmentContent>(
                                       animateTransitions: true,
@@ -179,8 +234,6 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                               item.examiner?.id ?? 0,
                                               tab),
                                     ),
-                                    separatorBuilder: (context, index) =>
-                                        const Divider(),
                                   ),
                                 )
                           //loadPatientAppointmentsList()

@@ -10,7 +10,6 @@ import '../../routes/app_routes.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
-import '../../widgets/custom_button.dart';
 import '../../widgets/responsive.dart';
 import 'controller/reset_password_verify_code_controller.dart';
 
@@ -119,11 +118,11 @@ class ResetPasswordVerifyCodeScreen
                                 selectedColor: ColorConstant.blue600,
                                 activeColor: ColorConstant.blue600)),
                       ))),
-              CustomButton(
-                  height: getVerticalSize(56),
-                  text: "lbl_verify".tr,
-                  margin: getMargin(left: 1, top: 40),
-                  onTap: () {
+              ElevatedButton(
+                  //height: getVerticalSize(56),
+                  child: Text("lbl_verify".tr),
+                  //margin: getMargin(left: 1, top: 40),
+                  onPressed: () {
                     onTapVerify();
                   }),
               Align(

@@ -44,17 +44,20 @@ Future<void> _initializeFlutterFire() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefUtils.init();
-
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    } else {
-      print(value);
-    }
-  });
+  if (!kIsWeb) {
+    await Permission.notification.isDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      } else {
+        print(value);
+      }
+    });
+  }
 
   await initFcm();
-  await _initializeFlutterFire();
+  if (!kIsWeb) {
+    await _initializeFlutterFire();
+  }
   const fatalError = true;
   FlutterError.onError = (errorDetails) {
     if (fatalError) {

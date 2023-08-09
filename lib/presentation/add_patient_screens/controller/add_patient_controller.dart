@@ -13,7 +13,6 @@ import '../../../network/api/user_api.dart';
 import '../../../routes/app_routes.dart';
 import '../../../theme/app_decoration.dart';
 import '../../../theme/app_style.dart';
-import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_image_view.dart';
 
 class AddPatientController extends GetxController {
@@ -373,13 +372,18 @@ class AddPatientController extends GetxController {
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.left,
                                 style: AppStyle.txtRalewayRomanBold20)),
-                        CustomButton(
-                            height: getVerticalSize(56),
-                            text: "lbl_go_to_home".tr,
-                            margin: getMargin(top: 22),
-                            onTap: () {
+                        ElevatedButton(
+                            onPressed: () {
                               Get.offAllNamed(AppRoutes.dashboardScreen);
-                            })
+                            },
+                            child: const Text('Go To Home'))
+                        // CustomButton(
+                        //     height: getVerticalSize(56),
+                        //     text: "lbl_go_to_home".tr,
+                        //     margin: getMargin(top: 22),
+                        //     onTap: () {
+                        //       Get.offAllNamed(AppRoutes.dashboardScreen);
+                        //     })
                       ])),
             )));
       }
