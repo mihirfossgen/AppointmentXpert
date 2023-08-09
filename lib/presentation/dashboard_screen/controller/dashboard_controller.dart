@@ -157,9 +157,7 @@ class DashboardController extends GetxController {
       callStaffList(0);
       callRecentPatientList(0);
       callEmergencyPatientList();
-      times = getTimes(startTime, endTime, step)
-          .map((tod) => tod.format(Get.context!))
-          .toList();
+      getTimes();
       final DateFormat formatter = DateFormat('dd-MM-yyyy');
       callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     }
@@ -302,6 +300,9 @@ class DashboardController extends GetxController {
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
+      for (var i = 0; i < list.length; i++) {
+        print(list[i].startTime);
+      }
       getAppointmentDetailsByDate.value = list;
       return list;
     } on Map {
@@ -319,11 +320,13 @@ class DashboardController extends GetxController {
       print(response);
       staffPagingController.itemList = [];
       staffPagingController.appendLastPage(response.content ?? []);
+      doctorsList.clear();
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
-        if (response.content?[i].profession == "DOCTOR") {
+        print(response.content?[i].profession);
+        if (response.content?[i].profession?.toLowerCase() == "doctor") {
           print(response.content?[i].profession);
           staffDataa = response.content![i];
-          doctorsList.clear();
+
           doctorsList.add(response.content![i]);
           print({"doctors list length ----- ${doctorsList.length}"});
           SharedPrefUtils.saveStr(
@@ -338,20 +341,93 @@ class DashboardController extends GetxController {
     }
   }
 
-  Iterable<TimeOfDay> getTimes(
-      TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
-    var hour = startTime.hour;
-    var minute = startTime.minute;
-
-    do {
-      yield TimeOfDay(hour: hour, minute: minute);
-      minute += step.inMinutes;
-      while (minute >= 60) {
-        minute -= 60;
-        hour++;
+  Future<void> updateStaff(var data) async {
+    try {
+      bool value = (await Get.find<StaffApi>().staffUpdate(data));
+      // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+      if (value) {
+        Get.back();
       }
-    } while (hour < endTime.hour ||
-        (hour == endTime.hour && minute <= endTime.minute));
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    }
+  }
+
+  getTimes() {
+    String startTime = "11:45";
+    String closeTime = "17:45";
+    String space = "00:15";
+    Duration spaceDuration = Duration(
+        minutes: int.parse(space.split(':')[1]),
+        hours: int.parse(space.split(':')[0]));
+    TimeOfDay start = TimeOfDay(
+        hour: int.parse(startTime.split(':')[0]),
+        minute: int.parse(startTime.split(':')[1]));
+    TimeOfDay close = TimeOfDay(
+        hour: int.parse(closeTime.split(':')[0]),
+        minute: int.parse(closeTime.split(':')[1]));
+    List<String> timeSlots = [];
+    while (start.hour < close.hour ||
+        (start.hour == close.hour && start.minute <= close.minute)) {
+      final time =
+          DateTime(0, 0, 0, start.hour, start.minute).add(spaceDuration);
+      String date2 = DateFormat("hh:mm a").format(time);
+      timeSlots.add(date2);
+
+      start = TimeOfDay(hour: time.hour, minute: time.minute);
+    }
+
+    times = timeSlots;
+  }
+
+  getTimeSlots() {
+    getTimes();
+  }
+
+  int? _getTimeInMinutesSinceMidnight(String time) {
+    final parts = time.split(":");
+
+    if (parts.length != 2) {
+      return null;
+    }
+
+    final a = int.tryParse(parts[0]);
+    final b = int.tryParse(parts[1]);
+    if (a == null || b == null) {
+      return null;
+    }
+
+    return a * 60 + b;
+  }
+
+  String _getTimeInStringForMinutesSinceMidnight(int time) {
+    final hours = time ~/ 60;
+    final minutes = time % 60;
+
+    formatTime(int val) {
+      if (val < 10) {
+        return "0$val";
+      } else {
+        return "$val";
+      }
+    }
+
+    String a = "${formatTime(hours)}:${formatTime(minutes)}";
+
+    String b = utcTo12HourFormat(a);
+
+    return b;
+  }
+
+  String utcTo12HourFormat(String bigTime) {
+    DateTime tempDate = DateFormat("hh:mm").parse(bigTime);
+    var dateFormat = DateFormat("hh:mm a"); // you can change the format here
+    var utcDate = dateFormat.format(tempDate); // pass the UTC time here
+    var localDate = dateFormat.parse(utcDate, true).toLocal().toString();
+    String createdDate = dateFormat.format(DateTime.parse(localDate));
+    print("------------$createdDate");
+    return createdDate;
   }
 
   final startTime = const TimeOfDay(hour: 12, minute: 0);

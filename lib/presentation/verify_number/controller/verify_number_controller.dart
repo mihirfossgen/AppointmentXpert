@@ -114,10 +114,12 @@ class VerifyNumberController extends GetxController {
             'employee_Id', model.response?.body?.staff?.id ?? 0);
         await SessionManager()
             .set("employee_Id", model.response?.body?.staff?.id ?? 0);
+        SharedPrefUtils.saveBool('complete_profile_flag', true);
         // AppointmentDetails.staffId = _model.staff!.id ?? 0;
         Get.back();
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
+        SharedPrefUtils.saveBool('complete_profile_flag', false);
         Get.back();
         WidgetsBinding.instance
             .addPostFrameCallback((timeStamp) => Get.snackbar(
@@ -138,6 +140,7 @@ class VerifyNumberController extends GetxController {
       }
     } else {
       if (model.response?.body?.patient != null) {
+        SharedPrefUtils.saveBool('complete_profile_flag', true);
         SharedPrefUtils.saveInt(
             'patient_Id', model.response?.body?.patient!.id ?? 0);
         await SessionManager()
@@ -146,6 +149,7 @@ class VerifyNumberController extends GetxController {
         Get.offAllNamed(AppRoutes.dashboardScreen);
       } else {
         Get.back();
+        SharedPrefUtils.saveBool('complete_profile_flag', false);
         Get.toNamed(AppRoutes.createProfileScreen,
             arguments: ScreenArguments(
                 model.response?.body?.roles?[0].name ?? "",

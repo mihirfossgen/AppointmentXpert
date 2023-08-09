@@ -25,7 +25,8 @@ class CustomDropDown extends StatelessWidget {
       this.items,
       this.onChanged,
       this.validator,
-      this.isRequired});
+      this.isRequired,
+      this.value});
 
   DropDownShape? shape;
 
@@ -55,6 +56,8 @@ class CustomDropDown extends StatelessWidget {
 
   List<SelectionPopupModel>? items;
 
+  SelectionPopupModel? value;
+
   Function(SelectionPopupModel)? onChanged;
 
   FormFieldValidator<SelectionPopupModel>? validator;
@@ -72,13 +75,14 @@ class CustomDropDown extends StatelessWidget {
   _buildDropDownWidget() {
     return Container(
       width: width ?? double.maxFinite,
-      height: Responsive.isMobile(Get.context!) ? 50 : 70,
+      height: Responsive.isMobile(Get.context!) ? 60 : 70,
       margin: margin,
       child: DropdownButtonFormField<SelectionPopupModel>(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         focusNode: focusNode,
         icon: icon,
         isExpanded: true,
+        value: value,
         style: _setFontStyle(),
         decoration: _buildDecoration(),
         items: items?.map((SelectionPopupModel item) {

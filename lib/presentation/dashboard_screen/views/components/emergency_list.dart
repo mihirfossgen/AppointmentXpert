@@ -56,7 +56,11 @@ class EmergencyList extends StatelessWidget {
             //   height: 10.0,
             // ),
             SizedBox(
-              height: 600,
+              height: Responsive.isMobile(Get.context!)
+                  ? MediaQuery.of(context).size.height * 0.75
+                  : Responsive.isTablet(Get.context!)
+                      ? MediaQuery.of(Get.context!).size.height * 0.80
+                      : MediaQuery.of(Get.context!).size.height,
               child:
                   !Responsive.isDesktop(context) ? loadList() : loadDataTable(),
             ),

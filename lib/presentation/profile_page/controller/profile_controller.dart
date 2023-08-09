@@ -8,6 +8,7 @@ class ProfileController extends GetxController {
   Rx<TextEditingController> to = TextEditingController().obs;
   TextEditingController dob = TextEditingController();
   TextEditingController timeInterval = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   getDate() {
     DateTime? date = DateTime.now();
@@ -35,6 +36,43 @@ class ProfileController extends GetxController {
           ],
         ),
         barrierDismissible: false);
+  }
+
+  bool trySubmit() {
+    final isValid = formKey.currentState!.validate();
+    Get.focusScope!.unfocus();
+
+    if (isValid) {
+      formKey.currentState!.save();
+
+      return true;
+    }
+    return false;
+  }
+
+  dateValidator(String value) {
+    if (value == '') {
+      return 'Please select date';
+    } else {
+      DateTime a = DateTime(int.parse(value.split('-')[2]),
+          int.parse(value.split('-')[1]), int.parse(value.split('-')[0]));
+      if (a.isBefore(DateTime.now())) {
+        return 'Please select proper date to reschedule';
+      }
+    }
+    return null;
+  }
+
+  timeIntervalValidator(String value) {
+    if (value == '') {
+      return 'Please enter time interval';
+    } else {
+      int a = int.tryParse(value) ?? 0;
+      if (a < 0) {
+        return 'Please enter valid time in minutes';
+      }
+    }
+    return null;
   }
 
   Future<void> staffUpdate(Map<String, dynamic> req) async {

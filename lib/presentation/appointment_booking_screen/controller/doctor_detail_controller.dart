@@ -44,21 +44,6 @@ class DoctorDetailController extends GetxController {
   RxBool pleasefillAllFields = false.obs;
   List<DoctorList>? list;
   int? deptId;
-  Iterable<TimeOfDay> getTimes(
-      TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
-    var hour = startTime.hour;
-    var minute = startTime.minute;
-
-    do {
-      yield TimeOfDay(hour: hour, minute: minute);
-      minute += step.inMinutes;
-      while (minute >= 60) {
-        minute -= 60;
-        hour++;
-      }
-    } while (hour < endTime.hour ||
-        (hour == endTime.hour && minute <= endTime.minute));
-  }
 
   List<String>? times;
 
@@ -72,6 +57,33 @@ class DoctorDetailController extends GetxController {
     selectedDate = value[0]!;
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     finalDate = formatter.format(selectedDate);
+  }
+
+  getTimes() {
+    String startTime = "11:45";
+    String closeTime = "17:45";
+    String space = "00:15";
+    Duration spaceDuration = Duration(
+        minutes: int.parse(space.split(':')[1]),
+        hours: int.parse(space.split(':')[0]));
+    TimeOfDay start = TimeOfDay(
+        hour: int.parse(startTime.split(':')[0]),
+        minute: int.parse(startTime.split(':')[1]));
+    TimeOfDay close = TimeOfDay(
+        hour: int.parse(closeTime.split(':')[0]),
+        minute: int.parse(closeTime.split(':')[1]));
+    List<String> timeSlots = [];
+    while (start.hour < close.hour ||
+        (start.hour == close.hour && start.minute <= close.minute)) {
+      final time =
+          DateTime(0, 0, 0, start.hour, start.minute).add(spaceDuration);
+      String date2 = DateFormat("hh:mm a").format(time);
+      timeSlots.add(date2);
+
+      start = TimeOfDay(hour: time.hour, minute: time.minute);
+    }
+
+    times = timeSlots;
   }
 
   bool trySubmit() {
@@ -206,7 +218,7 @@ class DoctorDetailController extends GetxController {
   }
 
   String? genderValidator(String value) {
-    if (value.isEmpty) {
+    if (value.isEmpty || value == 'SELECT') {
       return 'Please select gender';
     }
     return null;
@@ -219,36 +231,14 @@ class DoctorDetailController extends GetxController {
     return null;
   }
 
-  getColor(String time, bool newTime) {
-    if (getAppointmentDetailsByDate.any((element) {
-      return TimeCalculationUtils()
-          .startTimeCalCulation(element.startTime, element.updateTimeInMin)
-          .contains(time);
-    })) {
-      return Colors.blue;
-    } else if (getAppointmentDetailsByDate.any((element) {
-      return TimeCalculationUtils()
-          .startTimeCalCulation(element.startTime, element.updateTimeInMin)
-          .contains(selectedStartTime.value);
-    })) {
-      return Colors.green;
-    } else {
-      return Colors.grey.shade100;
-    }
-
-    // ? Colors.blue
-
-    //     ? Colors.green
-    //     : Colors.grey.shade100
-  }
-
   Rx<List<SelectionPopupModel>> genderList = Rx([
+    SelectionPopupModel(id: 1, title: "SELECT", isSelected: true),
     SelectionPopupModel(
-      id: 1,
+      id: 2,
       title: "MALE",
     ),
     SelectionPopupModel(
-      id: 2,
+      id: 3,
       title: "FEMALE",
     ),
   ]);
@@ -262,6 +252,17 @@ class DoctorDetailController extends GetxController {
         element.isSelected = true;
       }
     }
+    genderList.refresh();
+  }
+
+  prefieldGender(String value) {
+    for (var element in genderList.value) {
+      element.isSelected = false;
+      if (element.title == value) {
+        gender.text = element.title;
+      }
+    }
+    update();
     genderList.refresh();
   }
 
@@ -303,6 +304,9 @@ class DoctorDetailController extends GetxController {
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
+      for (var i = 0; i < list.length; i++) {
+        print(list[i].startTime);
+      }
       getAppointmentDetailsByDate.value = list;
       return list;
     } on Map {
@@ -330,6 +334,7 @@ class DoctorDetailController extends GetxController {
     callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     final DateFormat format = DateFormat('yyyy-MM-dd');
     dob.text = format.format(DateTime.now());
+    getTimes();
   }
 
   @override

@@ -928,107 +928,102 @@ class ProfilePage extends GetWidget<ProfileController> {
                               builder: (context) => AlertDialog(
                                 title: const Text('Update'),
                                 actions: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: size.height * 0.02,
-                                        ),
-                                        SizedBox(
-                                          child: InkWell(
-                                            onTap: () async {
-                                              FocusScope.of(context).unfocus();
-                                              DateTime a =
-                                                  await controller.getDate();
+                                  Form(
+                                    key: controller.formKey,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          SizedBox(
+                                            child: InkWell(
+                                              onTap: () async {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                DateTime a =
+                                                    await controller.getDate();
 
-                                              final DateFormat formatter =
-                                                  DateFormat('dd-MM-yyyy');
-                                              controller.dob.text =
-                                                  formatter.format(a);
-                                            },
-                                            child: AbsorbPointer(
-                                              child: CustomTextFormField(
-                                                  controller: controller.dob,
-                                                  labelText: "Date",
-                                                  isRequired: true,
-                                                  validator: (value) {
-                                                    DateTime a = DateTime(
-                                                        int.parse(value?.split(
-                                                                '-')[2] ??
-                                                            ""),
-                                                        int.parse(value?.split(
-                                                                '-')[1] ??
-                                                            ""),
-                                                        int.parse(value?.split(
-                                                                '-')[0] ??
-                                                            ""));
-
-                                                    if (a.isBefore(
-                                                        DateTime.now())) {
-                                                      return 'Please select proper date to reschedule';
-                                                    }
-                                                  },
-                                                  padding: TextFormFieldPadding
-                                                      .PaddingT14,
-                                                  textInputType: TextInputType
-                                                      .emailAddress,
-                                                  suffix: Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              right: 10),
-                                                      child: const Icon(Icons
-                                                          .calendar_month)),
-                                                  suffixConstraints:
-                                                      BoxConstraints(
-                                                          maxHeight:
-                                                              getVerticalSize(
-                                                                  56))),
+                                                final DateFormat formatter =
+                                                    DateFormat('dd-MM-yyyy');
+                                                controller.dob.text =
+                                                    formatter.format(a);
+                                              },
+                                              child: AbsorbPointer(
+                                                child: CustomTextFormField(
+                                                    controller: controller.dob,
+                                                    labelText: "Date",
+                                                    isRequired: true,
+                                                    validator: (value) {
+                                                      return controller
+                                                          .dateValidator(
+                                                              value ?? "");
+                                                    },
+                                                    padding:
+                                                        TextFormFieldPadding
+                                                            .PaddingT14,
+                                                    textInputType: TextInputType
+                                                        .emailAddress,
+                                                    suffix: Container(
+                                                        margin: const EdgeInsets
+                                                            .only(right: 10),
+                                                        child: const Icon(Icons
+                                                            .calendar_month)),
+                                                    suffixConstraints:
+                                                        BoxConstraints(
+                                                            maxHeight:
+                                                                getVerticalSize(
+                                                                    56))),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: size.height * 0.02,
-                                        ),
-                                        CustomTextFormField(
-                                            labelText: "Time Interval",
-                                            isRequired: true,
-                                            controller: controller.timeInterval,
-                                            validator: (value) {
-                                              int a =
-                                                  int.tryParse(value ?? "") ??
-                                                      0;
-                                              if (a < 0) {
-                                                return 'Please enter valid time in minutes';
-                                              }
-                                            },
-                                            padding:
-                                                TextFormFieldPadding.PaddingT14,
-                                            textInputType: TextInputType.number,
-                                            prefixConstraints: BoxConstraints(
-                                                maxHeight:
-                                                    getVerticalSize(56))),
-                                        SizedBox(
-                                          height: size.height * 0.02,
-                                        ),
-                                        ElevatedButton(
-                                          // height: 60,
-                                          // shape: ButtonShape.RoundedBorder8,
-                                          child: const Text("Update"),
-                                          onPressed: () async {
-                                            Map<String, dynamic> data = {
-                                              "rescheduleDate":
-                                                  controller.dob.text,
-                                              "rescheduleTimeInMin":
-                                                  controller.timeInterval.text,
-                                              "id": staffData?.id ?? 0
-                                            };
-                                            print(jsonEncode(data));
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          CustomTextFormField(
+                                              labelText: "Time Interval",
+                                              isRequired: true,
+                                              controller:
+                                                  controller.timeInterval,
+                                              validator: (value) {
+                                                return controller
+                                                    .timeIntervalValidator(
+                                                        value ?? "");
+                                              },
+                                              padding: TextFormFieldPadding
+                                                  .PaddingT14,
+                                              textInputType:
+                                                  TextInputType.number,
+                                              prefixConstraints: BoxConstraints(
+                                                  maxHeight:
+                                                      getVerticalSize(56))),
+                                          SizedBox(
+                                            height: size.height * 0.02,
+                                          ),
+                                          ElevatedButton(
+                                              // height: 60,
+                                              // shape: ButtonShape.RoundedBorder8,
+                                              child: const Text("Update"),
+                                              onPressed: () async {
+                                                bool a = controller.trySubmit();
+                                                if (a) {
+                                                  Map<String, dynamic> data = {
+                                                    "rescheduleDate":
+                                                        controller.dob.text,
+                                                    "rescheduleTimeInMin":
+                                                        controller
+                                                            .timeInterval.text,
+                                                    "id": staffData?.id ?? 0
+                                                  };
+                                                  print(jsonEncode(data));
 
-                                            await controller.staffUpdate(data);
-                                          },
-                                        )
-                                      ],
+                                                  await controller
+                                                      .staffUpdate(data);
+                                                }
+                                              })
+                                        ],
+                                      ),
                                     ),
                                   )
                                 ],

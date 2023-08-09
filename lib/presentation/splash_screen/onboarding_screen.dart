@@ -178,15 +178,16 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: Responsive.isMobile(context)
-                          ? 2
-                          : Responsive.isTablet(context)
-                              ? 3
-                              : 6,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5
-                      //childAspectRatio: 2,
-                      ),
+                    crossAxisCount: Responsive.isMobile(context)
+                        ? 2
+                        : Responsive.isTablet(context)
+                            ? 3
+                            : 6,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height / 1.4),
+                  ),
                   children: [
                     const Padding(
                       padding: EdgeInsets.all(8.0),

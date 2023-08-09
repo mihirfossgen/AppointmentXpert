@@ -93,8 +93,20 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                           childAspectRatio:
                                               tab.toLowerCase() == 'completed'
-                                                  ? 2.5
-                                                  : 1.90,
+                                                  ? MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      (MediaQuery.of(context)
+                                                              .size
+                                                              .height /
+                                                          5)
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      (MediaQuery.of(context)
+                                                              .size
+                                                              .height /
+                                                          4),
                                           // tab.toLowerCase() == 'completed'
                                           //     ? ResponsiveBuilder.isMobile(
                                           //             context)
@@ -202,10 +214,18 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                 .value,
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
-                                      childAspectRatio:
-                                          tab.toLowerCase() == 'completed'
-                                              ? 2.5
-                                              : 1.90,
+                                      childAspectRatio: tab.toLowerCase() ==
+                                              'completed'
+                                          ? MediaQuery.of(context).size.width /
+                                              (MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  5)
+                                          : MediaQuery.of(context).size.width /
+                                              (MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  4),
                                       // tab.toLowerCase() == 'completed'
                                       //     ? 100 / 50
                                       //     : 100 / 70,

@@ -168,20 +168,31 @@ class ScheduleController extends GetxController {
 
   final GlobalKey _rangeSelectorKey = GlobalKey();
 
-  Iterable<TimeOfDay> getTimes(
-      TimeOfDay startTime, TimeOfDay endTime, Duration step) sync* {
-    var hour = startTime.hour;
-    var minute = startTime.minute;
+  getTimes() {
+    String startTime = "11:45";
+    String closeTime = "17:45";
+    String space = "00:15";
+    Duration spaceDuration = Duration(
+        minutes: int.parse(space.split(':')[1]),
+        hours: int.parse(space.split(':')[0]));
+    TimeOfDay start = TimeOfDay(
+        hour: int.parse(startTime.split(':')[0]),
+        minute: int.parse(startTime.split(':')[1]));
+    TimeOfDay close = TimeOfDay(
+        hour: int.parse(closeTime.split(':')[0]),
+        minute: int.parse(closeTime.split(':')[1]));
+    List<String> timeSlots = [];
+    while (start.hour < close.hour ||
+        (start.hour == close.hour && start.minute <= close.minute)) {
+      final time =
+          DateTime(0, 0, 0, start.hour, start.minute).add(spaceDuration);
+      String date2 = DateFormat("hh:mm a").format(time);
+      timeSlots.add(date2);
 
-    do {
-      yield TimeOfDay(hour: hour, minute: minute);
-      minute += step.inMinutes;
-      while (minute >= 60) {
-        minute -= 60;
-        hour++;
-      }
-    } while (hour < endTime.hour ||
-        (hour == endTime.hour && minute <= endTime.minute));
+      start = TimeOfDay(hour: time.hour, minute: time.minute);
+    }
+
+    times = timeSlots;
   }
 
   @override
@@ -195,10 +206,7 @@ class ScheduleController extends GetxController {
       callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
       final DateFormat format = DateFormat('yyyy-MM-dd');
       reschduleDate.text = format.format(DateTime.now());
-
-      times = getTimes(startTime, endTime, step)
-          .map((tod) => tod.format(Get.context!))
-          .toList();
+      getTimes();
     } else {
       callGetAllAppointmentsForPatient(0);
     }

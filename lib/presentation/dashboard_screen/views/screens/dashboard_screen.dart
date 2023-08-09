@@ -253,6 +253,7 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.callTodayAppointmentsByPatient();
             controller.getUpcomingAppointments(0, true);
           } else {
+            controller.getTimes();
             controller.patientPagingController =
                 PagingController(firstPageKey: 0);
             controller.patientPagingController.itemList = [];
@@ -263,6 +264,7 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.callStaffList(0);
             controller.callRecentPatientList(0);
             controller.callEmergencyPatientList();
+
             final DateFormat formatter = DateFormat('dd-MM-yyyy');
             controller.callGetAppointmentDetailsForDate(
                 formatter.format(DateTime.now()));
@@ -557,7 +559,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                                         context: Get.context!,
                                                         isDismissible: true,
                                                         isScrollControlled:
-                                                            false,
+                                                            true,
                                                         enableDrag: false,
                                                         elevation: 2.0,
                                                         shape:
@@ -568,107 +570,87 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                       20.0),
                                                         ),
                                                         builder: (context) {
-                                                          return ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      20.0),
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                child: Column(
-                                                                  // mainAxisSize:
-                                                                  //     MainAxisSize.max,
-                                                                  children: [
-                                                                    ListTile(
-                                                                      title: const Text(
-                                                                          'Existing Patient'),
-                                                                      leading:
-                                                                          Obx(
-                                                                        () => Radio<
-                                                                            pats>(
-                                                                          value:
-                                                                              pats.Existing,
-                                                                          groupValue: controller.radioButtonIndex.value == 0
-                                                                              ? pats.Existing
-                                                                              : pats.New,
-                                                                          onChanged:
-                                                                              (pats? value) {
-                                                                            controller.nameController.text =
-                                                                                controller.patientData.value.patient?.firstName.toString() ?? '';
-                                                                            controller.mobileController.text =
-                                                                                controller.patientData.value.patient?.mobile.toString() ?? '';
-                                                                            controller.addressController.text =
-                                                                                controller.patientData.value.patient?.email.toString() ?? '';
-                                                                            controller.radioButtonVal.value =
-                                                                                'Existing Patient';
-                                                                            controller.radioButtonIndex.value =
-                                                                                0;
-                                                                          },
-                                                                        ),
+                                                          return FractionallySizedBox(
+                                                            heightFactor: 0.9,
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        20.0),
+                                                                child: ListView(
+                                                                    children: [
+                                                                      Column(
+                                                                        // mainAxisSize:
+                                                                        //     MainAxisSize.max,
+                                                                        children: [
+                                                                          ListTile(
+                                                                            title:
+                                                                                const Text('Existing Patient'),
+                                                                            leading:
+                                                                                Obx(
+                                                                              () => Radio<pats>(
+                                                                                value: pats.Existing,
+                                                                                groupValue: controller.radioButtonIndex.value == 0 ? pats.Existing : pats.New,
+                                                                                onChanged: (pats? value) {
+                                                                                  controller.nameController.text = controller.patientData.value.patient?.firstName.toString() ?? '';
+                                                                                  controller.mobileController.text = controller.patientData.value.patient?.mobile.toString() ?? '';
+                                                                                  controller.addressController.text = controller.patientData.value.patient?.email.toString() ?? '';
+                                                                                  controller.radioButtonVal.value = 'Existing Patient';
+                                                                                  controller.radioButtonIndex.value = 0;
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          ListTile(
+                                                                            title:
+                                                                                const Text('New Patient'),
+                                                                            leading:
+                                                                                Obx(
+                                                                              () => Radio<pats>(
+                                                                                value: pats.New,
+                                                                                groupValue: controller.radioButtonIndex.value == 0 ? pats.Existing : pats.New,
+                                                                                onChanged: (pats? value) {
+                                                                                  controller.nameController.text = '';
+                                                                                  controller.mobileController.text = '';
+                                                                                  controller.addressController.text = '';
+                                                                                  controller.radioButtonVal.value = 'New Patient';
+                                                                                  controller.radioButtonIndex.value = 1;
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Obx(() => controller.radioButtonIndex.value == 0 ? loadEmergencyDetails(true) : loadEmergencyDetails(false)
+                                                                              // Column(
+                                                                              //     children: [
+                                                                              //       Text(
+                                                                              //         "Thanks for your enquiry.",
+                                                                              //         style: TextStyle(
+                                                                              //             fontSize:
+                                                                              //                 20,
+                                                                              //             fontWeight:
+                                                                              //                 FontWeight.bold,
+                                                                              //             color: ColorConstant.gray900),
+                                                                              //       ),
+                                                                              //       Text(
+                                                                              //         "We will co-ordinate with you shortly.",
+                                                                              //         style: TextStyle(
+                                                                              //             fontSize:
+                                                                              //                 15,
+                                                                              //             fontWeight:
+                                                                              //                 FontWeight.normal,
+                                                                              //             color: ColorConstant.gray600),
+                                                                              //       ),
+                                                                              //     ],
+                                                                              //   ),
+                                                                              )
+                                                                        ],
                                                                       ),
-                                                                    ),
-                                                                    ListTile(
-                                                                      title: const Text(
-                                                                          'New Patient'),
-                                                                      leading:
-                                                                          Obx(
-                                                                        () => Radio<
-                                                                            pats>(
-                                                                          value:
-                                                                              pats.New,
-                                                                          groupValue: controller.radioButtonIndex.value == 0
-                                                                              ? pats.Existing
-                                                                              : pats.New,
-                                                                          onChanged:
-                                                                              (pats? value) {
-                                                                            controller.nameController.text =
-                                                                                '';
-                                                                            controller.mobileController.text =
-                                                                                '';
-                                                                            controller.addressController.text =
-                                                                                '';
-                                                                            controller.radioButtonVal.value =
-                                                                                'New Patient';
-                                                                            controller.radioButtonIndex.value =
-                                                                                1;
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Obx(() => controller.radioButtonIndex.value ==
-                                                                                0
-                                                                            ? loadEmergencyDetails(true)
-                                                                            : loadEmergencyDetails(false)
-                                                                        // Column(
-                                                                        //     children: [
-                                                                        //       Text(
-                                                                        //         "Thanks for your enquiry.",
-                                                                        //         style: TextStyle(
-                                                                        //             fontSize:
-                                                                        //                 20,
-                                                                        //             fontWeight:
-                                                                        //                 FontWeight.bold,
-                                                                        //             color: ColorConstant.gray900),
-                                                                        //       ),
-                                                                        //       Text(
-                                                                        //         "We will co-ordinate with you shortly.",
-                                                                        //         style: TextStyle(
-                                                                        //             fontSize:
-                                                                        //                 15,
-                                                                        //             fontWeight:
-                                                                        //                 FontWeight.normal,
-                                                                        //             color: ColorConstant.gray600),
-                                                                        //       ),
-                                                                        //     ],
-                                                                        //   ),
-                                                                        )
-                                                                  ],
-                                                                ),
+                                                                    ]),
                                                               ),
                                                             ),
                                                           );
@@ -1089,30 +1071,18 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                   Alignment
                                                                       .center,
                                                               decoration: BoxDecoration(
-                                                                  color: controller.getAppointmentDetailsByDate.any((element) {
-                                                                    return TimeCalculationUtils()
-                                                                        .startTimeCalCulation(
-                                                                            element
-                                                                                .startTime,
-                                                                            element
-                                                                                .updateTimeInMin)
-                                                                        .contains(controller.times?[index].toString() ??
-                                                                            "");
-                                                                  })
-                                                                      ? Colors.blue
-                                                                      : Colors.grey.shade100,
-                                                                  borderRadius: BorderRadius.circular(6),
+                                                                  color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) !=
+                                                                          null
+                                                                      ? Colors
+                                                                          .blue
+                                                                      : Colors
+                                                                          .grey
+                                                                          .shade100,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          6),
                                                                   border: Border.all(
-                                                                      color: controller.getAppointmentDetailsByDate.any((element) {
-                                                                    return TimeCalculationUtils()
-                                                                        .startTimeCalCulation(
-                                                                            element
-                                                                                .startTime,
-                                                                            element
-                                                                                .updateTimeInMin)
-                                                                        .contains(controller.times?[index].toString() ??
-                                                                            "");
-                                                                  })
+                                                                      color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) != null
                                                                           ? Colors.transparent
                                                                           : Colors.black)),
                                                               child: Text(
@@ -1120,19 +1090,12 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                         index] ??
                                                                     "",
                                                                 style: TextStyle(
-                                                                    color: controller.getAppointmentDetailsByDate.any((element) {
-                                                                  return TimeCalculationUtils()
-                                                                      .startTimeCalCulation(
-                                                                          element
-                                                                              .startTime,
-                                                                          element
-                                                                              .updateTimeInMin)
-                                                                      .contains(
-                                                                          controller.times?[index].toString() ??
-                                                                              "");
-                                                                })
-                                                                        ? Colors.white
-                                                                        : Colors.black),
+                                                                    color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) !=
+                                                                            null
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black),
                                                               ));
                                                         })),
                                                   )),

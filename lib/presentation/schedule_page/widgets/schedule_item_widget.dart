@@ -387,7 +387,7 @@ class ScheduleItemWidget extends StatelessWidget {
                         showDialog(
                           context: Get.context!,
                           builder: (context) => AlertDialog(
-                            title: const Text('Reschdule Appointment'),
+                            title: const Text('Reschedule Appointment'),
                             actions: [
                               ReschduleAppointment(
                                 appointment: appointment,

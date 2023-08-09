@@ -10,10 +10,13 @@ import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../../../core/utils/size_utils.dart';
 import '../../../../models/staff_list_model.dart';
+import '../../../../network/api/staff_api.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
+import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../controller/dashboard_controller.dart';
@@ -24,6 +27,7 @@ class StaffList extends GetView<DashboardController> {
 
   DashboardController dashboardController = Get.put(DashboardController());
   UserApi userApi = Get.put(UserApi());
+  StaffApi staffApi = Get.put(StaffApi());
 
   @override
   Widget build(BuildContext context) {
@@ -118,156 +122,209 @@ class StaffList extends GetView<DashboardController> {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  Responsive.isMobile(context)
-                      ? RefreshIndicator(
-                          onRefresh: () async {
-                            Future.sync(() => dashboardController
-                                .staffPagingController
-                                .refresh());
-                            dashboardController.isloadingStaffList.value = true;
-                            dashboardController.callStaffList(0);
-                          },
-                          child: PagedListView<int, Contents>.separated(
-                            shrinkWrap: true,
-                            pagingController:
-                                dashboardController.staffPagingController,
-                            physics: const ScrollPhysics(),
-                            builderDelegate:
-                                PagedChildBuilderDelegate<Contents>(
-                              animateTransitions: true,
-                              itemBuilder: (context, item, index) => Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: GFListTile(
-                                  icon: const Icon(Icons.arrow_right),
-                                  avatar: item.uploadedProfilePath != null
-                                      ? CachedNetworkImage(
-                                          width: 80,
-                                          height: 80,
-                                          fit: BoxFit.contain,
-                                          imageUrl: Uri.encodeFull(
-                                            Endpoints.baseURL +
-                                                Endpoints.downLoadEmployePhoto +
-                                                item.uploadedProfilePath
-                                                    .toString(),
+                  SizedBox(
+                    height: Responsive.isMobile(Get.context!)
+                        ? null
+                        : Responsive.isTablet(Get.context!)
+                            ? MediaQuery.of(Get.context!).size.height * 0.80
+                            : MediaQuery.of(Get.context!).size.height,
+                    child: Responsive.isMobile(context)
+                        ? RefreshIndicator(
+                            onRefresh: () async {
+                              Future.sync(() => dashboardController
+                                  .staffPagingController
+                                  .refresh());
+                              dashboardController.isloadingStaffList.value =
+                                  true;
+                              dashboardController.callStaffList(0);
+                            },
+                            child: PagedListView<int, Contents>.separated(
+                              shrinkWrap: true,
+                              pagingController:
+                                  dashboardController.staffPagingController,
+                              physics: const ScrollPhysics(),
+                              builderDelegate:
+                                  PagedChildBuilderDelegate<Contents>(
+                                animateTransitions: true,
+                                itemBuilder: (context, item, index) => Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: GFListTile(
+                                    icon: const Icon(Icons.arrow_right),
+                                    avatar: item.uploadedProfilePath != null
+                                        ? CachedNetworkImage(
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.contain,
+                                            imageUrl: Uri.encodeFull(
+                                              Endpoints.baseURL +
+                                                  Endpoints
+                                                      .downLoadEmployePhoto +
+                                                  item.uploadedProfilePath
+                                                      .toString(),
+                                            ),
+                                            httpHeaders: {
+                                              "Authorization":
+                                                  "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                                            },
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget: (context, url, error) {
+                                              print(error);
+                                              return CustomImageView(
+                                                imagePath: !Responsive
+                                                        .isDesktop(Get.context!)
+                                                    ? 'assets'
+                                                        '/images/default_profile.png'
+                                                    : '/images/default_profile.png',
+                                              );
+                                            },
+                                          )
+                                        : CustomImageView(
+                                            width: 80,
+                                            height: 80,
+                                            imagePath: !Responsive.isDesktop(
+                                                    Get.context!)
+                                                ? 'assets'
+                                                    '/images/default_profile.png'
+                                                : '/images/default_profile.png',
                                           ),
-                                          httpHeaders: {
-                                            "Authorization":
-                                                "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                                          },
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                  value: downloadProgress
-                                                      .progress),
-                                          errorWidget: (context, url, error) {
-                                            print(error);
-                                            return CustomImageView(
-                                              imagePath: !Responsive.isDesktop(
-                                                      Get.context!)
-                                                  ? 'assets'
-                                                      '/images/default_profile.png'
-                                                  : '/images/default_profile.png',
-                                            );
-                                          },
-                                        )
-                                      : CustomImageView(
-                                          width: 80,
-                                          height: 80,
-                                          imagePath: !Responsive.isDesktop(
-                                                  Get.context!)
-                                              ? 'assets'
-                                                  '/images/default_profile.png'
-                                              : '/images/default_profile.png',
+                                    //autofocus: true,
+                                    color: Colors.white,
+                                    description: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: 5,
                                         ),
-                                  //autofocus: true,
-                                  color: Colors.white,
-                                  description: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Email: ${item.email.toString()}',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Address: ${item.address}',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Profession: ${item.profession}',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                  enabled: true,
-                                  /*firstButtonTextStyle: const TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold),
-                                  firstButtonTitle: 'View Details',
-                                  secondButtonTitle: 'Book Appointment',
-                                  secondButtonTextStyle: const TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                  onSecondButtonTap: () {
-                                    // Get.to(() => AppointmentBookingScreen(
-                                    //     doctorsList: doctorsList,
-                                    //     patientDetailsArguments:
-                                    //         PatientDetailsArguments(
-                                    //             [], item)));
-                                  },
-                                  onFirstButtonTap: () {
-                                    // Get.to(
-                                    //     () => (PatientDetailsPage(item)));
-                                  },*/
-                                  //focusColor: ,
-                                  focusNode: FocusNode(),
-                                  //hoverColor: Colors.blue,
-                                  //icon: ,
-                                  listItemTextColor: GFColors.DARK,
-                                  //margin: getMarginOrPadding(all: 8.0),
-                                  //onFirstButtonTap: ,
-                                  //onLongPress: ,
-                                  //onSecondButtonTap: ,
-                                  onTap: () {},
-                                  //padding: ,
-                                  radius: 8,
-                                  //secondButtonTextStyle: ,
-                                  //secondButtonTitle: 'Delete',
-                                  selected: false,
-                                  //shadow: BoxShadow,
-                                  //subTitleText: 'Address: ${data.address}',
-                                  title: Text(
-                                    '${item.prefix.toString()}'
-                                    '${item.firstName} '
-                                    '${item.lastName}',
-                                    style: const TextStyle(
-                                        fontSize: 16,
+                                        Text(
+                                          'Email: ${item.email.toString()}',
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          'Address: ${item.address}',
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          'Profession: ${item.profession}',
+                                          style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    enabled: true,
+
+                                    firstButtonTextStyle: const TextStyle(
+                                        color: Colors.red,
                                         fontWeight: FontWeight.bold),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                    firstButtonTitle: 'Remove',
+
+                                    onSecondButtonTap: () {},
+                                    onFirstButtonTap: () {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((timeStamp) {
+                                        showDialog(
+                                          context: Get.context!,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text(
+                                                'Are you sure you want to remove the staff member?'),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  CustomButton(
+                                                      height:
+                                                          getVerticalSize(60),
+                                                      width:
+                                                          getHorizontalSize(80),
+                                                      text: 'Yes',
+                                                      margin: getMargin(
+                                                          left: 10, right: 00),
+                                                      fontStyle: ButtonFontStyle
+                                                          .RalewayRomanSemiBold14WhiteA700,
+                                                      onTap: () async {
+                                                        var data = {
+                                                          "id": item.id,
+                                                          "status":
+                                                              "NOT_ACTIVE",
+                                                          "profession":
+                                                              item.profession,
+                                                          "userId": item.userId
+                                                        };
+                                                        controller
+                                                            .updateStaff(data);
+                                                      }),
+                                                  CustomButton(
+                                                      height:
+                                                          getVerticalSize(60),
+                                                      width:
+                                                          getHorizontalSize(80),
+                                                      text: 'No',
+                                                      margin: getMargin(
+                                                          left: 0, right: 10),
+                                                      fontStyle: ButtonFontStyle
+                                                          .RalewayRomanSemiBold14WhiteA700,
+                                                      onTap: () async {
+                                                        Get.back();
+                                                      })
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      });
+                                    },
+                                    //focusColor: ,
+                                    focusNode: FocusNode(),
+                                    //hoverColor: Colors.blue,
+                                    //icon: ,
+                                    listItemTextColor: GFColors.DARK,
+
+                                    onTap: () {},
+                                    //padding: ,
+                                    radius: 8,
+                                    //secondButtonTextStyle: ,
+                                    //secondButtonTitle: 'Delete',
+                                    selected: false,
+                                    //shadow: BoxShadow,
+                                    //subTitleText: 'Address: ${data.address}',
+                                    title: Text(
+                                      '${item.prefix.toString()}'
+                                      '${item.firstName} '
+                                      '${item.lastName}',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    //titleText: '${data.firstName} ' + '${data.lastName}',
                                   ),
-                                  //titleText: '${data.firstName} ' + '${data.lastName}',
                                 ),
                               ),
+                              separatorBuilder: (context, index) =>
+                                  const Divider(),
                             ),
-                            separatorBuilder: (context, index) =>
-                                const Divider(),
-                          ),
-                        )
-                      //loadList()
-                      : loadDataTable(),
+                          )
+                        //loadList()
+                        : loadDataTable(),
+                  )
                 ],
               ),
             ]),
@@ -441,13 +498,12 @@ class StaffDataSource extends DataTableSource {
                   width: 5,
                 ),
                 SizedBox(
-                  width: 100,
+                  width: 50,
                   child: Text(
                     '${data[index].firstName} ' + '${data[index].lastName}',
                     maxLines: 2,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
                   ),
                 )
               ],

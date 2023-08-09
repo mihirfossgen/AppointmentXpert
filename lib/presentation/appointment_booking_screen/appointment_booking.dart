@@ -45,17 +45,6 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
     // final args =
     //     ModalRoute.of(context)!.settings.arguments as DoctorDetailsArguments;
 
-    TimeOfDay startTime = const TimeOfDay(hour: 12, minute: 00);
-    TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 00);
-    Duration step = const Duration(minutes: 15);
-    TimeOfDay selectedTime = TimeOfDay.now();
-
-    String hour, minute, time;
-    controller.times = controller
-        .getTimes(startTime, endTime, step)
-        .map((tod) => tod.format(context))
-        .toList();
-
     if (doctorsList != null && doctorsList!.isNotEmpty) {
       print('list value ------- ${controller.counsultingDoctor.value.length}');
       if (controller.counsultingDoctor.value.isEmpty) {
@@ -86,6 +75,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
       if (controller.address.text == '') {
         controller.address.text =
             patientDetailsArguments?.details?.address ?? "";
+      }
+
+      if (controller.gender.text == '') {
+        controller.prefieldGender(patientDetailsArguments?.details?.sex ?? "");
       }
 
       controller.list = patientDetailsArguments?.list;
@@ -143,46 +136,6 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
             ],
           ),
           barrierDismissible: false);
-    }
-
-    Future<void> _selectTime(BuildContext context) async {
-      final TimeOfDay? picked = await showTimePicker(
-        context: context,
-        initialTime: selectedTime,
-      );
-      if (picked != null) {
-        print(picked);
-        selectedTime = picked;
-      }
-      int intervalTime = doctorsList
-                  ?.firstWhere((element) =>
-                      element.id ==
-                      controller.counsultingDoctor.value
-                          .firstWhere((element) => element.isSelected == true)
-                          .id)
-                  .timeSlotForBookingInMin ==
-              0
-          ? 15
-          : doctorsList
-                  ?.firstWhere((element) =>
-                      element.id ==
-                      controller.counsultingDoctor.value
-                          .firstWhere((element) => element.isSelected == true)
-                          .id)
-                  .timeSlotForBookingInMin ??
-              15;
-      hour = selectedTime.hour.toString();
-      minute = selectedTime.minute.toString();
-      time = '$hour : $minute';
-
-      controller.to.value.text = formatDate(
-          DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day,
-              selectedTime.hour,
-              selectedTime.minute + intervalTime),
-          [hh, ':', nn, " ", am]).toString();
     }
 
     Widget mobileUi(BuildContext cxt) {
@@ -243,6 +196,11 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                               ),
                               CustomDropDown(
                                   labelText: "Gender",
+                                  value: controller.genderList.value.firstWhere(
+                                      (element) =>
+                                          element.title ==
+                                          patientDetailsArguments
+                                              ?.details?.sex),
                                   variant: DropDownVariant.OutlineBluegray400,
                                   fontStyle: DropDownFontStyle
                                       .ManropeMedium14Bluegray500,
@@ -251,7 +209,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                         .genderValidator(value?.title ?? "");
                                   },
                                   icon: const Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: EdgeInsets.only(
+                                      right: 8.0,
+                                    ),
                                     child: Icon(Icons.arrow_drop_down),
                                   ),
                                   items: controller.genderList.value,
@@ -418,20 +378,12 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                   0, (index) {
                                                             return InkWell(
                                                               onTap: () {
-                                                                if (controller
-                                                                    .getAppointmentDetailsByDate
-                                                                    .any(
-                                                                        (element) {
-                                                                  return TimeCalculationUtils()
-                                                                      .startTimeCalCulation(
-                                                                          element
-                                                                              .startTime,
-                                                                          element
-                                                                              .updateTimeInMin)
-                                                                      .contains(
-                                                                          controller.times?[index].toString() ??
-                                                                              "");
-                                                                })) {
+                                                                if (controller.getAppointmentDetailsByDate.firstWhereOrNull((element) =>
+                                                                        element
+                                                                            .startTime ==
+                                                                        controller
+                                                                            .times![index]) !=
+                                                                    null) {
                                                                   controller
                                                                       .selectedStartTime
                                                                       .value = "";
@@ -559,24 +511,14 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                       Alignment
                                                                           .center,
                                                                   decoration: BoxDecoration(
-                                                                      color: controller.getAppointmentDetailsByDate.any((element) {
-                                                                        return TimeCalculationUtils()
-                                                                            .startTimeCalCulation(element.startTime,
-                                                                                element.updateTimeInMin)
-                                                                            .contains(controller.times?[index].toString() ?? "");
-                                                                      })
+                                                                      color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) != null
                                                                           ? Colors.blue
                                                                           : controller.times![index] == controller.selectedStartTime.value
                                                                               ? Colors.green
                                                                               : Colors.grey.shade100,
                                                                       borderRadius: BorderRadius.circular(6),
                                                                       border: Border.all(
-                                                                          color: controller.getAppointmentDetailsByDate.any((element) {
-                                                                        return TimeCalculationUtils()
-                                                                            .startTimeCalCulation(element.startTime,
-                                                                                element.updateTimeInMin)
-                                                                            .contains(controller.times?[index].toString() ?? "");
-                                                                      })
+                                                                          color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) != null
                                                                               ? Colors.transparent
                                                                               : controller.times![index] == controller.selectedStartTime.value
                                                                                   ? Colors.green
@@ -586,13 +528,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                             index] ??
                                                                         "",
                                                                     style: TextStyle(
-                                                                        color: controller.getAppointmentDetailsByDate.any((element) {
-                                                                      return TimeCalculationUtils()
-                                                                          .startTimeCalCulation(
-                                                                              element.startTime,
-                                                                              element.updateTimeInMin)
-                                                                          .contains(controller.times?[index].toString() ?? "");
-                                                                    })
+                                                                        color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) !=
+                                                                                null
                                                                             ? Colors.white
                                                                             : Colors.black),
                                                                   )),
@@ -860,6 +797,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                         Flexible(
                             fit: FlexFit.tight,
                             child: CustomDropDown(
+                                variant: DropDownVariant.OutlineBluegray400,
+                                fontStyle: DropDownFontStyle
+                                    .ManropeMedium14Bluegray500,
                                 labelText: "Gender",
                                 isRequired: true,
                                 validator: (value) {
@@ -941,125 +881,440 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                 SizedBox(
                   height: size.height * 0.03,
                 ),
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: SizedBox(
-                            child: InkWell(
-                              onTap: () async {
-                                FocusScope.of(context).unfocus();
-                                DateTime a = await getDate();
+                // Padding(
+                //     padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         Flexible(
+                //           fit: FlexFit.tight,
+                //           child: SizedBox(
+                //             child: InkWell(
+                //               onTap: () async {
+                //                 FocusScope.of(context).unfocus();
+                //                 DateTime a = await getDate();
 
-                                final DateFormat formatter =
-                                    DateFormat('yyyy-MM-dd');
-                                controller.dob.text = formatter.format(a);
-                              },
-                              child: AbsorbPointer(
-                                child: CustomTextFormField(
-                                    controller: controller.dob,
-                                    labelText: "Date",
-                                    isRequired: true,
-                                    size: size,
-                                    validator: (value) {
-                                      return controller
-                                          .dobValidator(value ?? "");
-                                    },
-                                    padding: TextFormFieldPadding.PaddingT14,
-                                    textInputType: TextInputType.emailAddress,
-                                    suffix: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 10),
-                                        child:
-                                            const Icon(Icons.calendar_month)),
-                                    suffixConstraints: BoxConstraints(
-                                        maxHeight: getVerticalSize(56))),
+                //                 final DateFormat formatter =
+                //                     DateFormat('yyyy-MM-dd');
+                //                 controller.dob.text = formatter.format(a);
+                //               },
+                //               child: AbsorbPointer(
+                //                 child: CustomTextFormField(
+                //                     controller: controller.dob,
+                //                     labelText: "Date",
+                //                     isRequired: true,
+                //                     size: size,
+                //                     validator: (value) {
+                //                       return controller
+                //                           .dobValidator(value ?? "");
+                //                     },
+                //                     padding: TextFormFieldPadding.PaddingT14,
+                //                     textInputType: TextInputType.emailAddress,
+                //                     suffix: Container(
+                //                         margin:
+                //                             const EdgeInsets.only(right: 10),
+                //                         child:
+                //                             const Icon(Icons.calendar_month)),
+                //                     suffixConstraints: BoxConstraints(
+                //                         maxHeight: getVerticalSize(56))),
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //         SizedBox(
+                //           width: size.width * 0.02,
+                //         ),
+                //         Flexible(
+                //           fit: FlexFit.tight,
+                //           child: InkWell(
+                //             onTap: () {
+                //               _selectTime(context);
+                //             },
+                //             child: AbsorbPointer(
+                //               child: CustomTextFormField(
+                //                   labelText: "From",
+                //                   isRequired: true,
+                //                   controller: controller.from.value,
+                //                   padding: TextFormFieldPadding.PaddingT14,
+                //                   validator: (value) {
+                //                     return controller.fromValidator(
+                //                         value ?? "",
+                //                         content?.startTime ?? "12:00 PM",
+                //                         content?.endTime ?? "06:00 PM");
+                //                   },
+                //                   textInputType: TextInputType.emailAddress,
+                //                   suffix: Container(
+                //                     margin: const EdgeInsets.only(right: 10),
+                //                     child: const Icon(Icons.alarm),
+                //                   ),
+                //                   suffixConstraints: BoxConstraints(
+                //                       maxHeight: getVerticalSize(56))),
+                //             ),
+                //           ),
+                //         ),
+                //         SizedBox(
+                //           width: size.width * 0.02,
+                //         ),
+                //         Flexible(
+                //           fit: FlexFit.tight,
+                //           child: AbsorbPointer(
+                //             child: CustomTextFormField(
+                //                 controller: controller.to.value,
+                //                 isRequired: true,
+                //                 labelText: "To",
+                //                 padding: TextFormFieldPadding.PaddingT14,
+                //                 validator: (value) {
+                //                   return controller.toValidator(value ?? "");
+                //                 },
+                //                 textInputType: TextInputType.datetime,
+                //                 suffix: Container(
+                //                   margin: const EdgeInsets.only(right: 10),
+                //                   child: const Icon(Icons.alarm),
+                //                 ),
+                //                 suffixConstraints: BoxConstraints(
+                //                     maxHeight: getVerticalSize(56))),
+                //           ),
+                //         ),
+                //       ],
+                //     )),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+                  child: Obx(() => CustomDropDown(
+                      labelText: "Consulting Doctor ",
+                      variant: DropDownVariant.OutlineBluegray400,
+                      fontStyle: DropDownFontStyle.ManropeMedium14Bluegray500,
+                      validator: (value) {
+                        return controller
+                            .consultingdoctorValidator(value?.title ?? "");
+                      },
+                      icon: const Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Icon(Icons.arrow_drop_down),
+                      ),
+                      items: controller.counsultingDoctor.value,
+                      onChanged: (value) {
+                        controller.consultingDoctor.value.text = value.title;
+                        if (controller.consultingDoctor.value.text != '') {
+                          controller.showDateAndTime.value = true;
+                        }
+                        controller.onConsultingDoctorSelect(value);
+                      })),
+                ),
+
+                Obx(
+                  () => controller.showDateAndTime.value
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                              child: CalendarTimeline(
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime.now()
+                                    .add(const Duration(days: 360)),
+                                onDateSelected: (date) {
+                                  final DateFormat formatter =
+                                      DateFormat('dd-MM-yyyy');
+                                  final DateFormat format =
+                                      DateFormat('yyyy-MM-dd');
+                                  controller.dob.text = format.format(date);
+                                  controller.callGetAppointmentDetailsForDate(
+                                      formatter.format(date));
+                                  controller.getAppointmentDetailsByDate.value =
+                                      [];
+
+                                  controller.fromTime.value = '';
+                                  controller.toTime.value = '';
+                                  controller.getAppointmentDetailsByDate
+                                      .refresh();
+                                },
+                                monthColor: Colors.blueGrey,
+                                dayColor: Colors.black,
+                                activeDayColor: Colors.white,
+                                activeBackgroundDayColor:
+                                    ColorConstant.blue60001,
+                                dotsColor: Colors.white,
+                                locale: 'en_ISO',
                               ),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: InkWell(
-                            onTap: () {
-                              _selectTime(context);
-                            },
-                            child: AbsorbPointer(
-                              child: CustomTextFormField(
-                                  labelText: "From",
-                                  isRequired: true,
-                                  controller: controller.from.value,
-                                  padding: TextFormFieldPadding.PaddingT14,
-                                  validator: (value) {
-                                    return controller.fromValidator(
-                                        value ?? "",
-                                        content?.startTime ?? "12:00 PM",
-                                        content?.endTime ?? "06:00 PM");
-                                  },
-                                  textInputType: TextInputType.emailAddress,
-                                  suffix: Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    child: const Icon(Icons.alarm),
-                                  ),
-                                  suffixConstraints: BoxConstraints(
-                                      maxHeight: getVerticalSize(56))),
+                            const SizedBox(height: 10),
+                            Obx(() => controller.isLoading.value
+                                ? const SizedBox(
+                                    height: 200,
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                : controller.getAppointmentDetailsByDate
+                                            .value ==
+                                        []
+                                    ? const SizedBox(
+                                        height: 100,
+                                      )
+                                    : Align(
+                                        alignment: Alignment.center,
+                                        child: Wrap(
+                                            runSpacing: getVerticalSize(3),
+                                            spacing: getHorizontalSize(10),
+                                            children: List.generate(
+                                                controller.times?.length ?? 0,
+                                                (index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  if (controller
+                                                      .getAppointmentDetailsByDate
+                                                      .any((element) {
+                                                    return TimeCalculationUtils()
+                                                        .startTimeCalCulation(
+                                                            element.startTime,
+                                                            element
+                                                                .updateTimeInMin)
+                                                        .contains(controller
+                                                                .times?[index]
+                                                                .toString() ??
+                                                            "");
+                                                  })) {
+                                                    controller.selectedStartTime
+                                                        .value = "";
+                                                    WidgetsBinding.instance
+                                                        .addPostFrameCallback(
+                                                            (timeStamp) {
+                                                      showDialog(
+                                                        context: Get.context!,
+                                                        builder: (context) =>
+                                                            AlertDialog(
+                                                          title: const Text(
+                                                              'Appointment for the selected time is already booked. Please select other time.'),
+                                                          actions: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                CustomButton(
+                                                                    height:
+                                                                        getVerticalSize(
+                                                                            60),
+                                                                    width:
+                                                                        getHorizontalSize(
+                                                                            80),
+                                                                    text:
+                                                                        'Close',
+                                                                    margin: getMargin(
+                                                                        left: 0,
+                                                                        right:
+                                                                            10),
+                                                                    fontStyle:
+                                                                        ButtonFontStyle
+                                                                            .RalewayRomanSemiBold14WhiteA700,
+                                                                    onTap:
+                                                                        () async {
+                                                                      Get.back();
+                                                                    })
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      );
+                                                    });
+                                                  } else {
+                                                    controller.selectedStartTime
+                                                        .value = controller
+                                                            .times?[index] ??
+                                                        "";
+                                                    controller.index = index;
+                                                    int intervalTime = doctorsList
+                                                                ?.firstWhere((element) =>
+                                                                    element
+                                                                        .id ==
+                                                                    controller
+                                                                        .counsultingDoctor
+                                                                        .value
+                                                                        .firstWhere((element) =>
+                                                                            element
+                                                                                .isSelected ==
+                                                                            true)
+                                                                        .id)
+                                                                .timeSlotForBookingInMin ==
+                                                            0
+                                                        ? 15
+                                                        : doctorsList
+                                                                ?.firstWhere((element) =>
+                                                                    element
+                                                                        .id ==
+                                                                    controller
+                                                                        .counsultingDoctor
+                                                                        .value
+                                                                        .firstWhere((element) =>
+                                                                            element.isSelected ==
+                                                                            true)
+                                                                        .id)
+                                                                .timeSlotForBookingInMin ??
+                                                            15;
+
+                                                    TimeOfDay newSelectedTime = TimeOfDay(
+                                                        hour: int.parse(controller
+                                                            .selectedStartTime
+                                                            .value
+                                                            .split(":")[0]),
+                                                        minute: int.parse(
+                                                            controller
+                                                                .selectedStartTime
+                                                                .value
+                                                                .split(":")[1]
+                                                                .replaceAll(
+                                                                    ' AM', '')
+                                                                .replaceAll(
+                                                                    ' PM',
+                                                                    '')));
+
+                                                    controller.fromTime.value =
+                                                        formatDate(
+                                                            DateTime(
+                                                                DateTime.now()
+                                                                    .year,
+                                                                DateTime.now()
+                                                                    .month,
+                                                                DateTime.now()
+                                                                    .day,
+                                                                newSelectedTime
+                                                                    .hour,
+                                                                newSelectedTime
+                                                                    .minute),
+                                                            [
+                                                          hh,
+                                                          ':',
+                                                          nn,
+                                                          " ",
+                                                          am
+                                                        ]).toString().replaceAll(
+                                                            ' AM', ' PM');
+                                                    controller.toTime.value =
+                                                        formatDate(
+                                                            DateTime(
+                                                                DateTime.now()
+                                                                    .year,
+                                                                DateTime.now()
+                                                                    .month,
+                                                                DateTime.now()
+                                                                    .day,
+                                                                newSelectedTime
+                                                                    .hour,
+                                                                newSelectedTime
+                                                                        .minute +
+                                                                    intervalTime),
+                                                            [
+                                                          hh,
+                                                          ':',
+                                                          nn,
+                                                          " ",
+                                                          am
+                                                        ]).toString().replaceAll(
+                                                            ' AM', ' PM');
+                                                  }
+
+                                                  print(controller
+                                                      .fromTime.value);
+                                                  print(
+                                                      controller.toTime.value);
+                                                },
+                                                child: Container(
+                                                    height: 40,
+                                                    width: 100,
+                                                    margin:
+                                                        const EdgeInsets.all(5),
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                        color: controller
+                                                                .getAppointmentDetailsByDate
+                                                                .any((element) {
+                                                          return TimeCalculationUtils()
+                                                              .startTimeCalCulation(
+                                                                  element
+                                                                      .startTime,
+                                                                  element
+                                                                      .updateTimeInMin)
+                                                              .contains(controller
+                                                                      .times?[
+                                                                          index]
+                                                                      .toString() ??
+                                                                  "");
+                                                        })
+                                                            ? Colors.blue
+                                                            : controller.times![
+                                                                        index] ==
+                                                                    controller
+                                                                        .selectedStartTime
+                                                                        .value
+                                                                ? Colors.green
+                                                                : Colors.grey
+                                                                    .shade100,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(6),
+                                                        border: Border.all(
+                                                            color: controller
+                                                                    .getAppointmentDetailsByDate
+                                                                    .any(
+                                                                        (element) {
+                                                          return TimeCalculationUtils()
+                                                              .startTimeCalCulation(
+                                                                  element
+                                                                      .startTime,
+                                                                  element
+                                                                      .updateTimeInMin)
+                                                              .contains(controller
+                                                                      .times?[
+                                                                          index]
+                                                                      .toString() ??
+                                                                  "");
+                                                        })
+                                                                ? Colors
+                                                                    .transparent
+                                                                : controller.times![index] ==
+                                                                        controller
+                                                                            .selectedStartTime
+                                                                            .value
+                                                                    ? Colors.green
+                                                                    : Colors.black)),
+                                                    child: Text(
+                                                      controller
+                                                              .times?[index] ??
+                                                          "",
+                                                      style: TextStyle(
+                                                          color: controller
+                                                                  .getAppointmentDetailsByDate
+                                                                  .any(
+                                                                      (element) {
+                                                        return TimeCalculationUtils()
+                                                            .startTimeCalCulation(
+                                                                element
+                                                                    .startTime,
+                                                                element
+                                                                    .updateTimeInMin)
+                                                            .contains(controller
+                                                                    .times?[
+                                                                        index]
+                                                                    .toString() ??
+                                                                "");
+                                                      })
+                                                              ? Colors.white
+                                                              : Colors.black),
+                                                    )),
+                                              );
+                                            })),
+                                      )),
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Flexible(
-                          fit: FlexFit.tight,
-                          child: AbsorbPointer(
-                            child: CustomTextFormField(
-                                controller: controller.to.value,
-                                isRequired: true,
-                                labelText: "To",
-                                padding: TextFormFieldPadding.PaddingT14,
-                                validator: (value) {
-                                  return controller.toValidator(value ?? "");
-                                },
-                                textInputType: TextInputType.datetime,
-                                suffix: Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: const Icon(Icons.alarm),
-                                ),
-                                suffixConstraints: BoxConstraints(
-                                    maxHeight: getVerticalSize(56))),
-                          ),
-                        ),
-                      ],
-                    )),
+                          ],
+                        )
+                      : const SizedBox(),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
                   child: Row(
                     children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: CustomTextFormField(
-                            controller: controller.consultingDoctor.value,
-                            labelText: "Consulting Doctor",
-                            isRequired: true,
-                            readonly: true,
-                            validator: (value) {
-                              return controller
-                                  .consultingdoctorValidator(value ?? "");
-                            },
-                            padding: TextFormFieldPadding.PaddingT14,
-                            textInputType: TextInputType.emailAddress,
-                            prefixConstraints:
-                                BoxConstraints(maxHeight: getVerticalSize(56))),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.02,
-                      ),
                       Expanded(
                         flex: 1,
                         child: CustomTextFormField(
@@ -1202,33 +1457,18 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
   }
 
   onTapBookapointmentOne(int id) async {
-    TimeOfDay _startTime = TimeOfDay(
-        hour: int.parse(controller.fromTime.value.split(":")[0]),
-        minute: int.parse(controller.fromTime.value
-            .split(":")[1]
-            .replaceAll(' AM', '')
-            .replaceAll(' PM', '')));
-    print(_startTime);
+    print(controller.fromTime.value);
+    DateTime date2 = DateFormat("hh:mm a").parse(controller.fromTime.value);
 
     DateTime userdate = DateTime.parse(controller.dob.text);
-    DateTime a = DateTime(userdate.year, userdate.month, userdate.day,
-        _startTime.hour, _startTime.minute);
-    TimeOfDay b = TimeOfDay.now();
-    String c = DateFormat.jm().format(DateTime.now());
-    TimeOfDay _currentTime = TimeOfDay(
-        hour: int.parse(c.split(":")[0]),
-        minute: int.parse(
-            c.split(":")[1].replaceAll(' AM', '').replaceAll(' PM', '')));
-    DateTime now = DateTime(DateTime.now().year, DateTime.now().month,
-        DateTime.now().day, _currentTime.hour, _currentTime.minute);
-    print(a);
-    print(now);
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    formatter.format(now);
-    print(formatter.format(now));
-    print(controller.dob.text);
+    DateTime a = DateTime(
+        userdate.year, userdate.month, userdate.day, date2.hour, date2.minute);
 
-    if (a.isAfter(now)) {
+    print(a);
+    print(DateTime.now());
+    print(a.isAfter(DateTime.now()));
+
+    if (a.isAfter(DateTime.now())) {
       var requestData = {
         "active": true,
         "date": DateTime.parse(

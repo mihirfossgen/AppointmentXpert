@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefUtils {
@@ -31,8 +33,9 @@ class SharedPrefUtils {
   }
 
   static readPrefBool(String key) async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getBool(key);
+    bool value;
+    value = _prefsInstance?.getBool(key) ?? false;
+    return value;
   }
 
   static saveInt(String key, int value) async {

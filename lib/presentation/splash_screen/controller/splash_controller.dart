@@ -29,10 +29,11 @@ class SplashController extends GetxController {
     dynamic user_Id = await SessionManager().get("user_Id");
     dynamic auth_token = await SessionManager().get("auth_token");
     dynamic role = await SessionManager().get("role");
+    bool a = await SharedPrefUtils.readPrefBool('complete_profile_flag');
     if (SharedPrefUtils.readPrefStr('auth_token').isNotEmpty &&
         SharedPrefUtils.readPrefINt("user_Id") != 0 &&
         SharedPrefUtils.readPrefStr("role").isNotEmpty &&
-        SharedPrefUtils.readPrefBool('complete_profile_flag') == true) {
+        a == true) {
       // if (SharedPrefUtils.readPrefINt("employee_Id") == 0) {
       //   Future.delayed(const Duration(seconds: 3), () {
       //     Get.offAllNamed(AppRoutes.homeContainerScreen);

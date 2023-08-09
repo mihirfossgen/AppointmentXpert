@@ -31,6 +31,7 @@ class PatientsList extends GetView<DashboardController> {
   DashboardController dashboardController = Get.put(DashboardController());
 
   final DateFormat formatter = DateFormat.yMMMMd('en_US');
+  final DateFormat formatters = DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +166,7 @@ class PatientsList extends GetView<DashboardController> {
                   ),
                   SizedBox(
                     height: Responsive.isMobile(Get.context!)
-                        ? MediaQuery.of(Get.context!).size.height * 0.62
+                        ? null
                         : Responsive.isTablet(Get.context!)
                             ? MediaQuery.of(Get.context!).size.height * 0.80
                             : MediaQuery.of(Get.context!).size.height,
@@ -182,6 +183,7 @@ class PatientsList extends GetView<DashboardController> {
                             },
                             child: PagedListView<int, Content>.separated(
                               shrinkWrap: true,
+                              physics: const ScrollPhysics(),
                               pagingController:
                                   dashboardController.patientPagingController,
                               builderDelegate:
@@ -242,7 +244,7 @@ class PatientsList extends GetView<DashboardController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          'Email: ${item.email.toString()}',
+                                          'Email: ${item.email == '' ? "NA" : item.email}',
                                           style: const TextStyle(
                                               fontSize: 13,
                                               color: Colors.black),
@@ -260,7 +262,7 @@ class PatientsList extends GetView<DashboardController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          'Age: ${item.age}',
+                                          'Date of Birth: ${formatters.format(DateTime.parse(item.dob ?? ""))}',
                                           style: const TextStyle(
                                               fontSize: 13,
                                               color: Colors.black),
