@@ -205,7 +205,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                       childAspectRatio:
                                           tab.toLowerCase() == 'completed'
                                               ? 2.5
-                                              : 1.75,
+                                              : 1.90,
                                       // tab.toLowerCase() == 'completed'
                                       //     ? 100 / 50
                                       //     : 100 / 70,
