@@ -28,45 +28,71 @@ class StaffList extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: Scaffold(
-        /*floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            //Get.to(() => AddPatientScreen());
-          },
-          tooltip: 'Add New Staff',
-          child: const Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,*/
-        body: Container(
-            padding: const EdgeInsets.all(defaultPadding),
-            decoration: const BoxDecoration(
-              color: secondaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: LiquidPullToRefresh(
-              showChildOpacityTransition: false,
-              onRefresh: () async {
-                controller.isloadingStaffList.value = true;
-                controller.staffPagingController =
-                    PagingController(firstPageKey: 0);
-                controller.callStaffList(0);
-              },
-              child: ListView(children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (Responsive.isMobile(context))
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          SearchField(
+    return Scaffold(
+      /*floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          //Get.to(() => AddPatientScreen());
+        },
+        tooltip: 'Add New Staff',
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,*/
+      body: Container(
+          padding: const EdgeInsets.all(defaultPadding),
+          decoration: const BoxDecoration(
+            color: secondaryColor,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: LiquidPullToRefresh(
+            showChildOpacityTransition: false,
+            onRefresh: () async {
+              controller.isloadingStaffList.value = true;
+              controller.staffPagingController =
+                  PagingController(firstPageKey: 0);
+              controller.callStaffList(0);
+            },
+            child: ListView(children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (Responsive.isMobile(context))
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        SearchField(
+                          onSearch: (value) {
+                            // if (value.length > 3) {
+                            //   data?.forEach((element) {
+                            //     if (element.firstName!
+                            //         .toLowerCase()
+                            //         .contains(value.toLowerCase())) {
+                            //       print(true);
+                            //       List<Content> a = [];
+                            //       a.add(element);
+                            //       dashboardController
+                            //           .patientPagingController.itemList = a;
+                            //     }
+                            //   });
+                            // } else {
+                            //   dashboardController
+                            //       .patientPagingController.itemList = data;
+                            // }
+                          },
+                        ),
+                      ],
+                    ),
+                  if (!Responsive.isMobile(context))
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(flex: 1, child: textView()),
+                        Expanded(
+                          flex: 1,
+                          child: SearchField(
                             onSearch: (value) {
                               // if (value.length > 3) {
                               //   data?.forEach((element) {
@@ -86,208 +112,166 @@ class StaffList extends GetView<DashboardController> {
                               // }
                             },
                           ),
-                        ],
-                      ),
-                    if (!Responsive.isMobile(context))
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(flex: 1, child: textView()),
-                          Expanded(
-                            flex: 1,
-                            child: SearchField(
-                              onSearch: (value) {
-                                // if (value.length > 3) {
-                                //   data?.forEach((element) {
-                                //     if (element.firstName!
-                                //         .toLowerCase()
-                                //         .contains(value.toLowerCase())) {
-                                //       print(true);
-                                //       List<Content> a = [];
-                                //       a.add(element);
-                                //       dashboardController
-                                //           .patientPagingController.itemList = a;
-                                //     }
-                                //   });
-                                // } else {
-                                //   dashboardController
-                                //       .patientPagingController.itemList = data;
-                                // }
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    const SizedBox(
-                      height: 10.0,
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 630,
-                      child: Responsive.isMobile(context)
-                          ? RefreshIndicator(
-                              onRefresh: () async {
-                                Future.sync(() => dashboardController
-                                    .staffPagingController
-                                    .refresh());
-                                dashboardController.isloadingStaffList.value =
-                                    true;
-                                dashboardController.callStaffList(0);
-                              },
-                              child: PagedListView<int, Contents>.separated(
-                                shrinkWrap: true,
-                                pagingController:
-                                    dashboardController.staffPagingController,
-                                builderDelegate:
-                                    PagedChildBuilderDelegate<Contents>(
-                                  animateTransitions: true,
-                                  itemBuilder: (context, item, index) =>
-                                      Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: GFListTile(
-                                      icon: const Icon(Icons.arrow_right),
-                                      avatar: item.uploadedProfilePath != null
-                                          ? CachedNetworkImage(
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.contain,
-                                              imageUrl: Uri.encodeFull(
-                                                Endpoints.baseURL +
-                                                    Endpoints
-                                                        .downLoadEmployePhoto +
-                                                    item.uploadedProfilePath
-                                                        .toString(),
-                                              ),
-                                              httpHeaders: {
-                                                "Authorization":
-                                                    "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
-                                              },
-                                              progressIndicatorBuilder:
-                                                  (context, url,
-                                                          downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                          value:
-                                                              downloadProgress
-                                                                  .progress),
-                                              errorWidget:
-                                                  (context, url, error) {
-                                                print(error);
-                                                return CustomImageView(
-                                                  imagePath: !Responsive
-                                                          .isDesktop(
-                                                              Get.context!)
-                                                      ? 'assets'
-                                                          '/images/default_profile.png'
-                                                      : '/images/default_profile.png',
-                                                );
-                                              },
-                                            )
-                                          : CustomImageView(
-                                              width: 80,
-                                              height: 80,
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Responsive.isMobile(context)
+                      ? RefreshIndicator(
+                          onRefresh: () async {
+                            Future.sync(() => dashboardController
+                                .staffPagingController
+                                .refresh());
+                            dashboardController.isloadingStaffList.value = true;
+                            dashboardController.callStaffList(0);
+                          },
+                          child: PagedListView<int, Contents>.separated(
+                            shrinkWrap: true,
+                            pagingController:
+                                dashboardController.staffPagingController,
+                            physics: const ScrollPhysics(),
+                            builderDelegate:
+                                PagedChildBuilderDelegate<Contents>(
+                              animateTransitions: true,
+                              itemBuilder: (context, item, index) => Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: GFListTile(
+                                  icon: const Icon(Icons.arrow_right),
+                                  avatar: item.uploadedProfilePath != null
+                                      ? CachedNetworkImage(
+                                          width: 80,
+                                          height: 80,
+                                          fit: BoxFit.contain,
+                                          imageUrl: Uri.encodeFull(
+                                            Endpoints.baseURL +
+                                                Endpoints.downLoadEmployePhoto +
+                                                item.uploadedProfilePath
+                                                    .toString(),
+                                          ),
+                                          httpHeaders: {
+                                            "Authorization":
+                                                "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                                          },
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress),
+                                          errorWidget: (context, url, error) {
+                                            print(error);
+                                            return CustomImageView(
                                               imagePath: !Responsive.isDesktop(
                                                       Get.context!)
                                                   ? 'assets'
                                                       '/images/default_profile.png'
                                                   : '/images/default_profile.png',
-                                            ),
-                                      //autofocus: true,
-                                      color: Colors.white,
-                                      description: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Email: ${item.email.toString()}',
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Address: ${item.address}',
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Profession: ${item.profession}',
-                                            style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                          ),
-                                        ],
+                                            );
+                                          },
+                                        )
+                                      : CustomImageView(
+                                          width: 80,
+                                          height: 80,
+                                          imagePath: !Responsive.isDesktop(
+                                                  Get.context!)
+                                              ? 'assets'
+                                                  '/images/default_profile.png'
+                                              : '/images/default_profile.png',
+                                        ),
+                                  //autofocus: true,
+                                  color: Colors.white,
+                                  description: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
                                       ),
-                                      enabled: true,
-                                      /*firstButtonTextStyle: const TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold),
-                                      firstButtonTitle: 'View Details',
-                                      secondButtonTitle: 'Book Appointment',
-                                      secondButtonTextStyle: const TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                      onSecondButtonTap: () {
-                                        // Get.to(() => AppointmentBookingScreen(
-                                        //     doctorsList: doctorsList,
-                                        //     patientDetailsArguments:
-                                        //         PatientDetailsArguments(
-                                        //             [], item)));
-                                      },
-                                      onFirstButtonTap: () {
-                                        // Get.to(
-                                        //     () => (PatientDetailsPage(item)));
-                                      },*/
-                                      //focusColor: ,
-                                      focusNode: FocusNode(),
-                                      //hoverColor: Colors.blue,
-                                      //icon: ,
-                                      listItemTextColor: GFColors.DARK,
-                                      //margin: getMarginOrPadding(all: 8.0),
-                                      //onFirstButtonTap: ,
-                                      //onLongPress: ,
-                                      //onSecondButtonTap: ,
-                                      onTap: () {},
-                                      //padding: ,
-                                      radius: 8,
-                                      //secondButtonTextStyle: ,
-                                      //secondButtonTitle: 'Delete',
-                                      selected: false,
-                                      //shadow: BoxShadow,
-                                      //subTitleText: 'Address: ${data.address}',
-                                      title: Text(
-                                        '${item.prefix.toString()}'
-                                        '${item.firstName} '
-                                        '${item.lastName}',
+                                      Text(
+                                        'Email: ${item.email.toString()}',
                                         style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                            fontSize: 13, color: Colors.black),
                                       ),
-                                      //titleText: '${data.firstName} ' + '${data.lastName}',
-                                    ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Address: ${item.address}',
+                                        style: const TextStyle(
+                                            fontSize: 13, color: Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        'Profession: ${item.profession}',
+                                        style: const TextStyle(
+                                            fontSize: 13, color: Colors.black),
+                                      ),
+                                    ],
                                   ),
+                                  enabled: true,
+                                  /*firstButtonTextStyle: const TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold),
+                                  firstButtonTitle: 'View Details',
+                                  secondButtonTitle: 'Book Appointment',
+                                  secondButtonTextStyle: const TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                  onSecondButtonTap: () {
+                                    // Get.to(() => AppointmentBookingScreen(
+                                    //     doctorsList: doctorsList,
+                                    //     patientDetailsArguments:
+                                    //         PatientDetailsArguments(
+                                    //             [], item)));
+                                  },
+                                  onFirstButtonTap: () {
+                                    // Get.to(
+                                    //     () => (PatientDetailsPage(item)));
+                                  },*/
+                                  //focusColor: ,
+                                  focusNode: FocusNode(),
+                                  //hoverColor: Colors.blue,
+                                  //icon: ,
+                                  listItemTextColor: GFColors.DARK,
+                                  //margin: getMarginOrPadding(all: 8.0),
+                                  //onFirstButtonTap: ,
+                                  //onLongPress: ,
+                                  //onSecondButtonTap: ,
+                                  onTap: () {},
+                                  //padding: ,
+                                  radius: 8,
+                                  //secondButtonTextStyle: ,
+                                  //secondButtonTitle: 'Delete',
+                                  selected: false,
+                                  //shadow: BoxShadow,
+                                  //subTitleText: 'Address: ${data.address}',
+                                  title: Text(
+                                    '${item.prefix.toString()}'
+                                    '${item.firstName} '
+                                    '${item.lastName}',
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  //titleText: '${data.firstName} ' + '${data.lastName}',
                                 ),
-                                separatorBuilder: (context, index) =>
-                                    const Divider(),
                               ),
-                            )
-                          //loadList()
-                          : loadDataTable(),
-                    ),
-                  ],
-                ),
-              ]),
-            )),
-      ),
+                            ),
+                            separatorBuilder: (context, index) =>
+                                const Divider(),
+                          ),
+                        )
+                      //loadList()
+                      : loadDataTable(),
+                ],
+              ),
+            ]),
+          )),
     );
   }
 

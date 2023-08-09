@@ -2164,11 +2164,7 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget _buildStaffListPageContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: SizedBox(
-          width: MediaQuery.of(Get.context!).size.width,
-          height: MediaQuery.of(Get.context!).size.height,
-          //color: Colors.red,
-          child: StaffList()),
+      child: StaffList(),
     );
   }
 
