@@ -1199,10 +1199,13 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       child:
                                                           CircularProgressIndicator(),
                                                     )
-                                                  : controller
-                                                          .patientPagingController
-                                                          .itemList!
-                                                          .isNotEmpty
+                                                  : controller.patientPagingController
+                                                                  .itemList !=
+                                                              null ||
+                                                          controller
+                                                                  .patientPagingController
+                                                                  .itemList !=
+                                                              []
                                                       ? _RecentPatients(
                                                           data: controller
                                                                   .patientPagingController
