@@ -35,7 +35,11 @@ class ScheduleItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.a = jsonDecode(SharedPrefUtils.readPrefStr("doctor_details"));
+    String doctStr = SharedPrefUtils.readPrefStr("doctor_details");
+    if (doctStr != '') {
+      var details = jsonDecode(doctStr);
+      controller.a = details;
+    }
     return InkWell(
       onTap: () {
         Get.toNamed(AppRoutes.appointmentDetailsPage,
@@ -383,241 +387,251 @@ class ScheduleItemWidget extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       // Call reschedule appointment
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        showDialog(
-                          context: Get.context!,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Reschedule Appointment'),
-                            actions: [
-                              ReschduleAppointment(
-                                appointment: appointment,
-                                appointmentTime:
-                                    appointment.updateTimeInMin == 0
-                                        ? controller
-                                            .getformattedtime(
-                                                appointment.date ?? "",
-                                                Get.context!)
-                                            .replaceAll(' AM', ' PM')
-                                        : TimeCalculationUtils()
-                                            .startTimeCalCulation(
-                                                appointment.startTime,
-                                                appointment.updateTimeInMin),
-                              )
-                              // Column(
-                              //   children: [
-                              //     Padding(
-                              //         padding: const EdgeInsets.fromLTRB(
-                              //             15, 0, 15, 15),
-                              //         child: Column(
-                              //           mainAxisAlignment:
-                              //               MainAxisAlignment.spaceBetween,
-                              //           children: [
-                              //             SizedBox(
-                              //               child: InkWell(
-                              //                 onTap: () async {
-                              //                   DateTime a = await controller
-                              //                       .getRescheduleDate();
+                      if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          showDialog(
+                            context: Get.context!,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Reschedule Appointment'),
+                              actions: [
+                                ReschduleAppointment(
+                                  appointment: appointment,
+                                  appointmentTime:
+                                      appointment.updateTimeInMin == 0
+                                          ? controller
+                                              .getformattedtime(
+                                                  appointment.date ?? "",
+                                                  Get.context!)
+                                              .replaceAll(' AM', ' PM')
+                                          : TimeCalculationUtils()
+                                              .startTimeCalCulation(
+                                                  appointment.startTime,
+                                                  appointment.updateTimeInMin),
+                                )
+                                // Column(
+                                //   children: [
+                                //     Padding(
+                                //         padding: const EdgeInsets.fromLTRB(
+                                //             15, 0, 15, 15),
+                                //         child: Column(
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.spaceBetween,
+                                //           children: [
+                                //             SizedBox(
+                                //               child: InkWell(
+                                //                 onTap: () async {
+                                //                   DateTime a = await controller
+                                //                       .getRescheduleDate();
 
-                              //                   final DateFormat formatter =
-                              //                       DateFormat('yyyy-MM-dd');
-                              //                   controller.dob.text =
-                              //                       formatter.format(a);
-                              //                 },
-                              //                 child: AbsorbPointer(
-                              //                   child: CustomTextFormField(
-                              //                       controller: controller.dob,
-                              //                       labelText: "Date",
-                              //                       size: size,
-                              //                       validator: (value) {
-                              //                         return controller
-                              //                             .dobValidator(
-                              //                                 value ?? "");
-                              //                       },
-                              //                       padding:
-                              //                           TextFormFieldPadding
-                              //                               .PaddingT14,
-                              //                       textInputType: TextInputType
-                              //                           .emailAddress,
-                              //                       suffix: Container(
-                              //                           margin: const EdgeInsets
-                              //                               .only(right: 10),
-                              //                           child: const Icon(Icons
-                              //                               .calendar_month)),
-                              //                       suffixConstraints:
-                              //                           BoxConstraints(
-                              //                               maxHeight:
-                              //                                   getVerticalSize(
-                              //                                       56))),
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //             SizedBox(
-                              //               height: size.height * 0.02,
-                              //             ),
-                              //             InkWell(
-                              //               onTap: () {
-                              //                 controller.selectTime(
-                              //                     Get.context!,
-                              //                     appointment.examiner
-                              //                             ?.timeSlotForBookingInMin ??
-                              //                         0);
-                              //               },
-                              //               child: AbsorbPointer(
-                              //                 child: CustomTextFormField(
-                              //                     labelText: "From",
-                              //                     controller: controller
-                              //                         .from.value,
-                              //                     padding: TextFormFieldPadding
-                              //                         .PaddingT14,
-                              //                     textInputType: TextInputType
-                              //                         .emailAddress,
-                              //                     validator: (value) {
-                              //                       return controller.fromValidator(
-                              //                           value ?? "",
-                              //                           controller.a?[
-                              //                                   'startTime'] ??
-                              //                               "12:00 PM",
-                              //                           controller.a?[
-                              //                                   'endTime'] ??
-                              //                               "06:00 PM");
-                              //                     },
-                              //                     suffix: Container(
-                              //                       margin:
-                              //                           const EdgeInsets.only(
-                              //                               right: 10),
-                              //                       child:
-                              //                           const Icon(Icons.alarm),
-                              //                     ),
-                              //                     suffixConstraints:
-                              //                         BoxConstraints(
-                              //                             maxHeight:
-                              //                                 getVerticalSize(
-                              //                                     56))),
-                              //               ),
-                              //             ),
-                              //             SizedBox(
-                              //               height: size.height * 0.02,
-                              //             ),
-                              //             AbsorbPointer(
-                              //               child: CustomTextFormField(
-                              //                   controller: controller.to,
-                              //                   labelText: "To",
-                              //                   padding: TextFormFieldPadding
-                              //                       .PaddingT14,
-                              //                   textInputType: TextInputType
-                              //                       .datetime,
-                              //                   suffix: Container(
-                              //                     margin: const EdgeInsets.only(
-                              //                         right: 10),
-                              //                     child:
-                              //                         const Icon(Icons.alarm),
-                              //                   ),
-                              //                   suffixConstraints:
-                              //                       BoxConstraints(
-                              //                           maxHeight:
-                              //                               getVerticalSize(
-                              //                                   56))),
-                              //             ),
-                              //           ],
-                              //         )),
-                              //     Align(
-                              //       alignment: Alignment.center,
-                              //       child: CustomButton(
-                              //           height: getVerticalSize(56),
-                              //           width: getHorizontalSize(110),
-                              //           text: "Reschdule Appointment",
-                              //           shape: ButtonShape.RoundedBorder8,
-                              //           padding: ButtonPadding.PaddingAll16,
-                              //           fontStyle: ButtonFontStyle
-                              //               .RalewayRomanSemiBold14WhiteA700,
-                              //           onTap: () async {
-                              //             TimeOfDay _startTime = TimeOfDay(
-                              //                 hour: int.parse(controller
-                              //                     .from.value.text!
-                              //                     .split(":")[0]),
-                              //                 minute: int.parse(controller
-                              //                     .from.value.text
-                              //                     .split(":")[1]
-                              //                     .replaceAll(' AM', '')
-                              //                     .replaceAll(' PM', '')));
-                              //             print(_startTime);
+                                //                   final DateFormat formatter =
+                                //                       DateFormat('yyyy-MM-dd');
+                                //                   controller.dob.text =
+                                //                       formatter.format(a);
+                                //                 },
+                                //                 child: AbsorbPointer(
+                                //                   child: CustomTextFormField(
+                                //                       controller: controller.dob,
+                                //                       labelText: "Date",
+                                //                       size: size,
+                                //                       validator: (value) {
+                                //                         return controller
+                                //                             .dobValidator(
+                                //                                 value ?? "");
+                                //                       },
+                                //                       padding:
+                                //                           TextFormFieldPadding
+                                //                               .PaddingT14,
+                                //                       textInputType: TextInputType
+                                //                           .emailAddress,
+                                //                       suffix: Container(
+                                //                           margin: const EdgeInsets
+                                //                               .only(right: 10),
+                                //                           child: const Icon(Icons
+                                //                               .calendar_month)),
+                                //                       suffixConstraints:
+                                //                           BoxConstraints(
+                                //                               maxHeight:
+                                //                                   getVerticalSize(
+                                //                                       56))),
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //             SizedBox(
+                                //               height: size.height * 0.02,
+                                //             ),
+                                //             InkWell(
+                                //               onTap: () {
+                                //                 controller.selectTime(
+                                //                     Get.context!,
+                                //                     appointment.examiner
+                                //                             ?.timeSlotForBookingInMin ??
+                                //                         0);
+                                //               },
+                                //               child: AbsorbPointer(
+                                //                 child: CustomTextFormField(
+                                //                     labelText: "From",
+                                //                     controller: controller
+                                //                         .from.value,
+                                //                     padding: TextFormFieldPadding
+                                //                         .PaddingT14,
+                                //                     textInputType: TextInputType
+                                //                         .emailAddress,
+                                //                     validator: (value) {
+                                //                       return controller.fromValidator(
+                                //                           value ?? "",
+                                //                           controller.a?[
+                                //                                   'startTime'] ??
+                                //                               "12:00 PM",
+                                //                           controller.a?[
+                                //                                   'endTime'] ??
+                                //                               "06:00 PM");
+                                //                     },
+                                //                     suffix: Container(
+                                //                       margin:
+                                //                           const EdgeInsets.only(
+                                //                               right: 10),
+                                //                       child:
+                                //                           const Icon(Icons.alarm),
+                                //                     ),
+                                //                     suffixConstraints:
+                                //                         BoxConstraints(
+                                //                             maxHeight:
+                                //                                 getVerticalSize(
+                                //                                     56))),
+                                //               ),
+                                //             ),
+                                //             SizedBox(
+                                //               height: size.height * 0.02,
+                                //             ),
+                                //             AbsorbPointer(
+                                //               child: CustomTextFormField(
+                                //                   controller: controller.to,
+                                //                   labelText: "To",
+                                //                   padding: TextFormFieldPadding
+                                //                       .PaddingT14,
+                                //                   textInputType: TextInputType
+                                //                       .datetime,
+                                //                   suffix: Container(
+                                //                     margin: const EdgeInsets.only(
+                                //                         right: 10),
+                                //                     child:
+                                //                         const Icon(Icons.alarm),
+                                //                   ),
+                                //                   suffixConstraints:
+                                //                       BoxConstraints(
+                                //                           maxHeight:
+                                //                               getVerticalSize(
+                                //                                   56))),
+                                //             ),
+                                //           ],
+                                //         )),
+                                //     Align(
+                                //       alignment: Alignment.center,
+                                //       child: CustomButton(
+                                //           height: getVerticalSize(56),
+                                //           width: getHorizontalSize(110),
+                                //           text: "Reschdule Appointment",
+                                //           shape: ButtonShape.RoundedBorder8,
+                                //           padding: ButtonPadding.PaddingAll16,
+                                //           fontStyle: ButtonFontStyle
+                                //               .RalewayRomanSemiBold14WhiteA700,
+                                //           onTap: () async {
+                                //             TimeOfDay _startTime = TimeOfDay(
+                                //                 hour: int.parse(controller
+                                //                     .from.value.text!
+                                //                     .split(":")[0]),
+                                //                 minute: int.parse(controller
+                                //                     .from.value.text
+                                //                     .split(":")[1]
+                                //                     .replaceAll(' AM', '')
+                                //                     .replaceAll(' PM', '')));
+                                //             print(_startTime);
 
-                              //             DateTime userdate = DateTime.parse(
-                              //                 controller.dob.text);
-                              //             DateTime a = DateTime(
-                              //                 userdate.year,
-                              //                 userdate.month,
-                              //                 userdate.day,
-                              //                 _startTime.hour,
-                              //                 _startTime.minute);
-                              //             TimeOfDay b = TimeOfDay.now();
-                              //             String c = DateFormat.jm()
-                              //                 .format(DateTime.now());
-                              //             TimeOfDay _currentTime = TimeOfDay(
-                              //                 hour: int.parse(c.split(":")[0]),
-                              //                 minute: int.parse(c
-                              //                     .split(":")[1]
-                              //                     .replaceAll(' AM', '')
-                              //                     .replaceAll(' PM', '')));
-                              //             DateTime now = DateTime(
-                              //                 DateTime.now().year,
-                              //                 DateTime.now().month,
-                              //                 DateTime.now().day,
-                              //                 _currentTime.hour,
-                              //                 _currentTime.minute);
-                              //             print(a);
-                              //             print(now);
-                              //             final DateFormat formatter =
-                              //                 DateFormat('yyyy-MM-dd');
-                              //             formatter.format(now);
-                              //             print(formatter.format(now));
-                              //             print(controller.dob.text);
-                              //             if (a.isAfter(now)) {
-                              //               var requestData = {
-                              //                 "active": true,
-                              //                 "date": DateTime.parse(
-                              //                         "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
-                              //                     .toIso8601String(),
-                              //                 "startTime":
-                              //                     controller.from.value.text,
-                              //                 "endTime":
-                              //                     controller.to.value.text,
-                              //                 "examinerId":
-                              //                     appointment.examiner!.id,
-                              //                 "note": appointment.note,
-                              //                 "id": appointment.id,
-                              //                 "patientId":
-                              //                     appointment.patient?.id,
-                              //                 "purpose": "CHECKUP",
-                              //                 "status": "Reschduled",
-                              //                 "update_time_in_min": 0
-                              //               };
-                              //               print(jsonEncode(requestData));
-                              //               controller
-                              //                   .updateAppointment(requestData);
-                              //             } else {
-                              //               Get.back();
-                              //               WidgetsBinding.instance
-                              //                   .addPostFrameCallback(
-                              //                       (timeStamp) => Get.snackbar(
-                              //                           "Appointment for the selected time has passed.",
-                              //                           '',
-                              //                           snackPosition:
-                              //                               SnackPosition
-                              //                                   .BOTTOM));
-                              //             }
-                              //           }),
-                              //     )
-                              //   ],
-                              // ),
-                            ],
-                          ),
-                        ).then((value) {
-                          if (value == null) {
-                            controller.selectedStartTime.value = '';
-                          }
+                                //             DateTime userdate = DateTime.parse(
+                                //                 controller.dob.text);
+                                //             DateTime a = DateTime(
+                                //                 userdate.year,
+                                //                 userdate.month,
+                                //                 userdate.day,
+                                //                 _startTime.hour,
+                                //                 _startTime.minute);
+                                //             TimeOfDay b = TimeOfDay.now();
+                                //             String c = DateFormat.jm()
+                                //                 .format(DateTime.now());
+                                //             TimeOfDay _currentTime = TimeOfDay(
+                                //                 hour: int.parse(c.split(":")[0]),
+                                //                 minute: int.parse(c
+                                //                     .split(":")[1]
+                                //                     .replaceAll(' AM', '')
+                                //                     .replaceAll(' PM', '')));
+                                //             DateTime now = DateTime(
+                                //                 DateTime.now().year,
+                                //                 DateTime.now().month,
+                                //                 DateTime.now().day,
+                                //                 _currentTime.hour,
+                                //                 _currentTime.minute);
+                                //             print(a);
+                                //             print(now);
+                                //             final DateFormat formatter =
+                                //                 DateFormat('yyyy-MM-dd');
+                                //             formatter.format(now);
+                                //             print(formatter.format(now));
+                                //             print(controller.dob.text);
+                                //             if (a.isAfter(now)) {
+                                //               var requestData = {
+                                //                 "active": true,
+                                //                 "date": DateTime.parse(
+                                //                         "${controller.dob.text} ${controller.from.value.text.replaceAll(" PM", "").replaceAll(" AM", "")}")
+                                //                     .toIso8601String(),
+                                //                 "startTime":
+                                //                     controller.from.value.text,
+                                //                 "endTime":
+                                //                     controller.to.value.text,
+                                //                 "examinerId":
+                                //                     appointment.examiner!.id,
+                                //                 "note": appointment.note,
+                                //                 "id": appointment.id,
+                                //                 "patientId":
+                                //                     appointment.patient?.id,
+                                //                 "purpose": "CHECKUP",
+                                //                 "status": "Reschduled",
+                                //                 "update_time_in_min": 0
+                                //               };
+                                //               print(jsonEncode(requestData));
+                                //               controller
+                                //                   .updateAppointment(requestData);
+                                //             } else {
+                                //               Get.back();
+                                //               WidgetsBinding.instance
+                                //                   .addPostFrameCallback(
+                                //                       (timeStamp) => Get.snackbar(
+                                //                           "Appointment for the selected time has passed.",
+                                //                           '',
+                                //                           snackPosition:
+                                //                               SnackPosition
+                                //                                   .BOTTOM));
+                                //             }
+                                //           }),
+                                //     )
+                                //   ],
+                                // ),
+                              ],
+                            ),
+                          ).then((value) {
+                            if (value == null) {
+                              controller.selectedStartTime.value = '';
+                            }
+                          });
                         });
-                      });
+                      } else {
+                        Get.showSnackbar(GetSnackBar(
+                          padding: const EdgeInsets.all(20),
+                          backgroundColor: ColorConstant.blue600,
+                          message:
+                              'Our staff member will follow up with your request.',
+                        ));
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(15),
