@@ -583,7 +583,8 @@ class DashboardController extends GetxController {
       } else {
         var response =
             (await Get.find<AppointmentApi>().getAllAppointments(pageIndex));
-        List<AppointmentContent> list = response.content ?? [];
+        //List<AppointmentContent> list = response.content ?? [];
+        List<AppointmentContent> list = response;
         var now = DateTime.now();
         final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
         List<AppointmentContent> appointmentsUpcoming = list

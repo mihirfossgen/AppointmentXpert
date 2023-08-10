@@ -21,11 +21,15 @@ import '../endpoints.dart';
 class AppointmentApi {
   final DioClient _apiService = DioClient();
 
-  Future<GetAllAppointments> getAllAppointments(int pageValue) async {
+  Future<List<AppointmentContent>> getAllAppointments(int pageValue) async {
     try {
       final Response response =
-          await _apiService.get("${Endpoints.getAllAppointments}/$pageValue");
-      return GetAllAppointments.fromJson(response.data);
+          await _apiService.get(Endpoints.getAllAppointmentsWithoutPaged);
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      return list;
+      // return GetAllAppointments.fromJson(response.data);
     } on DioError catch (e) {
       print("e -- $e");
       throw Exception(e.response?.data['error_description']);
@@ -258,7 +262,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       var response =
-          await _apiService.get('${Endpoints.getAllAppointments}/$value');
+          await _apiService.get(Endpoints.getAllAppointmentsWithoutPaged);
       GetAllAppointments appointmentContent =
           GetAllAppointments.fromJson(response.data);
       List<AppointmentContent>? list = appointmentContent.content;

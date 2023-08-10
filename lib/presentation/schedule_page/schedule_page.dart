@@ -101,7 +101,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          5)
+                                                          5.7)
                                                   : 1.9
                                               : ResponsiveBuilder.isMobile(
                                                       context)
@@ -111,7 +111,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          3.6)
+                                                          4.0)
                                                   : 1.5,
                                           // tab.toLowerCase() == 'completed'
                                           //     ? ResponsiveBuilder.isMobile(
@@ -229,7 +229,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                   (MediaQuery.of(context)
                                                           .size
                                                           .height /
-                                                      5)
+                                                      5.7)
                                               : 1.9
                                           : ResponsiveBuilder.isMobile(context)
                                               ? MediaQuery.of(context)
@@ -238,7 +238,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                   (MediaQuery.of(context)
                                                           .size
                                                           .height /
-                                                      3.6)
+                                                      4.0)
                                               : 1.5,
                                       // tab.toLowerCase() == 'completed'
                                       //     ? 100 / 50

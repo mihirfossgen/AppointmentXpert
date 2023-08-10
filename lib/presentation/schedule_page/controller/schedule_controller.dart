@@ -23,7 +23,8 @@ import '../../../widgets/responsive.dart';
 class ScheduleController extends GetxController {
   bool response = false;
 
-  GetAllAppointments model = GetAllAppointments();
+  //GetAllAppointments model = GetAllAppointments();
+  List<AppointmentContent> allAppointments = [];
   RxList<AppointmentContent> patientAppointmentlist =
       <AppointmentContent>[].obs;
   String precriptionFileName = "";
@@ -273,69 +274,105 @@ class ScheduleController extends GetxController {
   Future<void> callGetAllAppointments(int pageNo, int count) async {
     print("count ----- $count");
     try {
-      model = (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
-      final isLastPage = model.numberOfElements! <= _pageSize;
-      if (isLastPage) {
-        todayPagingController.value.itemList = [];
-        upcomingPagingController.value.itemList = [];
-        completedPagingController.value.itemList = [];
-        List<AppointmentContent> list = model.content ?? [];
-        var now = DateTime.now();
-        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
-        List<AppointmentContent> appointmentsCompleted =
-            list.where((i) => i.status?.toLowerCase() == "completed").toList();
-        List<AppointmentContent> appointmentsUpcoming = list
-            .where(
-              (i) =>
-                  i.active == true &&
-                  !formatter
-                      .parse(i.date!)
-                      .isBefore(formatter.parse(now.toString())) &&
-                  i.status?.toLowerCase() != "completed",
-            )
-            .toList();
-        List<AppointmentContent> appointmentsToday = list
-            .where((i) =>
-                dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+      allAppointments =
+          (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
+      todayPagingController.value.itemList = [];
+      upcomingPagingController.value.itemList = [];
+      completedPagingController.value.itemList = [];
+      List<AppointmentContent> list = allAppointments;
+      var now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      List<AppointmentContent> appointmentsCompleted =
+          list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      List<AppointmentContent> appointmentsUpcoming = list
+          .where(
+            (i) =>
                 i.active == true &&
-                i.status?.toLowerCase() != "completed")
-            .toList();
-        todayPagingController.value.appendLastPage(appointmentsToday);
-        upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
-        completedPagingController.value.appendLastPage(appointmentsCompleted);
-        isloading.value = false;
-        update();
-      } else {
-        List<AppointmentContent> list = model.content ?? [];
-        var now = DateTime.now();
-        final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
-        List<AppointmentContent> appointmentsCompleted =
-            list.where((i) => i.status?.toLowerCase() == "completed").toList();
-        List<AppointmentContent> appointmentsUpcoming = list
-            .where(
-              (i) =>
-                  i.active == true &&
-                  !formatter
-                      .parse(i.date!)
-                      .isBefore(formatter.parse(now.toString())) &&
-                  i.status?.toLowerCase() != "completed",
-            )
-            .toList();
-        List<AppointmentContent> appointmentsToday = list
-            .where((i) =>
-                dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
-                i.active == true &&
-                i.status?.toLowerCase() != "completed")
-            .toList();
-        final nextPageKey = pageNo + appointmentsToday.length;
-        todayPagingController.value.appendPage(appointmentsToday, nextPageKey);
-        upcomingPagingController.value
-            .appendPage(appointmentsUpcoming, nextPageKey);
-        completedPagingController.value
-            .appendPage(appointmentsCompleted, nextPageKey);
-        isloading.value = false;
-        update();
-      }
+                !formatter
+                    .parse(i.date!)
+                    .isBefore(formatter.parse(now.toString())) &&
+                i.status?.toLowerCase() != "completed",
+          )
+          .toList();
+      List<AppointmentContent> appointmentsToday = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+              i.active == true &&
+              i.status?.toLowerCase() != "completed")
+          .toList();
+      appointmentsToday.sort((a, b) =>
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+      appointmentsUpcoming.sort((a, b) =>
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+      appointmentsCompleted.sort((a, b) =>
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+      todayPagingController.value.appendLastPage(appointmentsToday);
+      upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      completedPagingController.value.appendLastPage(appointmentsCompleted);
+      isloading.value = false;
+      update();
+      // final isLastPage = model.totalElements! <= _pageSize;
+      // if (isLastPage) {
+      //   todayPagingController.value.itemList = [];
+      //   upcomingPagingController.value.itemList = [];
+      //   completedPagingController.value.itemList = [];
+      //   List<AppointmentContent> list = model.content ?? [];
+      //   var now = DateTime.now();
+      //   final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      //   List<AppointmentContent> appointmentsCompleted =
+      //       list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      //   List<AppointmentContent> appointmentsUpcoming = list
+      //       .where(
+      //         (i) =>
+      //             i.active == true &&
+      //             !formatter
+      //                 .parse(i.date!)
+      //                 .isBefore(formatter.parse(now.toString())) &&
+      //             i.status?.toLowerCase() != "completed",
+      //       )
+      //       .toList();
+      //   List<AppointmentContent> appointmentsToday = list
+      //       .where((i) =>
+      //           dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+      //           i.active == true &&
+      //           i.status?.toLowerCase() != "completed")
+      //       .toList();
+      //   todayPagingController.value.appendLastPage(appointmentsToday);
+      //   upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      //   completedPagingController.value.appendLastPage(appointmentsCompleted);
+      //   isloading.value = false;
+      //   update();
+      // } else {
+      //   List<AppointmentContent> list = allAppointments;
+      //   var now = DateTime.now();
+      //   final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      //   List<AppointmentContent> appointmentsCompleted =
+      //       list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      //   List<AppointmentContent> appointmentsUpcoming = list
+      //       .where(
+      //         (i) =>
+      //             i.active == true &&
+      //             !formatter
+      //                 .parse(i.date!)
+      //                 .isBefore(formatter.parse(now.toString())) &&
+      //             i.status?.toLowerCase() != "completed",
+      //       )
+      //       .toList();
+      //   List<AppointmentContent> appointmentsToday = list
+      //       .where((i) =>
+      //           dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+      //           i.active == true &&
+      //           i.status?.toLowerCase() != "completed")
+      //       .toList();
+      //   final nextPageKey = pageNo + appointmentsToday.length;
+      //   todayPagingController.value.appendPage(appointmentsToday, nextPageKey);
+      //   upcomingPagingController.value
+      //       .appendPage(appointmentsUpcoming, nextPageKey);
+      //   completedPagingController.value
+      //       .appendPage(appointmentsCompleted, nextPageKey);
+      //   isloading.value = false;
+      //   update();
+      // }
       // todayPagingController.refresh();
       // upcomingPagingController.refresh();
       // completedPagingController.refresh();
@@ -419,9 +456,19 @@ class ScheduleController extends GetxController {
               i.active == true &&
               i.status?.toLowerCase() != "completed")
           .toList();
+      appointmentsToday.sort((a, b) =>
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+      appointmentsUpcoming.sort((a, b) =>
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+      appointmentsCompleted.sort((a, b) =>
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
       todayPagingController.value.appendLastPage(appointmentsToday);
       upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
       completedPagingController.value.appendLastPage(appointmentsCompleted);
+      todayPagingController.refresh();
+      upcomingPagingController.refresh();
+      completedPagingController.refresh();
+      update();
       //patientAppointmentlist.value = appointmentsUpcoming;
     } on Map {
       //postLoginResp = e;
@@ -433,10 +480,10 @@ class ScheduleController extends GetxController {
 
   Future<void> updateAppointment(var data) async {
     try {
+      isloading.value = true;
       value = (await Get.find<AppointmentApi>().updateAppointment(data));
       // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       if (value) {
-        isloading.value = true;
         //pagingController.addPageRequestListener((pageKey) {
         if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
           //SharedPrefUtils.readPrefINt('employee_Id')
