@@ -73,7 +73,8 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 8, right: 8),
-                    child: _buildImage('logo-opdxpert.png', 280),
+                    child: _buildImage('logo-opdxpert.png',
+                        MediaQuery.of(context).size.width / 1.5),
                   ),
                 ),
               ),
@@ -185,8 +186,11 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                             : 6,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 1.4),
+                    childAspectRatio: Responsive.isMobile(context)
+                        ? MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 1.2)
+                        : MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 1.4),
                   ),
                   children: [
                     const Padding(

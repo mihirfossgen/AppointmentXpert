@@ -304,7 +304,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       case TextFormFieldPadding.PaddingT14:
         return getPadding(
           left: 10,
-          top: 10,
+          top: 16,
           bottom: 16,
         );
       default:

@@ -297,7 +297,8 @@ class DashboardScreen extends GetView<DashboardController> {
                     // ),
                   ],
                 ),
-                ResponsiveBuilder.isDesktop(context) &&
+                (ResponsiveBuilder.isDesktop(context) ||
+                            ResponsiveBuilder.isTablet(context)) &&
                         (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
                     ? Align(
                         alignment: Alignment.centerRight,
@@ -2250,8 +2251,9 @@ class DashboardScreen extends GetView<DashboardController> {
                 ),
                 fit: BoxFit.contain,
                 alignment: Alignment.centerRight)),
-        child: ResponsiveBuilder.isMobile(context) ||
-                ResponsiveBuilder.isTablet(context)
+        child: ResponsiveBuilder.isMobile(context)
+            // ||
+            //         ResponsiveBuilder.isTablet(context)
             ? Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(

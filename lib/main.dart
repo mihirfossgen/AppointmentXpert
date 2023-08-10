@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:appointmentxpert/core/utils/color_constant.dart';
 import 'package:appointmentxpert/core/utils/notifications.dart';
 import 'package:appointmentxpert/presentation/splash_screen/splash_screen.dart';
 import 'package:appointmentxpert/routes/app_routes.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_framework/breakpoint.dart';
 import 'package:responsive_framework/responsive_breakpoints.dart';
@@ -134,10 +136,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
+    final scale = mediaQueryData.textScaleFactor.clamp(0.8, 1.0);
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: scale),
+          child: child!,
+        ),
         breakpoints: [
           const Breakpoint(start: 0, end: 450, name: MOBILE),
           const Breakpoint(start: 451, end: 800, name: TABLET),
@@ -146,8 +153,27 @@ class MyApp extends StatelessWidget {
         ],
       ),
       theme: ThemeData(
-        visualDensity: VisualDensity.standard,
+        scaffoldBackgroundColor: ColorConstant.whiteA700,
+        textTheme: GoogleFonts.robotoTextTheme(
+          Theme.of(context).textTheme,
+        ).apply(
+          bodyColor: Colors.black,
+        ),
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+          },
+        ),
+        //primarySwatch: ColorConstant.blue600,
       ),
+      // theme: ThemeData(
+      //     visualDensity: VisualDensity.standard,
+      //     textTheme: Theme.of(context).textTheme.apply(
+      //           fontSizeFactor: 1.0,
+      //           //fontSizeDelta: ,
+      //         ),
+      //     fontFamily: GoogleFonts.roboto().fontFamily),
       translations: AppLocalization(),
       locale: Get.deviceLocale, //for setting localization strings
       fallbackLocale: const Locale('en', 'US'),

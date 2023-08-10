@@ -112,7 +112,7 @@ class ListRecentPatients extends StatelessWidget {
             SizedBox(
                 width: 180,
                 child: Text(
-                  '${data.email}',
+                  data.email ?? 'N/A',
                   style: const TextStyle(fontSize: 13, color: Colors.black),
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
@@ -258,7 +258,7 @@ class ListRecentPatients extends StatelessWidget {
             height: 5,
           ),
           Text(
-            'Email: ${data.email.toString()}',
+            'Email: ${data.email == '' ? 'N/A' : data.email}',
             style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
           const SizedBox(

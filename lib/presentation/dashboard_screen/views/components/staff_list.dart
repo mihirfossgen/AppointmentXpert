@@ -553,23 +553,57 @@ class StaffDataSource extends DataTableSource {
           //       Icons.add,
           //       color: Colors.black,
           //     )),
+          // TextButton(
+          //     onPressed: () {
+          //       // Get.to(() => (PatientDetailsPage(
+          //       //     dashboardController.staffPagingController
+          //       //         .itemList![index])));
+          //     },
+          //     child: const Icon(Icons.edit)),
           TextButton(
               onPressed: () {
-                // Get.to(() => (PatientDetailsPage(
-                //     dashboardController.staffPagingController
-                //         .itemList![index])));
-              },
-              child: const Icon(Icons.edit)),
-          TextButton(
-              onPressed: () {
-                // Get.to(() => AppointmentBookingScreen(
-                //     doctorsList: doctorsList,
-                //     patientDetailsArguments:
-                //         PatientDetailsArguments(
-                //             [],
-                //             dashboardController
-                //                 .patientPagingController
-                //                 .itemList![index])));
+                WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                  showDialog(
+                    context: Get.context!,
+                    builder: (context) => AlertDialog(
+                      title: const Text(
+                          'Are you sure you want to remove the staff member?'),
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomButton(
+                                height: getVerticalSize(60),
+                                width: getHorizontalSize(80),
+                                text: 'Yes',
+                                margin: getMargin(left: 10, right: 00),
+                                fontStyle: ButtonFontStyle
+                                    .RalewayRomanSemiBold14WhiteA700,
+                                onTap: () async {
+                                  var rdata = {
+                                    "id": data[index].id,
+                                    "status": "NOT_ACTIVE",
+                                    "profession": data[index].profession,
+                                    "userId": data[index].userId
+                                  };
+                                  dashboardController.updateStaff(rdata);
+                                }),
+                            CustomButton(
+                                height: getVerticalSize(60),
+                                width: getHorizontalSize(80),
+                                text: 'No',
+                                margin: getMargin(left: 0, right: 10),
+                                fontStyle: ButtonFontStyle
+                                    .RalewayRomanSemiBold14WhiteA700,
+                                onTap: () async {
+                                  Get.back();
+                                })
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                });
               },
               child: const Icon(
                 Icons.delete,

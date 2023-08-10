@@ -346,6 +346,7 @@ class DashboardController extends GetxController {
       bool value = (await Get.find<StaffApi>().staffUpdate(data));
       // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       if (value) {
+        callStaffList(0);
         Get.back();
       }
     } on Map {

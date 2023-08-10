@@ -427,18 +427,61 @@ class AppointmentsDataSource extends DataTableSource {
         children: [
           InkWell(
             onTap: () {
-              // Navigator.push(
-              //     Get.context!,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             AppointmentDetailsPage(
-              //               appointment: data[index],
-              //               appointmentid: data[index].id!,
-              //             )));
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                showDialog(
+                  context: Get.context!,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Do you want to cancel appointment?'),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                              // height: getVerticalSize(60),
+                              // width: getHorizontalSize(80),
+                              child: Text('Yes'),
+                              // margin:
+                              //     getMargin(left: 10, right: 00),
+                              // fontStyle: ButtonFontStyle
+                              //     .RalewayRomanSemiBold14WhiteA700,
+                              onPressed: () async {
+                                var req = {
+                                  "active": false,
+                                  "id": data[index].id,
+                                  "date": data[index].date,
+                                  "examinerId": data[index].examiner!.id,
+                                  "note": data[index].note,
+                                  "patientId": data[index].patient?.id,
+                                  "purpose": data[index].purpose,
+                                  "status": "Canceled"
+                                };
+                                print(jsonEncode(req));
+                                dashboardController.updateAppointment(req);
+                              }),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                              // height: getVerticalSize(60),
+                              // width: getHorizontalSize(80),
+                              child: const Text('No'),
+                              // margin:
+                              //     getMargin(left: 0, right: 10),
+                              // fontStyle: ButtonFontStyle
+                              //     .RalewayRomanSemiBold14WhiteA700,
+                              onPressed: () async {
+                                Get.back();
+                              })
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              });
             },
             child: const Icon(
-              Icons.remove_red_eye,
-              color: Colors.green,
+              Icons.delete,
+              color: Colors.red,
             ),
           ),
           // SizedBox(

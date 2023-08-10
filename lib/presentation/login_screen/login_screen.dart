@@ -250,7 +250,9 @@ class LoginScreen extends GetWidget<LoginController> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 295,
+                                  // width:
+                                  //     MediaQuery.of(Get.context!).size.width /
+                                  //         1.5,
                                   height: 50,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -372,8 +374,8 @@ class LoginScreen extends GetWidget<LoginController> {
   // Login Button
   Widget loginButton() {
     return SizedBox(
-      height: 60,
-      width: 300,
+      height: 40,
+      width: 200,
       child: ElevatedButton(
           //height: getVerticalSize(55),
           child: Text(

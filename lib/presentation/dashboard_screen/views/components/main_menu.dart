@@ -40,6 +40,12 @@ class MainMenu extends StatelessWidget {
           //totalNotif: 20,
         ),
         SelectionButtonData(
+          activeIcon: EvaIcons.phoneCall,
+          icon: EvaIcons.phoneCall,
+          label: "Emergency",
+          //totalNotif: 20,
+        ),
+        SelectionButtonData(
           activeIcon: EvaIcons.settings,
           icon: EvaIcons.settingsOutline,
           label: "Settings",

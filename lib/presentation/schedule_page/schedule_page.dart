@@ -91,8 +91,10 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                     .value,
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
-                                          childAspectRatio:
-                                              tab.toLowerCase() == 'completed'
+                                          childAspectRatio: tab.toLowerCase() ==
+                                                  'completed'
+                                              ? ResponsiveBuilder.isMobile(
+                                                      context)
                                                   ? MediaQuery.of(context)
                                                           .size
                                                           .width /
@@ -100,13 +102,17 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                               .size
                                                               .height /
                                                           5)
-                                                  : MediaQuery.of(context)
+                                                  : 1.9
+                                              : ResponsiveBuilder.isMobile(
+                                                      context)
+                                                  ? MediaQuery.of(context)
                                                           .size
                                                           .width /
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          4),
+                                                          3.6)
+                                                  : 1.5,
                                           // tab.toLowerCase() == 'completed'
                                           //     ? ResponsiveBuilder.isMobile(
                                           //             context)
@@ -216,16 +222,24 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       childAspectRatio: tab.toLowerCase() ==
                                               'completed'
-                                          ? MediaQuery.of(context).size.width /
-                                              (MediaQuery.of(context)
+                                          ? ResponsiveBuilder.isMobile(context)
+                                              ? MediaQuery.of(context)
                                                       .size
-                                                      .height /
-                                                  5)
-                                          : MediaQuery.of(context).size.width /
-                                              (MediaQuery.of(context)
+                                                      .width /
+                                                  (MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      5)
+                                              : 1.9
+                                          : ResponsiveBuilder.isMobile(context)
+                                              ? MediaQuery.of(context)
                                                       .size
-                                                      .height /
-                                                  4),
+                                                      .width /
+                                                  (MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      3.6)
+                                              : 1.5,
                                       // tab.toLowerCase() == 'completed'
                                       //     ? 100 / 50
                                       //     : 100 / 70,

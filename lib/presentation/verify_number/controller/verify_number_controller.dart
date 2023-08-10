@@ -9,7 +9,6 @@ import '../../../models/verify_otp_model.dart';
 import '../../../network/api/verify_otp.dart';
 import '../../../routes/app_routes.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
-import '../../../theme/app_style.dart';
 import '../../create_profile/controller/create_profile_controller.dart';
 
 class VerifyNumberController extends GetxController {
@@ -174,7 +173,7 @@ class VerifyNumberController extends GetxController {
     scrollController = ScrollController();
     final bottomViewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
     isKeyboardVisible = bottomViewInsets > 0;
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 30), () {
       showResendText.value = true;
     });
   }

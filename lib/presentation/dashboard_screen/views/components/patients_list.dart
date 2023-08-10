@@ -244,7 +244,7 @@ class PatientsList extends GetView<DashboardController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          'Email: ${item.email == '' ? "NA" : item.email}',
+                                          'Email: ${item.email == '' ? "N/A" : item.email}',
                                           style: const TextStyle(
                                               fontSize: 13,
                                               color: Colors.black),

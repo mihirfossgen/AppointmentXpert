@@ -800,6 +800,10 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                 variant: DropDownVariant.OutlineBluegray400,
                                 fontStyle: DropDownFontStyle
                                     .ManropeMedium14Bluegray500,
+                                value: controller.genderList.value.firstWhere(
+                                    (element) =>
+                                        element.title ==
+                                        patientDetailsArguments?.details?.sex),
                                 labelText: "Gender",
                                 isRequired: true,
                                 validator: (value) {
@@ -1410,7 +1414,8 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
             child: Container(
                 width: double.maxFinite,
                 padding: getPadding(left: 8, top: 15, right: 8, bottom: 32),
-                child: ResponsiveBuilder.isMobile(Get.context!)
+                child: ResponsiveBuilder.isMobile(Get.context!) ||
+                        ResponsiveBuilder.isTablet(Get.context!)
                     ? mobileUi(context)
                     : webUi(context, args)),
           ),

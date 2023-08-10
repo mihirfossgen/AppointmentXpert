@@ -34,8 +34,8 @@ class _BottomNavbarState extends State<_BottomNavbar> {
           label: "Home",
         ),
         const BottomNavigationBarItem(
-          activeIcon: Icon(EvaIcons.list),
-          icon: Icon(EvaIcons.list),
+          activeIcon: Icon(EvaIcons.bell),
+          icon: Icon(EvaIcons.bellOutline),
           label: "Appointments",
         ),
         const BottomNavigationBarItem(
