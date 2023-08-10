@@ -263,10 +263,12 @@ class AppointmentApi {
       debugPrint('ssssss');
       var response =
           await _apiService.get(Endpoints.getAllAppointmentsWithoutPaged);
-      GetAllAppointments appointmentContent =
-          GetAllAppointments.fromJson(response.data);
-      List<AppointmentContent>? list = appointmentContent.content;
-      return list ?? [];
+      // GetAllAppointments appointmentContent =
+      //     GetAllAppointments.fromJson(response.data);
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      return list;
     } on DioError catch (e) {
       print("e -- $e");
       throw Exception(e.response?.data['error_description']);
