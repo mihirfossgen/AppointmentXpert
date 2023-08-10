@@ -2,6 +2,7 @@ import 'package:appointmentxpert/network/api/staff_api.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ProfileController extends GetxController {
   Rx<TextEditingController> from = TextEditingController().obs;
@@ -56,6 +57,11 @@ class ProfileController extends GetxController {
     } else {
       DateTime a = DateTime(int.parse(value.split('-')[2]),
           int.parse(value.split('-')[1]), int.parse(value.split('-')[0]));
+
+      final DateFormat formatter = DateFormat('dd-MM-yyyy');
+      if (formatter.format(a) == formatter.format(DateTime.now())) {
+        return null;
+      }
       if (a.isBefore(DateTime.now())) {
         return 'Please select proper date to reschedule';
       }
