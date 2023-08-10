@@ -133,23 +133,23 @@ class ScheduleItemWidget extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    " ${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
+                    "${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
                     style: AppStyle.txtInterRegular14Gray700,
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    "Appointment id - ${appointment.id}",
+                    "Status - ${appointment.status}",
                     style: AppStyle.txtManrope12,
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    appointment.department?.name ?? "",
-                    style: AppStyle.txtManrope12,
-                  ),
+                  // const SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Text(
+                  //   appointment.department?.name ?? "",
+                  //   style: AppStyle.txtManrope12,
+                  // ),
                   // SizedBox(
                   //   height: 5,
                   // ),
@@ -183,69 +183,74 @@ class ScheduleItemWidget extends StatelessWidget {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              InkWell(
-                onTap: () {
-                  // Call accept appointment
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    showDialog(
-                      context: Get.context!,
-                      builder: (context) => AlertDialog(
-                        title: const Text(
-                            'Are you sure appointment is completed?'),
-                        actions: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomButton(
-                                  height: getVerticalSize(60),
-                                  width: getHorizontalSize(80),
-                                  text: 'Yes',
-                                  margin: getMargin(left: 10, right: 00),
-                                  fontStyle: ButtonFontStyle
-                                      .RalewayRomanSemiBold14WhiteA700,
-                                  onTap: () async {
-                                    var data = {
-                                      "active": false,
-                                      "id": appointment.id,
-                                      "date": appointment.date,
-                                      "examinerId": appointment.examiner!.id,
-                                      "note": appointment.note,
-                                      "patientId": patientId,
-                                      "purpose": appointment.purpose,
-                                      "status": "Completed"
-                                    };
-                                    controller.updateAppointment(data);
-                                  }),
-                              CustomButton(
-                                  height: getVerticalSize(60),
-                                  width: getHorizontalSize(80),
-                                  text: 'No',
-                                  margin: getMargin(left: 0, right: 10),
-                                  fontStyle: ButtonFontStyle
-                                      .RalewayRomanSemiBold14WhiteA700,
-                                  onTap: () async {
-                                    Get.back();
-                                  })
-                            ],
-                          )
-                        ],
+              SharedPrefUtils.readPrefStr('role') != "PATIENT"
+                  ? InkWell(
+                      onTap: () {
+                        // Call accept appointment
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          showDialog(
+                            context: Get.context!,
+                            builder: (context) => AlertDialog(
+                              title: const Text(
+                                  'Are you sure appointment is completed?'),
+                              actions: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomButton(
+                                        height: getVerticalSize(60),
+                                        width: getHorizontalSize(80),
+                                        text: 'Yes',
+                                        margin: getMargin(left: 10, right: 00),
+                                        fontStyle: ButtonFontStyle
+                                            .RalewayRomanSemiBold14WhiteA700,
+                                        onTap: () async {
+                                          var data = {
+                                            "active": false,
+                                            "id": appointment.id,
+                                            "date": appointment.date,
+                                            "examinerId":
+                                                appointment.examiner!.id,
+                                            "note": appointment.note,
+                                            "patientId": patientId,
+                                            "purpose": appointment.purpose,
+                                            "status": "Completed"
+                                          };
+                                          controller.updateAppointment(data);
+                                        }),
+                                    CustomButton(
+                                        height: getVerticalSize(60),
+                                        width: getHorizontalSize(80),
+                                        text: 'No',
+                                        margin: getMargin(left: 0, right: 10),
+                                        fontStyle: ButtonFontStyle
+                                            .RalewayRomanSemiBold14WhiteA700,
+                                        onTap: () async {
+                                          Get.back();
+                                        })
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: AppDecoration.txtFillGray10002.copyWith(
+                          borderRadius: BorderRadiusStyle.txtRoundedBorder8,
+                        ),
+                        child: Text(
+                          'Complete',
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: AppStyle.txtRalewayRomanSemiBold14Gray700,
+                        ),
                       ),
-                    );
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: AppDecoration.txtFillGray10002.copyWith(
-                    borderRadius: BorderRadiusStyle.txtRoundedBorder8,
-                  ),
-                  child: Text(
-                    'Complete',
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: AppStyle.txtRalewayRomanSemiBold14Gray700,
-                  ),
-                ),
-              ),
+                    )
+                  : const SizedBox(),
               const SizedBox(
                 width: 10,
               ),

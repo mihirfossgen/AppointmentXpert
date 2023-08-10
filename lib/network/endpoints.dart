@@ -45,7 +45,9 @@ class Endpoints {
   static const String staffUpdate = "staff/update";
   static const String getPatientById = "patient/";
   static const String getReceptionistTodayAppoitments = "appointment/today";
-  static const String getAllAppointments = "appointment/list";
+  static const String getAllAppointmentsPaged = "appointment/list";
+  static const String getAllAppointmentsWithoutPaged =
+      "appointment/allAppointments";
   //static const String getReceptionistAllAppoitments = "appointment/";
   static const String callOtp = "otp/generateOtp?";
   static const String verifyOtp = "otp/verifyOtp?";

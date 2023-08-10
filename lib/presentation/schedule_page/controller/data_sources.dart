@@ -236,8 +236,8 @@ class DataSourceAsync extends AsyncDataTableSource {
         ? await scheduleController?.callGetAllAppointments(index, end)
         : [];
     AppointmentsServiceResponse response = AppointmentsServiceResponse(
-        scheduleController?.model.totalElements ?? 0,
-        scheduleController?.model.content?.toList() ?? []);
+        scheduleController?.allAppointments.length ?? 0,
+        scheduleController?.allAppointments ?? []);
     var r = AsyncRowsResponse(
         response.totalRecords,
         response.data.map((appointment) {
