@@ -30,6 +30,7 @@ class CreateProfileController extends GetxController {
   TextEditingController countryOfBirth = TextEditingController();
   TextEditingController country = TextEditingController();
   TextEditingController prefixController = TextEditingController();
+  Rx<TextEditingController> searchedText = TextEditingController().obs;
   RxBool isloading = false.obs;
   SelectionPopupModel? selectedjobtype;
   SelectionPopupModel? selectedprefix;
