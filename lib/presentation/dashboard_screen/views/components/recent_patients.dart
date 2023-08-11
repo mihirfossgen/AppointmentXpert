@@ -1,14 +1,14 @@
 part of dashboard;
 
 class _RecentPatients extends StatelessWidget {
-  const _RecentPatients({
+  _RecentPatients({
     required this.data,
     required this.onPressed,
     // required this.onPressedAssign,
     // required this.onPressedMember,
     Key? key,
   }) : super(key: key);
-
+  DashboardController dashboardController = Get.put(DashboardController());
   final List<Content> data;
   final Function(int index, Content data) onPressed;
   // final Function(int index, ListRecentPatientData data) onPressedAssign;
@@ -83,7 +83,7 @@ class _RecentPatients extends StatelessWidget {
                 ),
                 DataColumn2(
                   label: Text(
-                    'Blood Group',
+                    'Mobile',
                     style: AppStyle.txtInterSemiBold14,
                   ),
                   size: ColumnSize.S,
@@ -165,15 +165,32 @@ class _RecentPatients extends StatelessWidget {
                                 .format(DateTime.parse('${data[index].dob}'))),
                             onTap: () {}),
                         DataCell(Text('${data[index].email}'), onTap: () {}),
-                        DataCell(Text('${data[index].bloodType}'),
-                            onTap: () {}),
+                        DataCell(Text('${data[index].mobile}'), onTap: () {}),
                         //DataCell(Text(
                         //    formatter.format(DateTime.parse('${data[index].date}')))),
-                        const DataCell(Row(
+                        DataCell(Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(Icons.remove_red_eye),
+                            InkWell(
+                              child: const Icon(Icons.remove_red_eye),
+                              onTap: () {
+                                Get.to(() => (PatientDetailsPage(data[index])));
+                              },
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Get.to(() => AppointmentBookingScreen(
+                                      doctorsList:
+                                          dashboardController.doctorsList,
+                                      patientDetailsArguments:
+                                          PatientDetailsArguments(
+                                              [], data[index])));
+                                },
+                                child: const Text('Book'))
                             // SizedBox(
                             //   width: 10,
                             // ),

@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:image_network/image_network.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -1129,44 +1130,72 @@ Material appointmentTimes(String appointmentDay, context) {
 
 Widget officePhotos(context, String officePhotoUrl) {
   return Container(
-    margin: const EdgeInsets.only(
-      left: 20.0,
-    ),
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-    ),
-    child: Material(
-      child: Ink(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: Responsive.isDesktop(context)
-                ? Image.network(
-                    officePhotoUrl,
-                    loadingBuilder: (context, url, progress) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ).image
-                : CachedNetworkImageProvider(
-                    officePhotoUrl,
-                  ),
-          ),
-        ),
-        child: InkWell(
-          onTap: () async {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => ImageGallery(officePhotoUrl)),
-            // );
-          },
-          child: Container(
-            width: 150.0,
-          ),
-        ),
+      margin: const EdgeInsets.only(
+        left: 20.0,
       ),
-    ),
-  );
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      ),
+      child: ImageNetwork(
+        image: officePhotoUrl,
+        height: 150,
+        width: 150,
+        duration: 1500,
+        curve: Curves.easeIn,
+        onPointer: true,
+        debugPrint: false,
+        fullScreen: false,
+        fitAndroidIos: BoxFit.cover,
+        fitWeb: BoxFitWeb.cover,
+        onLoading: const CircularProgressIndicator(
+          color: Colors.indigoAccent,
+        ),
+        onError: const Icon(
+          Icons.error,
+          color: Colors.red,
+        ),
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (_) => const AlertDialog(
+                    content: Text("©gabrielpatricksouza"),
+                  ));
+          debugPrint("©gabriel_patrick_souza");
+        },
+      )
+      // Material(
+      //   child: Ink(
+      //     decoration: BoxDecoration(
+      //       image: DecorationImage(
+      //         fit: BoxFit.cover,
+      //         image: Responsive.isDesktop(context)
+      //             ? Image.network(
+      //                 officePhotoUrl,
+      //                 loadingBuilder: (context, url, progress) => const Center(
+      //                   child: CircularProgressIndicator(),
+      //                 ),
+      //               ).image
+      //             : CachedNetworkImageProvider(
+      //                 officePhotoUrl,
+      //               ),
+      //       ),
+      //     ),
+      //     child: InkWell(
+      //       onTap: () async {
+      //         // Navigator.push(
+      //         //   context,
+      //         //   MaterialPageRoute(
+      //         //       builder: (context) => ImageGallery(officePhotoUrl)),
+      //         // );
+      //       },
+      //       child: Container(
+      //         width: 150.0,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      );
 }
 
 class SimpleDialogItem extends StatelessWidget {

@@ -70,6 +70,8 @@ class DashboardController extends GetxController {
   void onPressedCalendar() {}
   void onPressedGroup(int index, ListRecentPatientData data) {}
 
+  AppointmentApi appointmentApi = Get.put(AppointmentApi());
+
   void openDrawer() {
     if (scafoldKey.currentState != null) {
       scafoldKey.currentState!.openDrawer();

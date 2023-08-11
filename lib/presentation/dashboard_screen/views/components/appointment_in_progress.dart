@@ -398,15 +398,20 @@ class AppointmentsDataSource extends DataTableSource {
                 // appointment.patient?.prefix != null
                 //     ? appointment.patient?.prefix.toString() ?? ''
                 //     : ''
-
-                '${appointment.examiner?.firstName} '
-                '${appointment.examiner?.lastName}',
+                SharedPrefUtils.readPrefStr("role") != 'PATIENT'
+                    ? '${appointment.patient?.firstName} '
+                        '${appointment.patient?.lastName}'
+                    : '${((appointment.examiner?.firstName == null || appointment.examiner?.firstName == '') || ((appointment.examiner?.lastName == null || appointment.examiner?.lastName == ''))) ? 'N/A' : '${appointment.examiner?.firstName}' '${appointment.examiner?.lastName}'} ',
                 overflow: TextOverflow.ellipsis,
               )
             ],
           ),
           onTap: () {}),
-      DataCell(Text("${appointment.examiner?.mobile}"), onTap: () {}),
+      DataCell(
+          Text(SharedPrefUtils.readPrefStr("role") != 'PATIENT'
+              ? "${appointment.patient?.mobile}"
+              : "${appointment.patient?.mobile}"),
+          onTap: () {}),
       DataCell(Text('${appointment.status}')),
       // DataCell(
       //     Text(formatter.format(

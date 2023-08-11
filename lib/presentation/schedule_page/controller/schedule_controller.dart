@@ -689,7 +689,7 @@ class MyData extends DataTableSource {
           onTap: () {}),
       DataCell(Flexible(
           child: Text(
-        '${appointment.examiner?.firstName.toString()} ${appointment.examiner?.lastName.toString()}',
+        '${((appointment.examiner?.firstName == null || appointment.examiner?.firstName == '') || ((appointment.examiner?.lastName == null || appointment.examiner?.lastName == ''))) ? 'N/A' : '${appointment.examiner?.firstName}' '${appointment.examiner?.lastName}'} ',
         overflow: TextOverflow.ellipsis,
         softWrap: false,
       ))),
