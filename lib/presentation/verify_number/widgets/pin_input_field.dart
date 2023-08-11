@@ -7,11 +7,13 @@ class PinInputField extends StatefulWidget {
   final int length;
   final void Function(bool)? onFocusChange;
   final void Function(String) onSubmit;
+  final void Function(String) onChanged;
 
   const PinInputField({
     Key? key,
     this.length = 6,
     this.onFocusChange,
+    required this.onChanged,
     required this.onSubmit,
   }) : super(key: key);
 
@@ -88,6 +90,7 @@ class _PinInputFieldState extends State<PinInputField> {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Pinput(
+          onChanged: widget.onChanged,
           length: _length,
           androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
           defaultPinTheme: defaultPinTheme,

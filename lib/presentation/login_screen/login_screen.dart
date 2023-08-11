@@ -392,24 +392,27 @@ class LoginScreen extends GetWidget<LoginController> {
                 VerifyNumberController verifyNumberController =
                     Get.put(VerifyNumberController());
 
-                Responsive.isMobile(Get.context!)
-                    ? await showModalBottomSheet<dynamic>(
-                        context: Get.context!,
-                        isDismissible: true,
-                        isScrollControlled: false,
-                        enableDrag: false,
-                        elevation: 2.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        builder: (context) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: VerifyPhoneNumberScreen(
-                                phoneNumber: controller.emailController.text),
-                          );
-                        },
-                      )
+                !Responsive.isDesktop(Get.context!)
+                    ? Get.to(() => VerifyPhoneNumberScreen(
+                          phoneNumber: controller.emailController.text,
+                        ))
+                    // ? await showModalBottomSheet<dynamic>(
+                    //     context: Get.context!,
+                    //     isDismissible: true,
+                    //     isScrollControlled: false,
+                    //     enableDrag: false,
+                    //     elevation: 2.0,
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(20.0),
+                    //     ),
+                    //     builder: (context) {
+                    //       return ClipRRect(
+                    //         borderRadius: BorderRadius.circular(20),
+                    //         child: VerifyPhoneNumberScreen(
+                    //             phoneNumber: controller.emailController.text),
+                    //       );
+                    //     },
+                    //   )
                     : WidgetsBinding.instance.addPostFrameCallback((_) {
                         showDialog(
                             context: Get.context!,

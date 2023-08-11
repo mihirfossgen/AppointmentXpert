@@ -77,7 +77,6 @@ class VerifyNumberController extends GetxController {
   void _handleCreateLoginSuccess(OtpModel otpModel) {
     if (otpModel.result == false) {
       isloading.value = false;
-      Get.back();
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Get.snackbar(
             "Uh oh!!",
             otpModel.message ?? "",
@@ -185,16 +184,17 @@ class VerifyNumberController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     enteredOtpp.value = '';
-    scrollController?.dispose();
+    enteredOtpp.value = '';
+    isSendingCode.value = false;
+    showResendText.value = false;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     enteredOtpp.value = '';
     isSendingCode.value = false;
     showResendText.value = false;
-    scrollController?.dispose();
+
+    super.dispose();
   }
 }

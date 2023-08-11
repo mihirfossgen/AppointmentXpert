@@ -1,6 +1,7 @@
 library dashboard;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:appointmentxpert/core/utils/time_calculation_utils.dart';
 import 'package:appointmentxpert/presentation/dashboard_screen/views/components/staff_list.dart';
@@ -13,6 +14,7 @@ import 'package:empty_widget/empty_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -31,6 +33,7 @@ import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../widgets/app_bar/appbar_image.dart';
+import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/custom_text_form_field.dart';
 import '../../../../widgets/responsive.dart';
@@ -120,54 +123,93 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: controller.scafoldKey,
-      resizeToAvoidBottomInset: true,
-      // drawer: ResponsiveBuilder.isDesktop(context)
-      //     ? null
-      //     : Drawer(
-      //         child: SafeArea(
-      //           child: SingleChildScrollView(child: _buildSidebar(context)),
-      //         ),
-      //       ),
-      appBar: ResponsiveBuilder.isDesktop(context)
-          ? null
-          : AppbarImage(
-              backgroundColor: ColorConstant.whiteA70001,
-              height: 70,
-              width: width,
-              imagePath: 'assets/images/login-logo.png',
-            ),
-      bottomNavigationBar: (ResponsiveBuilder.isDesktop(context) || kIsWeb)
-          ? null
-          : _BottomNavbar(onSelected: controller.onSelectedTabBarMainMenu),
+    return WillPopScope(
+      onWillPop: () async {
+        showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure you eant to exit the app?'),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomButton(
+                      height: getVerticalSize(60),
+                      width: getHorizontalSize(80),
+                      text: 'Yes',
+                      margin: getMargin(left: 10, right: 00),
+                      fontStyle:
+                          ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                      onTap: () async {
+                        SystemNavigator.pop();
+                      }),
+                  CustomButton(
+                      height: getVerticalSize(60),
+                      width: getHorizontalSize(80),
+                      text: 'No',
+                      margin: getMargin(left: 0, right: 10),
+                      fontStyle:
+                          ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
+                      onTap: () async {
+                        Get.back();
+                      })
+                ],
+              )
+            ],
+          ),
+        );
 
-      body: SafeArea(
-        child: ResponsiveBuilder(
-          mobileBuilder: (context, constraints) {
-            return Obx(
-                () => loadBody(controller.selectedPageIndex.value, context));
-          },
-          tabletBuilder: (context, constraints) {
-            return Obx(
-                () => loadBody(controller.selectedPageIndex.value, context));
-          },
-          desktopBuilder: (context, constraints) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: _buildSidebar(context),
-                ),
-                Flexible(
-                  flex: constraints.maxWidth > 1350 ? 10 : 9,
-                  child: Obx(() =>
-                      loadBody(controller.selectedPageIndex.value, context)),
-                ),
-              ],
-            );
-          },
+        return false;
+      },
+      child: Scaffold(
+        key: controller.scafoldKey,
+        resizeToAvoidBottomInset: true,
+        // drawer: ResponsiveBuilder.isDesktop(context)
+        //     ? null
+        //     : Drawer(
+        //         child: SafeArea(
+        //           child: SingleChildScrollView(child: _buildSidebar(context)),
+        //         ),
+        //       ),
+        appBar: ResponsiveBuilder.isDesktop(context)
+            ? null
+            : AppbarImage(
+                backgroundColor: ColorConstant.whiteA70001,
+                height: 70,
+                width: width,
+                imagePath: 'assets/images/login-logo.png',
+              ),
+        bottomNavigationBar: (ResponsiveBuilder.isDesktop(context) || kIsWeb)
+            ? null
+            : _BottomNavbar(onSelected: controller.onSelectedTabBarMainMenu),
+
+        body: SafeArea(
+          child: ResponsiveBuilder(
+            mobileBuilder: (context, constraints) {
+              return Obx(
+                  () => loadBody(controller.selectedPageIndex.value, context));
+            },
+            tabletBuilder: (context, constraints) {
+              return Obx(
+                  () => loadBody(controller.selectedPageIndex.value, context));
+            },
+            desktopBuilder: (context, constraints) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: _buildSidebar(context),
+                  ),
+                  Flexible(
+                    flex: constraints.maxWidth > 1350 ? 10 : 9,
+                    child: Obx(() =>
+                        loadBody(controller.selectedPageIndex.value, context)),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

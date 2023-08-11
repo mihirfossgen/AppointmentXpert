@@ -59,64 +59,63 @@ class StaffList extends GetView<DashboardController> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (Responsive.isMobile(context))
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        SearchField(
-                          onSearch: (value) {
-                            // if (value.length > 3) {
-                            //   data?.forEach((element) {
-                            //     if (element.firstName!
-                            //         .toLowerCase()
-                            //         .contains(value.toLowerCase())) {
-                            //       print(true);
-                            //       List<Content> a = [];
-                            //       a.add(element);
-                            //       dashboardController
-                            //           .patientPagingController.itemList = a;
-                            //     }
-                            //   });
-                            // } else {
-                            //   dashboardController
-                            //       .patientPagingController.itemList = data;
-                            // }
-                          },
-                        ),
-                      ],
-                    ),
+                  // if (Responsive.isMobile(context))
+                  //   Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //       const SizedBox(
+                  //         height: 10.0,
+                  //       ),
+                  //       // SearchField(
+                  //       //   onSearch: (value) {
+                  //       //     if (value.length > 3) {
+                  //       //       data?.forEach((element) {
+                  //       //         if (element.firstName!
+                  //       //             .toLowerCase()
+                  //       //             .contains(value.toLowerCase())) {
+                  //       //           print(true);
+                  //       //           List<Content> a = [];
+                  //       //           a.add(element);
+                  //       //           dashboardController
+                  //       //               .patientPagingController.itemList = a;
+                  //       //         }
+                  //       //       });
+                  //       //     } else {
+                  //       //       dashboardController
+                  //       //           .patientPagingController.itemList = data;
+                  //       //     }
+                  //       //   },
+                  //       // ),
+                  //     ],
+                  //   ),
                   if (!Responsive.isMobile(context))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(flex: 1, child: textView()),
-                        Expanded(
-                          flex: 1,
-                          child: SearchField(
-                            onSearch: (value) {
-                              // if (value.length > 3) {
-                              //   data?.forEach((element) {
-                              //     if (element.firstName!
-                              //         .toLowerCase()
-                              //         .contains(value.toLowerCase())) {
-                              //       print(true);
-                              //       List<Content> a = [];
-                              //       a.add(element);
-                              //       dashboardController
-                              //           .patientPagingController.itemList = a;
-                              //     }
-                              //   });
-                              // } else {
-                              //   dashboardController
-                              //       .patientPagingController.itemList = data;
-                              // }
-                            },
-                          ),
-                        )
+                        const Expanded(flex: 1, child: SizedBox()
+                            // SearchField(
+                            //   onSearch: (value) {
+                            //     if (value.length > 3) {
+                            //       data?.forEach((element) {
+                            //         if (element.firstName!
+                            //             .toLowerCase()
+                            //             .contains(value.toLowerCase())) {
+                            //           print(true);
+                            //           List<Content> a = [];
+                            //           a.add(element);
+                            //           dashboardController
+                            //               .patientPagingController.itemList = a;
+                            //         }
+                            //       });
+                            //     } else {
+                            //       dashboardController
+                            //           .patientPagingController.itemList = data;
+                            //     }
+                            //   },
+                            // ),
+                            )
                       ],
                     ),
                   const SizedBox(

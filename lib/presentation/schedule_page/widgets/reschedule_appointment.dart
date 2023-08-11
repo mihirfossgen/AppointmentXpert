@@ -282,9 +282,21 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                                 Get.back();
                                 WidgetsBinding.instance.addPostFrameCallback(
                                     (timeStamp) => Get.snackbar(
-                                        "Doctor is not assigned for this appointment.",
-                                        '',
-                                        snackPosition: SnackPosition.BOTTOM));
+                                          "Doctor is not assigned for this appointment.",
+                                          '',
+                                          snackPosition: SnackPosition.BOTTOM,
+                                          duration: const Duration(seconds: 5),
+                                          borderRadius: 15,
+                                          icon: Icon(
+                                            Icons.error_outline,
+                                            color: ColorConstant.whiteA700,
+                                          ),
+                                          padding: const EdgeInsets.all(15),
+                                          margin: const EdgeInsets.all(40),
+                                          colorText: ColorConstant.whiteA700,
+                                          backgroundColor:
+                                              ColorConstant.blue700,
+                                        ));
                               }
                             }),
                       ))
