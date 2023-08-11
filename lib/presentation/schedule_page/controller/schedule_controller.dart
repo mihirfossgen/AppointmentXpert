@@ -301,11 +301,11 @@ class ScheduleController extends GetxController {
               i.status?.toLowerCase() != "completed")
           .toList();
       appointmentsToday.sort((a, b) =>
-          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsUpcoming.sort((a, b) =>
-          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
-          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       todayPagingController.value.appendLastPage(appointmentsToday);
       upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
       completedPagingController.value.appendLastPage(appointmentsCompleted);
@@ -457,11 +457,11 @@ class ScheduleController extends GetxController {
               i.status?.toLowerCase() != "completed")
           .toList();
       appointmentsToday.sort((a, b) =>
-          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsUpcoming.sort((a, b) =>
-          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
-          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       todayPagingController.value.appendLastPage(appointmentsToday);
       upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
       completedPagingController.value.appendLastPage(appointmentsCompleted);
