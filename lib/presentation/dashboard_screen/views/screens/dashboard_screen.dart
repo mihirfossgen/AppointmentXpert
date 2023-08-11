@@ -297,8 +297,8 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.getUpcomingAppointments(0, true);
           } else {
             controller.getTimes();
-            controller.patientPagingController =
-                PagingController(firstPageKey: 0);
+            // controller.patientPagingController =
+            //     PagingController(firstPageKey: 0);
             controller.patientPagingController.itemList = [];
             controller
                 .callStaffData(SharedPrefUtils.readPrefINt('employee_Id'));
@@ -306,6 +306,7 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.callStaffUpcomingAppointments();
             controller.callStaffList(0);
             controller.callRecentPatientList(0);
+            controller.callRecentPatientListForDashboaard();
             controller.callEmergencyPatientList();
 
             final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -1115,18 +1116,19 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                   Alignment
                                                                       .center,
                                                               decoration: BoxDecoration(
-                                                                  color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) !=
+                                                                  color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                            return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) ==
+                                                                                controller.times![index];
+                                                                          }) !=
                                                                           null
-                                                                      ? Colors
-                                                                          .blue
-                                                                      : Colors
-                                                                          .grey
-                                                                          .shade100,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                          6),
+                                                                      ? Colors.blue
+                                                                      : Colors.grey.shade100,
+                                                                  borderRadius: BorderRadius.circular(6),
                                                                   border: Border.all(
-                                                                      color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) != null
+                                                                      color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                              }) !=
+                                                                              null
                                                                           ? Colors.transparent
                                                                           : Colors.black)),
                                                               child: Text(
@@ -1134,12 +1136,12 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                         index] ??
                                                                     "",
                                                                 style: TextStyle(
-                                                                    color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) !=
+                                                                    color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                              return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                            }) !=
                                                                             null
-                                                                        ? Colors
-                                                                            .white
-                                                                        : Colors
-                                                                            .black),
+                                                                        ? Colors.white
+                                                                        : Colors.black),
                                                               ));
                                                         })),
                                                   )),
@@ -1242,17 +1244,13 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       child:
                                                           CircularProgressIndicator(),
                                                     )
-                                                  : controller.patientPagingController
-                                                                  .itemList !=
-                                                              null ||
-                                                          controller
-                                                                  .patientPagingController
-                                                                  .itemList !=
-                                                              []
+                                                  : controller.recentPatientList
+                                                              .value !=
+                                                          []
                                                       ? _RecentPatients(
                                                           data: controller
-                                                                  .patientPagingController
-                                                                  .itemList ??
+                                                                  .recentPatientList
+                                                                  .value ??
                                                               [],
                                                           onPressed: controller
                                                               .onPressedPatient,
@@ -1599,11 +1597,11 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                 CircularProgressIndicator(),
                                                           )
                                                         : controller
-                                                                .getAllPatientsList
+                                                                .recentPatientList
                                                                 .isNotEmpty
                                                             ? _RecentPatients(
                                                                 data: controller
-                                                                    .getAllPatientsList,
+                                                                    .recentPatientList,
                                                                 onPressed:
                                                                     controller
                                                                         .onPressedPatient,

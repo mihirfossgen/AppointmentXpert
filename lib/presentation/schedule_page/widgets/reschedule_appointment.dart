@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
+import '../../../core/utils/time_calculation_utils.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../widgets/custom_button.dart';
 
@@ -75,9 +76,13 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                               return InkWell(
                                 onTap: () {
                                   if (controller.getAppointmentDetailsByDate
-                                          .firstWhereOrNull((element) =>
-                                              element.startTime ==
-                                              controller.times![index]) !=
+                                          .firstWhereOrNull((element) {
+                                        return TimeCalculationUtils()
+                                                .startTimeCalCulation(
+                                                    element.startTime,
+                                                    element.updateTimeInMin) ==
+                                            controller.times![index];
+                                      }) !=
                                       null) {
                                     controller.selectedStartTime.value = "";
                                     // WidgetsBinding.instance
@@ -158,11 +163,17 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                                     margin: const EdgeInsets.all(5),
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                        color: controller.getAppointmentDetailsByDate
-                                                    .firstWhereOrNull((element) =>
-                                                        element.startTime ==
-                                                        controller
-                                                            .times![index]) !=
+                                        color: controller
+                                                    .getAppointmentDetailsByDate
+                                                    .firstWhereOrNull(
+                                                        (element) {
+                                                  return TimeCalculationUtils()
+                                                          .startTimeCalCulation(
+                                                              element.startTime,
+                                                              element
+                                                                  .updateTimeInMin) ==
+                                                      controller.times![index];
+                                                }) !=
                                                 null
                                             ? Colors.blue
                                             : controller.times![index] ==
@@ -174,14 +185,23 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                                         border: Border.all(
                                             color: controller
                                                         .getAppointmentDetailsByDate
-                                                        .firstWhereOrNull((element) =>
-                                                            element.startTime ==
-                                                            controller.times![
-                                                                index]) !=
+                                                        .firstWhereOrNull(
+                                                            (element) {
+                                                      return TimeCalculationUtils()
+                                                              .startTimeCalCulation(
+                                                                  element
+                                                                      .startTime,
+                                                                  element
+                                                                      .updateTimeInMin) ==
+                                                          controller
+                                                              .times![index];
+                                                    }) !=
                                                     null
                                                 ? Colors.transparent
                                                 : controller.times![index] ==
-                                                        controller.selectedStartTime.value
+                                                        controller
+                                                            .selectedStartTime
+                                                            .value
                                                     ? Colors.green
                                                     : Colors.black)),
                                     child: Text(
@@ -190,11 +210,16 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                                           color: controller
                                                       .getAppointmentDetailsByDate
                                                       .firstWhereOrNull(
-                                                          (element) =>
-                                                              element
-                                                                  .startTime ==
-                                                              controller.times![
-                                                                  index]) !=
+                                                          (element) {
+                                                    return TimeCalculationUtils()
+                                                            .startTimeCalCulation(
+                                                                element
+                                                                    .startTime,
+                                                                element
+                                                                    .updateTimeInMin) ==
+                                                        controller
+                                                            .times![index];
+                                                  }) !=
                                                   null
                                               ? Colors.white
                                               : Colors.black),
@@ -282,7 +307,7 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                                 Get.back();
                                 WidgetsBinding.instance.addPostFrameCallback(
                                     (timeStamp) => Get.snackbar(
-                                          "Doctor is not assigned for this appointment.",
+                                          "Doctor assigned to this appointment is not active",
                                           '',
                                           snackPosition: SnackPosition.BOTTOM,
                                           duration: const Duration(seconds: 5),

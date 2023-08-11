@@ -62,8 +62,8 @@ class PatientsList extends GetView<DashboardController> {
             showChildOpacityTransition: false,
             onRefresh: () async {
               controller.isloadingRecentPatients.value = true;
-              controller.patientPagingController =
-                  PagingController(firstPageKey: 0);
+              // controller.patientPagingController =
+              //     PagingController(firstPageKey: 0);
               controller.callRecentPatientList(0);
             },
             child: SingleChildScrollView(

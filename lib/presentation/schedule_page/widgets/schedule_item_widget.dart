@@ -207,18 +207,55 @@ class ScheduleItemWidget extends StatelessWidget {
                                         fontStyle: ButtonFontStyle
                                             .RalewayRomanSemiBold14WhiteA700,
                                         onTap: () async {
-                                          var data = {
-                                            "active": false,
-                                            "id": appointment.id,
-                                            "date": appointment.date,
-                                            "examinerId":
-                                                appointment.examiner!.id,
-                                            "note": appointment.note,
-                                            "patientId": patientId,
-                                            "purpose": appointment.purpose,
-                                            "status": "Completed"
-                                          };
-                                          controller.updateAppointment(data);
+                                          if (appointment.examiner != null) {
+                                            var data = {
+                                              "active": false,
+                                              "id": appointment.id,
+                                              "date": appointment.date,
+                                              "examinerId":
+                                                  appointment.examiner!.id,
+                                              "note": appointment.note,
+                                              "patientId": patientId,
+                                              "purpose": appointment.purpose,
+                                              "status": "Completed"
+                                            };
+                                            controller.updateAppointment(data);
+                                          } else {
+                                            controller.isRescheduleLoading
+                                                .value = false;
+
+                                            Get.back();
+                                            WidgetsBinding.instance
+                                                .addPostFrameCallback(
+                                                    (timeStamp) => Get.snackbar(
+                                                          "Doctor assigned to this appointment is not active",
+                                                          '',
+                                                          snackPosition:
+                                                              SnackPosition
+                                                                  .BOTTOM,
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 5),
+                                                          borderRadius: 15,
+                                                          icon: Icon(
+                                                            Icons.error_outline,
+                                                            color: ColorConstant
+                                                                .whiteA700,
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(15),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(40),
+                                                          colorText:
+                                                              ColorConstant
+                                                                  .whiteA700,
+                                                          backgroundColor:
+                                                              ColorConstant
+                                                                  .blue700,
+                                                        ));
+                                          }
                                         }),
                                     CustomButton(
                                         height: getVerticalSize(60),
@@ -274,17 +311,48 @@ class ScheduleItemWidget extends StatelessWidget {
                                   fontStyle: ButtonFontStyle
                                       .RalewayRomanSemiBold14WhiteA700,
                                   onTap: () async {
-                                    var data = {
-                                      "active": false,
-                                      "id": appointment.id,
-                                      "date": appointment.date,
-                                      "examinerId": appointment.examiner!.id,
-                                      "note": appointment.note,
-                                      "patientId": patientId,
-                                      "purpose": appointment.purpose,
-                                      "status": "Canceled"
-                                    };
-                                    controller.updateAppointment(data);
+                                    if (appointment.examiner != null) {
+                                      var data = {
+                                        "active": false,
+                                        "id": appointment.id,
+                                        "date": appointment.date,
+                                        "examinerId": appointment.examiner!.id,
+                                        "note": appointment.note,
+                                        "patientId": patientId,
+                                        "purpose": appointment.purpose,
+                                        "status": "Canceled"
+                                      };
+                                      controller.updateAppointment(data);
+                                    } else {
+                                      controller.isRescheduleLoading.value =
+                                          false;
+
+                                      Get.back();
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((timeStamp) =>
+                                              Get.snackbar(
+                                                "Doctor assigned to this appointment is not active",
+                                                '',
+                                                snackPosition:
+                                                    SnackPosition.BOTTOM,
+                                                duration:
+                                                    const Duration(seconds: 5),
+                                                borderRadius: 15,
+                                                icon: Icon(
+                                                  Icons.error_outline,
+                                                  color:
+                                                      ColorConstant.whiteA700,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(15),
+                                                margin:
+                                                    const EdgeInsets.all(40),
+                                                colorText:
+                                                    ColorConstant.whiteA700,
+                                                backgroundColor:
+                                                    ColorConstant.blue700,
+                                              ));
+                                    }
                                   }),
                               CustomButton(
                                   height: getVerticalSize(60),
@@ -343,18 +411,53 @@ class ScheduleItemWidget extends StatelessWidget {
                                       fontStyle: ButtonFontStyle
                                           .RalewayRomanSemiBold14WhiteA700,
                                       onTap: () async {
-                                        var data = {
-                                          "active": false,
-                                          "id": appointment.id,
-                                          "date": appointment.date,
-                                          "examinerId":
-                                              appointment.examiner!.id,
-                                          "note": appointment.note,
-                                          "patientId": patientId,
-                                          "purpose": appointment.purpose,
-                                          "status": "Canceled"
-                                        };
-                                        controller.updateAppointment(data);
+                                        if (appointment.examiner != null) {
+                                          var data = {
+                                            "active": false,
+                                            "id": appointment.id,
+                                            "date": appointment.date,
+                                            "examinerId":
+                                                appointment.examiner!.id,
+                                            "note": appointment.note,
+                                            "patientId": patientId,
+                                            "purpose": appointment.purpose,
+                                            "status": "Canceled"
+                                          };
+                                          controller.updateAppointment(data);
+                                        } else {
+                                          controller.isRescheduleLoading.value =
+                                              false;
+
+                                          Get.back();
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback(
+                                                  (timeStamp) => Get.snackbar(
+                                                        "Doctor assigned to this appointment is not active",
+                                                        '',
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 5),
+                                                        borderRadius: 15,
+                                                        icon: Icon(
+                                                          Icons.error_outline,
+                                                          color: ColorConstant
+                                                              .whiteA700,
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(15),
+                                                        margin: const EdgeInsets
+                                                            .all(40),
+                                                        colorText: ColorConstant
+                                                            .whiteA700,
+                                                        backgroundColor:
+                                                            ColorConstant
+                                                                .blue700,
+                                                      ));
+                                        }
                                       }),
                                   CustomButton(
                                       height: getVerticalSize(60),

@@ -94,7 +94,7 @@ class DashboardController extends GetxController {
   RxList<AppointmentContent> upComingAppointments = <AppointmentContent>[].obs;
   var patientNumber;
   Rx<TextEditingController> searchedText = TextEditingController().obs;
-
+  RxList<Content> recentPatientList = <Content>[].obs;
   Rx<AppointmentContent> currentStaffAppointmentData = AppointmentContent().obs;
   Rx<AppointmentContent> currentPatientAppointmentData =
       AppointmentContent().obs;
@@ -104,11 +104,12 @@ class DashboardController extends GetxController {
   final events = <DateTime>[];
   PatientApi patientAPi = Get.put(PatientApi());
   static const _pageSize = 20;
-  PagingController<int, Content> patientPagingController =
+  final PagingController<int, Content> patientPagingController =
       PagingController(firstPageKey: 0);
   PagingController<int, Contents> staffPagingController =
       PagingController(firstPageKey: 0);
   Contents? staffDataa;
+  int pageKeys = 0;
 
   var isloadingPatientData = false.obs;
   var isloadingPatientTodaysAppointments = false.obs;
@@ -144,25 +145,27 @@ class DashboardController extends GetxController {
   );
 
   @override
-  void onReady() async {
-    super.onReady();
+  void onInit() {
     if (role == "PATIENT") {
       getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
       callTodayAppointmentsByPatient();
       getUpcomingAppointments(0, true);
     } else {
-      patientPagingController = PagingController(firstPageKey: 0);
-      patientPagingController.itemList = [];
       callStaffData(SharedPrefUtils.readPrefINt('employee_Id'));
       callStaffTodayAppointments();
       callStaffUpcomingAppointments();
       callStaffList(0);
-      callRecentPatientList(0);
+      print(patientPagingController);
+      patientPagingController.addPageRequestListener((pageKey) {
+        callRecentPatientList(pageKey);
+      });
+      callRecentPatientListForDashboaard();
       callEmergencyPatientList();
       getTimes();
       final DateFormat formatter = DateFormat('dd-MM-yyyy');
       callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     }
+    super.onInit();
   }
 
   String userNumber = '';
@@ -215,6 +218,21 @@ class DashboardController extends GetxController {
     return false;
   }
 
+  Future<void> callRecentPatientListForDashboaard() async {
+    try {
+      isloadingRecentPatients.value = true;
+      var response = (await Get.find<PatientApi>().getAllPatientsList(0));
+      recentPatientList.value = response.content ?? [];
+
+      isloadingRecentPatients.value = false;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isloadingRecentPatients.value = false;
+    }
+  }
+
   Future<void> callRecentPatientList(int pageNo) async {
     try {
       isloadingRecentPatients.value = true;
@@ -223,7 +241,7 @@ class DashboardController extends GetxController {
       PatientList patientListData = response;
       isloadingRecentPatients.value = false;
       //patientPagingController.itemList = [];
-      final isLastPage = patientListData.totalElements! < _pageSize;
+      final isLastPage = patientListData.content!.length < _pageSize;
       if (isLastPage) {
         isloadingRecentPatients.value = false;
         List<Content> list = patientListData.content ?? [];
@@ -232,7 +250,7 @@ class DashboardController extends GetxController {
         isloadingRecentPatients.value = false;
         List<Content> list = patientListData.content ?? [];
         getAllPatientsList.value = response.content ?? [];
-        final nextPageKey = pageNo + list.length;
+        final nextPageKey = pageNo + 1;
         patientPagingController.appendPage(list, nextPageKey);
       }
 
@@ -467,9 +485,12 @@ class DashboardController extends GetxController {
               i.status?.toLowerCase() != 'completed' &&
               now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
           .toList();
+      appointments.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       if (appointments.isNotEmpty) {
         currentPatientAppointmentData.value = appointments[0];
       }
+
       patientTodaysData.value = appointments;
 
       List<AppointmentContent> timeList = list
@@ -503,6 +524,8 @@ class DashboardController extends GetxController {
               i.status?.toLowerCase() != 'completed' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
+      appointments.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       staffTodaysData.value = appointments;
       if (appointments.isNotEmpty) {
         currentStaffAppointmentData.value = appointments[0];
@@ -511,6 +534,8 @@ class DashboardController extends GetxController {
           .where((i) =>
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
+      totalTodayList.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       staffTodaysTotalData.value = totalTodayList;
 
       List<AppointmentContent> completedList = list
@@ -518,6 +543,8 @@ class DashboardController extends GetxController {
               i.status?.toLowerCase() == 'completed' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
+      completedList.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       staffTodaysCompletedData.value = completedList;
     } on Map {
       //postLoginResp = e;
@@ -551,6 +578,8 @@ class DashboardController extends GetxController {
                 formatter.parse(i.date!) != formatter.parse(now.toString()),
           )
           .toList();
+      appointmentsUpcoming.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       upComingAppointments.value = appointmentsUpcoming;
     } on Map {
       //postLoginResp = e;
@@ -580,6 +609,8 @@ class DashboardController extends GetxController {
                   i.status?.toLowerCase() != "completed",
             )
             .toList();
+        appointmentsUpcoming.sort((a, b) => DateTime.parse(a.date ?? '')
+            .compareTo(DateTime.parse(b.date ?? '')));
         upComingAppointments.value = appointmentsUpcoming;
       } else {
         var response =
@@ -598,6 +629,8 @@ class DashboardController extends GetxController {
                   i.status?.toLowerCase() != "completed",
             )
             .toList();
+        appointmentsUpcoming.sort((a, b) => DateTime.parse(a.date ?? '')
+            .compareTo(DateTime.parse(b.date ?? '')));
         upComingAppointments.value = appointmentsUpcoming;
       }
     } on Map {

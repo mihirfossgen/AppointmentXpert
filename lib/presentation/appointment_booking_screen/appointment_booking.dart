@@ -378,11 +378,15 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                   0, (index) {
                                                             return InkWell(
                                                               onTap: () {
-                                                                if (controller.getAppointmentDetailsByDate.firstWhereOrNull((element) =>
-                                                                        element
-                                                                            .startTime ==
-                                                                        controller
-                                                                            .times![index]) !=
+                                                                if (controller
+                                                                        .getAppointmentDetailsByDate
+                                                                        .firstWhereOrNull(
+                                                                            (element) {
+                                                                      return TimeCalculationUtils().startTimeCalCulation(
+                                                                              element.startTime,
+                                                                              element.updateTimeInMin) ==
+                                                                          controller.times![index];
+                                                                    }) !=
                                                                     null) {
                                                                   controller
                                                                       .selectedStartTime
@@ -511,14 +515,20 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                       Alignment
                                                                           .center,
                                                                   decoration: BoxDecoration(
-                                                                      color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) != null
+                                                                      color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                              }) !=
+                                                                              null
                                                                           ? Colors.blue
                                                                           : controller.times![index] == controller.selectedStartTime.value
                                                                               ? Colors.green
                                                                               : Colors.grey.shade100,
                                                                       borderRadius: BorderRadius.circular(6),
                                                                       border: Border.all(
-                                                                          color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) != null
+                                                                          color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                    return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                  }) !=
+                                                                                  null
                                                                               ? Colors.transparent
                                                                               : controller.times![index] == controller.selectedStartTime.value
                                                                                   ? Colors.green
@@ -528,7 +538,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                             index] ??
                                                                         "",
                                                                     style: TextStyle(
-                                                                        color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) => element.startTime == controller.times![index]) !=
+                                                                        color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                  return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                }) !=
                                                                                 null
                                                                             ? Colors.white
                                                                             : Colors.black),

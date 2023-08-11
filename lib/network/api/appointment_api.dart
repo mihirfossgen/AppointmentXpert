@@ -340,7 +340,7 @@ class AppointmentApi {
   Future<List<EmergencyContent>> getEmergencyPatientsList(
       {Map<String, String> headers = const {},
       Map<String, dynamic>? data}) async {
-    ProgressDialogUtils.showProgressDialog();
+    // ProgressDialogUtils.showProgressDialog();
     try {
       //await isNetworkConnected();
       final Response response =
@@ -351,7 +351,7 @@ class AppointmentApi {
           data.map((e) => EmergencyContent.fromJson(e)).toList();
       return list;
     } catch (error, stackTrace) {
-      ProgressDialogUtils.hideProgressDialog();
+      //  ProgressDialogUtils.hideProgressDialog();
       Logger.log(
         error,
         stackTrace: stackTrace,

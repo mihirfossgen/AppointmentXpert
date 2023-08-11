@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/color_constant.dart';
 import '../../../../models/getAllApointments.dart';
 import '../../../../network/endpoints.dart';
 import '../../../../shared_prefrences_page/shared_prefrence_page.dart';
@@ -142,23 +143,63 @@ class UpcomingAppointments extends StatelessWidget {
                                                 // fontStyle: ButtonFontStyle
                                                 //     .RalewayRomanSemiBold14WhiteA700,
                                                 onPressed: () async {
-                                                  var req = {
-                                                    "active": false,
-                                                    "id": data[index].id,
-                                                    "date": data[index].date,
-                                                    "examinerId": data[index]
-                                                        .examiner!
-                                                        .id,
-                                                    "note": data[index].note,
-                                                    "patientId":
-                                                        data[index].patient?.id,
-                                                    "purpose":
-                                                        data[index].purpose,
-                                                    "status": "Canceled"
-                                                  };
-                                                  print(jsonEncode(req));
-                                                  controller
-                                                      .updateAppointment(req);
+                                                  if (data[index].examiner !=
+                                                      null) {
+                                                    var req = {
+                                                      "active": false,
+                                                      "id": data[index].id,
+                                                      "date": data[index].date,
+                                                      "examinerId": data[index]
+                                                          .examiner!
+                                                          .id,
+                                                      "note": data[index].note,
+                                                      "patientId": data[index]
+                                                          .patient
+                                                          ?.id,
+                                                      "purpose":
+                                                          data[index].purpose,
+                                                      "status": "Canceled"
+                                                    };
+                                                    print(jsonEncode(req));
+                                                    controller
+                                                        .updateAppointment(req);
+                                                  } else {
+                                                    Get.back();
+                                                    WidgetsBinding.instance
+                                                        .addPostFrameCallback(
+                                                            (timeStamp) =>
+                                                                Get.snackbar(
+                                                                  "Doctor assigned to this appointment is not active",
+                                                                  '',
+                                                                  snackPosition:
+                                                                      SnackPosition
+                                                                          .BOTTOM,
+                                                                  duration:
+                                                                      const Duration(
+                                                                          seconds:
+                                                                              5),
+                                                                  borderRadius:
+                                                                      15,
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .error_outline,
+                                                                    color: ColorConstant
+                                                                        .whiteA700,
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(15),
+                                                                  margin:
+                                                                      const EdgeInsets
+                                                                          .all(40),
+                                                                  colorText:
+                                                                      ColorConstant
+                                                                          .whiteA700,
+                                                                  backgroundColor:
+                                                                      ColorConstant
+                                                                          .blue700,
+                                                                ));
+                                                  }
                                                 }),
                                             const SizedBox(
                                               width: 20,
