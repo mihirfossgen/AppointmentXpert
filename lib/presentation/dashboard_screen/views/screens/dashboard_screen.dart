@@ -129,7 +129,7 @@ class DashboardScreen extends GetView<DashboardController> {
         showDialog(
           context: Get.context!,
           builder: (context) => AlertDialog(
-            title: const Text('Are you sure you eant to exit the app?'),
+            title: const Text('Are you sure you want to exit the app?'),
             actions: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
