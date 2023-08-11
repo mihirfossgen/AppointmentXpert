@@ -64,6 +64,7 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
                       },
                       onSubmit: (enteredOtp) async {
                         controller.enteredOtpp.value = enteredOtp;
+                        controller.otpValue = enteredOtp;
                       })),
               const SizedBox(height: 10),
               Obx(() => controller.isloading.value
@@ -71,22 +72,27 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
                   : SizedBox(
                       height: 60,
                       child: ElevatedButton(
+
                           // fontStyle:
                           //     ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                           onPressed: () async {
-                            try {
-                              controller.isloading.value = true;
-                              await controller.verifyOtp(
-                                  controller.enteredOtpp.value,
-                                  phoneNumber ?? "");
-                            } on Map {
-                              //  _onOnTapSignInError();
-                            } on NoInternetException catch (e) {
-                              controller.isloading.value = false;
-                              Get.rawSnackbar(message: e.toString());
-                            } catch (e) {
-                              controller.isloading.value = false;
-                              Get.rawSnackbar(message: e.toString());
+                            if (controller.otpValue.length >= 3) {
+                              try {
+                                controller.isloading.value = true;
+                                await controller.verifyOtp(
+                                    controller.otpValue, phoneNumber ?? "");
+                              } on Map {
+                                //  _onOnTapSignInError();
+                              } on NoInternetException catch (e) {
+                                controller.isloading.value = false;
+                                Get.rawSnackbar(message: e.toString());
+                              } catch (e) {
+                                controller.isloading.value = false;
+                                Get.rawSnackbar(message: e.toString());
+                              }
+                            } else {
+                              Get.rawSnackbar(
+                                  message: 'Please enter valid otp.');
                             }
                           },
                           child: const Text('Verify')),

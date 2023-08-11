@@ -326,7 +326,6 @@ class DashboardController extends GetxController {
         if (response.content?[i].profession?.toLowerCase() == "doctor") {
           print(response.content?[i].profession);
           staffDataa = response.content![i];
-
           doctorsList.add(response.content![i]);
           print({"doctors list length ----- ${doctorsList.length}"});
           SharedPrefUtils.saveStr(

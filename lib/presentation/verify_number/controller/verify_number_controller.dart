@@ -36,6 +36,7 @@ class VerifyNumberController extends GetxController {
   }
 
   RxString enteredOtpp = ''.obs;
+  String otpValue = '';
 
   void showSnackBar(
     String text, {
@@ -169,6 +170,7 @@ class VerifyNumberController extends GetxController {
 
   @override
   void onInit() {
+    enteredOtpp.value = '';
     super.onInit();
     scrollController = ScrollController();
     final bottomViewInsets = WidgetsBinding.instance.window.viewInsets.bottom;
@@ -182,6 +184,17 @@ class VerifyNumberController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+    enteredOtpp.value = '';
+    scrollController?.dispose();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    enteredOtpp.value = '';
+    isSendingCode.value = false;
+    showResendText.value = false;
     scrollController?.dispose();
   }
 }

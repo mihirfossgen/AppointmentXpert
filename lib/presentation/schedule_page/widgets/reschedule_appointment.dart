@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 
 import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
-import '../../../core/utils/time_calculation_utils.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../widgets/custom_button.dart';
 
@@ -230,49 +229,60 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                             fontStyle:
                                 ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
                             onTap: () async {
-                              print(controller.fromTime.value);
-                              DateTime date2 = DateFormat("hh:mm a")
-                                  .parse(controller.fromTime.value);
+                              if (appointment?.examiner != null) {
+                                print(controller.fromTime.value);
+                                DateTime date2 = DateFormat("hh:mm a")
+                                    .parse(controller.fromTime.value);
 
-                              DateTime userdate =
-                                  DateTime.parse(controller.reschduleDate.text);
-                              DateTime a = DateTime(
-                                  userdate.year,
-                                  userdate.month,
-                                  userdate.day,
-                                  date2.hour,
-                                  date2.minute);
+                                DateTime userdate = DateTime.parse(
+                                    controller.reschduleDate.text);
+                                DateTime a = DateTime(
+                                    userdate.year,
+                                    userdate.month,
+                                    userdate.day,
+                                    date2.hour,
+                                    date2.minute);
 
-                              print(a);
-                              print(DateTime.now());
-                              print(a.isAfter(DateTime.now()));
-                              controller.isRescheduleLoading.value = true;
+                                print(a);
+                                print(DateTime.now());
+                                print(a.isAfter(DateTime.now()));
+                                controller.isRescheduleLoading.value = true;
 
-                              if (a.isAfter(DateTime.now())) {
-                                var requestData = {
-                                  "active": true,
-                                  "date": DateTime.parse(
-                                          "${controller.reschduleDate.text} ${controller.fromTime.value.replaceAll(" PM", "").replaceAll(" AM", "")}")
-                                      .toIso8601String(),
-                                  "startTime": controller.fromTime.value,
-                                  "endTime": controller.toTime.value,
-                                  "examinerId": appointment?.examiner!.id,
-                                  "note": appointment?.note,
-                                  "id": appointment?.id,
-                                  "patientId": appointment?.patient?.id,
-                                  "purpose": "CHECKUP",
-                                  "status": "Reschduled",
-                                  "update_time_in_min": 0
-                                };
-                                print(jsonEncode(requestData));
-                                controller.updateAppointment(requestData);
+                                if (a.isAfter(DateTime.now())) {
+                                  var requestData = {
+                                    "active": true,
+                                    "date": DateTime.parse(
+                                            "${controller.reschduleDate.text} ${controller.fromTime.value.replaceAll(" PM", "").replaceAll(" AM", "")}")
+                                        .toIso8601String(),
+                                    "startTime": controller.fromTime.value,
+                                    "endTime": controller.toTime.value,
+                                    "examinerId": appointment?.examiner!.id,
+                                    "note": appointment?.note,
+                                    "id": appointment?.id,
+                                    "patientId": appointment?.patient?.id,
+                                    "purpose": "CHECKUP",
+                                    "status": "Reschduled",
+                                    "update_time_in_min": 0
+                                  };
+                                  print(jsonEncode(requestData));
+                                  controller.updateAppointment(requestData);
+                                } else {
+                                  controller.isRescheduleLoading.value = false;
+
+                                  Get.back();
+                                  WidgetsBinding.instance.addPostFrameCallback(
+                                      (timeStamp) => Get.snackbar(
+                                          "Appointment for the selected time has passed.",
+                                          '',
+                                          snackPosition: SnackPosition.BOTTOM));
+                                }
                               } else {
                                 controller.isRescheduleLoading.value = false;
 
                                 Get.back();
                                 WidgetsBinding.instance.addPostFrameCallback(
                                     (timeStamp) => Get.snackbar(
-                                        "Appointment for the selected time has passed.",
+                                        "Doctor is not assigned for this appointment.",
                                         '',
                                         snackPosition: SnackPosition.BOTTOM));
                               }

@@ -1,3 +1,4 @@
+import 'package:appointmentxpert/presentation/dashboard_screen/controller/dashboard_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -36,7 +37,7 @@ class ListRecentPatientData {
 }
 
 class ListRecentPatients extends StatelessWidget {
-  const ListRecentPatients({
+  ListRecentPatients({
     required this.data,
     required this.onPressed,
     // required this.onPressedAssign,
@@ -53,6 +54,8 @@ class ListRecentPatients extends StatelessWidget {
     final DateFormat formatter = DateFormat('dd/MM/yyyy');
     return formatter.format(DateTime.parse(date));
   }
+
+  DashboardController dashboardController = Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +167,7 @@ class ListRecentPatients extends StatelessWidget {
             color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold),
         onSecondButtonTap: () {
           Get.to(() => AppointmentBookingScreen(
+              doctorsList: dashboardController.doctorsList,
               patientDetailsArguments: PatientDetailsArguments([], data)));
         },
         onFirstButtonTap: () {

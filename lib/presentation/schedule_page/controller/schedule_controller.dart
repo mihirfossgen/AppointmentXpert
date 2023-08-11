@@ -492,6 +492,7 @@ class ScheduleController extends GetxController {
           callGetAllAppointmentsForPatient(0);
         }
         isRescheduleLoading.value = false;
+        isloading.value = false;
         selectedStartTime.value = '';
         Get.back();
       }
