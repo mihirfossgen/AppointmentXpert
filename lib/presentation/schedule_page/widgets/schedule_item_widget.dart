@@ -498,12 +498,27 @@ class ScheduleItemWidget extends StatelessWidget {
                       if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
                         WidgetsBinding.instance
                             .addPostFrameCallback((timeStamp) {
-                          showDialog(
+
+                          Get.to(() => ReschduleAppointment(
+                              appointment: appointment,appointmentTime:
+                          appointment.updateTimeInMin == 0
+                              ? controller
+                              .getformattedtime(
+                              appointment.date ?? "",
+                              Get.context!)
+                              .replaceAll(' AM', ' PM')
+                              : TimeCalculationUtils()
+                              .startTimeCalCulation(
+                              appointment.startTime,
+                              appointment.updateTimeInMin)
+                          ));
+
+                          /*showDialog(
                             context: Get.context!,
                             builder: (context) => AlertDialog(
                               title: const Text('Reschedule Appointment'),
                               actions: [
-                                ReschduleAppointment(
+                                *//*ReschduleAppointment(
                                   appointment: appointment,
                                   appointmentTime:
                                       appointment.updateTimeInMin == 0
@@ -516,7 +531,7 @@ class ScheduleItemWidget extends StatelessWidget {
                                               .startTimeCalCulation(
                                                   appointment.startTime,
                                                   appointment.updateTimeInMin),
-                                )
+                                )*//*
                                 // Column(
                                 //   children: [
                                 //     Padding(
@@ -730,7 +745,7 @@ class ScheduleItemWidget extends StatelessWidget {
                             if (value == null) {
                               controller.selectedStartTime.value = '';
                             }
-                          });
+                          });*/
                         });
                       } else {
                         Get.showSnackbar(GetSnackBar(

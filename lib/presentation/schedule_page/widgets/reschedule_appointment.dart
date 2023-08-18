@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:appointmentxpert/core/app_export.dart';
 import 'package:appointmentxpert/presentation/schedule_page/controller/schedule_controller.dart';
 import 'package:appointmentxpert/widgets/loader.dart';
+import 'package:appointmentxpert/widgets/responsive.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,10 @@ import '../../../core/utils/size_utils.dart';
 import '../../../core/utils/time_calculation_utils.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../widgets/custom_button.dart';
+import '/widgets/app_bar/appbar_subtitle_2.dart';
+import '/widgets/app_bar/custom_app_bar.dart';
+
+
 
 class ReschduleAppointment extends GetWidget<ScheduleController> {
   final AppointmentContent? appointment;
@@ -24,7 +29,42 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
     return SizedBox(
       height: 500,
       width: 800,
-      child: SingleChildScrollView(
+      child:Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: ColorConstant.whiteA700,
+          appBar: !Responsive.isDesktop(context)
+              ? CustomAppBar(
+
+              height: getVerticalSize(40),
+              leadingWidth: 64,
+              elevation: 0,
+              backgroundColor: ColorConstant.blue700,
+              leading: !Responsive.isDesktop(context)
+                    ? InkWell(
+                onTap: () {
+
+                  Get.back();
+                },
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+              )
+              // AppbarImage(
+              //     height: getSize(40),
+              //     width: getSize(40),
+              //     backgroundColor: Colors.white,
+              //     svgPath: ImageConstant.imgArrowleft,
+              //     margin: getMargin(left: 24),
+              //     onTap: () {
+              //       onTapArrowleft1();
+              //     })
+                  : null,
+              centerTitle: true,
+              title: AppbarSubtitle2(text: 'Reschedule Calendar'))
+              : null,
+        //key: controller.scaffoldMessengerKey,
+        body:SingleChildScrollView(
         child: Column(
           children: [
             Padding(
@@ -233,7 +273,7 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
             Obx(() => controller.selectedStartTime.value == ''
                 ? CustomButton(
                     height: getVerticalSize(55),
-                    text: "Reschdule Appointment",
+                    text: "Reschedule Appointment",
                     margin: getMargin(left: 11),
                     variant: ButtonVariant.FillGrey,
                     fontStyle: ButtonFontStyle.RalewayRomanSemiBold14WhiteA700,
@@ -248,7 +288,7 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                         child: CustomButton(
                             height: getVerticalSize(60),
                             //width: getHorizontalSize(110),
-                            text: "Reschdule Appointment",
+                            text: "Reschedule Appointment",
                             shape: ButtonShape.RoundedBorder8,
                             padding: ButtonPadding.PaddingAll16,
                             fontStyle:
@@ -328,6 +368,7 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
           ],
         ),
       ),
+      )
     );
   }
 }

@@ -22,7 +22,7 @@ import '../../../widgets/responsive.dart';
 
 class ScheduleController extends GetxController {
   bool response = false;
-
+  //static final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   //GetAllAppointments model = GetAllAppointments();
   List<AppointmentContent> allAppointments = [];
   RxList<AppointmentContent> patientAppointmentlist =
