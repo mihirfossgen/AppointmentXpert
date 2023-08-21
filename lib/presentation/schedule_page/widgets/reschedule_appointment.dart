@@ -13,6 +13,7 @@ import '../../../core/utils/color_constant.dart';
 import '../../../core/utils/size_utils.dart';
 import '../../../core/utils/time_calculation_utils.dart';
 import '../../../models/getAllApointments.dart';
+import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../../widgets/custom_button.dart';
 import '/widgets/app_bar/appbar_subtitle_2.dart';
 import '/widgets/app_bar/custom_app_bar.dart';
@@ -325,6 +326,11 @@ class ReschduleAppointment extends GetWidget<ScheduleController> {
                                     "note": appointment?.note,
                                     "id": appointment?.id,
                                     "patientId": appointment?.patient?.id,
+                                    "updateBy": SharedPrefUtils.readPrefStr(
+                                                'role') !=
+                                            "PATIENT"
+                                        ? appointment?.examiner?.id.toString()
+                                        : appointment?.patient?.id.toString(),
                                     "purpose": "CHECKUP",
                                     "status": "Reschduled",
                                     "update_time_in_min": 0

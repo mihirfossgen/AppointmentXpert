@@ -315,8 +315,9 @@ class DashboardController extends GetxController {
       String date) async {
     try {
       isloadingStaffData.value = true;
-      var response =
-          (await Get.find<AppointmentApi>().getAppointmentDetailsViaDate(date));
+      var response = (await Get.find<AppointmentApi>()
+          .getAppointmentDetailsViaDate(
+              date, SharedPrefUtils.readPrefINt('employee_Id')));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();

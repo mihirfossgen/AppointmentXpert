@@ -1498,6 +1498,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         "note": controller.treatment.text,
         "patientId": patientDetailsArguments?.details?.id,
         "purpose": "OTHER",
+        "createdBy": id,
         //"referenceId": 0,
         "status": "Booked",
         "updateTimeInMin": 0

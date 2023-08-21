@@ -216,6 +216,14 @@ class ScheduleItemWidget extends StatelessWidget {
                                                   appointment.examiner!.id,
                                               "note": appointment.note,
                                               "patientId": patientId,
+                                              "updateBy":
+                                                  SharedPrefUtils.readPrefStr(
+                                                              'role') !=
+                                                          "PATIENT"
+                                                      ? appointment.examiner!.id
+                                                          .toString()
+                                                      : appointment.patient?.id
+                                                          .toString(),
                                               "purpose": appointment.purpose,
                                               "status": "Completed"
                                             };
@@ -319,6 +327,13 @@ class ScheduleItemWidget extends StatelessWidget {
                                         "examinerId": appointment.examiner!.id,
                                         "note": appointment.note,
                                         "patientId": patientId,
+                                        "updateBy": SharedPrefUtils.readPrefStr(
+                                                    'role') !=
+                                                "PATIENT"
+                                            ? appointment.examiner!.id
+                                                .toString()
+                                            : appointment.patient?.id
+                                                .toString(),
                                         "purpose": appointment.purpose,
                                         "status": "Canceled"
                                       };
@@ -420,6 +435,13 @@ class ScheduleItemWidget extends StatelessWidget {
                                                 appointment.examiner!.id,
                                             "note": appointment.note,
                                             "patientId": patientId,
+                                            "updateBy":
+                                                SharedPrefUtils.readPrefStr(
+                                                            'role') !=
+                                                        "PATIENT"
+                                                    ? appointment.examiner!.id
+                                                        .toString()
+                                                    : patientId.toString(),
                                             "purpose": appointment.purpose,
                                             "status": "Canceled"
                                           };

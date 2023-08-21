@@ -7,6 +7,7 @@ import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../models/getallEmplyesList.dart';
 import '../../../network/api/appointment_api.dart';
+import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../models/doctor_detail_model.dart';
 
 class DoctorDetailController extends GetxController {
@@ -299,14 +300,13 @@ class DoctorDetailController extends GetxController {
       String date) async {
     try {
       isLoading.value = true;
-      var response =
-          (await Get.find<AppointmentApi>().getAppointmentDetailsViaDate(date));
+      var response = (await Get.find<AppointmentApi>()
+          .getAppointmentDetailsViaDate(
+              date, SharedPrefUtils.readPrefINt('employee_Id')));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
-      for (var i = 0; i < list.length; i++) {
-        print(list[i].startTime);
-      }
+
       getAppointmentDetailsByDate.value = list;
       return list;
     } on Map {

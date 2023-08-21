@@ -408,11 +408,13 @@ class ScheduleController extends GetxController {
   }
 
   Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
-      String date) async {
+    String date,
+  ) async {
     try {
       isLoading.value = true;
-      var response =
-          (await Get.find<AppointmentApi>().getAppointmentDetailsViaDate(date));
+      var response = (await Get.find<AppointmentApi>()
+          .getAppointmentDetailsViaDate(
+              date, SharedPrefUtils.readPrefINt('employee_Id')));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
@@ -865,6 +867,14 @@ class MyData extends DataTableSource {
                                               appointment.examiner!.id,
                                           "note": appointment.note,
                                           "id": appointment.id,
+                                          "updateBy":
+                                              SharedPrefUtils.readPrefStr(
+                                                          'role') !=
+                                                      "PATIENT"
+                                                  ? appointment.examiner!.id
+                                                      .toString()
+                                                  : appointment.patient?.id
+                                                      .toString(),
                                           "patientId": appointment.patient?.id,
                                           "purpose": "CHECKUP",
                                           "status": "Reschduled",
@@ -904,6 +914,11 @@ class MyData extends DataTableSource {
                                       "examinerId": appointment.examiner!.id,
                                       "note": appointment.note,
                                       "patientId": appointment.patient?.id,
+                                      "updateBy": SharedPrefUtils.readPrefStr(
+                                                  'role') !=
+                                              "PATIENT"
+                                          ? appointment.examiner!.id.toString()
+                                          : appointment.patient?.id.toString(),
                                       "purpose": appointment.purpose,
                                       "status": "Completed"
                                     };
@@ -982,6 +997,11 @@ class MyData extends DataTableSource {
                                       "examinerId": appointment.examiner!.id,
                                       "note": appointment.note,
                                       "patientId": appointment.patient?.id,
+                                      "updateBy": SharedPrefUtils.readPrefStr(
+                                                  'role') !=
+                                              "PATIENT"
+                                          ? appointment.examiner!.id.toString()
+                                          : appointment.patient?.id.toString(),
                                       "purpose": appointment.purpose,
                                       "status": "Canceled"
                                     };

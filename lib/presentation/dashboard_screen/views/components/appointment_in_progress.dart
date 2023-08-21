@@ -144,6 +144,18 @@ class _AppointmentInProgress extends StatelessWidget {
                                                   "examinerId":
                                                       data[index].examiner!.id,
                                                   "note": data[index].note,
+                                                  "updateBy": SharedPrefUtils
+                                                              .readPrefStr(
+                                                                  'role') !=
+                                                          "PATIENT"
+                                                      ? data[index]
+                                                          .examiner!
+                                                          .id
+                                                          .toString()
+                                                      : data[index]
+                                                          .patient
+                                                          ?.id
+                                                          .toString(),
                                                   "patientId":
                                                       data[index].patient?.id,
                                                   "purpose":
@@ -496,6 +508,11 @@ class AppointmentsDataSource extends DataTableSource {
                                   "date": data[index].date,
                                   "examinerId": data[index].examiner!.id,
                                   "note": data[index].note,
+                                  "updateBy":
+                                      SharedPrefUtils.readPrefStr('role') !=
+                                              "PATIENT"
+                                          ? data[index].examiner!.id.toString()
+                                          : data[index].patient?.id.toString(),
                                   "patientId": data[index].patient?.id,
                                   "purpose": data[index].purpose,
                                   "status": "Canceled"

@@ -242,12 +242,12 @@ class AppointmentApi {
     }
   }
 
-  Future<Response> getAppointmentDetailsViaDate(var data) async {
+  Future<Response> getAppointmentDetailsViaDate(var data, int staffId) async {
     print(jsonEncode(data));
 
     try {
       final Response response = await _apiService.post(
-        "${Endpoints.getappointmentDates}$data",
+        "${Endpoints.getappointmentDates}$staffId&rescheduleDate=$data",
         options: Options(headers: {"content-type": "application/json"}),
       );
       return response;
