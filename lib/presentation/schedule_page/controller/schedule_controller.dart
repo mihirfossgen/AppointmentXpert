@@ -413,7 +413,7 @@ class ScheduleController extends GetxController {
     try {
       isLoading.value = true;
       var response = (await Get.find<AppointmentApi>()
-          .getAppointmentDetailsViaDate(
+          .getAppointmentDetailsViaDateForStaff(
               date, SharedPrefUtils.readPrefINt('employee_Id')));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
@@ -554,30 +554,30 @@ class MyData extends DataTableSource {
           Row(
             children: [
               appointment.examiner?.uploadedProfilePath != null
-                  ? CachedNetworkImage(
-                      width: 40,
+                  ? Image.network(
+                      //width: 40,
                       height: 40,
                       fit: BoxFit.contain,
-                      imageUrl: Uri.encodeFull(Endpoints.baseURL +
+                      Uri.encodeFull(Endpoints.baseURL +
                           Endpoints.downLoadEmployePhoto +
                           appointment.examiner!.uploadedProfilePath.toString()),
-                      httpHeaders: {
+                      headers: {
                         "Authorization":
                             "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
                       },
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                      errorWidget: (context, url, error) {
-                        print(error);
-                        return CustomImageView(
-                          imagePath: !Responsive.isDesktop(Get.context!)
-                              ? 'assets'
-                                  '/images/default_profile.png'
-                              : '/images/default_profile.png',
-                        );
-                      },
+                      // progressIndicatorBuilder:
+                      //     (context, url, downloadProgress) =>
+                      //         CircularProgressIndicator(
+                      //             value: downloadProgress.progress),
+                      // errorWidget: (context, url, error) {
+                      //   print(error);
+                      //   return CustomImageView(
+                      //     imagePath: !Responsive.isDesktop(Get.context!)
+                      //         ? 'assets'
+                      //             '/images/default_profile.png'
+                      //         : '/images/default_profile.png',
+                      //   );
+                      // },
                     )
                   : CustomImageView(
                       width: 40,

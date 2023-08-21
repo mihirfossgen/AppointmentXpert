@@ -388,6 +388,7 @@ class PatientsList extends GetView<DashboardController> {
         columnSpacing: 10,
         horizontalMargin: 10,
         minWidth: 500,
+        rowsPerPage: 10,
         //showBottomBorder: true,
         headingRowColor:
             MaterialStateColor.resolveWith((states) => Colors.grey[200]!),
@@ -539,28 +540,30 @@ class PatientListDataSource extends DataTableSource {
             child: Row(
               children: [
                 data[index].profilePicture != null
-                    ? CachedNetworkImage(
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                        imageUrl: Uri.encodeFull(
+                    ? Image.network(
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.contain,
+                        Uri.encodeFull(
                           Endpoints.baseURL +
                               Endpoints.downLoadPatientPhoto +
-                              data[index].id.toString(),
+                              data[index].profilePicture.toString(),
                         ),
-                        httpHeaders: {
+                        loadingBuilder: (context, child, loadingProgress) =>
+                            const Center(child: CircularProgressIndicator()),
+                        headers: {
                           "Authorization":
                               "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
                         },
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                        errorWidget: (context, url, error) {
+                        // progressIndicatorBuilder:
+                        //     (context, url, downloadProgress) =>
+                        //         CircularProgressIndicator(
+                        //             value: downloadProgress.progress),
+                        errorBuilder: (context, url, error) {
                           print(error);
                           return CustomImageView(
-                            width: 60,
-                            height: 60,
+                            width: 40,
+                            height: 40,
                             imagePath: !Responsive.isDesktop(Get.context!)
                                 ? 'assets' + '/images/default_profile.png'
                                 : '/images/default_profile.png',
@@ -568,8 +571,8 @@ class PatientListDataSource extends DataTableSource {
                         },
                       )
                     : CustomImageView(
-                        width: 60,
-                        height: 60,
+                        width: 40,
+                        height: 40,
                         fit: BoxFit.contain,
                         imagePath: !Responsive.isDesktop(Get.context!)
                             ? 'assets' + '/images/default_profile.png'

@@ -242,12 +242,28 @@ class AppointmentApi {
     }
   }
 
-  Future<Response> getAppointmentDetailsViaDate(var data, int staffId) async {
+  Future<Response> getAppointmentDetailsViaDateWithoutStaff(var data) async {
     print(jsonEncode(data));
 
     try {
       final Response response = await _apiService.post(
-        "${Endpoints.getappointmentDates}$staffId&rescheduleDate=$data",
+        "${Endpoints.getappointmentDatesWithoutStaffId}&rescheduleDate=$data",
+        options: Options(headers: {"content-type": "application/json"}),
+      );
+      return response;
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<Response> getAppointmentDetailsViaDateForStaff(
+      var data, int staffId) async {
+    print(jsonEncode(data));
+
+    try {
+      final Response response = await _apiService.post(
+        "${Endpoints.getappointmentDatesWithStaffId}$staffId&rescheduleDate=$data",
         options: Options(headers: {"content-type": "application/json"}),
       );
       return response;

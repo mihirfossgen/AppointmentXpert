@@ -304,10 +304,10 @@ class SchedulePage extends GetWidget<ScheduleController> {
             ? controller.upcomingPagingController.value.itemList
             : controller.completedPagingController.value.itemList;
     return SizedBox(
-        height: 600,
+        height: 400,
         child: Card(
           child: SizedBox(
-            height: 600,
+            height: 400,
             width: MediaQuery.of(Get.context!).size.width,
             child: appointments == null && appointments!.isEmpty
                 ? loadEmptyWidget()
@@ -377,7 +377,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
             : controller.completedPagingController.value.itemList;
     return Card(
       child: SizedBox(
-        height: 600,
+        height: 500,
         child: appointments == null || appointments.isEmpty
             ? loadEmptyWidget()
             : PaginatedDataTable2(

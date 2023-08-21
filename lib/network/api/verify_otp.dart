@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import '../../core/utils/logger.dart';
 import '../../models/verify_otp_model.dart';
+import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../dio_client.dart';
 import '../endpoints.dart';
 
@@ -30,9 +33,11 @@ class VerifyOtpApi {
   }
 
   Future<OtpModel> verifyOtp(String number, String otp) async {
+    String deviceToken = SharedPrefUtils.readPrefStr('device_token');
+    String deviceType = Platform.operatingSystem;
     try {
-      final Response response = await _apiService
-          .get("${Endpoints.verifyOtp}otp=$otp&userName=$number");
+      final Response response = await _apiService.get(
+          "${Endpoints.verifyOtp}otp=$otp&userName=$number&token=$deviceToken&deviceType=$deviceType");
       return OtpModel.fromJson(response.data);
     } on DioError catch (e) {
       print("e -- $e");

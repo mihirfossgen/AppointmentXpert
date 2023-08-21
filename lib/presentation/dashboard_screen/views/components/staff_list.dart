@@ -20,7 +20,6 @@ import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_image_view.dart';
 import '../../../../widgets/responsive.dart';
 import '../../controller/dashboard_controller.dart';
-import '../../shared_components/search_field.dart';
 
 class StaffList extends GetView<DashboardController> {
   StaffList({super.key});
@@ -457,28 +456,27 @@ class StaffDataSource extends DataTableSource {
             child: Row(
               children: [
                 data[index].uploadedProfilePath != null
-                    ? CachedNetworkImage(
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                        imageUrl: Uri.encodeFull(
+                    ? Image.network(
+                        width: 40,
+                        height: 40,
+                        scale: 0.5,
+                        fit: BoxFit.contain,
+                        Uri.encodeFull(
                           Endpoints.baseURL +
                               Endpoints.downLoadEmployePhoto +
-                              data[index].id.toString(),
+                              data[index].uploadedProfilePath.toString(),
                         ),
-                        httpHeaders: {
+                        headers: {
                           "Authorization":
                               "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
                         },
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                        errorWidget: (context, url, error) {
+                        loadingBuilder: (context, url, downloadProgress) =>
+                            const Center(child: CircularProgressIndicator()),
+                        errorBuilder: (context, url, error) {
                           print(error);
                           return CustomImageView(
-                            width: 60,
-                            height: 60,
+                            width: 40,
+                            height: 40,
                             imagePath: !Responsive.isDesktop(Get.context!)
                                 ? 'assets' + '/images/default_profile.png'
                                 : '/images/default_profile.png',
@@ -486,8 +484,8 @@ class StaffDataSource extends DataTableSource {
                         },
                       )
                     : CustomImageView(
-                        width: 60,
-                        height: 60,
+                        width: 40,
+                        height: 40,
                         fit: BoxFit.contain,
                         imagePath: !Responsive.isDesktop(Get.context!)
                             ? 'assets' + '/images/default_profile.png'
@@ -497,7 +495,7 @@ class StaffDataSource extends DataTableSource {
                   width: 5,
                 ),
                 SizedBox(
-                  width: 50,
+                  width: 100,
                   child: Text(
                     '${data[index].firstName} ' + '${data[index].lastName}',
                     maxLines: 2,

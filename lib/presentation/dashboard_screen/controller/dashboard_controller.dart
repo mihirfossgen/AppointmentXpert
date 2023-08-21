@@ -156,9 +156,9 @@ class DashboardController extends GetxController {
       callStaffUpcomingAppointments();
       callStaffList(0);
       print(patientPagingController);
-      patientPagingController.addPageRequestListener((pageKey) {
-        callRecentPatientList(pageKey);
-      });
+      //patientPagingController.addPageRequestListener((pageKey) {
+      callRecentPatientList(0);
+      //});
       callRecentPatientListForDashboaard();
       callEmergencyPatientList();
       getTimes();
@@ -316,8 +316,7 @@ class DashboardController extends GetxController {
     try {
       isloadingStaffData.value = true;
       var response = (await Get.find<AppointmentApi>()
-          .getAppointmentDetailsViaDate(
-              date, SharedPrefUtils.readPrefINt('employee_Id')));
+          .getAppointmentDetailsViaDateWithoutStaff(date));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
