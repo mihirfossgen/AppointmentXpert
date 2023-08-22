@@ -253,7 +253,6 @@ class DashboardController extends GetxController {
         final nextPageKey = pageNo + 1;
         patientPagingController.appendPage(list, nextPageKey);
       }
-
       update();
     } on Map {
       //postLoginResp = e;

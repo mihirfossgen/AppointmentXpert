@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +15,14 @@ class AuthorizationInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    String deviceToken = SharedPrefUtils.readPrefStr('device_token');
+    String deviceType = Platform.operatingSystem;
     if (_needAuthorizationHeader(options)) {
       debugPrint(SharedPrefUtils.readPrefStr("auth_token").toString());
       options.headers['Authorization'] =
           'Bearer ${SharedPrefUtils.readPrefStr("auth_token")}';
+      options.headers['token'] = deviceToken;
+      options.headers['deviceType'] = deviceType;
     }
     super.onRequest(options, handler);
   }

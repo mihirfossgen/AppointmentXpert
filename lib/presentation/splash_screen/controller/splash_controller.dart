@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 
@@ -13,18 +12,7 @@ class SplashController extends GetxController {
   void onReady() {
     super.onReady();
     routeBasedOnUserProperties();
-    _register();
-  }
-
-  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-
-  _register() {
-    firebaseMessaging.getToken().then((token) {
-      print('fcm token ---- $token');
-      if (token != null) {
-        SharedPrefUtils.saveStr('device_token', token);
-      }
-    });
+    //_register();
   }
 
   void routeBasedOnUserProperties() async {

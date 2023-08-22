@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,6 +6,7 @@ import '../../../core/utils/color_constant.dart';
 import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
 import '../../../network/api/verify_otp.dart';
+import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../models/login_model.dart';
 
 class LoginController extends GetxController {
@@ -29,12 +31,29 @@ class LoginController extends GetxController {
   }
 
   @override
+  void onReady() {
+    super.onReady();
+    _register();
+  }
+
+  @override
   void onClose() {
     super.onClose();
     //formKey.currentState?.close();
     isloading.value = false;
     emailController.clear();
     passwordController.clear();
+  }
+
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
+  _register() {
+    firebaseMessaging.getToken().then((token) {
+      print('fcm token ---- $token');
+      if (token != null) {
+        SharedPrefUtils.saveStr('device_token', token);
+      }
+    });
   }
 
   Future<void> callCreateLogin(Map<String, dynamic> req) async {
