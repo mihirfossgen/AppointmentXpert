@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/utils/time_calculation_utils.dart';
 import '../../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../../models/getAllApointments.dart';
 import '../../../models/getallEmplyesList.dart';
@@ -301,7 +300,7 @@ class DoctorDetailController extends GetxController {
     try {
       isLoading.value = true;
       var response = (await Get.find<AppointmentApi>()
-          .getAppointmentDetailsViaDate(
+          .getAppointmentDetailsViaDateForStaff(
               date, SharedPrefUtils.readPrefINt('employee_Id')));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =

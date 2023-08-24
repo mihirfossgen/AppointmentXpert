@@ -49,8 +49,10 @@ class Endpoints {
   static const String getAllAppointmentsWithoutPaged =
       "appointment/allAppointments";
   //static const String getReceptionistAllAppoitments = "appointment/";
-  static const String callOtp = "otp/generateOtp?";
-  static const String verifyOtp = "otp/verifyOtp?";
+  static const String callPhoneOtp = "otp/generateOtp?";
+  static const String callEmailOtp = "otp/emailOtp?";
+  static const String verifyPhoneOtp = "otp/verifyOtp?";
+  static const String verifyEmailOtp = "otp/verifyEmailOtp?";
   static const String generatePrecription = "report/patientReport/?";
   static const String generateInvoice = "report/patientInvoice/?";
   static const String getServices = baseURL + 'service/list';

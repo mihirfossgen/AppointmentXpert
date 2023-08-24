@@ -81,7 +81,8 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                                     child: VerifyPhoneNumberScreen(
                                                         phoneNumber: controller
                                                             .mobileNoController
-                                                            .text),
+                                                            .text,
+                                                        isVerifyEmail: false),
                                                   );
                                                 },
                                               ).then((value) {
@@ -112,11 +113,15 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                                                       .size
                                                                       .width /
                                                                   3,
-                                                              child: VerifyPhoneNumberScreen(
-                                                                  phoneNumber:
-                                                                      controller
-                                                                          .mobileNoController
-                                                                          .text)),
+                                                              child:
+                                                                  VerifyPhoneNumberScreen(
+                                                                phoneNumber:
+                                                                    controller
+                                                                        .mobileNoController
+                                                                        .text,
+                                                                isVerifyEmail:
+                                                                    false,
+                                                              )),
                                                         )).then((value) {
                                                   if (value) onTapSendotp();
                                                 });

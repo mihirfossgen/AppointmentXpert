@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,17 +80,33 @@ class LoginController extends GetxController {
     return null;
   }
 
-  String? numberValidator(String value) {
-    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  bool isEmail(String input) => EmailValidator.validate(input);
+
+  bool isPhone(String input) =>
+      RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
+          .hasMatch(input);
+
+  String? numberOrEmailValidator(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10}$)';
     RegExp regExp = RegExp(pattern);
     if (value.isEmpty) {
-      return 'Please enter mobile number';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
+      return 'Please enter mobile number or email';
+    } else if (!regExp.hasMatch(value) && !isEmail(value)) {
+      return 'Please enter valid mobile number or email';
     } else {
       userNumber = value;
     }
     return null;
+  }
+
+  bool detectPhoneNumber(String message) {
+    RegExp phoneRegex = RegExp(r'^(?:[+0]9)?[0-9]{10}$');
+    if (phoneRegex.hasMatch(message)) {
+      print("A phone number was found!");
+      return true;
+    }
+    return false;
+    print("No luck!");
   }
 
   String? passwordValidator(String value) {
@@ -117,6 +134,41 @@ class LoginController extends GetxController {
       getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
         'Content-type': 'application/x-www-form-urlencoded',
       }, number: number, type: type);
+      isloading.value = false;
+      if (getOtp?.result == false) {
+        isloading.value = false;
+        Get.back();
+        WidgetsBinding.instance
+            .addPostFrameCallback((timeStamp) => Get.snackbar(
+                  "Uh oh!!",
+                  getOtp?.message ?? "",
+                  snackPosition: SnackPosition.BOTTOM,
+                  duration: const Duration(seconds: 5),
+                  borderRadius: 15,
+                  icon: Icon(
+                    Icons.error_outline,
+                    color: ColorConstant.whiteA700,
+                  ),
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(40),
+                  colorText: ColorConstant.whiteA700,
+                  backgroundColor: ColorConstant.blue700,
+                ));
+        return false;
+      } else {
+        return true;
+      }
+    } on Map catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> callEmailOtp(String email, String type) async {
+    try {
+      getOtp = await Get.find<VerifyOtpApi>().callEmailOtp(headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      }, email: email, type: type);
       isloading.value = false;
       if (getOtp?.result == false) {
         isloading.value = false;

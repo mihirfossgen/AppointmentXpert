@@ -19,7 +19,7 @@ class VerifyOtpApi {
     Map<String, dynamic> req = {"userName": number};
     try {
       Response response = await _apiService.post(
-          "${Endpoints.callOtp}type=$type&userName=$number",
+          "${Endpoints.callPhoneOtp}type=$type&userName=$number",
           options: Options(headers: headers));
       return OtpModel.fromJson(response.data);
     } catch (error, stackTrace) {
@@ -32,12 +32,49 @@ class VerifyOtpApi {
     }
   }
 
-  Future<OtpModel> verifyOtp(String number, String otp) async {
+  Future<OtpModel> callEmailOtp(
+      {Map<String, String> headers = const {},
+      String? email,
+      String? type}) async {
+    //ProgressDialogUtils.showProgressDialog();
+    Map<String, dynamic> req = {"userName": email};
+    try {
+      Response response = await _apiService.post(
+          "${Endpoints.callEmailOtp}type=$type&userName=$email",
+          options: Options(headers: headers));
+      return OtpModel.fromJson(response.data);
+    } catch (error, stackTrace) {
+      //ProgressDialogUtils.hideProgressDialog();
+      Logger.log(
+        error,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  Future<OtpModel> verifyPhoneOtp(String number, String otp) async {
     String deviceToken = SharedPrefUtils.readPrefStr('device_token');
     String deviceType = Platform.operatingSystem;
     try {
       final Response response = await _apiService.get(
-          "${Endpoints.verifyOtp}otp=$otp&userName=$number&token=$deviceToken&deviceType=$deviceType");
+          "${Endpoints.verifyPhoneOtp}otp=$otp&userName=$number&token=$deviceToken&deviceType=$deviceType");
+      return OtpModel.fromJson(response.data);
+    } on DioError catch (e) {
+      print("e -- $e");
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
+
+  Future<OtpModel> verifyEmailOtp(String number, String otp) async {
+    String deviceToken = SharedPrefUtils.readPrefStr('device_token');
+    String deviceType = Platform.operatingSystem;
+    try {
+      final Response response = await _apiService.get(
+          "${Endpoints.verifyEmailOtp}otp=$otp&userName=$number&token=$deviceToken&deviceType=$deviceType");
       return OtpModel.fromJson(response.data);
     } on DioError catch (e) {
       print("e -- $e");

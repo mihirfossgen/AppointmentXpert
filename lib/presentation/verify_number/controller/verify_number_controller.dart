@@ -49,25 +49,34 @@ class VerifyNumberController extends GetxController {
       );
   }
 
-  Future<void> verifyOtp(
-    String otp,
-    String number,
-  ) async {
+  Future<void> verifyOtp(String otp, String number, bool isVerifyEmail) async {
     try {
-      getOtp = await Get.find<VerifyOtpApi>().verifyOtp(number, otp);
-      _handleCreateLoginSuccess(getOtp!);
+      if (isVerifyEmail == false) {
+        getOtp = await Get.find<VerifyOtpApi>().verifyPhoneOtp(number, otp);
+        _handleCreateLoginSuccess(getOtp!);
+      } else {
+        getOtp = await Get.find<VerifyOtpApi>().verifyEmailOtp(number, otp);
+        _handleCreateLoginSuccess(getOtp!);
+      }
     } on Map catch (e) {
       print(e);
       rethrow;
     }
   }
 
-  Future<bool> callOtp(String number, String type) async {
+  Future<bool> callOtp(String number, String type, bool isVerifyEmail) async {
     try {
-      getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
-        'Content-type': 'application/x-www-form-urlencoded',
-      }, number: number, type: type);
-      return true;
+      if (isVerifyEmail == false) {
+        getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+        }, number: number, type: type);
+        return true;
+      } else {
+        getOtp = await Get.find<VerifyOtpApi>().callEmailOtp(headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+        }, email: number, type: type);
+        return true;
+      }
     } on Map catch (e) {
       print(e);
       return false;

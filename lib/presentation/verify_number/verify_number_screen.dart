@@ -14,8 +14,9 @@ import 'controller/verify_number_controller.dart';
 
 class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
   final String? phoneNumber;
-
-  const VerifyPhoneNumberScreen({super.key, this.phoneNumber});
+  final bool isVerifyEmail;
+  const VerifyPhoneNumberScreen(
+      {super.key, this.phoneNumber, required this.isVerifyEmail});
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +94,8 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
                               ),
                             ),
                             onTap: () {
-                              controller.callOtp(phoneNumber ?? "", "reSent");
+                              controller.callOtp(
+                                  phoneNumber ?? "", "reSent", isVerifyEmail);
                             },
                           )
                         : Container())
@@ -139,7 +141,8 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
                                     controller.isloading.value = true;
                                     await controller.verifyOtp(
                                         controller.enteredOtpp.value,
-                                        phoneNumber ?? "");
+                                        phoneNumber ?? "",
+                                        isVerifyEmail);
                                   } on Map {
                                     //  _onOnTapSignInError();
                                   } on NoInternetException catch (e) {
