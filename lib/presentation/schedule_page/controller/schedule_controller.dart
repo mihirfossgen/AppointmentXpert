@@ -460,7 +460,7 @@ class ScheduleController extends GetxController {
 
   Future<void> updateAppointment(var data) async {
     try {
-      isloading.value = true;
+      isRescheduleLoading.value = true;
       value = (await Get.find<AppointmentApi>().updateAppointment(data));
       // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       if (value) {
@@ -472,8 +472,8 @@ class ScheduleController extends GetxController {
           callGetAllAppointmentsForPatient(0);
         }
         isRescheduleLoading.value = false;
-        isloading.value = false;
         selectedStartTime.value = '';
+
         Get.back();
       }
       //   callGetAllAppointments(0, 1);
@@ -483,6 +483,10 @@ class ScheduleController extends GetxController {
     } on Map {
       //postLoginResp = e;
       rethrow;
+    } finally {
+      isRescheduleLoading.value = false;
+      isloading.value = false;
+      selectedStartTime.value = '';
     }
   }
 
@@ -501,6 +505,10 @@ class ScheduleController extends GetxController {
     todayPagingController.value.dispose();
     upcomingPagingController.value.dispose();
     completedPagingController.value.dispose();
+
+    isRescheduleLoading.value = false;
+    isloading.value = false;
+    selectedStartTime.value = '';
     super.onClose();
     update();
   }

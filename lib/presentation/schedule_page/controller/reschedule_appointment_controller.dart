@@ -17,7 +17,7 @@ class RescheduleAppointmentController extends GetxController {
       <AppointmentContent>[].obs;
   int? index;
   RxBool isRescheduleLoading = false.obs;
-
+  bool value = false;
   getTimes(String? stime, String? etime, String? interval) {
     Duration spaceDuration = Duration(
         minutes: int.parse(interval!.split(':')[1]),
@@ -59,6 +59,8 @@ class RescheduleAppointmentController extends GetxController {
   @override
   void onInit() {
     super.onInit;
+    selectedStartTime.value = '';
+    isRescheduleLoading.value = false;
   }
 
   Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
@@ -77,6 +79,29 @@ class RescheduleAppointmentController extends GetxController {
       rethrow;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> updateAppointment(var data) async {
+    try {
+      isRescheduleLoading.value = true;
+      value = (await Get.find<AppointmentApi>().updateAppointment(data));
+      // if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+      isRescheduleLoading.value = false;
+      selectedStartTime.value = '';
+
+      Get.back();
+    }
+    //   callGetAllAppointments(0, 1);
+    // } else {
+    //   callAppointmentsByPatientId(SharedPrefUtils.readPrefINt('patient_Id'));
+    // }
+    on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isRescheduleLoading.value = false;
+      selectedStartTime.value = '';
     }
   }
 }

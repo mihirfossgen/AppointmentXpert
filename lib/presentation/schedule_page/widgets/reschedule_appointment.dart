@@ -332,8 +332,6 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                       print(a);
                                       print(DateTime.now());
                                       print(a.isAfter(DateTime.now()));
-                                      controller.isRescheduleLoading.value =
-                                          true;
 
                                       if (a.isAfter(DateTime.now())) {
                                         var requestData = {
@@ -362,12 +360,11 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                           "update_time_in_min": 0
                                         };
                                         print(jsonEncode(requestData));
-                                        scheduleController
+                                        controller
                                             .updateAppointment(requestData);
                                       } else {
                                         controller.isRescheduleLoading.value =
                                             false;
-
                                         Get.back();
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((timeStamp) =>

@@ -91,70 +91,125 @@ class ScheduleTabContainerPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        child: TabBar(
-                          controller: controller.group125Controller,
-                          labelColor: ColorConstant.whiteA700,
-                          labelStyle: TextStyle(
-                            fontSize: getFontSize(
-                              14,
-                            ),
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelColor: ColorConstant.gray90001,
-                          unselectedLabelStyle: TextStyle(
-                            fontSize: getFontSize(
-                              14,
-                            ),
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          indicator: BoxDecoration(
-                            color: ColorConstant.blue600,
-                            borderRadius: BorderRadius.circular(
-                              getHorizontalSize(
-                                8,
+                        child: SharedPrefUtils.readPrefStr('role') == "PATIENT"
+                            ? TabBar(
+                                controller: controller.group126Controller,
+                                labelColor: ColorConstant.whiteA700,
+                                labelStyle: TextStyle(
+                                  fontSize: getFontSize(
+                                    14,
+                                  ),
+                                  fontFamily: 'Raleway',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                unselectedLabelColor: ColorConstant.gray90001,
+                                unselectedLabelStyle: TextStyle(
+                                  fontSize: getFontSize(
+                                    14,
+                                  ),
+                                  fontFamily: 'Raleway',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                indicator: BoxDecoration(
+                                  color: ColorConstant.blue600,
+                                  borderRadius: BorderRadius.circular(
+                                    getHorizontalSize(
+                                      8,
+                                    ),
+                                  ),
+                                ),
+                                onTap: (value) {
+                                  print(value);
+                                },
+                                tabs: [
+                                  const Tab(
+                                    child: Text(
+                                      "Today",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Text(
+                                      "lbl_upcoming".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : TabBar(
+                                controller: controller.group125Controller,
+                                labelColor: ColorConstant.whiteA700,
+                                labelStyle: TextStyle(
+                                  fontSize: getFontSize(
+                                    14,
+                                  ),
+                                  fontFamily: 'Raleway',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                unselectedLabelColor: ColorConstant.gray90001,
+                                unselectedLabelStyle: TextStyle(
+                                  fontSize: getFontSize(
+                                    14,
+                                  ),
+                                  fontFamily: 'Raleway',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                indicator: BoxDecoration(
+                                  color: ColorConstant.blue600,
+                                  borderRadius: BorderRadius.circular(
+                                    getHorizontalSize(
+                                      8,
+                                    ),
+                                  ),
+                                ),
+                                onTap: (value) {
+                                  print(value);
+                                },
+                                tabs: [
+                                  const Tab(
+                                    child: Text(
+                                      "Today",
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Text(
+                                      "lbl_upcoming".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Text(
+                                      "lbl_completed".tr,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                          onTap: (value) {
-                            print(value);
-                          },
-                          tabs: [
-                            const Tab(
-                              child: Text(
-                                "Today",
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                "lbl_upcoming".tr,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                "lbl_completed".tr,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                       SizedBox(
                           height: getVerticalSize(
                               MediaQuery.of(context).size.height),
                           //height: 600,
-                          child: TabBarView(
-                            //dragStartBehavior: DragStartBehavior.down,
-                            controller: controller.group125Controller,
-                            children: [
-                              SchedulePage("today"),
-                              SchedulePage("upcoming"),
-                              SchedulePage("completed"),
-                            ],
-                          )),
+                          child:
+                              SharedPrefUtils.readPrefStr('role') == "PATIENT"
+                                  ? TabBarView(
+                                      //dragStartBehavior: DragStartBehavior.down,
+                                      controller: controller.group126Controller,
+                                      children: [
+                                        SchedulePage("today"),
+                                        SchedulePage("upcoming"),
+                                      ],
+                                    )
+                                  : TabBarView(
+                                      //dragStartBehavior: DragStartBehavior.down,
+                                      controller: controller.group125Controller,
+                                      children: [
+                                        SchedulePage("today"),
+                                        SchedulePage("upcoming"),
+                                        SchedulePage("completed"),
+                                      ],
+                                    )),
                     ],
                   ),
                 ]),
