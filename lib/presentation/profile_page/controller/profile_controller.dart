@@ -1,8 +1,13 @@
+import 'package:appointmentxpert/network/api/patient_api.dart';
 import 'package:appointmentxpert/network/api/staff_api.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../models/patient_model.dart';
+import '../../../models/staff_model.dart';
+import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 
 class ProfileController extends GetxController {
   Rx<TextEditingController> from = TextEditingController().obs;
@@ -10,7 +15,9 @@ class ProfileController extends GetxController {
   TextEditingController dob = TextEditingController();
   TextEditingController timeInterval = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
+  RxBool sentNotification = false.obs;
+  Rx<StaffData> staffData = StaffData().obs;
+  Rx<PatientData> patientData = PatientData().obs;
   getDate() {
     DateTime? date = DateTime.now();
     WidgetsBinding.instance.addPostFrameCallback((_) {});
@@ -69,6 +76,16 @@ class ProfileController extends GetxController {
     return null;
   }
 
+  getnotification() async {
+    bool notificationflag =
+        await SharedPrefUtils.readPrefBool('notificationFlag');
+    if (notificationflag == true) {
+      sentNotification.value = true;
+    } else {
+      sentNotification.value = false;
+    }
+  }
+
   timeIntervalValidator(String value) {
     if (value == '') {
       return 'Please enter time interval';
@@ -84,6 +101,7 @@ class ProfileController extends GetxController {
   Future<void> staffUpdate(Map<String, dynamic> req) async {
     try {
       bool a = await Get.find<StaffApi>().staffUpdate(req);
+      timeInterval.text = '';
       Get.back();
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Get.snackbar(
           "Data Updated Successfully!!", '',
@@ -92,5 +110,32 @@ class ProfileController extends GetxController {
       print(e);
       rethrow;
     }
+  }
+
+  Future<void> staffnotificationUpdate(Map<String, dynamic> req) async {
+    try {
+      var response = await Get.find<StaffApi>().staffNotificationUpdate(req);
+      staffData.value = response;
+    } on Map catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<void> patientnotificationUpdate(Map<String, dynamic> req) async {
+    try {
+      var response = await Get.find<PatientApi>().patientUpdate(req);
+      patientData.value = response;
+    } on Map catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    getnotification();
   }
 }

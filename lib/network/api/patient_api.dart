@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/logger.dart';
+import '../../core/utils/progress_dialog_utils.dart';
 import '../../models/patient_list_model.dart';
 import '../../models/patient_model.dart';
 import '../dio_client.dart';
@@ -39,6 +40,28 @@ class PatientApi {
       );
 
       rethrow;
+    }
+  }
+
+  Future<PatientData> patientUpdate(var req) async {
+    ProgressDialogUtils.showProgressDialog();
+    try {
+      final Response response =
+          await _apiService.post(Endpoints.patientUpdate, data: req);
+      print(response.data['t']);
+      PatientData model = PatientData();
+      model.patient = Patients.fromJson(response.data['t']);
+      return model;
+    } on DioError catch (e) {
+      print("e -- $e");
+      ProgressDialogUtils.hideProgressDialog();
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      ProgressDialogUtils.hideProgressDialog();
+      print("e ----- $e");
+      throw Exception(e);
+    } finally {
+      ProgressDialogUtils.hideProgressDialog();
     }
   }
 

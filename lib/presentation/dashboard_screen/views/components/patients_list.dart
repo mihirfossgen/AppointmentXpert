@@ -20,18 +20,21 @@ import '../../../../widgets/responsive.dart';
 import '../../../add_patient_screens/add_patient_screen.dart';
 import '../../../appointment_booking_screen/appointment_booking.dart';
 import '../../controller/dashboard_controller.dart';
+import '../../controller/patient_list_controller.dart';
 import '../../shared_components/search_field.dart';
 import '../screens/dashboard_screen.dart';
 
-class PatientsList extends GetView<DashboardController> {
+class PatientsList extends GetView<PatientListController> {
   List<Content>? data;
   List<Contents>? doctorsList;
   PatientsList({super.key, this.data, this.doctorsList});
 
-  DashboardController dashboardController = Get.put(DashboardController());
+  //DashboardController dashboardController = Get.put(DashboardController());
 
   final DateFormat formatter = DateFormat.yMMMMd('en_US');
   final DateFormat formatters = DateFormat('dd-MM-yyyy');
+
+  PatientListController dashboardController = Get.put(PatientListController());
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +65,8 @@ class PatientsList extends GetView<DashboardController> {
             showChildOpacityTransition: false,
             onRefresh: () async {
               controller.isloadingRecentPatients.value = true;
-              // controller.patientPagingController =
-              //     PagingController(firstPageKey: 0);
+              controller.patientPagingController =
+                  PagingController(firstPageKey: 0);
               controller.callRecentPatientList(0);
             },
             child: SingleChildScrollView(

@@ -22,8 +22,8 @@ import '../log_out_pop_up_dialog/log_out_pop_up_dialog.dart';
 import 'controller/profile_controller.dart';
 
 class ProfilePage extends GetWidget<ProfileController> {
-  final StaffData? staffData;
-  final PatientData? patientData;
+  StaffData? staffData;
+  PatientData? patientData;
   ProfilePage(this.staffData, this.patientData, {super.key});
 
   @override
@@ -38,6 +38,7 @@ class ProfilePage extends GetWidget<ProfileController> {
           itemBuilder: (context, index) {
             return doctorCard(
                 id: staffData?.id,
+                userid: staffData?.userId,
                 firstName: staffData?.firstName,
                 lastName: staffData?.lastName,
                 prefix: staffData?.prefix,
@@ -51,26 +52,10 @@ class ProfilePage extends GetWidget<ProfileController> {
                 address: staffData?.address,
                 profile: staffData?.profilePicture,
                 startTime: staffData?.startTime,
-                endTime: staffData?.endTime);
+                endTime: staffData?.endTime,
+                notificationFlag: staffData?.notificationFlag);
           }),
     );
-    // : Container(
-    //     height: MediaQuery.of(context).size.height,
-    //     decoration: BoxDecoration(
-    //       gradient: LinearGradient(
-    //         begin: Alignment(-1.0, 0.0),
-    //         end: Alignment(1.0, 0.0),
-    //         colors: [
-    //           Theme.of(context).primaryColorLight,
-    //           Theme.of(context).primaryColorDark,
-    //         ], // whitish to gray
-    //       ),
-    //     ),
-    //     alignment: Alignment.center,
-    //     child: CircularProgressIndicator(
-    //       valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-    //     ),
-    //   );
   }
 
   Widget patientProfile() {
@@ -82,6 +67,7 @@ class ProfilePage extends GetWidget<ProfileController> {
           itemBuilder: (context, index) {
             return patientCard(
                 id: patientData?.patient?.id,
+                userId: patientData?.patient?.userId,
                 firstName: patientData?.patient?.firstName,
                 lastName: patientData?.patient?.lastName,
                 prefix: patientData?.patient?.prefix ?? '',
@@ -97,6 +83,7 @@ class ProfilePage extends GetWidget<ProfileController> {
 
   Widget doctorCard(
       {int? id,
+      int? userid,
       String? firstName,
       String? lastName,
       String? prefix,
@@ -110,7 +97,8 @@ class ProfilePage extends GetWidget<ProfileController> {
       String? address,
       String? profile,
       String? startTime,
-      String? endTime}) {
+      String? endTime,
+      bool? notificationFlag}) {
     return Container(
       width: MediaQuery.of(Get.context!).size.width * 1.0,
       alignment: Alignment.center, // where to position the child
@@ -201,15 +189,7 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                     Get.context!)
                                                 ? 'assets'
                                                     '/images/default_profile.png'
-                                                : '/images/default_profile.png')
-                                    // : CustomImageView(
-                                    //     imagePath: !Responsive.isDesktop(
-                                    //             Get.context!)
-                                    //         ? 'assets' +
-                                    //             '/images/default_profile.png'
-                                    //         : '/images/default_profile.png',
-                                    //   ),
-                                    ),
+                                                : '/images/default_profile.png')),
                               ),
                             ),
                           ],
@@ -263,25 +243,70 @@ class ProfilePage extends GetWidget<ProfileController> {
                   ),
                   Center(
                     child: Align(
-                      alignment: Alignment.center,
-                      child: RatingBar.builder(
-                        initialRating: rank ?? 0.0,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        unratedColor: Colors.amber.withAlpha(50),
-                        itemCount: 5,
-                        itemSize: 30.0,
-                        itemPadding:
-                            const EdgeInsets.symmetric(horizontal: 4.0),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Notifications",
+                                style: TextStyle(fontSize: 18)),
+                            Row(
+                              children: [
+                                const Text("No",
+                                    style: TextStyle(fontSize: 18)),
+                                Obx(() => Switch(
+                                      onChanged: (value) async {
+                                        controller.sentNotification.value =
+                                            value;
+                                        SharedPrefUtils.saveBool(
+                                            'notificationFlag', value);
+                                        var req = {
+                                          "id": id,
+                                          "notificationFlag":
+                                              controller.sentNotification.value,
+                                          "status": "ACTIVE",
+                                          "userId": userid
+                                        };
+                                        print(jsonEncode(req));
+                                        await controller
+                                            .staffnotificationUpdate(req)
+                                            .then((value) {
+                                          staffData =
+                                              controller.staffData.value;
+                                        });
+                                      },
+                                      activeColor: Colors.white,
+                                      activeTrackColor: Colors.blue,
+                                      inactiveThumbColor:
+                                          Colors.blueGrey.shade600,
+                                      inactiveTrackColor: Colors.grey.shade400,
+                                      splashRadius: 50.0,
+                                      value: controller.sentNotification.value,
+                                    )),
+                                const Text("Yes",
+                                    style: TextStyle(fontSize: 18)),
+                              ],
+                            )
+                          ],
+                        )
+
+                        // RatingBar.builder(
+                        //   initialRating: rank ?? 0.0,
+                        //   minRating: 1,
+                        //   direction: Axis.horizontal,
+                        //   allowHalfRating: true,
+                        //   unratedColor: Colors.amber.withAlpha(50),
+                        //   itemCount: 5,
+                        //   itemSize: 30.0,
+                        //   itemPadding:
+                        //       const EdgeInsets.symmetric(horizontal: 4.0),
+                        //   itemBuilder: (context, _) => const Icon(
+                        //     Icons.star,
+                        //     color: Colors.amber,
+                        //   ),
+                        //   onRatingUpdate: (rating) {},
+                        //   updateOnDrag: true,
+                        // ),
                         ),
-                        onRatingUpdate: (rating) {},
-                        updateOnDrag: true,
-                      ),
-                    ),
                   ),
                   address != null
                       ? sectionTitle(Get.context!, "Address")
@@ -584,6 +609,7 @@ class ProfilePage extends GetWidget<ProfileController> {
 
   Widget patientCard({
     int? id,
+    int? userId,
     String? firstName,
     String? lastName,
     String? prefix,
@@ -744,6 +770,69 @@ class ProfilePage extends GetWidget<ProfileController> {
                       ),
                     ],
                   ),
+                ),
+                Center(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Notifications",
+                              style: TextStyle(fontSize: 18)),
+                          Row(
+                            children: [
+                              const Text("No", style: TextStyle(fontSize: 18)),
+                              Obx(() => Switch(
+                                    onChanged: (value) async {
+                                      controller.sentNotification.value = value;
+                                      SharedPrefUtils.saveBool(
+                                          'notificationFlag', value);
+                                      var req = {
+                                        "id": id,
+                                        "notificationFlag":
+                                            controller.sentNotification.value,
+                                        "userId": userId
+                                      };
+                                      print(jsonEncode(req));
+                                      await controller
+                                          .patientnotificationUpdate(req)
+                                          .then((value) {
+                                        patientData =
+                                            controller.patientData.value;
+                                      });
+                                    },
+                                    activeColor: Colors.white,
+                                    activeTrackColor: Colors.blue,
+                                    inactiveThumbColor:
+                                        Colors.blueGrey.shade600,
+                                    inactiveTrackColor: Colors.grey.shade400,
+                                    splashRadius: 50.0,
+                                    value: controller.sentNotification.value,
+                                  )),
+                              const Text("Yes", style: TextStyle(fontSize: 18)),
+                            ],
+                          )
+                        ],
+                      )
+
+                      // RatingBar.builder(
+                      //   initialRating: rank ?? 0.0,
+                      //   minRating: 1,
+                      //   direction: Axis.horizontal,
+                      //   allowHalfRating: true,
+                      //   unratedColor: Colors.amber.withAlpha(50),
+                      //   itemCount: 5,
+                      //   itemSize: 30.0,
+                      //   itemPadding:
+                      //       const EdgeInsets.symmetric(horizontal: 4.0),
+                      //   itemBuilder: (context, _) => const Icon(
+                      //     Icons.star,
+                      //     color: Colors.amber,
+                      //   ),
+                      //   onRatingUpdate: (rating) {},
+                      //   updateOnDrag: true,
+                      // ),
+                      ),
                 ),
                 sectionTitle(Get.context!, "Basic information"),
                 Container(
@@ -1015,6 +1104,7 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                     "rescheduleTimeInMin":
                                                         controller
                                                             .timeInterval.text,
+                                                    "status": "ACTIVE",
                                                     "id": staffData?.id ?? 0
                                                   };
                                                   print(jsonEncode(data));
@@ -1032,6 +1122,7 @@ class ProfilePage extends GetWidget<ProfileController> {
                             ).then((value) {
                               if (value == null) {
                                 controller.dob.clear();
+                                controller.timeInterval.clear();
                               }
                             });
                           });

@@ -203,8 +203,7 @@ class ScheduleController extends GetxController {
     if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       //SharedPrefUtils.readPrefINt('employee_Id')
       callGetAllAppointments(0, 20);
-      final DateFormat formatter = DateFormat('dd-MM-yyyy');
-      callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
+
       final DateFormat format = DateFormat('yyyy-MM-dd');
       reschduleDate.text = format.format(DateTime.now());
       getTimes();
@@ -404,27 +403,6 @@ class ScheduleController extends GetxController {
       rethrow;
     } finally {
       isloading.value = false;
-    }
-  }
-
-  Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
-    String date,
-  ) async {
-    try {
-      isLoading.value = true;
-      var response = (await Get.find<AppointmentApi>()
-          .getAppointmentDetailsViaDateForStaff(
-              date, SharedPrefUtils.readPrefINt('employee_Id')));
-      List<dynamic> data = response.data;
-      List<AppointmentContent> list =
-          data.map((e) => AppointmentContent.fromJson(e)).toList();
-      getAppointmentDetailsByDate.value = list;
-      return list;
-    } on Map {
-      //postLoginResp = e;
-      rethrow;
-    } finally {
-      isLoading.value = false;
     }
   }
 

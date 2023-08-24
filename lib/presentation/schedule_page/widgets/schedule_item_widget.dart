@@ -4,6 +4,7 @@ import 'package:appointmentxpert/core/utils/time_calculation_utils.dart';
 import 'package:appointmentxpert/presentation/schedule_page/widgets/reschedule_appointment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/app_export.dart';
 import '../../../core/utils/color_constant.dart';
@@ -17,6 +18,7 @@ import '../../../theme/app_style.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_image_view.dart';
 import '../../../widgets/responsive.dart';
+import '../controller/reschedule_appointment_controller.dart';
 import '../controller/schedule_controller.dart';
 
 // ignore: must_be_immutable
@@ -520,27 +522,43 @@ class ScheduleItemWidget extends StatelessWidget {
                       if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
                         WidgetsBinding.instance
                             .addPostFrameCallback((timeStamp) {
-
+                          RescheduleAppointmentController controllers =
+                              Get.put(RescheduleAppointmentController());
+                          final DateFormat formatter = DateFormat('dd-MM-yyyy');
+                          controllers.callGetAppointmentDetailsForDate(
+                              formatter.format(DateTime.now()),
+                              appointment.examiner?.id ?? 0);
+                          controllers.getTimes(
+                              appointment.examiner?.startTime
+                                      ?.replaceAll(" PM", "") ??
+                                  "11:45",
+                              appointment.examiner?.endTime
+                                      ?.replaceAll(" PM", "") ??
+                                  "17:45",
+                              appointment.examiner?.timeSlotForBookingInMin
+                                          .toString() ==
+                                      "0"
+                                  ? "00:15"
+                                  : appointment
+                                      .examiner?.timeSlotForBookingInMin
+                                      .toString());
                           Get.to(() => ReschduleAppointment(
-                              appointment: appointment,appointmentTime:
-                          appointment.updateTimeInMin == 0
-                              ? controller
-                              .getformattedtime(
-                              appointment.date ?? "",
-                              Get.context!)
-                              .replaceAll(' AM', ' PM')
-                              : TimeCalculationUtils()
-                              .startTimeCalCulation(
-                              appointment.startTime,
-                              appointment.updateTimeInMin)
-                          ));
+                              appointment: appointment,
+                              appointmentTime: appointment.updateTimeInMin == 0
+                                  ? controller
+                                      .getformattedtime(
+                                          appointment.date ?? "", Get.context!)
+                                      .replaceAll(' AM', ' PM')
+                                  : TimeCalculationUtils().startTimeCalCulation(
+                                      appointment.startTime,
+                                      appointment.updateTimeInMin)));
 
                           /*showDialog(
                             context: Get.context!,
                             builder: (context) => AlertDialog(
                               title: const Text('Reschedule Appointment'),
                               actions: [
-                                *//*ReschduleAppointment(
+                                */ /*ReschduleAppointment(
                                   appointment: appointment,
                                   appointmentTime:
                                       appointment.updateTimeInMin == 0
@@ -553,7 +571,7 @@ class ScheduleItemWidget extends StatelessWidget {
                                               .startTimeCalCulation(
                                                   appointment.startTime,
                                                   appointment.updateTimeInMin),
-                                )*//*
+                                )*/ /*
                                 // Column(
                                 //   children: [
                                 //     Padding(

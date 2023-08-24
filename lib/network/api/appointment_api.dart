@@ -247,7 +247,7 @@ class AppointmentApi {
 
     try {
       final Response response = await _apiService.post(
-        "${Endpoints.getappointmentDatesWithoutStaffId}&rescheduleDate=$data",
+        "${Endpoints.getappointmentDatesWithoutStaffId}?rescheduleDate=$data",
         options: Options(headers: {"content-type": "application/json"}),
       );
       return response;

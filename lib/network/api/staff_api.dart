@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/logger.dart';
+import '../../core/utils/progress_dialog_utils.dart';
 import '../../models/getallEmplyesList.dart';
 import '../../models/staff_list_model.dart';
 import '../../models/staff_model.dart';
@@ -71,6 +72,24 @@ class StaffApi {
       print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
+
+  Future<StaffData> staffNotificationUpdate(var data) async {
+    ProgressDialogUtils.showProgressDialog();
+    try {
+      final Response response =
+          await _apiService.post(Endpoints.staffUpdate, data: data);
+      ProgressDialogUtils.hideProgressDialog();
+      return StaffData.fromJson(response.data);
+    } on DioError catch (e) {
+      print("e -- $e");
+      ProgressDialogUtils.hideProgressDialog();
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      ProgressDialogUtils.hideProgressDialog();
       print("e ----- $e");
       throw Exception(e);
     }

@@ -38,13 +38,14 @@ class DoctorDetailController extends GetxController {
   RxList<AppointmentContent> getAppointmentDetailsByDate =
       <AppointmentContent>[].obs;
   RxString selectedStartTime = ''.obs;
+  DateTime? initalTime;
   int? index;
   final formKey = GlobalKey<FormState>();
   Rx<DateTime> dateTime = DateTime.now().obs;
   RxBool pleasefillAllFields = false.obs;
   List<DoctorList>? list;
   int? deptId;
-
+  RxInt selectedStaffID = 0.obs;
   List<String>? times;
 
   getdeptId(int id) {
@@ -59,19 +60,17 @@ class DoctorDetailController extends GetxController {
     finalDate = formatter.format(selectedDate);
   }
 
-  getTimes() {
-    String startTime = "11:45";
-    String closeTime = "17:45";
-    String space = "00:15";
+  getTimes(String? stime, String? etime, String? interval) {
     Duration spaceDuration = Duration(
-        minutes: int.parse(space.split(':')[1]),
-        hours: int.parse(space.split(':')[0]));
+        minutes: int.parse(interval!.split(':')[1]),
+        hours: int.parse(interval.split(':')[0]));
     TimeOfDay start = TimeOfDay(
-        hour: int.parse(startTime.split(':')[0]),
-        minute: int.parse(startTime.split(':')[1]));
+        hour: int.parse(stime!.split(':')[0]),
+        minute: int.parse(stime.split(':')[1]));
     TimeOfDay close = TimeOfDay(
-        hour: int.parse(closeTime.split(':')[0]),
-        minute: int.parse(closeTime.split(':')[1]));
+        hour: int.parse(etime!.split(':')[0]),
+        minute: int.parse(etime.split(':')[1]));
+
     List<String> timeSlots = [];
     while (start.hour < close.hour ||
         (start.hour == close.hour && start.minute <= close.minute)) {
@@ -266,19 +265,6 @@ class DoctorDetailController extends GetxController {
     genderList.refresh();
   }
 
-  Rx<List<SelectionPopupModel>> counsultingDoctor = Rx(<SelectionPopupModel>[]);
-
-  onConsultingDoctorSelect(dynamic value) {
-    for (var element in counsultingDoctor.value) {
-      element.isSelected = false;
-      if (element.id == value.id) {
-        examinerId = element.id;
-        element.isSelected = true;
-      }
-    }
-    counsultingDoctor.refresh();
-  }
-
   bool valueS = false;
 
   Future<void> callCreateLogin(Map<String, dynamic> req) async {
@@ -296,12 +282,11 @@ class DoctorDetailController extends GetxController {
   }
 
   Future<List<AppointmentContent>> callGetAppointmentDetailsForDate(
-      String date) async {
+      String date, int doctorsId) async {
     try {
       isLoading.value = true;
       var response = (await Get.find<AppointmentApi>()
-          .getAppointmentDetailsViaDateForStaff(
-              date, SharedPrefUtils.readPrefINt('employee_Id')));
+          .getAppointmentDetailsViaDateForStaff(date, doctorsId));
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
@@ -314,6 +299,30 @@ class DoctorDetailController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Rx<List<SelectionPopupModel>> counsultingDoctor = Rx(<SelectionPopupModel>[]);
+
+  onConsultingDoctorSelect(SelectionPopupModel values) async {
+    SelectionPopupModel value = values;
+    for (var element in counsultingDoctor.value) {
+      print(element.title);
+      element.isSelected = false;
+      if (element.id == value.id) {
+        examinerId = element.id;
+        element.isSelected = true;
+        final DateFormat formatter = DateFormat('dd-MM-yyyy');
+        await callGetAppointmentDetailsForDate(
+                formatter.format(DateTime.now()), element.id ?? 0)
+            .then((value) {
+          getTimes(
+              element.startTime?.replaceAll(" PM", "") ?? "11:45",
+              element.endTime?.replaceAll(" PM", "") ?? "17:45",
+              element.interval == "0" ? "00:15" : element.interval);
+        });
+      }
+    }
+    counsultingDoctor.refresh();
   }
 
   setFromTime(String text) {
@@ -329,11 +338,8 @@ class DoctorDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
-    callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     final DateFormat format = DateFormat('yyyy-MM-dd');
     dob.text = format.format(DateTime.now());
-    getTimes();
   }
 
   @override
