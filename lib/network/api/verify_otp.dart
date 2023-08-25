@@ -74,7 +74,7 @@ class VerifyOtpApi {
     String deviceType = Platform.operatingSystem;
     try {
       final Response response = await _apiService.get(
-          "${Endpoints.verifyEmailOtp}otp=$otp&userName=$number&token=$deviceToken&deviceType=$deviceType");
+          "${Endpoints.verifyEmailOtp}deviceType=$deviceType&otp=$otp&token=$deviceToken&type=login&userName=$number");
       return OtpModel.fromJson(response.data);
     } on DioError catch (e) {
       print("e -- $e");

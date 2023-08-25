@@ -93,9 +93,9 @@ class _AppointmentInProgress extends StatelessWidget {
                             onTap: () {}),
                         DataCell(
                             Text(
-                              '${data[index].patient?.prefix}'
-                              '${data[index].patient?.firstName} '
-                              '${data[index].patient?.lastName}',
+                              '${data[index].examiner?.prefix}'
+                              '${data[index].examiner?.firstName} '
+                              '${data[index].examiner?.lastName}',
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                             ),

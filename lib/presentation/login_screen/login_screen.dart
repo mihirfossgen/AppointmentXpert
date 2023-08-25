@@ -390,19 +390,16 @@ class LoginScreen extends GetWidget<LoginController> {
           onPressed: () async {
             if (controller.trySubmit()) {
               controller.isloading.value = true;
-              if (controller
-                  .detectPhoneNumber(controller.emailController.text)) {
-                bool resp = await controller.callOtp(
-                    controller.emailController.text, "login");
-                if (resp) {
-                  VerifyNumberController verifyNumberController =
-                      Get.put(VerifyNumberController());
+
+              bool resp = await controller.callOtp(
+                  controller.emailController.text, "login");
+              if (resp) {
+                VerifyNumberController verifyNumberController =
+                    Get.put(VerifyNumberController());
+                if (controller
+                    .detectPhoneNumber(controller.emailController.text)) {
                   showVerifyController(false);
-                }
-              } else {
-                bool resp = await controller.callEmailOtp(
-                    controller.emailController.text, "login");
-                if (resp) {
+                } else {
                   showVerifyController(true);
                 }
               }

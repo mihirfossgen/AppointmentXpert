@@ -89,7 +89,6 @@ dependencies:
   flutter_custom_selector: ^0.0.3
   flutter_pdfview: ^1.2.7
   # file_saver: ^0.2.7
-  share_plus: ^7.0.2
   easy_stepper: ^0.7.2
   another_flushbar: ^1.10.17
   ripple_button: ^3.4.1
@@ -97,7 +96,6 @@ dependencies:
   empty_widget: ^0.0.3
   time_range_picker: ^2.2.0
   stepper_page_view: ^0.0.2
-  pdfx: ^2.4.0
   introduction_screen: ^3.1.11
   sign_in_with_apple: ^5.0.0
   liquid_pull_to_refresh: ^3.0.1
@@ -114,6 +112,8 @@ dependencies:
   sign_in_button: ^3.2.0
   image_network: ^2.5.4+1
   email_validator: ^2.1.17
+  syncfusion_flutter_pdfviewer: ^22.2.10
+
 
 dev_dependencies:
   flutter_test:
@@ -161,6 +161,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/lottie/
+    - assets/pdf/
   fonts: 
     - family: Inter
       fonts: 

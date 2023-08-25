@@ -52,7 +52,9 @@ class ScheduleItemWidget extends StatelessWidget {
           elevation: 4,
           color: ColorConstant.whiteA700,
           child: InkWell(
-            child: loadCard(),
+            child: SharedPrefUtils.readPrefStr('role') == "PATIENT"
+                ? loadCardStaff()
+                : loadCard(),
             onTap: () {
               // Navigator.push(
               //     Get.context!,
@@ -63,6 +65,126 @@ class ScheduleItemWidget extends StatelessWidget {
               //             )));
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget loadCardStaff() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 80,
+              width: 80,
+              //decoration: BoxDecoration(
+              //    color: Colors.black, borderRadius: BorderRadius.circular(12)),
+              child: appointment.patient?.profilePicture != null
+                  ? CachedNetworkImage(
+                      fit: BoxFit.contain,
+                      imageUrl: Uri.encodeFull(
+                        Endpoints.baseURL +
+                            Endpoints.downLoadEmployePhoto +
+                            (appointment.examiner?.uploadedProfilePath ?? ""),
+                      ),
+                      httpHeaders: {
+                        "Authorization":
+                            "Bearer ${SharedPrefUtils.readPrefStr("auth_token")}"
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      errorWidget: (context, url, error) {
+                        return Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(10)),
+                        );
+                      },
+                    )
+                  : CustomImageView(
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
+                      imagePath: !Responsive.isDesktop(Get.context!)
+                          ? 'assets' '/images/default_profile.png'
+                          : '/images/default_profile.png',
+                    ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '${appointment.examiner?.prefix.toString()}'
+                      '${appointment.examiner?.firstName.toString()} ${appointment.examiner?.lastName.toString()}',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "${controller.getformattedDate(appointment.date.toString())} ${appointment.updateTimeInMin == 0 ? controller.getformattedtime(appointment.date ?? "", Get.context!).replaceAll(' AM', ' PM') : TimeCalculationUtils().startTimeCalCulation(appointment.startTime, appointment.updateTimeInMin)}",
+                      style: AppStyle.txtInterRegular14Gray700,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "Status - ${appointment.status}",
+                      style: AppStyle.txtManrope12,
+                    ),
+                    // const SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Text(
+                    //   appointment.department?.name ?? "",
+                    //   style: AppStyle.txtManrope12,
+                    // ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Text(
+                    //   appointment.purpose ?? 'N/A',
+                    //   style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                    // ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      width: 220,
+                      child: Text(
+                        'Note: ${appointment.note}',
+                        maxLines: 3,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyle.txtInterRegular14,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    loadActionButtons(),
+                  ],
+                ),
+                // SizedBox(width: 50),
+              ],
+            ),
+          ],
         ),
       ),
     );

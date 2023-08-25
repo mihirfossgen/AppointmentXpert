@@ -110,7 +110,6 @@ class LogOutPopUpDialog extends StatelessWidget {
             ),
             child: GestureDetector(
               onTap: () {
-                SharedPrefUtils.clearPreferences();
                 Get.back();
               },
               child: Text(

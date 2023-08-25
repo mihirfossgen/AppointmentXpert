@@ -280,7 +280,7 @@ class ContentExaminer {
   String? fatherName;
   String? lastName;
   String? sex;
-  dynamic uploadedProfilePath;
+  String? uploadedProfilePath;
   String? dob;
   String? email;
   String? mobile;
