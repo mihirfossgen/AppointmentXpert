@@ -57,7 +57,11 @@ class ScheduleTabContainerPage extends StatelessWidget {
               //pagingController.addPageRequestListener((pageKey) {
               if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
                 //SharedPrefUtils.readPrefINt('employee_Id')
-                scheduleController.callGetAllAppointments(0, 20);
+                if (SharedPrefUtils.readPrefStr('role') == "DOCTOR") {
+                  scheduleController.callGetAllAppointmentsByStaffId(0, 20);
+                } else {
+                  scheduleController.callGetAllAppointments(0, 20);
+                }
               } else {
                 scheduleController.callGetAllAppointmentsForPatient(0);
               }

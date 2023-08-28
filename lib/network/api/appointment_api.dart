@@ -14,6 +14,7 @@ import '../../models/getAllApointments.dart';
 import '../../models/patient_model.dart';
 import '../../models/patient_visit_model.dart';
 import '../../models/treatmentmodel.dart';
+import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../widgets/responsive.dart';
 import '../dio_client.dart';
 import '../endpoints.dart';
@@ -25,6 +26,27 @@ class AppointmentApi {
     try {
       final Response response =
           await _apiService.get(Endpoints.getAllAppointmentsWithoutPaged);
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      return list;
+      // return GetAllAppointments.fromJson(response.data);
+    } on DioError catch (e) {
+      print("e -- $e");
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
+
+  Future<List<AppointmentContent>> getAllAppointmentsByStaffId(
+      int pageValue) async {
+    int staffId = await SharedPrefUtils.readPrefINt('employee_Id');
+    print("${Endpoints.appointmentByUserId}ExaminerId=$staffId&Role=DOCTOR");
+    try {
+      final Response response = await _apiService.get(
+          "${Endpoints.appointmentByUserId}ExaminerId=$staffId&Role=DOCTOR");
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
@@ -299,6 +321,25 @@ class AppointmentApi {
       debugPrint('ssssss');
       var response =
           await _apiService.get(Endpoints.getReceptionistTodayAppoitments);
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      return list;
+    } on DioError catch (e) {
+      print("e -- $e");
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
+
+  Future<List<AppointmentContent>> getAllDoctorTodayAppointment() async {
+    int staffId = await SharedPrefUtils.readPrefINt('employee_Id');
+    try {
+      debugPrint('ssssss');
+      var response = await _apiService.get(
+          "${Endpoints.getStaffToadyAppointments}ExaminerId=$staffId&Role=DOCTOR");
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();

@@ -152,7 +152,10 @@ class DashboardController extends GetxController {
       getUpcomingAppointments(0, true);
     } else {
       callStaffData(SharedPrefUtils.readPrefINt('employee_Id'));
-      callStaffTodayAppointments();
+
+      role == "DOCTOR"
+          ? callStaffTodayAppointmentsByStaffid()
+          : callStaffTodayAppointments();
       callStaffUpcomingAppointments();
       callStaffList(0);
       print(patientPagingController);
@@ -163,7 +166,10 @@ class DashboardController extends GetxController {
       callEmergencyPatientList();
       getTimes();
       final DateFormat formatter = DateFormat('dd-MM-yyyy');
-      callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
+      role == "DOCTOR"
+          ? callGetAppointmentDetailsForDateByExaminerId(
+              formatter.format(DateTime.now()))
+          : callGetAppointmentDetailsForDate(formatter.format(DateTime.now()));
     }
     super.onInit();
   }
@@ -319,10 +325,32 @@ class DashboardController extends GetxController {
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
-      for (var i = 0; i < list.length; i++) {
-        print(list[i].startTime);
-      }
+
       getAppointmentDetailsByDate.value = list;
+
+      return list;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isloadingStaffData.value = false;
+    }
+  }
+
+  Future<List<AppointmentContent>> callGetAppointmentDetailsForDateByExaminerId(
+    String date,
+  ) async {
+    int staffId = await SharedPrefUtils.readPrefINt('employee_Id');
+    try {
+      isloadingStaffData.value = true;
+      var response = (await Get.find<AppointmentApi>()
+          .getAppointmentDetailsViaDateForStaff(date, staffId));
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+
+      getAppointmentDetailsByDate.value = list;
+
       return list;
     } on Map {
       //postLoginResp = e;
@@ -553,6 +581,48 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<void> callStaffTodayAppointmentsByStaffid() async {
+    try {
+      isloadingStaffTodayAppointments.value = true;
+      var response =
+          (await Get.find<AppointmentApi>().getAllDoctorTodayAppointment());
+      List<AppointmentContent> list = response;
+      //List<AppointmentContent> match = [];
+      List<AppointmentContent> appointments = list
+          .where((i) =>
+              i.status?.toLowerCase() != 'completed' &&
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
+      appointments.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      staffTodaysData.value = appointments;
+      if (appointments.isNotEmpty) {
+        currentStaffAppointmentData.value = appointments[0];
+      }
+      List<AppointmentContent> totalTodayList = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
+      totalTodayList.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      staffTodaysTotalData.value = totalTodayList;
+
+      List<AppointmentContent> completedList = list
+          .where((i) =>
+              i.status?.toLowerCase() == 'completed' &&
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
+      completedList.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      staffTodaysCompletedData.value = completedList;
+    } on Map {
+      //postLoginResp = e;
+      rethrow;
+    } finally {
+      isloadingStaffTodayAppointments.value = false;
+    }
+  }
+
   dateFormat(String a) {
     final DateFormat formatter = DateFormat('dd-MMM-yyyy');
     return formatter.format(DateTime.parse(a));
@@ -566,17 +636,34 @@ class DashboardController extends GetxController {
       List<AppointmentContent> list = response;
       var now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
-      List<AppointmentContent> appointmentsUpcoming = list
-          .where(
-            (i) =>
-                i.active == true &&
-                !formatter
-                    .parse(i.date!)
-                    .isBefore(formatter.parse(now.toString())) &&
-                i.status?.toLowerCase() != "completed" &&
-                formatter.parse(i.date!) != formatter.parse(now.toString()),
-          )
-          .toList();
+      List<AppointmentContent> appointmentsUpcoming;
+      if (SharedPrefUtils.readPrefStr('role') == 'DOCTOR') {
+        appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed" &&
+                  formatter.parse(i.date!) != formatter.parse(now.toString()) &&
+                  i.examiner?.id == SharedPrefUtils.readPrefINt('employee_Id'),
+            )
+            .toList();
+      } else {
+        appointmentsUpcoming = list
+            .where(
+              (i) =>
+                  i.active == true &&
+                  !formatter
+                      .parse(i.date!)
+                      .isBefore(formatter.parse(now.toString())) &&
+                  i.status?.toLowerCase() != "completed" &&
+                  formatter.parse(i.date!) != formatter.parse(now.toString()),
+            )
+            .toList();
+      }
+
       appointmentsUpcoming.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       upComingAppointments.value = appointmentsUpcoming;

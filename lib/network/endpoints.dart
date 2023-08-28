@@ -45,6 +45,8 @@ class Endpoints {
   static const String staffUpdate = "staff/update";
   static const String getPatientById = "patient/";
   static const String getReceptionistTodayAppoitments = "appointment/today";
+  static const String getStaffToadyAppointments =
+      "appointment/todayAppointmentWithExaminerId?";
   static const String getAllAppointmentsPaged = "appointment/list";
   static const String getAllAppointmentsWithoutPaged =
       "appointment/allAppointments";
@@ -68,4 +70,6 @@ class Endpoints {
   static const String getappointmentDatesWithStaffId =
       'appointment/getAppointmentDetailsForDate?id=';
   static const String patientUpdate = 'patient/update';
+  static const String appointmentByUserId =
+      "appointment/allAppointmentsWithExaminerId?";
 }

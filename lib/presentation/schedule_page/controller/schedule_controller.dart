@@ -202,7 +202,11 @@ class ScheduleController extends GetxController {
     //pagingController.addPageRequestListener((pageKey) {
     if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
       //SharedPrefUtils.readPrefINt('employee_Id')
-      callGetAllAppointments(0, 20);
+      if (SharedPrefUtils.readPrefStr('role') == "DOCTOR") {
+        callGetAllAppointmentsByStaffId(0, 20);
+      } else {
+        callGetAllAppointments(0, 20);
+      }
 
       final DateFormat format = DateFormat('yyyy-MM-dd');
       reschduleDate.text = format.format(DateTime.now());
@@ -275,6 +279,120 @@ class ScheduleController extends GetxController {
     try {
       allAppointments =
           (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
+      todayPagingController.value.itemList = [];
+      upcomingPagingController.value.itemList = [];
+      completedPagingController.value.itemList = [];
+      List<AppointmentContent> list = allAppointments;
+      var now = DateTime.now();
+      final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      List<AppointmentContent> appointmentsCompleted =
+          list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      List<AppointmentContent> appointmentsUpcoming = list
+          .where(
+            (i) =>
+                i.active == true &&
+                !formatter
+                    .parse(i.date!)
+                    .isBefore(formatter.parse(now.toString())) &&
+                i.status?.toLowerCase() != "completed",
+          )
+          .toList();
+      List<AppointmentContent> appointmentsToday = list
+          .where((i) =>
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+              i.active == true &&
+              i.status?.toLowerCase() != "completed")
+          .toList();
+      appointmentsToday.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      appointmentsUpcoming.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      appointmentsCompleted.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      todayPagingController.value.appendLastPage(appointmentsToday);
+      upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      completedPagingController.value.appendLastPage(appointmentsCompleted);
+      isloading.value = false;
+      update();
+      // final isLastPage = model.totalElements! <= _pageSize;
+      // if (isLastPage) {
+      //   todayPagingController.value.itemList = [];
+      //   upcomingPagingController.value.itemList = [];
+      //   completedPagingController.value.itemList = [];
+      //   List<AppointmentContent> list = model.content ?? [];
+      //   var now = DateTime.now();
+      //   final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      //   List<AppointmentContent> appointmentsCompleted =
+      //       list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      //   List<AppointmentContent> appointmentsUpcoming = list
+      //       .where(
+      //         (i) =>
+      //             i.active == true &&
+      //             !formatter
+      //                 .parse(i.date!)
+      //                 .isBefore(formatter.parse(now.toString())) &&
+      //             i.status?.toLowerCase() != "completed",
+      //       )
+      //       .toList();
+      //   List<AppointmentContent> appointmentsToday = list
+      //       .where((i) =>
+      //           dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+      //           i.active == true &&
+      //           i.status?.toLowerCase() != "completed")
+      //       .toList();
+      //   todayPagingController.value.appendLastPage(appointmentsToday);
+      //   upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      //   completedPagingController.value.appendLastPage(appointmentsCompleted);
+      //   isloading.value = false;
+      //   update();
+      // } else {
+      //   List<AppointmentContent> list = allAppointments;
+      //   var now = DateTime.now();
+      //   final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
+      //   List<AppointmentContent> appointmentsCompleted =
+      //       list.where((i) => i.status?.toLowerCase() == "completed").toList();
+      //   List<AppointmentContent> appointmentsUpcoming = list
+      //       .where(
+      //         (i) =>
+      //             i.active == true &&
+      //             !formatter
+      //                 .parse(i.date!)
+      //                 .isBefore(formatter.parse(now.toString())) &&
+      //             i.status?.toLowerCase() != "completed",
+      //       )
+      //       .toList();
+      //   List<AppointmentContent> appointmentsToday = list
+      //       .where((i) =>
+      //           dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
+      //           i.active == true &&
+      //           i.status?.toLowerCase() != "completed")
+      //       .toList();
+      //   final nextPageKey = pageNo + appointmentsToday.length;
+      //   todayPagingController.value.appendPage(appointmentsToday, nextPageKey);
+      //   upcomingPagingController.value
+      //       .appendPage(appointmentsUpcoming, nextPageKey);
+      //   completedPagingController.value
+      //       .appendPage(appointmentsCompleted, nextPageKey);
+      //   isloading.value = false;
+      //   update();
+      // }
+      // todayPagingController.refresh();
+      // upcomingPagingController.refresh();
+      // completedPagingController.refresh();
+    } on Map {
+      //postLoginResp = e;
+      todayPagingController.value.error = 'No data found.';
+      rethrow;
+    } finally {
+      isloading.value = false;
+    }
+  }
+
+  Future<void> callGetAllAppointmentsByStaffId(int pageNo, int count) async {
+    print("count ----- $count");
+    try {
+      allAppointments = (await Get.find<AppointmentApi>()
+          .getAllAppointmentsByStaffId(pageNo));
       todayPagingController.value.itemList = [];
       upcomingPagingController.value.itemList = [];
       completedPagingController.value.itemList = [];

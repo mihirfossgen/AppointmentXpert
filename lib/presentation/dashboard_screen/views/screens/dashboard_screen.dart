@@ -301,7 +301,9 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.patientPagingController.itemList = [];
             controller
                 .callStaffData(SharedPrefUtils.readPrefINt('employee_Id'));
-            controller.callStaffTodayAppointments();
+            SharedPrefUtils.readPrefStr("role") == "DOCTOR"
+                ? controller.callStaffTodayAppointmentsByStaffid()
+                : controller.callStaffTodayAppointments();
             controller.callStaffUpcomingAppointments();
             controller.callStaffList(0);
             controller.callRecentPatientList(0);
@@ -309,8 +311,11 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.callEmergencyPatientList();
 
             final DateFormat formatter = DateFormat('dd-MM-yyyy');
-            controller.callGetAppointmentDetailsForDate(
-                formatter.format(DateTime.now()));
+            SharedPrefUtils.readPrefStr("role") == "DOCTOR"
+                ? controller.callGetAppointmentDetailsForDateByExaminerId(
+                    formatter.format(DateTime.now()))
+                : controller.callGetAppointmentDetailsForDate(
+                    formatter.format(DateTime.now()));
           }
         },
         child: SizedBox(
@@ -1105,43 +1110,98 @@ class DashboardScreen extends GetView<DashboardController> {
                                                             controller.times
                                                                     ?.length ??
                                                                 0, (index) {
-                                                          return Container(
-                                                              height: 40,
-                                                              width: 100,
-                                                              margin:
-                                                                  const EdgeInsets
-                                                                      .all(5),
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              decoration: BoxDecoration(
-                                                                  color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
-                                                                            return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) ==
-                                                                                controller.times![index];
-                                                                          }) !=
-                                                                          null
-                                                                      ? Colors.blue
-                                                                      : Colors.grey.shade100,
-                                                                  borderRadius: BorderRadius.circular(6),
-                                                                  border: Border.all(
+                                                          return controller
+                                                                      .getAppointmentDetailsByDate
+                                                                      .where(
+                                                                          (e) {
+                                                                    return controller
+                                                                            .times![index] ==
+                                                                        e.startTime;
+                                                                  }).length >
+                                                                  1
+                                                              ? Badge(
+                                                                  offset:
+                                                                      const Offset(
+                                                                          -1,
+                                                                          1),
+                                                                  label: Text(controller
+                                                                      .getAppointmentDetailsByDate
+                                                                      .where(
+                                                                          (e) {
+                                                                        return controller.times![index] ==
+                                                                            e.startTime;
+                                                                      })
+                                                                      .length
+                                                                      .toString()),
+                                                                  child: Container(
+                                                                      height: 40,
+                                                                      width: 100,
+                                                                      margin: const EdgeInsets.all(5),
+                                                                      alignment: Alignment.center,
+                                                                      decoration: BoxDecoration(
+                                                                          color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                    return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                  }) !=
+                                                                                  null
+                                                                              ? Colors.blue
+                                                                              : Colors.grey.shade100,
+                                                                          borderRadius: BorderRadius.circular(6),
+                                                                          border: Border.all(
+                                                                              color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                        return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                      }) !=
+                                                                                      null
+                                                                                  ? Colors.transparent
+                                                                                  : Colors.black)),
+                                                                      child: Text(
+                                                                        controller.times?[index] ??
+                                                                            "",
+                                                                        style: TextStyle(
+                                                                            color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                      return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                    }) !=
+                                                                                    null
+                                                                                ? Colors.white
+                                                                                : Colors.black),
+                                                                      )),
+                                                                )
+                                                              : Container(
+                                                                  height: 40,
+                                                                  width: 100,
+                                                                  margin:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          5),
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration: BoxDecoration(
                                                                       color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
                                                                                 return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
                                                                               }) !=
                                                                               null
-                                                                          ? Colors.transparent
-                                                                          : Colors.black)),
-                                                              child: Text(
-                                                                controller.times?[
-                                                                        index] ??
-                                                                    "",
-                                                                style: TextStyle(
-                                                                    color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
-                                                                              return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
-                                                                            }) !=
-                                                                            null
-                                                                        ? Colors.white
-                                                                        : Colors.black),
-                                                              ));
+                                                                          ? Colors.blue
+                                                                          : Colors.grey.shade100,
+                                                                      borderRadius: BorderRadius.circular(6),
+                                                                      border: Border.all(
+                                                                          color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                    return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                  }) !=
+                                                                                  null
+                                                                              ? Colors.transparent
+                                                                              : Colors.black)),
+                                                                  child: Text(
+                                                                    controller.times?[
+                                                                            index] ??
+                                                                        "",
+                                                                    style: TextStyle(
+                                                                        color: controller.getAppointmentDetailsByDate.firstWhereOrNull((element) {
+                                                                                  return TimeCalculationUtils().startTimeCalCulation(element.startTime, element.updateTimeInMin) == controller.times![index];
+                                                                                }) !=
+                                                                                null
+                                                                            ? Colors.white
+                                                                            : Colors.black),
+                                                                  ));
                                                         })),
                                                   )),
                                         const SizedBox(
