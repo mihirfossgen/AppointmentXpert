@@ -169,7 +169,7 @@ class ScheduleItemWidget extends StatelessWidget {
                       width: 220,
                       child: Text(
                         'Note: ${appointment.note}',
-                        maxLines: 3,
+                        maxLines: 1,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.txtInterRegular14,
@@ -304,7 +304,7 @@ class ScheduleItemWidget extends StatelessWidget {
                       width: 220,
                       child: Text(
                         'Note: ${appointment.note}',
-                        maxLines: 3,
+                        maxLines: 1,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: AppStyle.txtInterRegular14,

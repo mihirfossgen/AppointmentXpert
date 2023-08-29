@@ -348,12 +348,15 @@ class SchedulePage extends GetWidget<ScheduleController> {
                           style: AppStyle.txtInterSemiBold14,
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          'Note',
-                          style: AppStyle.txtInterSemiBold14,
-                        ),
-                      ),
+                      DataColumn2(
+                          label: Text(
+                            'Note',
+                            style: AppStyle.txtInterSemiBold14,
+                            softWrap: true,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          fixedWidth: 150),
                       DataColumn(
                         label: Text(
                           'Date',
