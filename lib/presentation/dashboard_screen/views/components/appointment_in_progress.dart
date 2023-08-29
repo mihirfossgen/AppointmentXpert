@@ -91,15 +91,25 @@ class _AppointmentInProgress extends StatelessWidget {
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             onTap: () {}),
-                        DataCell(
-                            Text(
-                              '${data[index].examiner?.prefix}'
-                              '${data[index].examiner?.firstName} '
-                              '${data[index].examiner?.lastName}',
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                            ),
-                            onTap: () {}),
+                        SharedPrefUtils.readPrefStr('role') == "PATIENT"
+                            ? DataCell(
+                                Text(
+                                  '${data[index].examiner?.prefix}'
+                                  '${data[index].examiner?.firstName} '
+                                  '${data[index].examiner?.lastName}',
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                ),
+                                onTap: () {})
+                            : DataCell(
+                                Text(
+                                  '${data[index].patient?.prefix}'
+                                  '${data[index].patient?.firstName} '
+                                  '${data[index].patient?.lastName}',
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                ),
+                                onTap: () {}),
                         DataCell(
                             data[index].updateTimeInMin == 0
                                 ? Text(

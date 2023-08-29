@@ -1063,9 +1063,17 @@ class DashboardScreen extends GetView<DashboardController> {
                                             onDateSelected: (date) {
                                               final DateFormat formatter =
                                                   DateFormat('dd-MM-yyyy');
-                                              controller
-                                                  .callGetAppointmentDetailsForDate(
-                                                      formatter.format(date));
+                                              SharedPrefUtils.readPrefStr(
+                                                          "role") ==
+                                                      "DOCTOR"
+                                                  ? controller
+                                                      .callGetAppointmentDetailsForDateByExaminerId(
+                                                          formatter
+                                                              .format(date))
+                                                  : controller
+                                                      .callGetAppointmentDetailsForDate(
+                                                          formatter
+                                                              .format(date));
                                               controller
                                                   .getAppointmentDetailsByDate
                                                   .value = [];
