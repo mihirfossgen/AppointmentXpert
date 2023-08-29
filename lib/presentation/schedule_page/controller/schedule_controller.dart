@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/app_export.dart';
@@ -36,7 +35,10 @@ class ScheduleController extends GetxController {
   RxList<AppointmentContent> getAppointmentDetailsByDate =
       <AppointmentContent>[].obs;
 
-  // RxList<AppointmentContent> today = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> todayAppointments = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> upcomingAppointments = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> completedAppointments = <AppointmentContent>[].obs;
+
   // RxList<AppointmentContent> upcoming = <AppointmentContent>[].obs;
   // RxList<AppointmentContent> completed = <AppointmentContent>[].obs;
   // RxList<AppointmentContent> today1 = <AppointmentContent>[].obs;
@@ -132,12 +134,12 @@ class ScheduleController extends GetxController {
   //     PagingController(firstPageKey: 0);
   // PagingController<int, AppointmentContent> completedPagingController =
   //     PagingController(firstPageKey: 0);
-  Rx<PagingController<int, AppointmentContent>> todayPagingController =
-      PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
-  Rx<PagingController<int, AppointmentContent>> upcomingPagingController =
-      PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
-  Rx<PagingController<int, AppointmentContent>> completedPagingController =
-      PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
+  // Rx<PagingController<int, AppointmentContent>> todayPagingController =
+  //     PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
+  // Rx<PagingController<int, AppointmentContent>> upcomingPagingController =
+  //     PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
+  // Rx<PagingController<int, AppointmentContent>> completedPagingController =
+  //     PagingController<int, AppointmentContent>(firstPageKey: 0).obs;
 
   getformattedDate(String date) {
     final DateFormat formatter = DateFormat.yMMMEd();
@@ -279,9 +281,10 @@ class ScheduleController extends GetxController {
     try {
       allAppointments =
           (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
-      todayPagingController.value.itemList = [];
-      upcomingPagingController.value.itemList = [];
-      completedPagingController.value.itemList = [];
+      todayAppointments.value = [];
+      upcomingAppointments.value = [];
+      completedAppointments.value = [];
+
       List<AppointmentContent> list = allAppointments;
       var now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
@@ -310,9 +313,12 @@ class ScheduleController extends GetxController {
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
-      todayPagingController.value.appendLastPage(appointmentsToday);
-      upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
-      completedPagingController.value.appendLastPage(appointmentsCompleted);
+      todayAppointments.value = appointmentsToday;
+      upcomingAppointments.value = appointmentsUpcoming;
+      completedAppointments.value = appointmentsCompleted;
+      // todayPagingController.value.appendLastPage(appointmentsToday);
+      // upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      // completedPagingController.value.appendLastPage(appointmentsCompleted);
       isloading.value = false;
       update();
       // final isLastPage = model.totalElements! <= _pageSize;
@@ -382,7 +388,7 @@ class ScheduleController extends GetxController {
       // completedPagingController.refresh();
     } on Map {
       //postLoginResp = e;
-      todayPagingController.value.error = 'No data found.';
+      //todayPagingController.value.error = 'No data found.';
       rethrow;
     } finally {
       isloading.value = false;
@@ -394,9 +400,10 @@ class ScheduleController extends GetxController {
     try {
       allAppointments = (await Get.find<AppointmentApi>()
           .getAllAppointmentsByStaffId(pageNo));
-      todayPagingController.value.itemList = [];
-      upcomingPagingController.value.itemList = [];
-      completedPagingController.value.itemList = [];
+
+      todayAppointments.value = [];
+      upcomingAppointments.value = [];
+      completedAppointments.value = [];
       List<AppointmentContent> list = allAppointments;
       var now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
@@ -425,9 +432,12 @@ class ScheduleController extends GetxController {
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
-      todayPagingController.value.appendLastPage(appointmentsToday);
-      upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
-      completedPagingController.value.appendLastPage(appointmentsCompleted);
+      // todayPagingController.value.appendLastPage(appointmentsToday);
+      // upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
+      // completedPagingController.value.appendLastPage(appointmentsCompleted);
+      todayAppointments.value = appointmentsToday;
+      upcomingAppointments.value = appointmentsUpcoming;
+      completedAppointments.value = appointmentsCompleted;
       isloading.value = false;
       update();
       // final isLastPage = model.totalElements! <= _pageSize;
@@ -497,7 +507,7 @@ class ScheduleController extends GetxController {
       // completedPagingController.refresh();
     } on Map {
       //postLoginResp = e;
-      todayPagingController.value.error = 'No data found.';
+      //todayPagingController.value.error = 'No data found.';
       rethrow;
     } finally {
       isloading.value = false;
@@ -535,9 +545,9 @@ class ScheduleController extends GetxController {
       List<AppointmentContent> list = response;
       var now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
-      todayPagingController.value.itemList = [];
-      upcomingPagingController.value.itemList = [];
-      completedPagingController.value.itemList = [];
+      todayAppointments.value = [];
+      upcomingAppointments.value = [];
+      completedAppointments.value = [];
       List<AppointmentContent> appointmentsCompleted =
           list.where((i) => i.status?.toLowerCase() == "completed").toList();
       List<AppointmentContent> appointmentsUpcoming = list
@@ -562,12 +572,9 @@ class ScheduleController extends GetxController {
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
-      todayPagingController.value.appendLastPage(appointmentsToday);
-      upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
-      completedPagingController.value.appendLastPage(appointmentsCompleted);
-      todayPagingController.refresh();
-      upcomingPagingController.refresh();
-      completedPagingController.refresh();
+      todayAppointments.value = appointmentsToday;
+      upcomingAppointments.value = appointmentsUpcoming;
+      completedAppointments.value = appointmentsCompleted;
       update();
       //patientAppointmentlist.value = appointmentsUpcoming;
     } on Map {
@@ -622,9 +629,9 @@ class ScheduleController extends GetxController {
 
   @override
   void onClose() {
-    todayPagingController.value.dispose();
-    upcomingPagingController.value.dispose();
-    completedPagingController.value.dispose();
+    todayAppointments.value = [];
+    upcomingAppointments.value = [];
+    completedAppointments.value = [];
 
     isRescheduleLoading.value = false;
     isloading.value = false;

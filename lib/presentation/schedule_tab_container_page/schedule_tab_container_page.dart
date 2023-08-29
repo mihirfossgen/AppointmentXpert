@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import '../../core/app_export.dart';
@@ -48,12 +47,6 @@ class ScheduleTabContainerPage extends StatelessWidget {
 
               // scheduleController.onClose();
               // scheduleController.onReady();
-              scheduleController.todayPagingController.value =
-                  PagingController(firstPageKey: 0);
-              scheduleController.upcomingPagingController.value =
-                  PagingController(firstPageKey: 0);
-              scheduleController.completedPagingController.value =
-                  PagingController(firstPageKey: 0);
 
               scheduleController.isloading.value = true;
               //pagingController.addPageRequestListener((pageKey) {

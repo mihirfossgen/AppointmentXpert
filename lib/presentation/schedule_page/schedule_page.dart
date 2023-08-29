@@ -2,7 +2,6 @@ import 'package:appointmentxpert/presentation/dashboard_screen/shared_components
 import 'package:data_table_2/data_table_2.dart';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/app_export.dart';
@@ -42,12 +41,6 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                     child: CircularProgressIndicator())
                                 : RefreshIndicator(
                                     onRefresh: () async {
-                                      controller.todayPagingController.value
-                                          .itemList = [];
-                                      controller.upcomingPagingController.value
-                                          .itemList = [];
-                                      controller.completedPagingController.value
-                                          .itemList = [];
                                       controller.isloading.value = true;
                                       controller.callGetAllAppointments(0, 20);
                                       /*Future.sync(
@@ -69,26 +62,26 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                               0.65
                                           : MediaQuery.of(context).size.height *
                                               0.75,
-                                      child: PagedGridView<int,
-                                          AppointmentContent>(
+                                      child: GridView.builder(
                                         shrinkWrap: true,
-                                        showNewPageProgressIndicatorAsGridChild:
-                                            false,
-                                        showNewPageErrorIndicatorAsGridChild:
-                                            false,
-                                        showNoMoreItemsIndicatorAsGridChild:
-                                            false,
-                                        pagingController: tab.toLowerCase() ==
-                                                'today'
+                                        // showNewPageProgressIndicatorAsGridChild:
+                                        //     false,
+                                        // showNewPageErrorIndicatorAsGridChild:
+                                        //     false,
+                                        // showNoMoreItemsIndicatorAsGridChild:
+                                        //     false,
+                                        itemCount: tab.toLowerCase() == 'today'
                                             ? controller
-                                                .todayPagingController.value
+                                                .todayAppointments.value.length
                                             : tab.toLowerCase() == 'upcoming'
                                                 ? controller
-                                                    .upcomingPagingController
+                                                    .upcomingAppointments
                                                     .value
+                                                    .length
                                                 : controller
-                                                    .completedPagingController
-                                                    .value,
+                                                    .completedAppointments
+                                                    .value
+                                                    .length,
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
                                           childAspectRatio: tab.toLowerCase() ==
@@ -101,8 +94,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          5)
-                                                  : 1.8
+                                                          5.7)
+                                                  : 1.9
                                               : ResponsiveBuilder.isMobile(
                                                       context)
                                                   ? MediaQuery.of(context)
@@ -111,8 +104,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          3.5)
-                                                  : 1.4,
+                                                          4.0)
+                                                  : 1.5,
                                           // tab.toLowerCase() == 'completed'
                                           //     ? ResponsiveBuilder.isMobile(
                                           //             context)
@@ -133,49 +126,60 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       ? 2
                                                       : 3,
                                         ),
-                                        builderDelegate:
-                                            PagedChildBuilderDelegate<
-                                                AppointmentContent>(
-                                          animateTransitions: true,
-                                          itemBuilder: (context, item, index) =>
-                                              ScheduleItemWidget(
-                                                  item,
-                                                  item.patient?.id ?? 0,
-                                                  item.examiner?.id ?? 0,
-                                                  tab),
-                                          // firstPageErrorIndicatorBuilder: (_) =>
-                                          //     FirstPageErrorIndicator(
-                                          //   error: _pagingController.error,
-                                          //   onTryAgain: () =>
-                                          //       _pagingController.refresh(),
-                                          // ),
-                                          // newPageErrorIndicatorBuilder: (_) =>
-                                          //     NewPageErrorIndicator(
-                                          //   error: _pagingController.error,
-                                          //   onTryAgain: () => _pagingController
-                                          //       .retryLastFailedRequest(),
-                                          // ),
-                                          // firstPageProgressIndicatorBuilder: (_) =>
-                                          //     FirstPageProgressIndicator(),
-                                          // newPageProgressIndicatorBuilder: (_) =>
-                                          //     NewPageProgressIndicator(),
-                                          noItemsFoundIndicatorBuilder: (_) =>
-                                              loadEmptyWidget(),
-                                          //     const Text(
-                                          //   'No appointments found.',
-                                          //   textAlign: TextAlign.center,
-                                          // ),
-                                          noMoreItemsIndicatorBuilder: (_) =>
-                                              const Padding(
-                                            padding: EdgeInsets.all(28.0),
-                                            child: Text(
-                                              'No more appointments.',
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ),
+                                        itemBuilder: (context, index) {
+                                          AppointmentContent item;
+                                          if (tab.toLowerCase() == 'today') {
+                                            item = controller
+                                                .todayAppointments.value[index];
+                                          } else if (tab.toLowerCase() ==
+                                              'upcoming') {
+                                            item = controller
+                                                .upcomingAppointments
+                                                .value[index];
+                                          } else {
+                                            item = controller
+                                                .completedAppointments
+                                                .value[index];
+                                          }
+                                          return ScheduleItemWidget(
+                                              item,
+                                              item.patient?.id ?? 0,
+                                              item.examiner?.id ?? 0,
+                                              tab);
+                                        },
+                                        // firstPageErrorIndicatorBuilder: (_) =>
+                                        //     FirstPageErrorIndicator(
+                                        //   error: _pagingController.error,
+                                        //   onTryAgain: () =>
+                                        //       _pagingController.refresh(),
+                                        // ),
+                                        // newPageErrorIndicatorBuilder: (_) =>
+                                        //     NewPageErrorIndicator(
+                                        //   error: _pagingController.error,
+                                        //   onTryAgain: () => _pagingController
+                                        //       .retryLastFailedRequest(),
+                                        // ),
+                                        // firstPageProgressIndicatorBuilder: (_) =>
+                                        //     FirstPageProgressIndicator(),
+                                        // newPageProgressIndicatorBuilder: (_) =>
+                                        //     NewPageProgressIndicator(),
+                                        // noItemsFoundIndicatorBuilder: (_) =>
+                                        //     loadEmptyWidget(),
+                                        //     const Text(
+                                        //   'No appointments found.',
+                                        //   textAlign: TextAlign.center,
+                                        // ),
+                                        // noMoreItemsIndicatorBuilder: (_) =>
+                                        //     const Padding(
+                                        //   padding: EdgeInsets.all(28.0),
+                                        //   child: Text(
+                                        //     'No more appointments.',
+                                        //     textAlign: TextAlign.center,
+                                        //   ),
+                                        // ),
                                       ),
-                                    ))
+                                    ),
+                                  )
                             //loadStaffAppointmentList()
                             : loadStaffAppointmentsDataTable(),
                       ),
@@ -192,32 +196,35 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                 )
                               : RefreshIndicator(
                                   onRefresh: () => Future.sync(
-                                    () => tab.toLowerCase() == 'today'
-                                        ? controller.todayPagingController
-                                            .refresh()
-                                        : tab.toLowerCase() == 'upcoming'
-                                            ? controller
-                                                .upcomingPagingController
-                                                .refresh()
-                                            : controller
-                                                .completedPagingController
-                                                .refresh(),
+                                    () {
+                                      controller.isloading.value = true;
+                                      controller.callGetAllAppointments(0, 20);
+                                      // tab.toLowerCase() == 'today'
+                                      //   ? controller.todayPagingController
+                                      //       .refresh()
+                                      //   : tab.toLowerCase() == 'upcoming'
+                                      //       ? controller
+                                      //           .upcomingPagingController
+                                      //           .refresh()
+                                      //       : controller
+                                      //           .completedPagingController
+                                      //           .refresh()
+                                    },
                                   ),
-                                  child: PagedGridView<int, AppointmentContent>(
+                                  child: GridView.builder(
                                     shrinkWrap: true,
-                                    showNewPageProgressIndicatorAsGridChild:
-                                        false,
-                                    showNewPageErrorIndicatorAsGridChild: false,
-                                    showNoMoreItemsIndicatorAsGridChild: false,
-                                    pagingController: tab.toLowerCase() ==
-                                            'today'
-                                        ? controller.todayPagingController.value
+                                    // showNewPageProgressIndicatorAsGridChild:
+                                    //     false,
+                                    // showNewPageErrorIndicatorAsGridChild: false,
+                                    // showNoMoreItemsIndicatorAsGridChild: false,
+                                    itemCount: tab.toLowerCase() == 'today'
+                                        ? controller
+                                            .todayAppointments.value.length
                                         : tab.toLowerCase() == 'upcoming'
-                                            ? controller
-                                                .upcomingPagingController.value
-                                            : controller
-                                                .completedPagingController
-                                                .value,
+                                            ? controller.upcomingAppointments
+                                                .value.length
+                                            : controller.completedAppointments
+                                                .value.length,
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                       childAspectRatio: tab.toLowerCase() ==
@@ -229,7 +236,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                   (MediaQuery.of(context)
                                                           .size
                                                           .height /
-                                                      5.8)
+                                                      5.7)
                                               : 1.9
                                           : ResponsiveBuilder.isMobile(context)
                                               ? MediaQuery.of(context)
@@ -252,22 +259,25 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                               ? 2
                                               : 3,
                                     ),
-                                    builderDelegate: PagedChildBuilderDelegate<
-                                        AppointmentContent>(
-                                      animateTransitions: true,
-                                      // noMoreItemsIndicatorBuilder: (context) {
-                                      //   return loadEmptyWidget();
-                                      // },
-                                      // noItemsFoundIndicatorBuilder: (context) {
-                                      //   return loadEmptyWidget();
-                                      // },
-                                      itemBuilder: (context, item, index) =>
-                                          ScheduleItemWidget(
-                                              item,
-                                              item.patient?.id ?? 0,
-                                              item.examiner?.id ?? 0,
-                                              tab),
-                                    ),
+                                    itemBuilder: (context, index) {
+                                      AppointmentContent item;
+                                      if (tab.toLowerCase() == 'today') {
+                                        item = controller
+                                            .todayAppointments.value[index];
+                                      } else if (tab.toLowerCase() ==
+                                          'upcoming') {
+                                        item = controller
+                                            .upcomingAppointments.value[index];
+                                      } else {
+                                        item = controller
+                                            .completedAppointments.value[index];
+                                      }
+                                      return ScheduleItemWidget(
+                                          item,
+                                          item.patient?.id ?? 0,
+                                          item.examiner?.id ?? 0,
+                                          tab);
+                                    },
                                   ),
                                 )
                           //loadPatientAppointmentsList()
@@ -299,10 +309,10 @@ class SchedulePage extends GetWidget<ScheduleController> {
   Widget loadPatientAppointmentsDataTable() {
     final DateFormat formatter = DateFormat.yMMMEd();
     List<AppointmentContent>? appointments = tab.toLowerCase() == 'today'
-        ? controller.todayPagingController.value.itemList
+        ? controller.todayAppointments.value
         : tab.toLowerCase() == 'upcoming'
-            ? controller.upcomingPagingController.value.itemList
-            : controller.completedPagingController.value.itemList;
+            ? controller.upcomingAppointments.value
+            : controller.completedAppointments.value;
     return SizedBox(
         height: 400,
         child: Card(
@@ -371,14 +381,14 @@ class SchedulePage extends GetWidget<ScheduleController> {
   Widget loadStaffAppointmentsDataTable() {
     final DateFormat formatter = DateFormat.yMMMEd();
     List<AppointmentContent>? appointments = tab.toLowerCase() == 'today'
-        ? controller.todayPagingController.value.itemList
+        ? controller.todayAppointments.value
         : tab.toLowerCase() == 'upcoming'
-            ? controller.upcomingPagingController.value.itemList
-            : controller.completedPagingController.value.itemList;
+            ? controller.upcomingAppointments.value
+            : controller.completedAppointments.value;
     return Card(
       child: SizedBox(
         height: 500,
-        child: appointments == null || appointments.isEmpty
+        child: appointments.isEmpty
             ? loadEmptyWidget()
             : PaginatedDataTable2(
                 sortAscending: false,
