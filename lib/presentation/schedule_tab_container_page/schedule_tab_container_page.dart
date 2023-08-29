@@ -44,6 +44,8 @@ class ScheduleTabContainerPage extends StatelessWidget {
           child: LiquidPullToRefresh(
             showChildOpacityTransition: false,
             onRefresh: () async {
+              String a = await SharedPrefUtils.readPrefStr('role');
+
               // scheduleController.onClose();
               // scheduleController.onReady();
               scheduleController.todayPagingController.value =

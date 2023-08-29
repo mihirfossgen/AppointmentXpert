@@ -101,8 +101,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          5.7)
-                                                  : 1.9
+                                                          5)
+                                                  : 1.8
                                               : ResponsiveBuilder.isMobile(
                                                       context)
                                                   ? MediaQuery.of(context)
@@ -111,8 +111,8 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                       (MediaQuery.of(context)
                                                               .size
                                                               .height /
-                                                          4.0)
-                                                  : 1.5,
+                                                          3.5)
+                                                  : 1.4,
                                           // tab.toLowerCase() == 'completed'
                                           //     ? ResponsiveBuilder.isMobile(
                                           //             context)
@@ -229,7 +229,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
                                                   (MediaQuery.of(context)
                                                           .size
                                                           .height /
-                                                      5.7)
+                                                      5.8)
                                               : 1.9
                                           : ResponsiveBuilder.isMobile(context)
                                               ? MediaQuery.of(context)

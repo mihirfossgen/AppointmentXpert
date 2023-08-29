@@ -254,6 +254,21 @@ class ScheduleItemWidget extends StatelessWidget {
                       '${appointment.patient?.firstName.toString()} ${appointment.patient?.lastName.toString()}',
                       style: AppStyle.txtInterSemiBold14,
                     ),
+                    SharedPrefUtils.readPrefStr('role') == "RECEPTIONIST" ||
+                            SharedPrefUtils.readPrefStr('role') == "ASSISTANT"
+                        ? Column(
+                            children: [
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Dr.'
+                                '${appointment.examiner?.firstName.toString()} ${appointment.examiner?.lastName.toString()}',
+                                style: AppStyle.txtInterSemiBold14,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
                     const SizedBox(
                       width: 10,
                     ),

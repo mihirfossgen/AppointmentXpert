@@ -308,6 +308,10 @@ class DashboardController extends GetxController {
       isloadingStaffData.value = true;
       var response = (await Get.find<StaffApi>().getstaffbyid(staffId));
       staffData.value = response;
+      if (staffData.value.notificationFlag == true) {
+        SharedPrefUtils.saveBool(
+            'notificationFlag', staffData.value.notificationFlag ?? false);
+      }
     } on Map {
       //postLoginResp = e;
       rethrow;
@@ -752,6 +756,10 @@ class DashboardController extends GetxController {
           (await Get.find<PatientApi>().getPatientDetails(headers: {
         'Content-type': 'application/json',
       }, id: id));
+      if (patientData.value.patient?.notificationFlag == true) {
+        SharedPrefUtils.saveBool('notificationFlag',
+            patientData.value.patient?.notificationFlag ?? false);
+      }
     } on Map {
       //postLoginResp = e;
       rethrow;

@@ -294,6 +294,7 @@ class ScheduleController extends GetxController {
                 !formatter
                     .parse(i.date!)
                     .isBefore(formatter.parse(now.toString())) &&
+                formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                 i.status?.toLowerCase() != "completed",
           )
           .toList();
@@ -408,6 +409,7 @@ class ScheduleController extends GetxController {
                 !formatter
                     .parse(i.date!)
                     .isBefore(formatter.parse(now.toString())) &&
+                formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                 i.status?.toLowerCase() != "completed",
           )
           .toList();
