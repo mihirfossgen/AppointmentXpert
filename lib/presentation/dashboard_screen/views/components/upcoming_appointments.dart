@@ -60,11 +60,11 @@ class UpcomingAppointments extends StatelessWidget {
                   //size: ColumnSize.L,
                 ),
                 DataColumn2(
-                  label: Text(
-                    'Name',
-                    style: AppStyle.txtInterSemiBold14,
-                  ),
-                ),
+                    label: Text(
+                      'Name',
+                      style: AppStyle.txtInterSemiBold14,
+                    ),
+                    fixedWidth: 110),
                 DataColumn2(
                   label: Text(
                     'Time',
