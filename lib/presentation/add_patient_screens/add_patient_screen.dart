@@ -22,32 +22,17 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
   @override
   AddPatientController controller = Get.put(AddPatientController());
   UserApi userApi = Get.put(UserApi());
-  getDate() {
-    DateTime? date = DateTime.now();
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
-    return Get.dialog(
-        AlertDialog(
-          title: const Text('Please select date'),
-          content: SizedBox(
-            height: 250,
-            width: 100,
-            child: CalendarDatePicker2(
-              config: CalendarDatePicker2Config(),
-              value: [DateTime.now()],
-              onValueChanged: (value) {
-                date = value[0];
-              },
-            ),
-          ),
-          actions: [
-            TextButton(
-                child: const Text("Continue"),
-                onPressed: () {
-                  Get.back(result: date);
-                }),
-          ],
-        ),
-        barrierDismissible: false);
+
+  getDate() async {
+    final DateTime? picked = await showDatePicker(
+        context: Get.context!,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1940),
+        lastDate: DateTime.now());
+    if (picked != null && picked != DateTime.now()) {
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      controller.dob.text = formatter.format(picked);
+    }
   }
 
   Widget getBody() {
@@ -238,14 +223,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                       ),*/
                       SizedBox(
                         child: InkWell(
-                          onTap: () async {
-                            FocusScope.of(Get.context!).unfocus();
-                            DateTime a = await getDate();
-
-                            final DateFormat formatter =
-                                DateFormat('yyyy-MM-dd');
-                            controller.dob.text = formatter.format(a);
-                          },
+                          onTap: () => getDate(),
                           child: AbsorbPointer(
                             child: CustomTextFormField(
                                 controller: controller.dob,
@@ -553,14 +531,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                         fit: FlexFit.tight,
                         child: SizedBox(
                           child: InkWell(
-                            onTap: () async {
-                              FocusScope.of(Get.context!).unfocus();
-                              DateTime a = await getDate();
-
-                              final DateFormat formatter =
-                                  DateFormat('yyyy-MM-dd');
-                              controller.dob.text = formatter.format(a);
-                            },
+                            onTap: () => getDate(),
                             child: AbsorbPointer(
                               child: CustomTextFormField(
                                   controller: controller.dob,

@@ -60,34 +60,49 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
     });
   }
 
-  getDate() {
-    DateTime? date = DateTime.now();
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
-    return Get.dialog(
-        AlertDialog(
-          title: const Text('Please select DOB'),
-          content: SizedBox(
-            height: 250,
-            width: 100,
-            child: CalendarDatePicker2(
-              config: CalendarDatePicker2Config(),
-              value: [DateTime.now()],
-              onValueChanged: (value) {
-                print(value);
-                date = value[0];
-              },
-            ),
-          ),
-          actions: [
-            TextButton(
-                child: const Text("Continue"),
-                onPressed: () {
-                  Get.back(result: date);
-                }),
-          ],
-        ),
-        barrierDismissible: false);
+  getDate() async {
+    final DateTime? picked = await showDatePicker(
+        context: Get.context!,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1940),
+        lastDate: DateTime.now());
+    if (picked != null && picked != DateTime.now()) {
+      finalDob = picked.toIso8601String();
+
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      controller.dob.text = formatter.format(picked);
+    }
   }
+  // getDate() {
+  //   DateTime? date = DateTime.now();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {});
+  //   return Get.dialog(
+  //       AlertDialog(
+  //         title: const Text('Please select DOB'),
+  //         content: SizedBox(
+  //           height: 250,
+  //           width: 100,
+  //           child: _selectDate
+
+  //         //   CalendarDatePicker2(
+  //         //     config: CalendarDatePicker2Config(),
+  //         //     value: [DateTime.now()],
+  //         //     onValueChanged: (value) {
+  //         //       print(value);
+  //         //       date = value[0];
+  //         //     },
+  //         //   ),
+  //         // ),
+  //         actions: [
+  //           TextButton(
+  //               child: const Text("Continue"),
+  //               onPressed: () {
+  //                 Get.back(result: date);
+  //               }),
+  //         ],
+  //       ),
+  //       barrierDismissible: false);
+  // }
 
   // int getClinicID(String t) {
   //   var a = clinic.firstWhere((element) => element.name == t).id;
@@ -301,16 +316,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                             fit: FlexFit.tight,
                                             child: SizedBox(
                                               child: InkWell(
-                                                onTap: () async {
-                                                  DateTime a = await getDate();
-                                                  finalDob =
-                                                      a.toIso8601String();
-
-                                                  final DateFormat formatter =
-                                                      DateFormat('yyyy-MM-dd');
-                                                  controller.dob.text =
-                                                      formatter.format(a);
-                                                },
+                                                onTap: () => getDate(),
                                                 child: AbsorbPointer(
                                                   child: CustomTextFormField(
                                                       labelText:
@@ -727,14 +733,7 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                               padding: const EdgeInsets.all(10.0),
                               child: SizedBox(
                                 child: InkWell(
-                                  onTap: () async {
-                                    DateTime a = await getDate();
-                                    finalDob = a.toIso8601String();
-
-                                    final DateFormat formatter =
-                                        DateFormat('yyyy-MM-dd');
-                                    controller.dob.text = formatter.format(a);
-                                  },
+                                  onTap: () => getDate(),
                                   child: AbsorbPointer(
                                     child: CustomTextFormField(
                                         labelText: "Date of Birth",
