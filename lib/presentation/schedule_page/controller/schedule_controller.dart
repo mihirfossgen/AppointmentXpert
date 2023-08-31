@@ -408,7 +408,7 @@ class ScheduleController extends GetxController {
       var now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
       List<AppointmentContent> appointmentsCompleted =
-          list.where((i) => i.status?.toLowerCase() == "completed").toList();
+          list.where((i) => i.status?.toLowerCase() == "completed").toList();      
       List<AppointmentContent> appointmentsUpcoming = list
           .where(
             (i) =>
@@ -419,13 +419,13 @@ class ScheduleController extends GetxController {
                 formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                 i.status?.toLowerCase() != "completed",
           )
-          .toList();
+          .toList();      
       List<AppointmentContent> appointmentsToday = list
           .where((i) =>
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
               i.active == true &&
               i.status?.toLowerCase() != "completed")
-          .toList();
+          .toList();      
       appointmentsToday.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsUpcoming.sort((a, b) =>

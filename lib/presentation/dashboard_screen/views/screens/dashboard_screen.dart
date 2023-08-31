@@ -295,7 +295,6 @@ class DashboardScreen extends GetView<DashboardController> {
             controller.callTodayAppointmentsByPatient();
             controller.getUpcomingAppointments(0, true);
           } else {
-            controller.getTimes();
             // controller.patientPagingController =
             //     PagingController(firstPageKey: 0);
             controller.patientPagingController.itemList = [];
@@ -1122,9 +1121,10 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                       .getAppointmentDetailsByDate
                                                                       .where(
                                                                           (e) {
-                                                                    return controller
-                                                                            .times![index] ==
-                                                                        e.startTime;
+                                                                    return TimeCalculationUtils().startTimeCalCulation(
+                                                                            e.startTime,
+                                                                            e.updateTimeInMin) ==
+                                                                        controller.times![index];
                                                                   }).length >
                                                                   1
                                                               ? Badge(
@@ -1136,8 +1136,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                                                       .getAppointmentDetailsByDate
                                                                       .where(
                                                                           (e) {
-                                                                        return controller.times![index] ==
-                                                                            e.startTime;
+                                                                        return TimeCalculationUtils().startTimeCalCulation(e.startTime,
+                                                                                e.updateTimeInMin) ==
+                                                                            controller.times![index];
                                                                       })
                                                                       .length
                                                                       .toString()),

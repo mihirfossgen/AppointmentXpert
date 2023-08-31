@@ -15,6 +15,7 @@ import '../../core/utils/time_calculation_utils.dart';
 import '../../data/models/selectionPopupModel/selection_popup_model.dart';
 import '../../models/getallEmplyesList.dart';
 import '../../models/staff_list_model.dart';
+import '../../routes/app_routes.dart';
 import '../../widgets/app_bar/appbar_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drop_down.dart';
@@ -1578,7 +1579,9 @@ onTapBooknow() {
         BookingDoctorSuccessController(),
       ),
     ),
-  ));
+  )).then((value) {
+    Get.offAllNamed(AppRoutes.dashboardScreen);
+  });
 }
 
 class AppointmentDetails {

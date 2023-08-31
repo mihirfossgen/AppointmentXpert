@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:appointmentxpert/core/app_export.dart';
 import 'package:appointmentxpert/network/api/user_api.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -24,14 +28,42 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
   UserApi userApi = Get.put(UserApi());
 
   getDate() async {
-    final DateTime? picked = await showDatePicker(
-        context: Get.context!,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1940),
-        lastDate: DateTime.now());
-    if (picked != null && picked != DateTime.now()) {
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      controller.dob.text = formatter.format(picked);
+    if (kIsWeb || Platform.isAndroid) {
+      final DateTime? picked = await showDatePicker(
+          context: Get.context!,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1940),
+          lastDate: DateTime.now());
+      if (picked != null && picked != DateTime.now()) {
+        final DateFormat formatter = DateFormat('yyyy-MM-dd');
+        controller.dob.text = formatter.format(picked);
+      }
+    } else {
+      Get.dialog(AlertDialog(
+          title: const Text('Please select DOB'),
+          content: SizedBox(
+              height: 250,
+              width: 100,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: DateTime.now(),
+                maximumDate: DateTime.now(),
+                minimumYear: DateTime.now().year - 100,
+                dateOrder: DatePickerDateOrder.ymd,
+                onDateTimeChanged: (DateTime newDateTime) {
+                  if (newDateTime != null && newDateTime != DateTime.now()) {
+                    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+                    controller.dob.text = formatter.format(newDateTime);
+                  }
+                },
+              )),
+          actions: [
+            TextButton(
+                child: const Text("Continue"),
+                onPressed: () {
+                  Get.back();
+                }),
+          ]));
     }
   }
 

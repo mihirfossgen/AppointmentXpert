@@ -35,6 +35,7 @@ class StaffData {
   String? startTime;
   String? endTime;
   bool? notificationFlag;
+  int? timeSlotForBookingInMin;
 
   StaffData({
     this.id,
@@ -63,35 +64,38 @@ class StaffData {
     this.startTime,
     this.endTime,
     this.notificationFlag,
+    this.timeSlotForBookingInMin,
   });
 
-  StaffData copyWith(
-          {int? id,
-          String? prefix,
-          String? staffId,
-          String? firstName,
-          int? userId,
-          String? fatherName,
-          String? lastName,
-          String? sex,
-          String? dob,
-          String? clinicName,
-          int? clinicId,
-          String? departmentName,
-          int? departmentId,
-          String? email,
-          String? mobile,
-          String? address,
-          String? profession,
-          String? employment,
-          String? qualification,
-          String? status,
-          String? joinedDate,
-          String? terminatedDate,
-          String? profilePicture,
-          String? startTime,
-          String? endTime,
-          bool? notificationFlag}) =>
+  StaffData copyWith({
+    int? id,
+    String? prefix,
+    String? staffId,
+    String? firstName,
+    int? userId,
+    String? fatherName,
+    String? lastName,
+    String? sex,
+    String? dob,
+    String? clinicName,
+    int? clinicId,
+    String? departmentName,
+    int? departmentId,
+    String? email,
+    String? mobile,
+    String? address,
+    String? profession,
+    String? employment,
+    String? qualification,
+    String? status,
+    String? joinedDate,
+    String? terminatedDate,
+    String? profilePicture,
+    String? startTime,
+    String? endTime,
+    bool? notificationFlag,
+    int? timeSlotForBookingInMin,
+  }) =>
       StaffData(
           id: id ?? this.id,
           prefix: prefix ?? this.prefix,
@@ -118,6 +122,8 @@ class StaffData {
           profilePicture: profilePicture ?? this.profilePicture,
           startTime: startTime ?? this.startTime,
           endTime: endTime ?? this.endTime,
+          timeSlotForBookingInMin:
+              timeSlotForBookingInMin ?? this.timeSlotForBookingInMin,
           notificationFlag: notificationFlag ?? this.notificationFlag);
 
   factory StaffData.fromJson(Map<String, dynamic> json) => StaffData(
@@ -146,6 +152,7 @@ class StaffData {
       profilePicture: json["uploadedProfilePath"],
       startTime: json['startTime'],
       endTime: json['endTime'],
+      timeSlotForBookingInMin: json["timeSlotForBookingInMin"],
       notificationFlag: json['notificationFlag']);
 
   Map<String, dynamic> toJson() => {
@@ -174,6 +181,7 @@ class StaffData {
         "uploadedProfilePath": profilePicture,
         "startTime": startTime,
         "endTime": endTime,
+        "timeSlotForBookingInMin": timeSlotForBookingInMin,
         "notificationFlag": notificationFlag
       };
 }

@@ -164,7 +164,6 @@ class DashboardController extends GetxController {
       //});
       callRecentPatientListForDashboaard();
       callEmergencyPatientList();
-      getTimes();
       final DateFormat formatter = DateFormat('dd-MM-yyyy');
       role == "DOCTOR"
           ? callGetAppointmentDetailsForDateByExaminerId(
@@ -308,6 +307,12 @@ class DashboardController extends GetxController {
       isloadingStaffData.value = true;
       var response = (await Get.find<StaffApi>().getstaffbyid(staffId));
       staffData.value = response;
+      getTimes(
+          staffData.value.startTime?.replaceAll(" PM", "") ?? "11:45",
+          staffData.value.endTime?.replaceAll(" PM", "") ?? "17:45",
+          staffData.value.timeSlotForBookingInMin == 0
+              ? "00:15"
+              : staffData.value.timeSlotForBookingInMin.toString());
       if (staffData.value.notificationFlag == true) {
         SharedPrefUtils.saveBool(
             'notificationFlag', staffData.value.notificationFlag ?? false);
@@ -405,19 +410,16 @@ class DashboardController extends GetxController {
     }
   }
 
-  getTimes() {
-    String startTime = "11:45";
-    String closeTime = "17:45";
-    String space = "00:15";
+  getTimes(String? stime, String? etime, String? interval) {
     Duration spaceDuration = Duration(
-        minutes: int.parse(space.split(':')[1]),
-        hours: int.parse(space.split(':')[0]));
+        minutes: int.parse(interval!.split(':')[1]),
+        hours: int.parse(interval.split(':')[0]));
     TimeOfDay start = TimeOfDay(
-        hour: int.parse(startTime.split(':')[0]),
-        minute: int.parse(startTime.split(':')[1]));
+        hour: int.parse(stime!.split(':')[0]),
+        minute: int.parse(stime.split(':')[1]));
     TimeOfDay close = TimeOfDay(
-        hour: int.parse(closeTime.split(':')[0]),
-        minute: int.parse(closeTime.split(':')[1]));
+        hour: int.parse(etime!.split(':')[0]),
+        minute: int.parse(etime.split(':')[1]));
     List<String> timeSlots = [];
     while (start.hour < close.hour ||
         (start.hour == close.hour && start.minute <= close.minute)) {
@@ -430,10 +432,6 @@ class DashboardController extends GetxController {
     }
 
     times = timeSlots;
-  }
-
-  getTimeSlots() {
-    getTimes();
   }
 
   int? _getTimeInMinutesSinceMidnight(String time) {
