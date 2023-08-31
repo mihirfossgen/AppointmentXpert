@@ -684,9 +684,7 @@ class ScheduleItemWidget extends StatelessWidget {
                                           .toString() ==
                                       "0"
                                   ? "00:15"
-                                  : appointment
-                                      .examiner?.timeSlotForBookingInMin
-                                      .toString());
+                                  : "00:${appointment.examiner?.timeSlotForBookingInMin}");
                           Get.to(() => ReschduleAppointment(
                               appointment: appointment,
                               appointmentTime: appointment.updateTimeInMin == 0

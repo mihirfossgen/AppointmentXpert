@@ -318,7 +318,7 @@ class DoctorDetailController extends GetxController {
           getTimes(
               element.startTime?.replaceAll(" PM", "") ?? "11:45",
               element.endTime?.replaceAll(" PM", "") ?? "17:45",
-              element.interval == "0" ? "00:15" : element.interval);
+              element.interval);
         });
       }
     }

@@ -55,7 +55,9 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                 id: e.id,
                 startTime: e.startTime,
                 endTime: e.endTime,
-                interval: e.timeSlotForBookingInMin.toString()))
+                interval: e.timeSlotForBookingInMin == 0
+                    ? "00:15"
+                    : "00:${e.timeSlotForBookingInMin}"))
             .toList();
       } else {}
     }

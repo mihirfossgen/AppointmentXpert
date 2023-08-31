@@ -312,7 +312,7 @@ class DashboardController extends GetxController {
           staffData.value.endTime?.replaceAll(" PM", "") ?? "17:45",
           staffData.value.timeSlotForBookingInMin == 0
               ? "00:15"
-              : staffData.value.timeSlotForBookingInMin.toString());
+              : "00:${staffData.value.timeSlotForBookingInMin}");
       if (staffData.value.notificationFlag == true) {
         SharedPrefUtils.saveBool(
             'notificationFlag', staffData.value.notificationFlag ?? false);
