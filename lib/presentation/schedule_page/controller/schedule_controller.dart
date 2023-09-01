@@ -55,7 +55,6 @@ class ScheduleController extends GetxController {
   TextEditingController dob = TextEditingController();
   Rx<TextEditingController> from = TextEditingController().obs;
   TextEditingController to = TextEditingController();
-  TextEditingController reschduleDate = TextEditingController();
 
   RxString fromTime = ''.obs;
   RxString toTime = ''.obs;
@@ -210,8 +209,6 @@ class ScheduleController extends GetxController {
         callGetAllAppointments(0, 20);
       }
 
-      final DateFormat format = DateFormat('yyyy-MM-dd');
-      reschduleDate.text = format.format(DateTime.now());
       getTimes();
     } else {
       callGetAllAppointmentsForPatient(0);
@@ -277,7 +274,6 @@ class ScheduleController extends GetxController {
   }
 
   Future<void> callGetAllAppointments(int pageNo, int count) async {
-    print("count ----- $count");
     try {
       allAppointments =
           (await Get.find<AppointmentApi>().getAllAppointments(pageNo));
@@ -396,7 +392,6 @@ class ScheduleController extends GetxController {
   }
 
   Future<void> callGetAllAppointmentsByStaffId(int pageNo, int count) async {
-    print("count ----- $count");
     try {
       allAppointments = (await Get.find<AppointmentApi>()
           .getAllAppointmentsByStaffId(pageNo));
@@ -408,7 +403,7 @@ class ScheduleController extends GetxController {
       var now = DateTime.now();
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
       List<AppointmentContent> appointmentsCompleted =
-          list.where((i) => i.status?.toLowerCase() == "completed").toList();      
+          list.where((i) => i.status?.toLowerCase() == "completed").toList();
       List<AppointmentContent> appointmentsUpcoming = list
           .where(
             (i) =>
@@ -419,13 +414,13 @@ class ScheduleController extends GetxController {
                 formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                 i.status?.toLowerCase() != "completed",
           )
-          .toList();      
+          .toList();
       List<AppointmentContent> appointmentsToday = list
           .where((i) =>
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
               i.active == true &&
               i.status?.toLowerCase() != "completed")
-          .toList();      
+          .toList();
       appointmentsToday.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsUpcoming.sort((a, b) =>

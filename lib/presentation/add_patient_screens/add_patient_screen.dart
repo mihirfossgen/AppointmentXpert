@@ -189,7 +189,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                             return controller.numberValidator(value ?? "");
                           },
                           padding: TextFormFieldPadding.PaddingT14,
-                          textInputType: TextInputType.emailAddress,
+                          textInputType: TextInputType.phone,
                           prefixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56))),
                       SizedBox(
@@ -476,7 +476,7 @@ class AddPatientScreen extends GetWidget<AddPatientController> {
                             return controller.numberValidator(value ?? "");
                           },
                           padding: TextFormFieldPadding.PaddingT14,
-                          textInputType: TextInputType.emailAddress,
+                          textInputType: TextInputType.phone,
                           prefixConstraints:
                               BoxConstraints(maxHeight: getVerticalSize(56))),
                     ),

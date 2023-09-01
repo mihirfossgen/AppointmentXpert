@@ -72,4 +72,6 @@ class Endpoints {
   static const String patientUpdate = 'patient/update';
   static const String appointmentByUserId =
       "appointment/allAppointmentsWithExaminerId?";
+  static const String cancelledAppointments =
+      "appointment/getCancelAppointmentDetailsForDate?";
 }

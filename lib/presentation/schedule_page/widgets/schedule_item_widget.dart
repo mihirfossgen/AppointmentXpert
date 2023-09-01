@@ -356,7 +356,7 @@ class ScheduleItemWidget extends StatelessWidget {
                                         onTap: () async {
                                           if (appointment.examiner != null) {
                                             var data = {
-                                              "active": false,
+                                              "active": true,
                                               "id": appointment.id,
                                               "date": appointment.date,
                                               "examinerId":
@@ -670,6 +670,9 @@ class ScheduleItemWidget extends StatelessWidget {
                           RescheduleAppointmentController controllers =
                               Get.put(RescheduleAppointmentController());
                           final DateFormat formatter = DateFormat('dd-MM-yyyy');
+                          final DateFormat format = DateFormat('yyyy-MM-dd');
+                          controllers.reschduleDate.value =
+                              format.format(DateTime.now());
                           controllers.callGetAppointmentDetailsForDate(
                               formatter.format(DateTime.now()),
                               appointment.examiner?.id ?? 0);

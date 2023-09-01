@@ -43,22 +43,21 @@ class ScheduleTabContainerPage extends StatelessWidget {
           child: LiquidPullToRefresh(
             showChildOpacityTransition: false,
             onRefresh: () async {
-              String a = await SharedPrefUtils.readPrefStr('role');
-
+              String a = SharedPrefUtils.readPrefStr('role');
               // scheduleController.onClose();
               // scheduleController.onReady();
 
-              scheduleController.isloading.value = true;
               //pagingController.addPageRequestListener((pageKey) {
-              if (SharedPrefUtils.readPrefStr('role') != "PATIENT") {
+              if (a == "PATIENT") {
                 //SharedPrefUtils.readPrefINt('employee_Id')
-                if (SharedPrefUtils.readPrefStr('role') == "DOCTOR") {
-                  scheduleController.callGetAllAppointmentsByStaffId(0, 20);
-                } else {
-                  scheduleController.callGetAllAppointments(0, 20);
-                }
-              } else {
+                scheduleController.isloading.value = true;
                 scheduleController.callGetAllAppointmentsForPatient(0);
+              } else if (a == "DOCTOR") {
+                scheduleController.isloading.value = true;
+                scheduleController.callGetAllAppointmentsByStaffId(0, 20);
+              } else {
+                scheduleController.isloading.value = true;
+                scheduleController.callGetAllAppointments(0, 20);
               }
             },
             child: ListView(

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart' as Get;
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../core/utils/logger.dart';
@@ -340,6 +341,27 @@ class AppointmentApi {
       debugPrint('ssssss');
       var response = await _apiService.get(
           "${Endpoints.getStaffToadyAppointments}ExaminerId=$staffId&Role=DOCTOR");
+      List<dynamic> data = response.data;
+      List<AppointmentContent> list =
+          data.map((e) => AppointmentContent.fromJson(e)).toList();
+      return list;
+    } on DioError catch (e) {
+      print("e -- $e");
+      throw Exception(e.response?.data['error_description']);
+    } catch (e) {
+      print("e ----- $e");
+      throw Exception(e);
+    }
+  }
+
+  Future<List<AppointmentContent>> getAllCancelledAppointments() async {
+    int staffId = await SharedPrefUtils.readPrefINt('employee_Id');
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    String date = formatter.format(DateTime.now());
+    try {
+      debugPrint('ssssss');
+      var response = await _apiService.post(
+          "${Endpoints.cancelledAppointments}Date=$date&ExaminerId=$staffId");
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();

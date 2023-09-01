@@ -87,6 +87,7 @@ class DashboardController extends GetxController {
   Rx<StaffData> staffData = StaffData().obs;
   Rx<PatientData> patientData = PatientData().obs;
   RxList<AppointmentContent> staffTodaysData = <AppointmentContent>[].obs;
+  RxList<AppointmentContent> cancelledAppointments = <AppointmentContent>[].obs;
   RxList<AppointmentContent> staffTodaysCompletedData =
       <AppointmentContent>[].obs;
   RxList<AppointmentContent> staffTodaysTotalData = <AppointmentContent>[].obs;
@@ -116,6 +117,7 @@ class DashboardController extends GetxController {
   var isloadingPatientUpcomingAppointments = false.obs;
   var isloadingStaffData = false.obs;
   var isloadingStaffTodayAppointments = false.obs;
+  RxBool isloadingCancelledAppointments = false.obs;
   var isloadingStaffUpcomingAppointments = false.obs;
   var isloadingStaffList = false.obs;
   var isloadingRecentPatients = false.obs;
@@ -156,6 +158,7 @@ class DashboardController extends GetxController {
       role == "DOCTOR"
           ? callStaffTodayAppointmentsByStaffid()
           : callStaffTodayAppointments();
+      callAllCancelledAppointments();
       callStaffUpcomingAppointments();
       callStaffList(0);
       print(patientPagingController);
@@ -561,6 +564,7 @@ class DashboardController extends GetxController {
       }
       List<AppointmentContent> totalTodayList = list
           .where((i) =>
+              i.status?.toLowerCase() != 'completed' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       totalTodayList.sort((a, b) =>
@@ -580,6 +584,22 @@ class DashboardController extends GetxController {
       rethrow;
     } finally {
       isloadingStaffTodayAppointments.value = false;
+    }
+  }
+
+  Future<void> callAllCancelledAppointments() async {
+    try {
+      isloadingCancelledAppointments.value = true;
+      var response =
+          (await Get.find<AppointmentApi>().getAllCancelledAppointments());
+      List<AppointmentContent> list = response;
+      list.sort((a, b) =>
+          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+      cancelledAppointments.value = list;
+    } on Map {
+      rethrow;
+    } finally {
+      isloadingCancelledAppointments.value = false;
     }
   }
 
@@ -603,17 +623,15 @@ class DashboardController extends GetxController {
       }
       List<AppointmentContent> totalTodayList = list
           .where((i) =>
+              i.status?.toLowerCase() != 'completed' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       totalTodayList.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       staffTodaysTotalData.value = totalTodayList;
 
-      List<AppointmentContent> completedList = list
-          .where((i) =>
-              i.status?.toLowerCase() == 'completed' &&
-              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
-          .toList();
+      List<AppointmentContent> completedList =
+          list.where((i) => i.status?.toLowerCase() == 'completed').toList();
       completedList.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       staffTodaysCompletedData.value = completedList;

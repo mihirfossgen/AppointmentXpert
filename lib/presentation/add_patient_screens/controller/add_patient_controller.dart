@@ -385,7 +385,9 @@ class AddPatientController extends GetxController {
                         //       Get.offAllNamed(AppRoutes.dashboardScreen);
                         //     })
                       ])),
-            )));
+            ))).then((value) {
+          Get.offAllNamed(AppRoutes.dashboardScreen);
+        });
       }
     } on Map {
       //postLoginResp = e;

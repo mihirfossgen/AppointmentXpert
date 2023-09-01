@@ -47,6 +47,7 @@ import '../../shared_components/responsive_builder.dart';
 import '../../shared_components/selection_button.dart';
 import '../../shared_components/simple_selection_button.dart';
 import '../../shared_components/simple_user_profile.dart';
+import '../components/cancelled_appointments.dart';
 import '../components/dashboard_header.dart';
 import '../components/emergency_list.dart';
 import '../components/patients_list.dart';
@@ -303,6 +304,7 @@ class DashboardScreen extends GetView<DashboardController> {
             SharedPrefUtils.readPrefStr("role") == "DOCTOR"
                 ? controller.callStaffTodayAppointmentsByStaffid()
                 : controller.callStaffTodayAppointments();
+            controller.callAllCancelledAppointments();
             controller.callStaffUpcomingAppointments();
             controller.callStaffList(0);
             controller.callRecentPatientList(0);
@@ -1032,6 +1034,67 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ),
                               ),
                             ),
+                            (SharedPrefUtils.readPrefStr("role") == 'DOCTOR')
+                                ? Card(
+                                    elevation: 4,
+                                    color: Colors.white,
+                                    shadowColor: ColorConstant.gray400,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: HeaderText(
+                                                //DateTime.now().formatdMMMMY(),
+                                                "Cancelled Appointments"),
+                                          ),
+                                          const SizedBox(height: kSpacing),
+                                          Obx(() => controller
+                                                  .isloadingCancelledAppointments
+                                                  .value
+                                              ? const Center(
+                                                  child:
+                                                      CircularProgressIndicator())
+                                              : controller.cancelledAppointments
+                                                      .isNotEmpty
+                                                  ? CancelledAppointments(
+                                                      data: controller
+                                                          .cancelledAppointments)
+                                                  : Container(
+                                                      color: Colors.white,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              20),
+                                                      child: const Center(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              'No cancelled appointments found.',
+                                                              style: TextStyle(
+                                                                fontSize: 18,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    )),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
                             SharedPrefUtils.readPrefStr('role') == 'PATIENT'
                                 ? const SizedBox()
                                 : Card(

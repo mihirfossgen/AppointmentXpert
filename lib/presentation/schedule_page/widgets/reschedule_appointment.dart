@@ -24,7 +24,6 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
   final String? appointmentTime;
   ReschduleAppointment({super.key, this.appointment, this.appointmentTime});
 
-  ScheduleController scheduleController = Get.put(ScheduleController());
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -84,7 +83,7 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                       onDateSelected: (date) {
                         final DateFormat formatter = DateFormat('dd-MM-yyyy');
                         final DateFormat format = DateFormat('yyyy-MM-dd');
-                        controller.reschduleDate.text = format.format(date);
+                        controller.reschduleDate.value = format.format(date);
                         controller.callGetAppointmentDetailsForDate(
                             formatter.format(date),
                             appointment?.examiner?.id ?? 0);
@@ -321,7 +320,7 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                           .parse(controller.fromTime.value);
 
                                       DateTime userdate = DateTime.parse(
-                                          controller.reschduleDate.text);
+                                          controller.reschduleDate.value);
                                       DateTime a = DateTime(
                                           userdate.year,
                                           userdate.month,
@@ -337,7 +336,7 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                         var requestData = {
                                           "active": true,
                                           "date": DateTime.parse(
-                                                  "${controller.reschduleDate.text} ${controller.fromTime.value.replaceAll(" PM", "").replaceAll(" AM", "")}")
+                                                  "${controller.reschduleDate.value} ${controller.fromTime.value.replaceAll(" PM", "").replaceAll(" AM", "")}")
                                               .toIso8601String(),
                                           "startTime":
                                               controller.fromTime.value,

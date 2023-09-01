@@ -42,7 +42,12 @@ class PatientsList extends GetView<PatientListController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => AddPatientScreen());
+          Get.to(() => AddPatientScreen())?.then((value) {
+            controller.isloadingRecentPatients.value = true;
+            controller.patientPagingController =
+                PagingController(firstPageKey: 0);
+            controller.callRecentPatientList(0);
+          });
         },
         tooltip: 'Add New Patient',
         child: const Icon(Icons.add),
@@ -117,7 +122,8 @@ class PatientsList extends GetView<PatientListController> {
                           onSearch: (value) {
                             if (value.length > 2) {
                               List<Content> a = [];
-                              data?.forEach((element) {
+                              controller.getAllPatientsList.value
+                                  .forEach((element) {
                                 if (element.firstName!
                                     .toLowerCase()
                                     .contains(value.toLowerCase())) {
@@ -129,8 +135,8 @@ class PatientsList extends GetView<PatientListController> {
                               dashboardController
                                   .patientPagingController.itemList = a;
                             } else {
-                              dashboardController
-                                  .patientPagingController.itemList = data;
+                              dashboardController.patientPagingController
+                                  .itemList = controller.getAllPatientsList;
                             }
                           },
                         ),

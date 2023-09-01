@@ -7,7 +7,7 @@ import '../../../network/api/appointment_api.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
 
 class RescheduleAppointmentController extends GetxController {
-  TextEditingController reschduleDate = TextEditingController();
+  RxString reschduleDate = ''.obs;
   RxString fromTime = ''.obs;
   RxString toTime = ''.obs;
   List<String>? times;
