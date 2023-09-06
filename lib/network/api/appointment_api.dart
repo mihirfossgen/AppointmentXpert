@@ -361,7 +361,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       var response = await _apiService.post(
-          "${Endpoints.cancelledAppointments}Date=$date&ExaminerId=$staffId");
+          "${Endpoints.cancelledAppointments}Date=$date&ExaminerId=${SharedPrefUtils.readPrefStr('role') == "RECEPTIONIST" ? 0 : staffId}");
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();

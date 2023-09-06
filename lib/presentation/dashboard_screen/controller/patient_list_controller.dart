@@ -6,18 +6,30 @@ import '../../../models/patient_list_model.dart';
 import '../../../network/api/patient_api.dart';
 
 class PatientListController extends GetxController {
-  var isloadingRecentPatients = false.obs;
+  RxBool isloadingRecentPatients = false.obs;
   RxList<Content> getAllPatientsList = <Content>[].obs;
+  RxList<Content> tempList = <Content>[].obs;
   PagingController<int, Content> patientPagingController =
       PagingController(firstPageKey: 0);
   Rx<TextEditingController> searchedText = TextEditingController().obs;
   static const _pageSize = 20;
+  ScrollController scrollcontroller = ScrollController();
+  int pageno = 0;
   @override
   void onInit() {
     super.onInit();
-    patientPagingController.addPageRequestListener((pageKey) {
-      callRecentPatientList(0);
-    });
+    scrollcontroller.addListener(pagination);
+    //patientPagingController.addPageRequestListener((pageKey) {
+    callRecentPatientList(pageno);
+    // });
+  }
+
+  void pagination() {
+    if ((scrollcontroller.position.pixels ==
+            scrollcontroller.position.maxScrollExtent) &&
+        (getAllPatientsList.length == _pageSize)) {
+      callRecentPatientList(pageno++);
+    }
   }
 
   @override
@@ -31,23 +43,30 @@ class PatientListController extends GetxController {
     try {
       isloadingRecentPatients.value = true;
       var response = (await Get.find<PatientApi>().getAllPatientsList(pageNo));
-      getAllPatientsList.value = response.content ?? [];
+
       PatientList patientListData = response;
-      isloadingRecentPatients.value = false;
-      //patientPagingController.itemList = [];
-      final isLastPage = patientListData.content!.length < _pageSize;
-      if (isLastPage) {
-        isloadingRecentPatients.value = false;
-        List<Content> list = patientListData.content ?? [];
-        patientPagingController.appendLastPage(list);
+      if (patientListData.content != []) {
+        getAllPatientsList.addAll(patientListData.content ?? []);
+        tempList.addAll(patientListData.content ?? []);
       } else {
-        isloadingRecentPatients.value = false;
-        List<Content> list = patientListData.content ?? [];
-        getAllPatientsList.value = response.content ?? [];
-        final nextPageKey = pageNo + 1;
-        patientPagingController.appendPage(list, nextPageKey);
+        pageNo--;
       }
+
+      isloadingRecentPatients.value = false;
       update();
+      //patientPagingController.itemList = [];
+      // final isLastPage = patientListData.content!.length < _pageSize;
+      // if (isLastPage) {
+      //   isloadingRecentPatients.value = false;
+      //   List<Content> list = patientListData.content ?? [];
+      //   patientPagingController.appendLastPage(list);
+      // } else {
+      //   isloadingRecentPatients.value = false;
+      //   List<Content> list = patientListData.content ?? [];
+      //   getAllPatientsList.value = response.content ?? [];
+      //   final nextPageKey = pageNo + 1;
+      //   patientPagingController.appendPage(list, nextPageKey);
+      // }
     } on Map {
       //postLoginResp = e;
       rethrow;

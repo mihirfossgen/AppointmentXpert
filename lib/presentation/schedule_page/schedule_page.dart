@@ -23,226 +23,199 @@ class SchedulePage extends GetWidget<ScheduleController> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: double.maxFinite,
-        height: MediaQuery.of(context).size.height + 20,
-        child: ListView(
-          //mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SharedPrefUtils.readPrefStr('role') != "PATIENT"
-                ? Obx(() => Padding(
-                      padding: getPadding(left: 0, top: 12, right: 0),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: Responsive.isMobile(context) ||
-                                Responsive.isTablet(context)
-                            ? controller.isloading.value
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : SizedBox(
-                                    height: Responsive.isMobile(context)
-                                        ? MediaQuery.of(context).size.height *
-                                            0.65
-                                        : MediaQuery.of(context).size.height *
-                                            0.75,
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
-                                      // showNewPageProgressIndicatorAsGridChild:
-                                      //     false,
-                                      // showNewPageErrorIndicatorAsGridChild:
-                                      //     false,
-                                      // showNoMoreItemsIndicatorAsGridChild:
-                                      //     false,
-                                      itemCount: tab.toLowerCase() == 'today'
-                                          ? controller
-                                              .todayAppointments.value.length
-                                          : tab.toLowerCase() == 'upcoming'
-                                              ? controller.upcomingAppointments
-                                                  .value.length
-                                              : controller.completedAppointments
-                                                  .value.length,
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        childAspectRatio:
-                                            tab.toLowerCase() == 'completed'
-                                                ? ResponsiveBuilder.isMobile(
-                                                        context)
-                                                    ? MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        (MediaQuery.of(context)
-                                                                .size
-                                                                .height /
-                                                            5.7)
-                                                    : 1.9
-                                                : ResponsiveBuilder.isMobile(
-                                                        context)
-                                                    ? MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        (MediaQuery.of(context)
-                                                                .size
-                                                                .height /
-                                                            4.0)
-                                                    : 1.5,
-                                        // tab.toLowerCase() == 'completed'
-                                        //     ? ResponsiveBuilder.isMobile(
-                                        //             context)
-                                        //         ? 100 / 45
-                                        //         : 100 / 50
-                                        //     : ResponsiveBuilder.isMobile(
-                                        //             context)
-                                        //         ? 100 / 55
-                                        //         : 100 / 70,
-                                        crossAxisSpacing: 10,
-                                        mainAxisSpacing: 10,
-                                        crossAxisCount:
-                                            ResponsiveBuilder.isMobile(context)
-                                                ? 1
-                                                : ResponsiveBuilder.isTablet(
-                                                        context)
-                                                    ? 2
-                                                    : 3,
-                                      ),
-                                      itemBuilder: (context, index) {
-                                        AppointmentContent item;
-                                        if (tab.toLowerCase() == 'today') {
-                                          item = controller
-                                              .todayAppointments.value[index];
-                                        } else if (tab.toLowerCase() ==
-                                            'upcoming') {
-                                          item = controller.upcomingAppointments
-                                              .value[index];
-                                        } else {
-                                          item = controller
-                                              .completedAppointments
-                                              .value[index];
-                                        }
-                                        return ScheduleItemWidget(
-                                            item,
-                                            item.patient?.id ?? 0,
-                                            item.examiner?.id ?? 0,
-                                            tab);
-                                      },
-                                      // firstPageErrorIndicatorBuilder: (_) =>
-                                      //     FirstPageErrorIndicator(
-                                      //   error: _pagingController.error,
-                                      //   onTryAgain: () =>
-                                      //       _pagingController.refresh(),
-                                      // ),
-                                      // newPageErrorIndicatorBuilder: (_) =>
-                                      //     NewPageErrorIndicator(
-                                      //   error: _pagingController.error,
-                                      //   onTryAgain: () => _pagingController
-                                      //       .retryLastFailedRequest(),
-                                      // ),
-                                      // firstPageProgressIndicatorBuilder: (_) =>
-                                      //     FirstPageProgressIndicator(),
-                                      // newPageProgressIndicatorBuilder: (_) =>
-                                      //     NewPageProgressIndicator(),
-                                      // noItemsFoundIndicatorBuilder: (_) =>
-                                      //     loadEmptyWidget(),
-                                      //     const Text(
-                                      //   'No appointments found.',
-                                      //   textAlign: TextAlign.center,
-                                      // ),
-                                      // noMoreItemsIndicatorBuilder: (_) =>
-                                      //     const Padding(
-                                      //   padding: EdgeInsets.all(28.0),
-                                      //   child: Text(
-                                      //     'No more appointments.',
-                                      //     textAlign: TextAlign.center,
-                                      //   ),
-                                      // ),
-                                    ),
-                                  )
-                            //loadStaffAppointmentList()
-                            : loadStaffAppointmentsDataTable(),
-                      ),
-                    ))
-                : Obx(() => Padding(
-                    padding: getPadding(left: 0, top: 12, right: 0),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: Responsive.isMobile(context) ||
-                              Responsive.isTablet(context)
-                          ? controller.isloading.value
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : GridView.builder(
-                                  shrinkWrap: true,
-                                  // showNewPageProgressIndicatorAsGridChild:
-                                  //     false,
-                                  // showNewPageErrorIndicatorAsGridChild: false,
-                                  // showNoMoreItemsIndicatorAsGridChild: false,
-                                  itemCount: tab.toLowerCase() == 'today'
+    return ListView(
+      //mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SharedPrefUtils.readPrefStr('role') != "PATIENT"
+            ? Obx(() => Padding(
+                  padding: getPadding(left: 0, top: 12, right: 0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 1.4,
+                    child: Responsive.isMobile(context) ||
+                            Responsive.isTablet(context)
+                        ? controller.isloading.value
+                            ? const Center(child: CircularProgressIndicator())
+                            : GridView.builder(
+                                shrinkWrap: true,
+                                // showNewPageProgressIndicatorAsGridChild:
+                                //     false,
+                                // showNewPageErrorIndicatorAsGridChild:
+                                //     false,
+                                // showNoMoreItemsIndicatorAsGridChild:
+                                //     false,
+                                itemCount: tab.toLowerCase() == 'today'
+                                    ? controller.todayAppointments.value.length
+                                    : tab.toLowerCase() == 'upcoming'
+                                        ? controller
+                                            .upcomingAppointments.value.length
+                                        : controller
+                                            .completedAppointments.value.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio: tab.toLowerCase() ==
+                                          'completed'
+                                      ? ResponsiveBuilder.isMobile(context)
+                                          ? MediaQuery.of(context).size.width /
+                                              (MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  5.7)
+                                          : 1.9
+                                      : ResponsiveBuilder.isMobile(context)
+                                          ? MediaQuery.of(context).size.width /
+                                              (MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  4.0)
+                                          : 1.5,
+                                  // tab.toLowerCase() == 'completed'
+                                  //     ? ResponsiveBuilder.isMobile(
+                                  //             context)
+                                  //         ? 100 / 45
+                                  //         : 100 / 50
+                                  //     : ResponsiveBuilder.isMobile(
+                                  //             context)
+                                  //         ? 100 / 55
+                                  //         : 100 / 70,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  crossAxisCount:
+                                      ResponsiveBuilder.isMobile(context)
+                                          ? 1
+                                          : ResponsiveBuilder.isTablet(context)
+                                              ? 2
+                                              : 3,
+                                ),
+                                itemBuilder: (context, index) {
+                                  AppointmentContent item;
+                                  if (tab.toLowerCase() == 'today') {
+                                    item = controller
+                                        .todayAppointments.value[index];
+                                  } else if (tab.toLowerCase() == 'upcoming') {
+                                    item = controller
+                                        .upcomingAppointments.value[index];
+                                  } else {
+                                    item = controller
+                                        .completedAppointments.value[index];
+                                  }
+                                  return ScheduleItemWidget(
+                                      item,
+                                      item.patient?.id ?? 0,
+                                      item.examiner?.id ?? 0,
+                                      tab);
+                                },
+                                // firstPageErrorIndicatorBuilder: (_) =>
+                                //     FirstPageErrorIndicator(
+                                //   error: _pagingController.error,
+                                //   onTryAgain: () =>
+                                //       _pagingController.refresh(),
+                                // ),
+                                // newPageErrorIndicatorBuilder: (_) =>
+                                //     NewPageErrorIndicator(
+                                //   error: _pagingController.error,
+                                //   onTryAgain: () => _pagingController
+                                //       .retryLastFailedRequest(),
+                                // ),
+                                // firstPageProgressIndicatorBuilder: (_) =>
+                                //     FirstPageProgressIndicator(),
+                                // newPageProgressIndicatorBuilder: (_) =>
+                                //     NewPageProgressIndicator(),
+                                // noItemsFoundIndicatorBuilder: (_) =>
+                                //     loadEmptyWidget(),
+                                //     const Text(
+                                //   'No appointments found.',
+                                //   textAlign: TextAlign.center,
+                                // ),
+                                // noMoreItemsIndicatorBuilder: (_) =>
+                                //     const Padding(
+                                //   padding: EdgeInsets.all(28.0),
+                                //   child: Text(
+                                //     'No more appointments.',
+                                //     textAlign: TextAlign.center,
+                                //   ),
+                                // ),
+                              )
+                        //loadStaffAppointmentList()
+                        : loadStaffAppointmentsDataTable(),
+                  ),
+                ))
+            : Obx(() => Padding(
+                padding: getPadding(left: 0, top: 12, right: 0),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Responsive.isMobile(context) ||
+                          Responsive.isTablet(context)
+                      ? controller.isloading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              // showNewPageProgressIndicatorAsGridChild:
+                              //     false,
+                              // showNewPageErrorIndicatorAsGridChild: false,
+                              // showNoMoreItemsIndicatorAsGridChild: false,
+                              itemCount: tab.toLowerCase() == 'today'
+                                  ? controller.todayAppointments.value.length
+                                  : tab.toLowerCase() == 'upcoming'
                                       ? controller
-                                          .todayAppointments.value.length
-                                      : tab.toLowerCase() == 'upcoming'
-                                          ? controller
-                                              .upcomingAppointments.value.length
-                                          : controller.completedAppointments
-                                              .value.length,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: tab.toLowerCase() ==
-                                            'completed'
-                                        ? ResponsiveBuilder.isMobile(context)
-                                            ? MediaQuery.of(context)
+                                          .upcomingAppointments.value.length
+                                      : controller
+                                          .completedAppointments.value.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: tab.toLowerCase() ==
+                                        'completed'
+                                    ? ResponsiveBuilder.isMobile(context)
+                                        ? MediaQuery.of(context).size.width /
+                                            (MediaQuery.of(context)
                                                     .size
-                                                    .width /
-                                                (MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    5.7)
-                                            : 1.9
-                                        : ResponsiveBuilder.isMobile(context)
-                                            ? MediaQuery.of(context)
+                                                    .height /
+                                                5.7)
+                                        : 1.9
+                                    : ResponsiveBuilder.isMobile(context)
+                                        ? MediaQuery.of(context).size.width /
+                                            (MediaQuery.of(context)
                                                     .size
-                                                    .width /
-                                                (MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    4.0)
-                                            : 1.5,
-                                    // tab.toLowerCase() == 'completed'
-                                    //     ? 100 / 50
-                                    //     : 100 / 70,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    crossAxisCount: ResponsiveBuilder.isMobile(
-                                            context)
+                                                    .height /
+                                                4.0)
+                                        : 1.5,
+                                // tab.toLowerCase() == 'completed'
+                                //     ? 100 / 50
+                                //     : 100 / 70,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                crossAxisCount:
+                                    ResponsiveBuilder.isMobile(context)
                                         ? 1
                                         : ResponsiveBuilder.isTablet(context)
                                             ? 2
                                             : 3,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    AppointmentContent item;
-                                    if (tab.toLowerCase() == 'today') {
-                                      item = controller
-                                          .todayAppointments.value[index];
-                                    } else if (tab.toLowerCase() ==
-                                        'upcoming') {
-                                      item = controller
-                                          .upcomingAppointments.value[index];
-                                    } else {
-                                      item = controller
-                                          .completedAppointments.value[index];
-                                    }
-                                    return ScheduleItemWidget(
-                                        item,
-                                        item.patient?.id ?? 0,
-                                        item.examiner?.id ?? 0,
-                                        tab);
-                                  },
-                                )
-                          //loadPatientAppointmentsList()
-                          : loadPatientAppointmentsDataTable(),
-                    )))
-          ],
-        ));
+                              ),
+                              itemBuilder: (context, index) {
+                                AppointmentContent item;
+                                if (tab.toLowerCase() == 'today') {
+                                  item =
+                                      controller.todayAppointments.value[index];
+                                } else if (tab.toLowerCase() == 'upcoming') {
+                                  item = controller
+                                      .upcomingAppointments.value[index];
+                                } else {
+                                  item = controller
+                                      .completedAppointments.value[index];
+                                }
+                                return ScheduleItemWidget(
+                                    item,
+                                    item.patient?.id ?? 0,
+                                    item.examiner?.id ?? 0,
+                                    tab);
+                              },
+                            )
+                      //loadPatientAppointmentsList()
+                      : loadPatientAppointmentsDataTable(),
+                )))
+      ],
+    );
   }
 
   Widget loadEmptyWidget() {
