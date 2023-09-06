@@ -7,7 +7,7 @@ class EncryptData {
   static var decrypted;
 
   static encryptAES(plainText) {
-    final key = Key.fromUtf8('my 32 length key................');
+    final key = Key.fromUtf8('This Is Fossgen Private Key Apps');
     final iv = IV.fromLength(16);
     final encrypter = Encrypter(AES(key));
     encrypted = encrypter.encrypt(plainText, iv: iv);
@@ -16,7 +16,7 @@ class EncryptData {
   }
 
   static decryptAES(plainText) {
-    final key = Key.fromUtf8('my 32 length key................');
+    final key = Key.fromUtf8('This Is Fossgen Private Key Apps');
     final iv = IV.fromLength(16);
     final encrypter = Encrypter(AES(key));
     decrypted = encrypter.decrypt(encrypted!, iv: iv);

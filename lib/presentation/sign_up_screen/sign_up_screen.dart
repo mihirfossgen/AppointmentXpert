@@ -535,12 +535,12 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
   Future<void> onTapSignup() async {
     Map<String, dynamic> requestData = {
-      "email": EncryptData.encryptAES(controller.enteremailController.text),
-      "mobile": EncryptData.encryptAES(controller.enternumberController.text),
+      "email": controller.enteremailController.text,
+      "mobile": controller.enternumberController.text,
       "password": "",
       "role": "PATIENT",
       "termsAndConditionFlag": controller.isCheckbox.value,
-      "username": EncryptData.encryptAES(controller.enternumberController.text)
+      "username": controller.enternumberController.text
     };
     print(jsonEncode(requestData));
     try {

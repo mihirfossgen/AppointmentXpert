@@ -134,7 +134,7 @@ class LoginController extends GetxController {
     try {
       getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
         'Content-type': 'application/x-www-form-urlencoded',
-      }, number: EncryptData.encryptAES(number), type: type);
+      }, number: number, type: type);
       isloading.value = false;
       if (getOtp?.result == false) {
         isloading.value = false;

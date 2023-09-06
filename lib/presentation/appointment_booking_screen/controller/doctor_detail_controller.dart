@@ -313,7 +313,10 @@ class DoctorDetailController extends GetxController {
         element.isSelected = true;
         final DateFormat formatter = DateFormat('dd-MM-yyyy');
         await callGetAppointmentDetailsForDate(
-                formatter.format(DateTime.now()), element.id ?? 0)
+                dob.text != ''
+                    ? formatter.format(DateTime.parse(dob.text))
+                    : formatter.format(DateTime.now()),
+                element.id ?? 0)
             .then((value) {
           getTimes(
               element.startTime?.replaceAll(" PM", "") ?? "11:45",

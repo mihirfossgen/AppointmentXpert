@@ -78,8 +78,8 @@ class ScheduleItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 80,
-              width: 80,
+              height: 60,
+              width: 60,
               //decoration: BoxDecoration(
               //    color: Colors.black, borderRadius: BorderRadius.circular(12)),
               child: appointment.patient?.profilePicture != null
@@ -192,14 +192,14 @@ class ScheduleItemWidget extends StatelessWidget {
 
   Widget loadCard() {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
       child: SizedBox(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 80,
-              width: 80,
+              height: 60,
+              width: 60,
               //decoration: BoxDecoration(
               //    color: Colors.black, borderRadius: BorderRadius.circular(12)),
               child: appointment.patient?.profilePicture != null

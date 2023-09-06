@@ -390,23 +390,22 @@ class LoginScreen extends GetWidget<LoginController> {
           ),
           //margin: getMargin(top: 12, bottom: 10),
           onPressed: () async {
-            EncryptData.decryptAES("MtWx3RP5qchMBc5OonyMtg==");
-            // if (controller.trySubmit()) {
-            //   controller.isloading.value = true;
+            if (controller.trySubmit()) {
+              controller.isloading.value = true;
 
-            //   bool resp = await controller.callOtp(
-            //       controller.emailController.text, "login");
-            //   if (resp) {
-            //     VerifyNumberController verifyNumberController =
-            //         Get.put(VerifyNumberController());
-            //     if (controller
-            //         .detectPhoneNumber(controller.emailController.text)) {
-            //       showVerifyController(false);
-            //     } else {
-            //       showVerifyController(true);
-            //     }
-            //   }
-            // }
+              bool resp = await controller.callOtp(
+                  controller.emailController.text, "login");
+              if (resp) {
+                VerifyNumberController verifyNumberController =
+                    Get.put(VerifyNumberController());
+                if (controller
+                    .detectPhoneNumber(controller.emailController.text)) {
+                  showVerifyController(false);
+                } else {
+                  showVerifyController(true);
+                }
+              }
+            }
           }),
     );
   }
