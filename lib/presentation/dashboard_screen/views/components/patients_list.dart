@@ -66,6 +66,8 @@ class PatientsList extends GetView<PatientListController> {
             onRefresh: () async {
               controller.isloadingRecentPatients.value = true;
               controller.pageno = 0;
+              controller.getAllPatientsList.clear();
+              controller.tempList.clear();
               controller.callRecentPatientList(controller.pageno);
             },
             child: SingleChildScrollView(

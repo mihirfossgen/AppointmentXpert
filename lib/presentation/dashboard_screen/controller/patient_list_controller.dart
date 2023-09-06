@@ -18,17 +18,18 @@ class PatientListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    if (pageno == 0) {
+      callRecentPatientList(pageno);
+    }
     scrollcontroller.addListener(pagination);
-    //patientPagingController.addPageRequestListener((pageKey) {
-    callRecentPatientList(pageno);
-    // });
   }
 
   void pagination() {
     if ((scrollcontroller.position.pixels ==
             scrollcontroller.position.maxScrollExtent) &&
-        (getAllPatientsList.length == _pageSize)) {
-      callRecentPatientList(pageno++);
+        (getAllPatientsList.length > _pageSize)) {
+      callRecentPatientList(pageno);
     }
   }
 
@@ -45,11 +46,13 @@ class PatientListController extends GetxController {
       var response = (await Get.find<PatientApi>().getAllPatientsList(pageNo));
 
       PatientList patientListData = response;
+
       if (patientListData.content != []) {
         getAllPatientsList.addAll(patientListData.content ?? []);
         tempList.addAll(patientListData.content ?? []);
+        pageno++;
       } else {
-        pageNo--;
+        pageno = 0;
       }
 
       isloadingRecentPatients.value = false;
