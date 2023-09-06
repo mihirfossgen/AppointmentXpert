@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:appointmentxpert/core/scaffolds/desktop_scaffold.dart';
 import 'package:appointmentxpert/core/scaffolds/mobile_scaffold.dart';
 import 'package:appointmentxpert/core/scaffolds/public_master_layout/public_master_layout.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -21,6 +22,7 @@ import '../../domain/googleauth/google_auth_helper.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/custom_text_form_field.dart';
+import '../../widgets/encrypt_decrypt.dart';
 import '../../widgets/loader.dart';
 import '../../widgets/responsive.dart';
 import '../dashboard_screen/shared_components/responsive_builder.dart';
@@ -388,22 +390,23 @@ class LoginScreen extends GetWidget<LoginController> {
           ),
           //margin: getMargin(top: 12, bottom: 10),
           onPressed: () async {
-            if (controller.trySubmit()) {
-              controller.isloading.value = true;
+            EncryptData.decryptAES("MtWx3RP5qchMBc5OonyMtg==");
+            // if (controller.trySubmit()) {
+            //   controller.isloading.value = true;
 
-              bool resp = await controller.callOtp(
-                  controller.emailController.text, "login");
-              if (resp) {
-                VerifyNumberController verifyNumberController =
-                    Get.put(VerifyNumberController());
-                if (controller
-                    .detectPhoneNumber(controller.emailController.text)) {
-                  showVerifyController(false);
-                } else {
-                  showVerifyController(true);
-                }
-              }
-            }
+            //   bool resp = await controller.callOtp(
+            //       controller.emailController.text, "login");
+            //   if (resp) {
+            //     VerifyNumberController verifyNumberController =
+            //         Get.put(VerifyNumberController());
+            //     if (controller
+            //         .detectPhoneNumber(controller.emailController.text)) {
+            //       showVerifyController(false);
+            //     } else {
+            //       showVerifyController(true);
+            //     }
+            //   }
+            // }
           }),
     );
   }

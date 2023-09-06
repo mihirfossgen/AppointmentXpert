@@ -8,6 +8,7 @@ import '../../../models/verify_otp_model.dart';
 import '../../../network/api/user_api.dart';
 import '../../../network/api/verify_otp.dart';
 import '../../../shared_prefrences_page/shared_prefrence_page.dart';
+import '../../../widgets/encrypt_decrypt.dart';
 import '../models/login_model.dart';
 
 class LoginController extends GetxController {
@@ -133,7 +134,7 @@ class LoginController extends GetxController {
     try {
       getOtp = await Get.find<VerifyOtpApi>().callOtp(headers: {
         'Content-type': 'application/x-www-form-urlencoded',
-      }, number: number, type: type);
+      }, number: EncryptData.encryptAES(number), type: type);
       isloading.value = false;
       if (getOtp?.result == false) {
         isloading.value = false;

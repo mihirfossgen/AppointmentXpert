@@ -1,27 +1,22 @@
 import 'dart:convert';
 
+import 'package:appointmentxpert/widgets/encrypt_decrypt.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../core/constants/constants.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
-import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/app_bar/appbar_subtitle_2.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 import '../../widgets/custom_checkbox.dart';
-import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/responsive.dart';
 import '../dashboard_screen/shared_components/responsive_builder.dart';
-import '../sign_up_success_dialog/controller/sign_up_success_controller.dart';
-import '../sign_up_success_dialog/sign_up_success_dialog.dart';
 import 'controller/sign_up_controller.dart';
 import 'models/pdfview.dart';
 
@@ -540,12 +535,12 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
   Future<void> onTapSignup() async {
     Map<String, dynamic> requestData = {
-      "email": controller.enteremailController.text,
-      "mobile": controller.enternumberController.text,
+      "email": EncryptData.encryptAES(controller.enteremailController.text),
+      "mobile": EncryptData.encryptAES(controller.enternumberController.text),
       "password": "",
       "role": "PATIENT",
       "termsAndConditionFlag": controller.isCheckbox.value,
-      "username": controller.enternumberController.text
+      "username": EncryptData.encryptAES(controller.enternumberController.text)
     };
     print(jsonEncode(requestData));
     try {
