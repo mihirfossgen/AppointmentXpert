@@ -338,7 +338,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       var response = await _apiService.get(
-          "${Endpoints.getStaffToadyAppointments}ExaminerId=38&Role=DOCTOR");
+          "${Endpoints.getStaffToadyAppointments}ExaminerId=$staffId&Role=DOCTOR");
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();
