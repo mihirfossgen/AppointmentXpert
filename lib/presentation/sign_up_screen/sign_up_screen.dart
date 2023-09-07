@@ -255,7 +255,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                   //   height: size.height * 0.03,
                   // ),
                   CustomTextFormField(
-                      labelText: "Enter your Email",
+                      labelText: "Enter your Email Id",
                       controller: controller.enteremailController,
                       isRequired: true,
                       //padding: TextFormFieldPadding.PaddingT16_2,
@@ -270,7 +270,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                     height: size.height * 0.03,
                   ),
                   CustomTextFormField(
-                      labelText: "Enter your number",
+                      labelText: "Enter your Number",
                       controller: controller.enternumberController,
                       isRequired: true,
                       maxLength: 10,
@@ -340,7 +340,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
                           softWrap: true,
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                              text: 'I agree to the OPDXpert ',
+                              text: 'I agree to the ',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -457,6 +457,11 @@ class SignUpScreen extends GetWidget<SignUpController> {
                             ),
                           ),
                         ),
+                        Text('Fossgen Technologies Pvt Ltd',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),

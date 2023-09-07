@@ -33,10 +33,8 @@ class AppointmentApi {
       return list;
       // return GetAllAppointments.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -340,7 +338,7 @@ class AppointmentApi {
     try {
       debugPrint('ssssss');
       var response = await _apiService.get(
-          "${Endpoints.getStaffToadyAppointments}ExaminerId=$staffId&Role=DOCTOR");
+          "${Endpoints.getStaffToadyAppointments}ExaminerId=38&Role=DOCTOR");
       List<dynamic> data = response.data;
       List<AppointmentContent> list =
           data.map((e) => AppointmentContent.fromJson(e)).toList();

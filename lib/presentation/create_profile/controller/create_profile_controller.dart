@@ -200,14 +200,13 @@ class CreateProfileController extends GetxController {
   }
 
   String? pincodeValidator(String value) {
-    String pattern = r"^[1-9]{1}[0-9]{2}\\s{0, 1}[0-9]{3}$";
+    String pattern = r"^[1-9][0-9]{5}$";
     RegExp regExp = RegExp(pattern);
     if (value.isEmpty) {
       return 'Please enter pincode';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid pincode';
     }
-    // else if (!regExp.hasMatch(value)) {
-    //   return 'Please enter valid pincode';
-    // }
     return null;
   }
 

@@ -122,6 +122,9 @@ class LoginScreen extends GetWidget<LoginController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(
+              height: 150,
+            ),
             Center(
               child: Image.asset(
                 !Responsive.isDesktop(Get.context!)
@@ -149,7 +152,7 @@ class LoginScreen extends GetWidget<LoginController> {
                       hintText: 'Enter mobile number or email',
                       isRequired: true,
                       //maxLength: 10,
-                      textInputType: TextInputType.phone,
+                      textInputType: TextInputType.name,
                       validator: (value) {
                         return controller.numberOrEmailValidator(value ?? "");
                       },
@@ -346,6 +349,7 @@ class LoginScreen extends GetWidget<LoginController> {
                         : const SizedBox(
                             height: 20,
                           ),
+
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Column(
@@ -355,7 +359,7 @@ class LoginScreen extends GetWidget<LoginController> {
                             style: AppStyle.txtInterRegular16,
                           ),
                           const SizedBox(
-                            height: 75,
+                            height: 65,
                             child: AspectRatio(
                               aspectRatio: 16 / 9,
                               child: Image(
@@ -364,6 +368,11 @@ class LoginScreen extends GetWidget<LoginController> {
                               ),
                             ),
                           ),
+                          const Text('Fossgen Technologies Pvt Ltd',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -532,6 +541,7 @@ onTapRowgoogle() async {
         Get.snackbar('Error', 'user data is empty');
       }
     }).catchError((onError) {
+      print(onError.toString());
       Get.snackbar('Error', onError.toString());
     });
   }

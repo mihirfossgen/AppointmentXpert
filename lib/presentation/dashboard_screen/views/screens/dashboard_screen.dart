@@ -48,6 +48,7 @@ import '../../shared_components/selection_button.dart';
 import '../../shared_components/simple_selection_button.dart';
 import '../../shared_components/simple_user_profile.dart';
 import '../components/cancelled_appointments.dart';
+import '../components/completed_appointments.dart';
 import '../components/dashboard_header.dart';
 import '../components/emergency_list.dart';
 import '../components/patients_list.dart';
@@ -1034,8 +1035,9 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ),
                               ),
                             ),
-                            (SharedPrefUtils.readPrefStr("role") == 'DOCTOR')
-                                ? Card(
+                            (SharedPrefUtils.readPrefStr("role") == 'PATIENT')
+                                ? const SizedBox()
+                                : Card(
                                     elevation: 4,
                                     color: Colors.white,
                                     shadowColor: ColorConstant.gray400,
@@ -1093,8 +1095,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         ],
                                       ),
                                     ),
-                                  )
-                                : const SizedBox(),
+                                  ),
                             SharedPrefUtils.readPrefStr('role') == 'PATIENT'
                                 ? const SizedBox()
                                 : Card(
@@ -2819,53 +2820,73 @@ class DashboardScreen extends GetView<DashboardController> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: ColorConstant.blue60001,
+                          InkWell(
+                            onTap: () {
+                              Get.to(() => Completedappointments(
+                                    completedAppointments:
+                                        controller.staffTodaysCompletedData,
+                                  ));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: ColorConstant.blue60001,
+                                      ),
+                                      child: const Icon(
+                                          Icons.access_time_filled_outlined,
+                                          size: 40,
+                                          color: Colors.white),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Countup(
+                                            begin: 0,
+                                            end: double.parse(controller
+                                                .staffTodaysCompletedData.length
+                                                .toString()),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            separator: ',',
+                                            style: TextStyle(
+                                              fontSize: Responsive.isDesktop(
+                                                      Get.context!)
+                                                  ? 30
+                                                  : 18,
+                                              color: Colors.blue.shade900,
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "Completed Appointments",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                              color: ColorConstant.black900),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                child: const Icon(
-                                    Icons.access_time_filled_outlined,
-                                    size: 40,
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Countup(
-                                      begin: 0,
-                                      end: double.parse(controller
-                                          .staffTodaysCompletedData.length
-                                          .toString()),
-                                      duration: const Duration(seconds: 3),
-                                      separator: ',',
-                                      style: TextStyle(
-                                        fontSize:
-                                            Responsive.isDesktop(Get.context!)
-                                                ? 30
-                                                : 18,
-                                        color: Colors.blue.shade900,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Completed Appointments",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
-                                        color: ColorConstant.black900),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Icon(Icons.arrow_right)
+                              ],
+                            ),
                           )
                         ])
                   : SingleChildScrollView(

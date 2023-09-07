@@ -69,7 +69,6 @@ class DioClient {
         throw errorMessage;
       }
     } catch (e) {
-      if (kDebugMode) print(e);
       throw e.toString();
     }
   }
@@ -116,7 +115,6 @@ class DioClient {
         throw errorMessage;
       }
     } catch (e) {
-      if (kDebugMode) print(e);
       throw e.toString();
     }
   }
@@ -154,7 +152,6 @@ class DioClient {
       final errorMessage = DioException.fromDioError(err.type).toString();
       throw errorMessage;
     } catch (e) {
-      if (kDebugMode) print(e);
       throw e.toString();
     }
   }
@@ -194,7 +191,6 @@ class DioClient {
       final errorMessage = DioException.fromDioError(err.type).toString();
       throw errorMessage;
     } catch (e) {
-      if (kDebugMode) print(e);
       throw e.toString();
     }
   }
@@ -232,7 +228,6 @@ class DioClient {
       final errorMessage = DioException.fromDioError(err.type).toString();
       throw errorMessage;
     } catch (e) {
-      if (kDebugMode) print(e);
       throw e.toString();
     }
   }

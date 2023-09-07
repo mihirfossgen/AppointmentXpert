@@ -429,7 +429,7 @@ class ScheduleController extends GetxController {
       appointmentsUpcoming.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
-          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
       // todayPagingController.value.appendLastPage(appointmentsToday);
       // upcomingPagingController.value.appendLastPage(appointmentsUpcoming);
       // completedPagingController.value.appendLastPage(appointmentsCompleted);
