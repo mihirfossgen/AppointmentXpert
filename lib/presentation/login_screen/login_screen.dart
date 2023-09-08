@@ -270,7 +270,7 @@ class LoginScreen extends GetWidget<LoginController> {
                                       Buttons.google,
                                       text: "Sign in with Google",
                                       onPressed: () {
-                                        onTapRowgoogle();
+                                        onTapRowgoogle(controller);
                                       },
                                     ),
                                   ),
@@ -409,9 +409,9 @@ class LoginScreen extends GetWidget<LoginController> {
                     Get.put(VerifyNumberController());
                 if (controller
                     .detectPhoneNumber(controller.emailController.text)) {
-                  showVerifyController(false);
+                  showVerifyController(false, "");
                 } else {
-                  showVerifyController(true);
+                  showVerifyController(true, "");
                 }
               }
             }
@@ -419,10 +419,108 @@ class LoginScreen extends GetWidget<LoginController> {
     );
   }
 
-  showVerifyController(bool isVerifyEmail) {
+  onTapTxtForgotPassword() {
+    Get.toNamed(
+      AppRoutes.resetPasswordEmailTabContainerScreen,
+    );
+  }
+
+  Future<void> onTapSignin(LoginController controller) async {
+    Map<String, dynamic> requestData = {
+      'userName': controller.emailController.text,
+      'password': "qwerty"
+    };
+    try {
+      await controller.callCreateLogin(requestData);
+      // onTapLoginOne();
+    } on Map {
+      _onOnTapSignInError();
+    } on NoInternetException catch (e) {
+      Get.rawSnackbar(message: e.toString());
+    } catch (e) {
+      Get.rawSnackbar(message: e.toString());
+    }
+  }
+
+  void _onOnTapSignInError() {
+    Fluttertoast.showToast(
+      msg: "Invalid username or password!",
+    );
+  }
+
+  onTapLoginOne() {
+    Get.dialog(AlertDialog(
+      backgroundColor: Colors.transparent,
+      contentPadding: EdgeInsets.zero,
+      insetPadding: const EdgeInsets.only(left: 0),
+      content: LoginSuccessDialog(
+        Get.put(
+          LoginSuccessController(),
+        ),
+      ),
+    ));
+  }
+
+  onTapTxtSignUp() {
+    Get.toNamed(
+      AppRoutes.signUpScreen,
+    );
+  }
+
+  onTapRowgoogle(LoginController controller) async {
+    if (kIsWeb) {
+      GoogleAuthProvider authProvider = GoogleAuthProvider();
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      //final GoogleSignIn googleSignIn = GoogleSignIn();
+      auth.signInWithPopup(authProvider).then((result) {
+        print(result);
+      }).catchError((e) {
+        print(e);
+        var snackbar = const SnackBar(
+            width: 500,
+            padding: EdgeInsets.all(10),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            duration: Duration(seconds: 3),
+            dismissDirection: DismissDirection.horizontal,
+            closeIconColor: Colors.white,
+            backgroundColor: Colors.redAccent,
+            content: Center(
+              child: Text(
+                "Error, please try again later!",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ));
+        ScaffoldMessenger.of(Get.context!).showSnackBar(snackbar);
+      });
+    } else {
+      await GoogleAuthHelper().googleSignInProcess().then((googleUser) async {
+        if (googleUser != null) {
+          bool resp = await controller.callOtp(googleUser.email, "login");
+          if (resp) {
+            showVerifyController(true, googleUser.email);
+          }
+        } else {
+          Get.snackbar('Error', 'user data is empty');
+        }
+      }).catchError((onError) {
+        print(onError.toString());
+        Get.snackbar('Error', onError.toString());
+      });
+    }
+  }
+
+  showVerifyController(bool isVerifyEmail, String emailViaGoogleTap) {
     !Responsive.isDesktop(Get.context!)
         ? Get.to(() => VerifyPhoneNumberScreen(
-              phoneNumber: controller.emailController.text,
+              phoneNumber: emailViaGoogleTap == ''
+                  ? controller.emailController.text
+                  : emailViaGoogleTap,
               isVerifyEmail: isVerifyEmail,
             ))
         : WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -441,7 +539,9 @@ class LoginScreen extends GetWidget<LoginController> {
                           height: Responsive.isMobile(context) ? 300 : 400,
                           width: MediaQuery.of(context).size.width / 2,
                           child: VerifyPhoneNumberScreen(
-                            phoneNumber: controller.emailController.text,
+                            phoneNumber: emailViaGoogleTap == ''
+                                ? controller.emailController.text
+                                : emailViaGoogleTap,
                             isVerifyEmail: isVerifyEmail,
                           )),
                     )).then((value) {
@@ -449,101 +549,6 @@ class LoginScreen extends GetWidget<LoginController> {
               if (value) onTapSignin(controller);
             });
           });
-  }
-}
-
-onTapTxtForgotPassword() {
-  Get.toNamed(
-    AppRoutes.resetPasswordEmailTabContainerScreen,
-  );
-}
-
-Future<void> onTapSignin(LoginController controller) async {
-  Map<String, dynamic> requestData = {
-    'userName': controller.emailController.text,
-    'password': "qwerty"
-  };
-  try {
-    await controller.callCreateLogin(requestData);
-    // onTapLoginOne();
-  } on Map {
-    _onOnTapSignInError();
-  } on NoInternetException catch (e) {
-    Get.rawSnackbar(message: e.toString());
-  } catch (e) {
-    Get.rawSnackbar(message: e.toString());
-  }
-}
-
-void _onOnTapSignInError() {
-  Fluttertoast.showToast(
-    msg: "Invalid username or password!",
-  );
-}
-
-onTapLoginOne() {
-  Get.dialog(AlertDialog(
-    backgroundColor: Colors.transparent,
-    contentPadding: EdgeInsets.zero,
-    insetPadding: const EdgeInsets.only(left: 0),
-    content: LoginSuccessDialog(
-      Get.put(
-        LoginSuccessController(),
-      ),
-    ),
-  ));
-}
-
-onTapTxtSignUp() {
-  Get.toNamed(
-    AppRoutes.signUpScreen,
-  );
-}
-
-onTapRowgoogle() async {
-  if (kIsWeb) {
-    GoogleAuthProvider authProvider = GoogleAuthProvider();
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    //final GoogleSignIn googleSignIn = GoogleSignIn();
-    auth.signInWithPopup(authProvider).then((result) {
-      print(result);
-    }).catchError((e) {
-      print(e);
-      var snackbar = const SnackBar(
-          width: 500,
-          padding: EdgeInsets.all(10),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          duration: Duration(seconds: 3),
-          dismissDirection: DismissDirection.horizontal,
-          closeIconColor: Colors.white,
-          backgroundColor: Colors.redAccent,
-          content: Center(
-            child: Text(
-              "Error, please try again later!",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ));
-      ScaffoldMessenger.of(Get.context!).showSnackBar(snackbar);
-    });
-  } else {
-    await GoogleAuthHelper().googleSignInProcess().then((googleUser) {
-      if (googleUser != null) {
-        //TODO Actions to be performed after signin
-        Get.to(SignUpScreen(
-            name: googleUser.displayName, email: googleUser.email));
-      } else {
-        Get.snackbar('Error', 'user data is empty');
-      }
-    }).catchError((onError) {
-      print(onError.toString());
-      Get.snackbar('Error', onError.toString());
-    });
   }
 }
 

@@ -630,10 +630,13 @@ class DashboardController extends GetxController {
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       staffTodaysTotalData.value = totalTodayList;
 
-      List<AppointmentContent> completedList =
-          list.where((i) => i.status?.toLowerCase() == 'completed').toList();
+      List<AppointmentContent> completedList = list
+          .where((i) =>
+              i.status?.toLowerCase() == 'completed' &&
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
+          .toList();
       completedList.sort((a, b) =>
-          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
       staffTodaysCompletedData.value = completedList;
     } on Map {
       //postLoginResp = e;

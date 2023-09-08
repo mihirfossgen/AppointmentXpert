@@ -597,6 +597,14 @@ class ProfilePage extends GetWidget<ProfileController> {
                             ),
                           ),
                         ),
+                        const Text('Fossgen Technologies Pvt Ltd',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          height: 20,
+                        ),
                       ],
                     ),
                   ),

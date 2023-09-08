@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "536695916934-jr368absn38vn1b7g7hi5l330d3uf839.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appointmentxpert",
+            "certificate_hash": "a0a802e03dd0d1db324b9e01bff5ab1d2131616c"
+          }
+        },
+        {
           "client_id": "536695916934-m2q7hf7c6loer1g3padf7ntb32jselnn.apps.googleusercontent.com",
           "client_type": 3
         }

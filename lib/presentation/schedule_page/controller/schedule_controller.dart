@@ -308,7 +308,7 @@ class ScheduleController extends GetxController {
       appointmentsUpcoming.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
-          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
       todayAppointments.value = appointmentsToday;
       upcomingAppointments.value = appointmentsUpcoming;
       completedAppointments.value = appointmentsCompleted;
@@ -555,6 +555,7 @@ class ScheduleController extends GetxController {
                 !formatter
                     .parse(i.date!)
                     .isBefore(formatter.parse(now.toString())) &&
+                formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                 i.status?.toLowerCase() != "completed",
           )
           .toList();
@@ -569,7 +570,7 @@ class ScheduleController extends GetxController {
       appointmentsUpcoming.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsCompleted.sort((a, b) =>
-          DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
+          DateTime.parse(b.date ?? '').compareTo(DateTime.parse(a.date ?? '')));
       todayAppointments.value = appointmentsToday;
       upcomingAppointments.value = appointmentsUpcoming;
       completedAppointments.value = appointmentsCompleted;

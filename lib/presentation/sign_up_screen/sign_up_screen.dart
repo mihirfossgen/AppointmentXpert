@@ -523,11 +523,11 @@ class SignUpScreen extends GetWidget<SignUpController> {
             selectConditions.value = true;
           } else {
             selectConditions.value = false;
-          }
-          if (_formKey.currentState!.validate()) {
-            // ... Navigate To your Home Page
-            FocusScope.of(Get.context!).unfocus();
-            onTapSignup();
+            if (_formKey.currentState!.validate()) {
+              // ... Navigate To your Home Page
+              FocusScope.of(Get.context!).unfocus();
+              onTapSignup();
+            }
           }
         },
         child: Text(
