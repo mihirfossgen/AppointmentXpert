@@ -360,19 +360,6 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
                                         Get.to(() => PDFScreens(
                                             'assets/pdf/FinalTermCondition.pdf'));
-
-                                        // Get.dialog(AlertDialog(
-                                        //   title: const Text('Terms of Service'),
-                                        //   actions: [
-                                        //     SizedBox(
-                                        //       height: 400,
-                                        //       child: SfPdfViewer.asset(
-                                        //           initialZoomLevel: 1.5,
-                                        //           enableDoubleTapZooming: true,
-                                        //           'assets/pdf/FinalTermCondition.pdf'),
-                                        //     )
-                                        //   ],
-                                        // ));
                                       }),
                                 const TextSpan(
                                     text: ' and ',
@@ -389,19 +376,6 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
                                       Get.to(() => PDFScreens(
                                           'assets/pdf/FinalPolicy.pdf'));
-
-                                      // Get.dialog(AlertDialog(
-                                      //   title: const Text('Privacy Policy'),
-                                      //   actions: [
-                                      //     SizedBox(
-                                      //       height: 400,
-                                      //       child: SfPdfViewer.asset(
-                                      //           initialZoomLevel: 1.5,
-                                      //           enableDoubleTapZooming: true,
-                                      //           'assets/pdf/FinalPolicy.pdf'),
-                                      //     )
-                                      //   ],
-                                      // ));
                                     },
                                   style: const TextStyle(
                                       color: Colors.blue,

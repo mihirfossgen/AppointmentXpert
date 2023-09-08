@@ -142,7 +142,7 @@ class SchedulePage extends GetWidget<ScheduleController> {
             : Obx(() => Padding(
                 padding: getPadding(left: 0, top: 12, right: 0),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height / 1.51,
                   child: Responsive.isMobile(context) ||
                           Responsive.isTablet(context)
                       ? controller.isloading.value
