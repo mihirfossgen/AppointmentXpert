@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:appointmentxpert/widgets/encrypt_decrypt.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../core/constants/constants.dart';
 import '../../core/errors/exceptions.dart';
 import '../../core/utils/color_constant.dart';
@@ -535,7 +535,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
 
   void _onOnTapSignInError() {
     Fluttertoast.showToast(
-      msg: "Facing technicl Difficulties",
+      msg: "Facing technical Difficulties",
     );
   }
 

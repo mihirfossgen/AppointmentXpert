@@ -714,7 +714,7 @@ class DashboardController extends GetxController {
                   i.active == true &&
                   !formatter
                       .parse(i.date!)
-                      .isBefore(formatter.parse(now.toString())) &&
+                      .isBefore(formatter.parse(now.toString())) && formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                   i.status?.toLowerCase() != "completed",
             )
             .toList();
