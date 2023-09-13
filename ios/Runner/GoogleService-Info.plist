@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>536695916934-9nakgghe1rcl57ngh5ksvo56f1fu2p8e.apps.googleusercontent.com</string>
+	<string>536695916934-nltbl010hkan3ou7p3neij5u8bdd46ig.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.536695916934-9nakgghe1rcl57ngh5ksvo56f1fu2p8e</string>
+	<string>com.googleusercontent.apps.536695916934-nltbl010hkan3ou7p3neij5u8bdd46ig</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>536695916934-jr368absn38vn1b7g7hi5l330d3uf839.apps.googleusercontent.com</string>
+	<string>536695916934-dnlf9n6eg28damohsoe1f0bqp6ktltf5.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyA6z0XPnX2IGqGTtL3uaGpgmr_-NfaQNeA</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.appointmentxpert</string>
+	<string>com.fossgen.appointmentxpert</string>
 	<key>PROJECT_ID</key>
 	<string>appointxpert</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:536695916934:ios:c948f7291e09acb1220407</string>
+	<string>1:536695916934:ios:dcfbf3b35ef0072e220407</string>
 </dict>
 </plist>
