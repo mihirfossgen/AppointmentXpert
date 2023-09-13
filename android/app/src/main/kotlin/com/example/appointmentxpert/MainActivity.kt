@@ -1,4 +1,4 @@
-package com.example.appointmentxpert
+package com.fossgen.appointmentxpert
 
 import io.flutter.embedding.android.FlutterActivity
 

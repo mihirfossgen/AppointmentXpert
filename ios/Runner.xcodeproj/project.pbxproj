@@ -508,8 +508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -528,7 +527,7 @@
 				DEVELOPMENT_TEAM = B8GM7479M9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert.RunnerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -547,7 +546,7 @@
 				DEVELOPMENT_TEAM = B8GM7479M9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert.RunnerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
@@ -564,7 +563,7 @@
 				DEVELOPMENT_TEAM = B8GM7479M9;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert.RunnerTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
@@ -698,8 +697,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< Updated upstream
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert;
+>>>>>>> Stashed changes
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -727,8 +730,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< Updated upstream
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert;
+>>>>>>> Stashed changes
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
