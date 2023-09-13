@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:appointmentxpert/core/scaffolds/desktop_scaffold.dart';
 import 'package:appointmentxpert/core/scaffolds/mobile_scaffold.dart';
 import 'package:appointmentxpert/core/scaffolds/public_master_layout/public_master_layout.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -22,13 +21,11 @@ import '../../domain/googleauth/google_auth_helper.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/app_style.dart';
 import '../../widgets/custom_text_form_field.dart';
-import '../../widgets/encrypt_decrypt.dart';
 import '../../widgets/loader.dart';
 import '../../widgets/responsive.dart';
 import '../dashboard_screen/shared_components/responsive_builder.dart';
 import '../login_success_dialog/controller/login_success_controller.dart';
 import '../login_success_dialog/login_success_dialog.dart';
-import '../sign_up_screen/sign_up_screen.dart';
 import '../verify_number/controller/verify_number_controller.dart';
 import '../verify_number/verify_number_screen.dart';
 import 'controller/login_controller.dart';
@@ -334,9 +331,15 @@ class LoginScreen extends GetWidget<LoginController> {
                                           AppleIDAuthorizationScopes.fullName,
                                         ],
                                       );
-                                      Get.to(SignUpScreen(
-                                          name: credential.givenName,
-                                          email: credential.email));
+                                      bool resp = await controller.callOtp(
+                                          credential.email ?? "", "login");
+                                      if (resp) {
+                                        showVerifyController(
+                                            true, credential.email ?? "");
+                                      }
+                                      //Get.to(SignUpScreen(
+                                      //  name: credential.givenName,
+                                      // email: credential.email));
                                       // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
                                       // after they have been validated with Apple (see `Integration` section for more information on how to do this)
                                     },
