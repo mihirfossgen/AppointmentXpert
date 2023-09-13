@@ -69,7 +69,7 @@ class VerifyPhoneNumberScreen extends GetWidget<VerifyNumberController> {
               controller: controller.scrollController,
               children: [
                 Text(
-                  "We've sent an SMS with a verification code to $phoneNumber",
+                  "We've sent a verification code to $phoneNumber",
                   style: const TextStyle(fontSize: 25),
                 ),
                 const SizedBox(height: 10),
