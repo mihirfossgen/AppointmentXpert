@@ -7,22 +7,22 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:536695916934:android:2d93a7a66ff21bce220407",
+        "mobilesdk_app_id": "1:536695916934:android:49dbb5e9249e7b59220407",
         "android_client_info": {
-          "package_name": "com.example.appointmentxpert"
+          "package_name": "com.fossgen.appointmentxpert"
         }
       },
       "oauth_client": [
         {
-          "client_id": "536695916934-jr368absn38vn1b7g7hi5l330d3uf839.apps.googleusercontent.com",
+          "client_id": "536695916934-dnlf9n6eg28damohsoe1f0bqp6ktltf5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.appointmentxpert",
+            "package_name": "com.fossgen.appointmentxpert",
             "certificate_hash": "a0a802e03dd0d1db324b9e01bff5ab1d2131616c"
           }
         },
         {
-          "client_id": "536695916934-m2q7hf7c6loer1g3padf7ntb32jselnn.apps.googleusercontent.com",
+          "client_id": "536695916934-r53mt4bk0aqnsojpld64otj0b4qal7mu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -37,6 +37,13 @@
             {
               "client_id": "536695916934-m2q7hf7c6loer1g3padf7ntb32jselnn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "536695916934-9nakgghe1rcl57ngh5ksvo56f1fu2p8e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appointmentxpert"
+              }
             }
           ]
         }
