@@ -697,12 +697,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-<<<<<<< Updated upstream
-				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert;
->>>>>>> Stashed changes
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -730,12 +725,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-<<<<<<< Updated upstream
-				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.appointmentxpert;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = com.fossgen.appointmentxpert;
->>>>>>> Stashed changes
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
