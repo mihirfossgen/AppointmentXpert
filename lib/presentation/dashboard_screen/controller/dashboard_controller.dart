@@ -515,7 +515,7 @@ class DashboardController extends GetxController {
       List<AppointmentContent> appointments = list
           .where((i) =>
               i.status?.toLowerCase() != 'completed' &&
-              now.isAfter(DateFormat('yyyy-MM-dd').parse(i.date!)))
+              dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       appointments.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
@@ -714,7 +714,8 @@ class DashboardController extends GetxController {
                   i.active == true &&
                   !formatter
                       .parse(i.date!)
-                      .isBefore(formatter.parse(now.toString())) && formatter.parse(i.date!) != formatter.parse(now.toString()) &&
+                      .isBefore(formatter.parse(now.toString())) &&
+                  formatter.parse(i.date!) != formatter.parse(now.toString()) &&
                   i.status?.toLowerCase() != "completed",
             )
             .toList();
