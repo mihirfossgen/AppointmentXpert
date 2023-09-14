@@ -21,24 +21,19 @@ class CreatePateintRepositoryImpl {
         data: jsonEncode(credentials),
         options: Options(headers: {"content-type": "application/json"}),
       );
-      print(response);
       if (response.statusCode == 200) {
         return CreatepatientModel.fromJson(response.data);
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception("Couldn't login. Is the device online?");
     }
   }
 
   Future<CreateStaff> createEmployee(Map<String, dynamic> credentials) async {
-    print(jsonEncode(credentials));
-
     try {
       final response = await _apiService.post(
         Endpoints.createEmployee,
@@ -47,17 +42,15 @@ class CreatePateintRepositoryImpl {
           "content-type": "application/json",
         }),
       );
-      print(response);
+
       if (response.statusCode == 200) {
         return CreateStaff.fromJson(response.data);
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception("Couldn't login. Is the device online?");
     }
   }
@@ -79,17 +72,14 @@ class CreatePateintRepositoryImpl {
               "multipart/form-data;boundary=YourBoundaryOfChoiceHere",
         }),
       );
-      print(response);
       if (response.statusCode == 200) {
         return CreatepatientModel.fromJson(response.data);
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception("Couldn't login. Is the device online?");
     }
   }
@@ -111,17 +101,14 @@ class CreatePateintRepositoryImpl {
               "multipart/form-data;boundary=YourBoundaryOfChoiceHere",
         }),
       );
-      print(response);
       if (response.statusCode == 200) {
         return CreatepatientModel.fromJson(response.data);
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception("Couldn't login. Is the device online?");
     }
   }
@@ -129,14 +116,11 @@ class CreatePateintRepositoryImpl {
   Future<GetAllDepartemnt> getAllDept() async {
     try {
       final resp = await _apiService.get(Endpoints.getAllDept);
-      print(resp);
-      print(resp.data);
+
       return GetAllDepartemnt.fromJson(resp.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -151,10 +135,8 @@ class CreatePateintRepositoryImpl {
         throw Exception(response.statusMessage);
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception("Couldn't login. Is the device online?");
     }
   }

@@ -50,7 +50,7 @@ class DoctorDetailController extends GetxController {
 
   getdeptId(int id) {
     deptId = list?.firstWhere((element) => element.id == id).departmentId;
-    print(deptId);
+
     return deptId;
   }
 
@@ -306,7 +306,6 @@ class DoctorDetailController extends GetxController {
   onConsultingDoctorSelect(SelectionPopupModel values) async {
     SelectionPopupModel value = values;
     for (var element in counsultingDoctor.value) {
-      print(element.title);
       element.isSelected = false;
       if (element.id == value.id) {
         examinerId = element.id;

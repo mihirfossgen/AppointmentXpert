@@ -521,7 +521,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
       "termsAndConditionFlag": controller.isCheckbox.value,
       "username": controller.enternumberController.text
     };
-    print(jsonEncode(requestData));
+
     try {
       await controller.callRegister(requestData);
     } on Map {

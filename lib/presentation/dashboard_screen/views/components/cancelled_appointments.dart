@@ -352,7 +352,6 @@ class UpcomingAppointmentsDataSource extends DataTableSource {
                                   "purpose": data[index].purpose,
                                   "status": "Canceled"
                                 };
-                                print(jsonEncode(req));
                                 dashboardController.updateAppointment(req);
                               }),
                           const SizedBox(

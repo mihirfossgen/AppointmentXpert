@@ -18,7 +18,6 @@ class AuthorizationInterceptor extends Interceptor {
     String deviceToken = SharedPrefUtils.readPrefStr('device_token');
     String deviceType = Platform.operatingSystem;
     if (_needAuthorizationHeader(options)) {
-      debugPrint(SharedPrefUtils.readPrefStr("auth_token").toString());
       options.headers['Authorization'] =
           'Bearer ${SharedPrefUtils.readPrefStr("auth_token")}';
       options.headers['token'] = deviceToken;

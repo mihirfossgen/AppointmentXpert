@@ -22,11 +22,7 @@ import 'localization/app_localization.dart';
 import 'shared_prefrences_page/shared_prefrence_page.dart';
 
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
   RemoteNotification? notification = message.notification;
-  print('message -- ${message.notification?.title}');
-  print('message -- ${message.notification?.body}');
-  print('message -- ${message.data}');
 }
 
 const _kTestingCrashlytics = true;
@@ -50,9 +46,7 @@ void main() async {
     await Permission.notification.isDenied.then((value) {
       if (value) {
         Permission.notification.request();
-      } else {
-        print(value);
-      }
+      } else {}
     });
   }
 

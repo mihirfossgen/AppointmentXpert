@@ -80,7 +80,6 @@ class ListRecentPatients extends StatelessWidget {
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(value: downloadProgress.progress),
                 errorWidget: (context, url, error) {
-                  print(error);
                   return CustomImageView(
                     imagePath: !Responsive.isDesktop(Get.context!)
                         ? 'assets' '/images/default_profile.png'

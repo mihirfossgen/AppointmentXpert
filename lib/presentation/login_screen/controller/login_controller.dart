@@ -1,3 +1,4 @@
+import 'package:appointmentxpert/domain/googleauth/google_auth_helper.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,6 @@ class LoginController extends GetxController {
 
   _register() {
     firebaseMessaging.getToken().then((token) {
-      print('fcm token ---- $token');
       if (token != null) {
         SharedPrefUtils.saveStr('device_token', token);
       }
@@ -103,11 +103,9 @@ class LoginController extends GetxController {
   bool detectPhoneNumber(String message) {
     RegExp phoneRegex = RegExp(r'^(?:[+0]9)?[0-9]{10}$');
     if (phoneRegex.hasMatch(message)) {
-      print("A phone number was found!");
       return true;
     }
     return false;
-    print("No luck!");
   }
 
   String? passwordValidator(String value) {
@@ -138,29 +136,28 @@ class LoginController extends GetxController {
       isloading.value = false;
       if (getOtp?.result == false) {
         isloading.value = false;
+        GoogleAuthHelper().googleSignOutProcess();
         Get.back();
-        WidgetsBinding.instance
-            .addPostFrameCallback((timeStamp) => Get.snackbar(
-                  "Uh oh!!",
-                  getOtp?.message ?? "",
-                  snackPosition: SnackPosition.BOTTOM,
-                  duration: const Duration(seconds: 5),
-                  borderRadius: 15,
-                  icon: Icon(
-                    Icons.error_outline,
-                    color: ColorConstant.whiteA700,
-                  ),
-                  padding: const EdgeInsets.all(15),
-                  margin: const EdgeInsets.all(40),
-                  colorText: ColorConstant.whiteA700,
-                  backgroundColor: ColorConstant.blue700,
-                ));
+        Get.snackbar(
+          "Uh oh!!",
+          getOtp?.message ?? "",
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 5),
+          borderRadius: 15,
+          icon: Icon(
+            Icons.error_outline,
+            color: ColorConstant.whiteA700,
+          ),
+          padding: const EdgeInsets.all(15),
+          margin: const EdgeInsets.all(40),
+          colorText: ColorConstant.whiteA700,
+          backgroundColor: ColorConstant.blue700,
+        );
         return false;
       } else {
         return true;
       }
     } on Map catch (e) {
-      print(e);
       return false;
     }
   }
@@ -195,7 +192,6 @@ class LoginController extends GetxController {
         return true;
       }
     } on Map catch (e) {
-      print(e);
       return false;
     }
   }

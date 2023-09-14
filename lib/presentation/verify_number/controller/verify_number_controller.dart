@@ -59,7 +59,6 @@ class VerifyNumberController extends GetxController {
         _handleCreateLoginSuccess(getOtp!);
       }
     } on Map catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -78,7 +77,6 @@ class VerifyNumberController extends GetxController {
         return true;
       }
     } on Map catch (e) {
-      print(e);
       return false;
     }
   }

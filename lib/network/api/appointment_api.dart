@@ -42,7 +42,6 @@ class AppointmentApi {
   Future<List<AppointmentContent>> getAllAppointmentsByStaffId(
       int pageValue) async {
     int staffId = await SharedPrefUtils.readPrefINt('employee_Id');
-    print("${Endpoints.appointmentByUserId}ExaminerId=$staffId&Role=DOCTOR");
     try {
       final Response response = await _apiService.get(
           "${Endpoints.appointmentByUserId}ExaminerId=$staffId&Role=DOCTOR");
@@ -52,10 +51,8 @@ class AppointmentApi {
       return list;
       // return GetAllAppointments.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -63,7 +60,6 @@ class AppointmentApi {
   Future<List<AppointmentContent>> getAllAppointmentBYPatientId(
       int value, int pageIndex) async {
     try {
-      debugPrint('ssssss');
       var response = await _apiService
           .get('${Endpoints.getAllAppoinmentByPatirntId}$value/true/');
       //var newResponse = {"data": response.data};
@@ -72,100 +68,80 @@ class AppointmentApi {
           data.map((e) => AppointmentContent.fromJson(e)).toList();
       return list;
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<PatientVisitModel> patientVisitAdd(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.patientVisitAdd, data: data);
       return PatientVisitModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<PatientVisitModel> patientVisitUpdate(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.visitUpdate, data: data);
       return PatientVisitModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<PatientVisitModel> patientExaminationAdd(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.patientExaminationAdd, data: data);
       return PatientVisitModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<PatientVisitModel> patientExaminationUpdate(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.examinationUpdate, data: data);
       return PatientVisitModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<PatientVisitModel> patientTreatmentAdd(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.patientTreatmentAdd, data: data);
       return PatientVisitModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<TreatmentModel> createTreatment(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.createTreatment, data: data);
       return TreatmentModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -173,7 +149,6 @@ class AppointmentApi {
   Future<List<AppointmentContent>> getTodaysAppointments(
       int patientId, bool active) async {
     try {
-      debugPrint('ssssss');
       final Response response = await _apiService.get(
           '${Endpoints.getTodaysAppointmentByPatientId}$patientId/$active');
       List<dynamic> data = response.data;
@@ -188,7 +163,6 @@ class AppointmentApi {
   Future<List<AppointmentContent>> getTodaysAppointmentsByExaminerId(
       int staffId, bool active) async {
     try {
-      debugPrint('ssssss');
       final Response response = await _apiService
           .get('${Endpoints.getTodaysAppointmentByExaminerId}$staffId/$active');
       List<dynamic> data = response.data;
@@ -202,7 +176,6 @@ class AppointmentApi {
 
   Future<Response> signUp(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.register, data: data);
       return response.data;
@@ -213,7 +186,6 @@ class AppointmentApi {
 
   Future<Response> createPatientCase(var data) async {
     try {
-      debugPrint('ssssss');
       final Response response =
           await _apiService.post(Endpoints.createPatientCase, data: data);
       return response.data;
@@ -234,10 +206,8 @@ class AppointmentApi {
         return true;
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     } finally {
       ProgressDialogUtils.hideProgressDialog();
@@ -245,10 +215,7 @@ class AppointmentApi {
   }
 
   Future<dynamic> updateAppointment(var data) async {
-    print(jsonEncode(data));
-
     try {
-      debugPrint('ssssss');
       final Response response = await _apiService.post(
         Endpoints.updateAppointment,
         data: jsonEncode(data),
@@ -258,14 +225,11 @@ class AppointmentApi {
         return true;
       }
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
 
   Future<Response> getAppointmentDetailsViaDateWithoutStaff(var data) async {
-    print(jsonEncode(data));
-
     try {
       final Response response = await _apiService.post(
         "${Endpoints.getappointmentDatesWithoutStaffId}?rescheduleDate=$data",
@@ -273,15 +237,12 @@ class AppointmentApi {
       );
       return response;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
 
   Future<Response> getAppointmentDetailsViaDateForStaff(
       var data, int staffId) async {
-    print(jsonEncode(data));
-
     try {
       final Response response = await _apiService.post(
         "${Endpoints.getappointmentDatesWithStaffId}$staffId&rescheduleDate=$data",
@@ -289,7 +250,6 @@ class AppointmentApi {
       );
       return response;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -297,7 +257,6 @@ class AppointmentApi {
   Future<List<AppointmentContent>> getAllReceiptionstAppointment(
       int value) async {
     try {
-      debugPrint('ssssss');
       var response =
           await _apiService.get(Endpoints.getAllAppointmentsWithoutPaged);
       // GetAllAppointments appointmentContent =
@@ -307,17 +266,14 @@ class AppointmentApi {
           data.map((e) => AppointmentContent.fromJson(e)).toList();
       return list;
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
 
   Future<List<AppointmentContent>> getAllReceiptionstTodayAppointment() async {
     try {
-      debugPrint('ssssss');
       var response =
           await _apiService.get(Endpoints.getReceptionistTodayAppoitments);
       List<dynamic> data = response.data;
@@ -325,10 +281,8 @@ class AppointmentApi {
           data.map((e) => AppointmentContent.fromJson(e)).toList();
       return list;
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -336,7 +290,6 @@ class AppointmentApi {
   Future<List<AppointmentContent>> getAllDoctorTodayAppointment() async {
     int staffId = await SharedPrefUtils.readPrefINt('employee_Id');
     try {
-      debugPrint('ssssss');
       var response = await _apiService.get(
           "${Endpoints.getStaffToadyAppointments}ExaminerId=$staffId&Role=DOCTOR");
       List<dynamic> data = response.data;
@@ -344,10 +297,8 @@ class AppointmentApi {
           data.map((e) => AppointmentContent.fromJson(e)).toList();
       return list;
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -357,7 +308,6 @@ class AppointmentApi {
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     String date = formatter.format(DateTime.now());
     try {
-      debugPrint('ssssss');
       var response = await _apiService.post(
           "${Endpoints.cancelledAppointments}Date=$date&ExaminerId=${SharedPrefUtils.readPrefStr('role') == "RECEPTIONIST" ? 0 : staffId}");
       List<dynamic> data = response.data;
@@ -365,10 +315,8 @@ class AppointmentApi {
           data.map((e) => AppointmentContent.fromJson(e)).toList();
       return list;
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -485,10 +433,8 @@ class AppointmentApi {
         return '';
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     } finally {
       ProgressDialogUtils.hideProgressDialog();
@@ -540,10 +486,8 @@ class AppointmentApi {
         return '';
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     } finally {
       ProgressDialogUtils.hideProgressDialog();

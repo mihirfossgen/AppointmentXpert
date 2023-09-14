@@ -124,7 +124,6 @@ class _RecentPatients extends StatelessWidget {
                                                 value:
                                                     downloadProgress.progress),
                                         errorWidget: (context, url, error) {
-                                          print(error);
                                           return CustomImageView(
                                             imagePath: !Responsive.isDesktop(
                                                     Get.context!)

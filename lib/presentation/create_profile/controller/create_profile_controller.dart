@@ -55,7 +55,6 @@ class CreateProfileController extends GetxController {
   void _setImageFileListFromFile(XFile? value) {
     imageFileList = value == null ? null : <XFile>[value];
     selectedImage.value = imageFileList![0].path;
-    print(selectedImage);
   }
 
   pickImage(ImageSource source) async {
@@ -65,9 +64,7 @@ class CreateProfileController extends GetxController {
         _setImageFileListFromFile(pickedFile);
         fileName = imageFileList![0].path.split('/').last;
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   TextEditingController? _controller;
@@ -298,7 +295,7 @@ class CreateProfileController extends GetxController {
         },
         data: data,
       ));
-      print("create api called for employee");
+
       _handleCreateEmployeeSuccess(createStaffObj, role, createpatientModel);
     } on Map {
       //postLoginResp = e;
@@ -314,7 +311,7 @@ class CreateProfileController extends GetxController {
         },
         data: data,
       ));
-      print("create api called for employee");
+
       _handleCreateEmployeeSuccess(createStaffObj, role, createpatientModel);
     } on Map {
       //postLoginResp = e;

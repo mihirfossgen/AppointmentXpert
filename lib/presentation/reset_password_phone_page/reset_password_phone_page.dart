@@ -86,7 +86,6 @@ class ResetPasswordPhonePage extends GetWidget<ResetPasswordPhoneController> {
                                                   );
                                                 },
                                               ).then((value) {
-                                                print(value);
                                                 if (value) onTapSendotp;
                                               })
                                             : WidgetsBinding.instance

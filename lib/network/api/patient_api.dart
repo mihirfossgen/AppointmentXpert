@@ -48,17 +48,15 @@ class PatientApi {
     try {
       final Response response =
           await _apiService.post(Endpoints.patientUpdate, data: req);
-      print(response.data['t']);
+
       PatientData model = PatientData();
       model.patient = Patients.fromJson(response.data['t']);
       return model;
     } on DioError catch (e) {
-      print("e -- $e");
       ProgressDialogUtils.hideProgressDialog();
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
       ProgressDialogUtils.hideProgressDialog();
-      print("e ----- $e");
       throw Exception(e);
     } finally {
       ProgressDialogUtils.hideProgressDialog();

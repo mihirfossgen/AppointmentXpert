@@ -125,8 +125,6 @@ class PatientsList extends GetView<PatientListController> {
                                     if (element.firstName!
                                         .toLowerCase()
                                         .contains(value.toLowerCase())) {
-                                      print(true);
-
                                       a.add(element);
                                     }
                                   });
@@ -156,7 +154,6 @@ class PatientsList extends GetView<PatientListController> {
                                       if (element.firstName!
                                           .toLowerCase()
                                           .contains(value.toLowerCase())) {
-                                        print(true);
                                         List<Content> a = [];
                                         a.add(element);
                                         dashboardController
@@ -229,7 +226,6 @@ class PatientsList extends GetView<PatientListController> {
                                                                     .progress),
                                                     errorWidget:
                                                         (context, url, error) {
-                                                      print(error);
                                                       return CustomImageView(
                                                         imagePath: !Responsive
                                                                 .isDesktop(Get
@@ -720,7 +716,6 @@ class PatientListDataSource extends DataTableSource {
                         //         CircularProgressIndicator(
                         //             value: downloadProgress.progress),
                         errorBuilder: (context, url, error) {
-                          print(error);
                           return CustomImageView(
                             width: 40,
                             height: 40,

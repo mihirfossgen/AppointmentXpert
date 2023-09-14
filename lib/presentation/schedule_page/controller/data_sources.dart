@@ -171,18 +171,14 @@ class DataSource extends DataTableSource {
 /// is an extension to FLutter's DataTableSource and aimed at solving
 /// saync data fetching scenarious by paginated table (such as using Web API)
 class DataSourceAsync extends AsyncDataTableSource {
-  DataSourceAsync() {
-    print('DessertDataSourceAsync created');
-  }
+  DataSourceAsync() {}
 
   DataSourceAsync.empty() {
     _empty = true;
-    print('DessertDataSourceAsync.empty created');
   }
 
   DataSourceAsync.error() {
     _errorCounter = 0;
-    print('DessertDataSourceAsync.error created');
   }
 
   bool _empty = false;
@@ -214,7 +210,6 @@ class DataSourceAsync extends AsyncDataTableSource {
 
   @override
   Future<AsyncRowsResponse> getRows(int start, int end) async {
-    print('getRows($start, $end)');
     if (_errorCounter != null) {
       _errorCounter = _errorCounter! + 1;
 

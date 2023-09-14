@@ -2223,7 +2223,7 @@ class DashboardScreen extends GetView<DashboardController> {
       "emailId": controller.addressController.text
       //"address": controller.addressController.text
     };
-    print(jsonEncode(requestData));
+   
     try {
       await controller.addEmergencyAppointment(requestData);
       Fluttertoast.showToast(

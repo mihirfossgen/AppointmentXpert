@@ -212,7 +212,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                                 builder: (BuildContext bc) {
                                                   return Bottomsheet(
                                                     onchanged: ((value) {
-                                                      print(value);
                                                       if (value == "Gallery") {
                                                         controller.pickImage(
                                                             ImageSource
@@ -615,7 +614,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
                                           builder: (BuildContext bc) {
                                             return Bottomsheet(
                                               onchanged: ((value) {
-                                                print(value);
                                                 if (value == "Gallery") {
                                                   controller.pickImage(
                                                       ImageSource.gallery);
@@ -1116,7 +1114,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           "userId": args.roleId,
           "visits": []
         };
-        print(jsonEncode(credentials));
       } else {
         // staff creation api
         credentials = {
@@ -1139,7 +1136,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
           "terminatedDate": "",
           "userId": args.roleId
         };
-        print(jsonEncode(credentials));
       }
 
       try {
@@ -1150,7 +1146,6 @@ class CreateProfileScreen extends GetWidget<CreateProfileController> {
         }
         onTapCreateprofile();
       } on Map {
-        print("errrororrrr");
         // _onOnTapSignInError();
       } on NoInternetException catch (e) {
         Get.rawSnackbar(message: e.toString());

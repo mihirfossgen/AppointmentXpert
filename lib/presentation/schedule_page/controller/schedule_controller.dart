@@ -77,7 +77,6 @@ class ScheduleController extends GetxController {
       initialTime: selectedTime,
     );
     if (picked != null) {
-      print(picked);
       selectedTime = picked;
     }
 
@@ -109,7 +108,6 @@ class ScheduleController extends GetxController {
               config: CalendarDatePicker2Config(),
               value: [DateTime.now()],
               onValueChanged: (value) {
-                print(value);
                 date = value[0];
               },
             ),
@@ -404,7 +402,7 @@ class ScheduleController extends GetxController {
       final DateFormat formatter = DateFormat('yyyy-MM-dd', 'en-US');
       List<AppointmentContent> appointmentsCompleted =
           list.where((i) => i.status?.toLowerCase() == "completed").toList();
-      print('completed appointments --- ${appointmentsCompleted.length}');
+
       List<AppointmentContent> appointmentsUpcoming = list
           .where(
             (i) =>
@@ -416,14 +414,14 @@ class ScheduleController extends GetxController {
                 i.status?.toLowerCase() != "completed",
           )
           .toList();
-      print('upcoming appointments --- ${appointmentsUpcoming.length}');
+
       List<AppointmentContent> appointmentsToday = list
           .where((i) =>
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()) &&
               i.active == true &&
               i.status?.toLowerCase() != "completed")
           .toList();
-      print('appointmentsToday appointments --- ${appointmentsToday.length}');
+
       appointmentsToday.sort((a, b) =>
           DateTime.parse(a.date ?? '').compareTo(DateTime.parse(b.date ?? '')));
       appointmentsUpcoming.sort((a, b) =>
@@ -771,7 +769,6 @@ class MyData extends DataTableSource {
                               CircularProgressIndicator(
                                   value: downloadProgress.progress),
                       errorWidget: (context, url, error) {
-                        print(error);
                         return CustomImageView(
                           imagePath: !Responsive.isDesktop(Get.context!)
                               ? 'assets'
@@ -992,7 +989,7 @@ class MyData extends DataTableSource {
                                           "status": "Reschduled",
                                           "update_time_in_min": 0
                                         };
-                                        print(jsonEncode(requestData));
+
                                         scheduleController
                                             .updateAppointment(requestData);
                                       }),

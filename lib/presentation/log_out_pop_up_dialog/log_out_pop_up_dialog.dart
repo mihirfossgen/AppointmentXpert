@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/utils/color_constant.dart';
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
+import '../../domain/googleauth/google_auth_helper.dart';
 import '../../routes/app_routes.dart';
 import '../../shared_prefrences_page/shared_prefrence_page.dart';
 import '../../theme/app_decoration.dart';
@@ -93,6 +94,7 @@ class LogOutPopUpDialog extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               SharedPrefUtils().clearAllData();
+              GoogleAuthHelper().googleSignOutProcess().then((value) {});
               Get.offAllNamed(AppRoutes.loginScreen);
             },
             // height: getVerticalSize(

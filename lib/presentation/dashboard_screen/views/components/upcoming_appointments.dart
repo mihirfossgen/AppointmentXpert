@@ -182,7 +182,7 @@ class UpcomingAppointments extends StatelessWidget {
                                                           data[index].purpose,
                                                       "status": "Canceled"
                                                     };
-                                                    print(jsonEncode(req));
+
                                                     controller
                                                         .updateAppointment(req);
                                                   } else {
@@ -480,7 +480,7 @@ class UpcomingAppointmentsDataSource extends DataTableSource {
                                   "purpose": data[index].purpose,
                                   "status": "Canceled"
                                 };
-                                print(jsonEncode(req));
+
                                 dashboardController.updateAppointment(req);
                               }),
                           const SizedBox(

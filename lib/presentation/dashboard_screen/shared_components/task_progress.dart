@@ -27,7 +27,6 @@ class AppointmentProgress extends StatelessWidget {
       return 0.0;
     } else {
       double calculatedValue = data.totalCompleted / data.totalAppointments;
-      print(calculatedValue);
       return calculatedValue == 0 ? 0.0 : calculatedValue;
     }
   }

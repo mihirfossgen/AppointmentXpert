@@ -166,7 +166,6 @@ class UserApi {
               "multipart/form-data;boundary=YourBoundaryOfChoiceHere",
         }),
       );
-      print(response);
       if (response.statusCode == 200) {
         return CreatepatientModel.fromJson(response.data);
       } else {
@@ -199,17 +198,14 @@ class UserApi {
               "multipart/form-data;boundary=YourBoundaryOfChoiceHere",
         }),
       );
-      print(response);
       if (response.statusCode == 200) {
         return CreatepatientModel.fromJson(response.data);
       } else {
         throw Exception(response.statusMessage);
       }
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception("Couldn't login. Is the device online?");
     }
   }

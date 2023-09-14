@@ -205,9 +205,6 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                               .toString()
                                               .replaceAll(' AM', ' PM');
                                         }
-
-                                        print(controller.fromTime.value);
-                                        print(controller.toTime.value);
                                       },
                                       child: Container(
                                           height: 40,
@@ -315,7 +312,6 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                       .RalewayRomanSemiBold14WhiteA700,
                                   onTap: () async {
                                     if (appointment?.examiner != null) {
-                                      print(controller.fromTime.value);
                                       DateTime date2 = DateFormat("hh:mm a")
                                           .parse(controller.fromTime.value);
 
@@ -327,10 +323,6 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                           userdate.day,
                                           date2.hour,
                                           date2.minute);
-
-                                      print(a);
-                                      print(DateTime.now());
-                                      print(a.isAfter(DateTime.now()));
 
                                       if (a.isAfter(DateTime.now())) {
                                         var requestData = {
@@ -358,7 +350,7 @@ class ReschduleAppointment extends GetWidget<RescheduleAppointmentController> {
                                           "status": "Reschduled",
                                           "update_time_in_min": 0
                                         };
-                                        print(jsonEncode(requestData));
+
                                         controller
                                             .updateAppointment(requestData);
                                       } else {

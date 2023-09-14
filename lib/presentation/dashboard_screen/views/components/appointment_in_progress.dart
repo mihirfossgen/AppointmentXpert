@@ -172,7 +172,7 @@ class _AppointmentInProgress extends StatelessWidget {
                                                       data[index].purpose,
                                                   "status": "Canceled"
                                                 };
-                                                print(jsonEncode(req));
+
                                                 controller
                                                     .updateAppointment(req);
                                               } else {
@@ -254,7 +254,7 @@ class _AppointmentInProgress extends StatelessWidget {
           rowsPerPage: 5,
           //wrapInCard: true,
           // onRowsPerPageChanged: (value) {
-          //   print(value);
+
           // },
           // minWidth: 600,
           // showBottomBorder: true,
@@ -527,7 +527,6 @@ class AppointmentsDataSource extends DataTableSource {
                                   "purpose": data[index].purpose,
                                   "status": "Canceled"
                                 };
-                                print(jsonEncode(req));
                                 dashboardController.updateAppointment(req);
                               }),
                           const SizedBox(

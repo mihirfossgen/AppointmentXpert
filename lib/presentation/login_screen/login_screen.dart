@@ -475,10 +475,7 @@ class LoginScreen extends GetWidget<LoginController> {
       GoogleAuthProvider authProvider = GoogleAuthProvider();
       final FirebaseAuth auth = FirebaseAuth.instance;
       //final GoogleSignIn googleSignIn = GoogleSignIn();
-      auth.signInWithPopup(authProvider).then((result) {
-        print(result);
-      }).catchError((e) {
-        print(e);
+      auth.signInWithPopup(authProvider).then((result) {}).catchError((e) {
         var snackbar = const SnackBar(
             width: 500,
             padding: EdgeInsets.all(10),
@@ -512,7 +509,6 @@ class LoginScreen extends GetWidget<LoginController> {
           Get.snackbar('Error', 'user data is empty');
         }
       }).catchError((onError) {
-        print(onError.toString());
         Get.snackbar('Error', onError.toString());
       });
     }

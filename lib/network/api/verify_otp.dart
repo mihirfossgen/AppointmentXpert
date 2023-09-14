@@ -61,10 +61,8 @@ class VerifyOtpApi {
           "${Endpoints.verifyPhoneOtp}otp=$otp&userName=$number&token=$deviceToken&deviceType=$deviceType");
       return OtpModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -77,10 +75,8 @@ class VerifyOtpApi {
           "${Endpoints.verifyEmailOtp}deviceType=$deviceType&otp=$otp&token=$deviceToken&type=login&userName=$number");
       return OtpModel.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }

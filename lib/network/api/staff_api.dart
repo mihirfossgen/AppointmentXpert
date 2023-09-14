@@ -41,10 +41,8 @@ class StaffApi {
           await _apiService.get("${Endpoints.getStaffById}$value");
       return StaffData.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -55,10 +53,8 @@ class StaffApi {
           await _apiService.get("${Endpoints.staffList}$value");
       return StaffList.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -69,10 +65,8 @@ class StaffApi {
           await _apiService.post(Endpoints.staffUpdate, data: data);
       return true;
     } on DioError catch (e) {
-      print("e -- $e");
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
-      print("e ----- $e");
       throw Exception(e);
     }
   }
@@ -85,12 +79,10 @@ class StaffApi {
       ProgressDialogUtils.hideProgressDialog();
       return StaffData.fromJson(response.data);
     } on DioError catch (e) {
-      print("e -- $e");
       ProgressDialogUtils.hideProgressDialog();
       throw Exception(e.response?.data['error_description']);
     } catch (e) {
       ProgressDialogUtils.hideProgressDialog();
-      print("e ----- $e");
       throw Exception(e);
     }
   }

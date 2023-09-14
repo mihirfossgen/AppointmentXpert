@@ -116,9 +116,7 @@ class ScheduleTabContainerPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                onTap: (value) {
-                                  print(value);
-                                },
+                                onTap: (value) {},
                                 tabs: [
                                   const Tab(
                                     child: Text(
@@ -160,9 +158,7 @@ class ScheduleTabContainerPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                onTap: (value) {
-                                  print(value);
-                                },
+                                onTap: (value) {},
                                 tabs: [
                                   const Tab(
                                     child: Text(

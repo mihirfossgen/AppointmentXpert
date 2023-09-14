@@ -47,7 +47,6 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
     //     ModalRoute.of(context)!.settings.arguments as DoctorDetailsArguments;
 
     if (doctorsList != null && doctorsList!.isNotEmpty) {
-      print('list value ------- ${controller.counsultingDoctor.value.length}');
       if (controller.counsultingDoctor.value.isEmpty) {
         controller.counsultingDoctor.value = doctorsList!
             .map((e) => SelectionPopupModel(
@@ -519,11 +518,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                                   ' AM', ' PM');
                                                             }
 
-                                                            print(controller
-                                                                .fromTime
-                                                                .value);
-                                                            print(controller
-                                                                .toTime.value);
+                                                        
                                                           },
                                                           child: Container(
                                                               height: 40,
@@ -1255,10 +1250,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
                                                             ' AM', ' PM');
                                                   }
 
-                                                  print(controller
-                                                      .fromTime.value);
-                                                  print(
-                                                      controller.toTime.value);
+                                               
                                                 },
                                                 child: Container(
                                                     height: 40,
@@ -1500,16 +1492,13 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
   }
 
   onTapBookapointmentOne(int id) async {
-    print(controller.fromTime.value);
     DateTime date2 = DateFormat("hh:mm a").parse(controller.fromTime.value);
 
     DateTime userdate = DateTime.parse(controller.dob.text);
     DateTime a = DateTime(
         userdate.year, userdate.month, userdate.day, date2.hour, date2.minute);
 
-    print(a);
-    print(DateTime.now());
-    print(a.isAfter(DateTime.now()));
+ 
 
     if (a.isAfter(DateTime.now())) {
       var requestData = {
@@ -1530,7 +1519,7 @@ class AppointmentBookingScreen extends GetWidget<DoctorDetailController> {
         "updateTimeInMin": 0
       };
 
-      print(jsonEncode(requestData));
+    
 
       try {
         await controller.callCreateLogin(requestData);

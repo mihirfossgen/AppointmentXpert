@@ -107,7 +107,6 @@ class ProfileController extends GetxController {
           "Data Updated Successfully!!", '',
           snackPosition: SnackPosition.BOTTOM));
     } on Map catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -117,7 +116,6 @@ class ProfileController extends GetxController {
       var response = await Get.find<StaffApi>().staffNotificationUpdate(req);
       staffData.value = response;
     } on Map catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -127,7 +125,6 @@ class ProfileController extends GetxController {
       var response = await Get.find<PatientApi>().patientUpdate(req);
       patientData.value = response;
     } on Map catch (e) {
-      print(e);
       rethrow;
     }
   }

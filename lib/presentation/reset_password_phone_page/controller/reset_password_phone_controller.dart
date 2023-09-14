@@ -15,7 +15,6 @@ class ResetPasswordPhoneController extends GetxController {
       }, number: number, type: type);
       return true;
     } on Map catch (e) {
-      print(e);
       return false;
     }
   }

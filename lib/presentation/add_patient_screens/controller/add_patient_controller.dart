@@ -298,8 +298,6 @@ class AddPatientController extends GetxController {
       "userId": roleID,
       "visits": []
     };
-
-    print(jsonEncode(data));
     try {
       createpatientModel = (await Get.find<UserApi>().callCreatePatient(
         headers: {
@@ -307,7 +305,6 @@ class AddPatientController extends GetxController {
         },
         data: data,
       ));
-      print("create api called for patient");
       if (createpatientModel.result == false) {
         Get.back();
         WidgetsBinding.instance

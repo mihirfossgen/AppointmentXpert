@@ -170,7 +170,6 @@ class StaffList extends GetView<DashboardController> {
                                                     value: downloadProgress
                                                         .progress),
                                             errorWidget: (context, url, error) {
-                                              print(error);
                                               return CustomImageView(
                                                 imagePath: !Responsive
                                                         .isDesktop(Get.context!)
@@ -473,7 +472,6 @@ class StaffDataSource extends DataTableSource {
                         loadingBuilder: (context, url, downloadProgress) =>
                             const Center(child: CircularProgressIndicator()),
                         errorBuilder: (context, url, error) {
-                          print(error);
                           return CustomImageView(
                             width: 40,
                             height: 40,

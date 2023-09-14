@@ -11,7 +11,6 @@ class EncryptData {
     final iv = IV.fromLength(16);
     final encrypter = Encrypter(AES(key));
     encrypted = encrypter.encrypt(plainText, iv: iv);
-    print(encrypted!.base64);
     return encrypted!.base64;
   }
 
@@ -20,7 +19,6 @@ class EncryptData {
     final iv = IV.fromLength(16);
     final encrypter = Encrypter(AES(key));
     decrypted = encrypter.decrypt(encrypted!, iv: iv);
-    print(decrypted);
     return decrypted;
   }
 }

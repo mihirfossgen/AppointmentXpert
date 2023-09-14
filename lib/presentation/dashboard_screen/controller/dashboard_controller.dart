@@ -161,7 +161,6 @@ class DashboardController extends GetxController {
       callAllCancelledAppointments();
       callStaffUpcomingAppointments();
       callStaffList(0);
-      print(patientPagingController);
       //patientPagingController.addPageRequestListener((pageKey) {
       callRecentPatientList(0);
       //});
@@ -275,7 +274,7 @@ class DashboardController extends GetxController {
       isloadingEmergancyPatients.value = true;
       var response =
           (await Get.find<AppointmentApi>().getEmergencyPatientsList());
-      //print(response.content);
+
       List<EmergencyContent> requests = response
           .where((i) =>
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
@@ -376,17 +375,14 @@ class DashboardController extends GetxController {
     try {
       isloadingStaffList.value = true;
       StaffList response = (await Get.find<StaffApi>().staffList(pageNumber));
-      print(response);
+
       staffPagingController.itemList = [];
       staffPagingController.appendLastPage(response.content ?? []);
       doctorsList.clear();
       for (var i = 0; i < (response.content?.length ?? 0); i++) {
-        print(response.content?[i].profession);
         if (response.content?[i].profession?.toLowerCase() == "doctor") {
-          print(response.content?[i].profession);
           staffDataa = response.content![i];
           doctorsList.add(response.content![i]);
-          print({"doctors list length ----- ${doctorsList.length}"});
           SharedPrefUtils.saveStr(
               'doctor_details', jsonEncode(response.content![i]));
         }
@@ -478,7 +474,6 @@ class DashboardController extends GetxController {
     var utcDate = dateFormat.format(tempDate); // pass the UTC time here
     var localDate = dateFormat.parse(utcDate, true).toLocal().toString();
     String createdDate = dateFormat.format(DateTime.parse(localDate));
-    print("------------$createdDate");
     return createdDate;
   }
 
@@ -515,6 +510,7 @@ class DashboardController extends GetxController {
       List<AppointmentContent> appointments = list
           .where((i) =>
               i.status?.toLowerCase() != 'completed' &&
+              i.status?.toLowerCase() != 'canceled' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       appointments.sort((a, b) =>
@@ -554,6 +550,7 @@ class DashboardController extends GetxController {
       List<AppointmentContent> appointments = list
           .where((i) =>
               i.status?.toLowerCase() != 'completed' &&
+              i.status?.toLowerCase() != 'canceled' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       appointments.sort((a, b) =>
@@ -565,6 +562,7 @@ class DashboardController extends GetxController {
       List<AppointmentContent> totalTodayList = list
           .where((i) =>
               i.status?.toLowerCase() != 'completed' &&
+              i.status?.toLowerCase() != 'canceled' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       totalTodayList.sort((a, b) =>
@@ -613,6 +611,7 @@ class DashboardController extends GetxController {
       List<AppointmentContent> appointments = list
           .where((i) =>
               i.status?.toLowerCase() != 'completed' &&
+              i.status?.toLowerCase() != 'canceled' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       appointments.sort((a, b) =>
@@ -624,6 +623,7 @@ class DashboardController extends GetxController {
       List<AppointmentContent> totalTodayList = list
           .where((i) =>
               i.status?.toLowerCase() != 'completed' &&
+              i.status?.toLowerCase() != 'canceled' &&
               dateFormat(i.date!) == dateFormat(DateTime.now().toString()))
           .toList();
       totalTodayList.sort((a, b) =>
@@ -716,6 +716,7 @@ class DashboardController extends GetxController {
                       .parse(i.date!)
                       .isBefore(formatter.parse(now.toString())) &&
                   formatter.parse(i.date!) != formatter.parse(now.toString()) &&
+                  i.status?.toLowerCase() != 'canceled' &&
                   i.status?.toLowerCase() != "completed",
             )
             .toList();
@@ -759,7 +760,6 @@ class DashboardController extends GetxController {
         },
         data: req,
       ));
-      print(response.doctorList);
       getAllEmployesList.value = response;
       getPatientDetails(SharedPrefUtils.readPrefINt('patient_Id'));
       // _handleCreateLoginSuccess(loginModelObj);

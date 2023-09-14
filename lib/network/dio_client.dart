@@ -20,7 +20,15 @@ class DioClient {
 
   // dio instance
   final DIO.Dio _dio = DIO.Dio(_options)
-    ..interceptors.addAll([AuthorizationInterceptor(), DIO.LogInterceptor()]);
+    ..interceptors.addAll([
+      AuthorizationInterceptor(),
+      DIO.LogInterceptor(
+          request: false,
+          requestBody: false,
+          responseBody: false,
+          responseHeader: false,
+          requestHeader: false)
+    ]);
 
   Future<bool> checkInternetConnectivity() async {
     bool result = await ConnectivityWrapper.instance.isConnected;

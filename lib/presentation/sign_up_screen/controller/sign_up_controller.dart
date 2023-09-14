@@ -117,10 +117,7 @@ class SignUpController extends GetxController {
 
     if (isValid) {
       formKey.currentState!.save();
-      print(userEmail);
-      print(userName);
-      print(userPassword);
-      print(userNumber);
+
       return true;
     }
     return false;

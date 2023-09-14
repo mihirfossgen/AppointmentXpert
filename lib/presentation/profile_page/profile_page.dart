@@ -266,7 +266,7 @@ class ProfilePage extends GetWidget<ProfileController> {
                                           "status": "ACTIVE",
                                           "userId": userid
                                         };
-                                        print(jsonEncode(req));
+
                                         await controller
                                             .staffnotificationUpdate(req)
                                             .then((value) {
@@ -801,7 +801,7 @@ class ProfilePage extends GetWidget<ProfileController> {
                                             controller.sentNotification.value,
                                         "userId": userId
                                       };
-                                      print(jsonEncode(req));
+
                                       await controller
                                           .patientnotificationUpdate(req)
                                           .then((value) {
@@ -1115,7 +1115,6 @@ class ProfilePage extends GetWidget<ProfileController> {
                                                     "status": "ACTIVE",
                                                     "id": staffData?.id ?? 0
                                                   };
-                                                  print(jsonEncode(data));
 
                                                   await controller
                                                       .staffUpdate(data);
@@ -1260,7 +1259,6 @@ Widget officePhotos(context, String officePhotoUrl) {
               builder: (_) => const AlertDialog(
                     content: Text("©gabrielpatricksouza"),
                   ));
-          debugPrint("©gabriel_patrick_souza");
         },
       )
       // Material(
